@@ -45,7 +45,9 @@ class ProjectServiceProvider extends ModuleServiceProvider
      * @var array
      */
     protected $listen = [
-        // 
+        'entree.menu:ready' => [
+            'Joesama\Project\Events\Handlers\MenuHandler'
+        ],
     ];
 
     /**
