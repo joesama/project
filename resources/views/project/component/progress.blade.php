@@ -9,7 +9,50 @@
   </div>
   <div id="progress" class="collapse show" aria-labelledby="headingProgress" data-parent="#accordionExample">
     <div class="card-body">
-      Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+      <div class="row">
+        <div class="col-md-6">
+          <div id="physical_chart"></div> 
+        </div>
+        <div class="col-md-6">
+          <div id="financial_chart"></div> 
+        </div>
+      </div>
     </div>
   </div>
 </div>
+@push('pages.script')
+
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Year', 'Planned', 'Actual'],
+          ['2004',  1000,      400],
+          ['2005',  1170,      460],
+          ['2006',  660,       1120],
+          ['2007',  1030,      540]
+        ]);
+
+        var pOptions = {
+          title: '{{ __('joesama/project::project.category.progress.physical')  }}',
+          curveType: 'function',
+          legend: { position: 'bottom' }
+        };
+
+        var fOptions = {
+          title: '{{ __('joesama/project::project.category.progress.finance')  }}',
+          curveType: 'function',
+          legend: { position: 'bottom' }
+        };
+
+        var physical = new google.visualization.LineChart(document.getElementById('physical_chart'));
+        var financial = new google.visualization.LineChart(document.getElementById('financial_chart'));
+
+        physical.draw(data, pOptions);
+        financial.draw(data, fOptions);
+      }
+    </script>
+
+@endpush

@@ -26,9 +26,14 @@ class MenuHandler
     public function handle($menu)
     {
 
-        $menu->add('license','>:config')
+        $menu->add('project','>:config')
             ->title(trans('joesama/project::project.module'))
             ->link('#')
+            ->icon('icon fa fa-qrcode');
+
+        $menu->add('info','^:project')
+            ->title(trans('joesama/project::project.detail'))
+            ->link(handles('joesama/project::project/info'))
             ->icon('icon fa fa-qrcode');
 
     }

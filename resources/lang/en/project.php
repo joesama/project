@@ -2,6 +2,7 @@
 
 return [
 	'module' => 'Project Management Officer',
+	'detail' => 'Project Information',
 	'date' => [
 		'report' =>  'Report Date'
 	],
@@ -35,14 +36,32 @@ return [
 			'contact' => 'Contact No.',
 		],
 	],
+	'task' => [
+		'task' => 'Tasks',
+		'progress' => 'Progress',
+		'date' => [
+			'start' => 'Date Start',
+			'end' => 'Date End',
+		],
+	],
+	'owner' => [
+		'prepared' => 'Prepared By',
+		'approval' => 'Approved By',
+		'validate' => 'Validate By',
+		'review' => 'Review By',
+		'name' => 'Name',
+		'mobile' => 'Mobile No.',
+		'position' => 'Position',
+	],
 	'category' => [
 		'schedule' => 'Project Schedule',
 		'progress' => [
 			'physical' => 'Physical (S-Curve)',
-			'finance' => 'Financial (S-Curve)',
+			'finance' => 'Financial (S-Curve) - Amount Claimed',
 		],
 		'issue' => 'Issues',
 		'financial' => 'Financial Tracker',
-		'hse' => 'Health & Safety Environment (HSE)'
+		'hse' => 'Health & Safety Environment (HSE)',
+		'owner' => 'Project Owner'
 	]
 ];

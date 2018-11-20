@@ -1,34 +1,16 @@
 <div class="row">
     <div class="col-md-9">
-        <h1>PROJECT DASHBOARD</h1>
+        <h4 class="pl-2 text-justify">Balance of Plant Electrical Works, Transmission Line Interconnection and Other Associated Works for 6 Mv Sg. Slim Mini Hydro
+        <br><small class="font-italic text-muted">Contract No</small>
+        </h4>
     </div>
     <div class="col-md-3 text-right" class="vertical">
         <p class="font-weight-bold mb-1">{{ __('joesama/project::project.date.report') }}</p>
-        <p class="text-muted">{!! date('d-m-Y') !!}</p>
+        <p class="text-muted">{!! $dateReport->format('d-m-Y') !!}</p>
     </div>
 </div>
 <hr class="mb-4">
 <div class="row">
-    <div class="col-md-12">
-        <table class="table table-borderless table-sm">
-            <tr>
-                <td class="font-weight-bold bg-primary text-light text-capitalize" style="width: 14.5%">
-                    {{ __('joesama/project::project.info.name') }}
-                </td>
-                <td class="pl-2 text-justify">
-                    Balance of Plant Electrical Works, Transmission Line Interconnection and Other Associated Works for 6 Mv Sg. Slim Mini Hydro 
-                </td>
-            </tr>
-            <tr>
-                <td class="font-weight-bold bg-primary text-light text-capitalize">
-                    {{ __('joesama/project::project.info.contract.no') }}
-                </td>
-                <td class="pl-2">
-                    AK47
-                </td>
-            </tr>
-        </table>
-    </div>
     <div class="col-md-6">
         <table class="table table-borderless table-sm">
             <tr>
@@ -157,7 +139,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="ont-weight-bold bg-default text-light text-capitalize">
+                <td class="font-weight-bold bg-default text-light text-capitalize">
                     {{ __('joesama/project::project.info.contract.eot') }}
                 </td>
                 <td class="pl-2">
