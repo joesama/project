@@ -18,5 +18,9 @@ return [
 		'stop' => 'Qty',
 		'summon' => 'Qty',
 		'complaint' => 'Qty',
+	],
+	'project' => [
+		'Balance of Plant Electrical Works, Transmission Line Interconnection and Other Associated Works for 6 Mv Sg. Slim Mini Hydro',
 	]
+
 ];

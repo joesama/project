@@ -14,7 +14,7 @@ return [
 			'scope'=> 'Scope of Contract',
 			'date'=> [
 				'start' => 'Start Date',
-				'end' => 'End Date (Planned)',
+				'end' => 'End Date',
 			],
 			'gp' => [
 				'original' => 'GP - Proposed',
