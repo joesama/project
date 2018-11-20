@@ -7,7 +7,7 @@ Foundation::group('joesama/project', '/', ['namespace' => 'Http\Controller', 'mi
 
     $router->group(['middleware' => ['auth']], function ($router) {
 
-    	$router->get('home', 'DashboardController@projectDashboard');
+    	$router->get('dashboard', 'DashboardController@projectDashboard');
         $router->group(['prefix' => 'project'], function ($router) {
             $router->get('/info/{id?}', 'ProjectController@projectInformation');
     	});
