@@ -11,6 +11,18 @@ use App\Http\Controllers\Controller;
  **/
 class DashboardController 
 {
+
+	/**
+	 * Return Project Portfolio
+	 *
+	 * @return void
+	 * @author 
+	 **/
+	public function projectPorfolio()
+	{
+		return view('joesama/project::project.portfolio');
+	}
+
 	/**
 	 * Return Project Information
 	 *
