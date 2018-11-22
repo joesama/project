@@ -4,8 +4,10 @@
 	<?php $issue = data_get($subsidiary,'issue'); ?>
 	<div class="col-lg-12 col-md-12 col-sm-12">
 		<div class="card text-center">
-			<div class="card-header font-weight-bold text-light bg-dark">
+			<div class="card-header text-light bg-dark" style="font-size: 24px;">
+				<a class=" font-weight-bold btn-link btn-category" style="color: white;" href="{{ handles('joesama/project::subsidiaries') }}">
 				{{ data_get($subsidiary,'name') }}
+				</a>
 			</div>
 			<div class="card-body">
 				<div class="row">

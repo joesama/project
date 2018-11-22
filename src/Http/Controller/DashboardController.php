@@ -13,7 +13,7 @@ class DashboardController
 {
 
 	/**
-	 * Return Project Portfolio
+	 * Return Group Portfolio
 	 *
 	 * @return void
 	 * @author 
@@ -21,6 +21,17 @@ class DashboardController
 	public function projectPorfolio()
 	{
 		return view('joesama/project::project.portfolio');
+	}
+
+	/**
+	 * Return Sub Portfolio
+	 *
+	 * @return void
+	 * @author 
+	 **/
+	public function projectSubs()
+	{
+		return view('joesama/project::project.subsidiary');
 	}
 
 	/**

@@ -120,6 +120,102 @@ return [
 			'gp' => 1.5,
 			'task' => 23
 		]
+	],
+	'tel' => [
+		[ 
+			'name' => 'Project A',
+			'contract' => 2,
+			'planned' => 100,
+			'actual' => 95,
+			'health' => 1,
+			'resource' => [
+				'Ali' => 3,
+				'Abu' => 1,
+				'Karim' => 1,
+			],
+			'task' => 4,
+			'issue' => 2,
+			'gp' => 1.2,
+		],
+		[ 
+			'name' => 'Project B',
+			'contract' => 0.7,
+			'planned' => 150,
+			'actual' => 165,
+			'health' => 2,
+			'resource' => [
+				'Ali' => 0,
+				'Abu' => 1,
+				'Karim' => 1,
+			],
+			'task' => 3,
+			'issue' => 1,
+			'gp' => -0.8,
+		],
+		[ 
+			'name' => 'Project C',
+			'contract' => 1.2,
+			'planned' => 200,
+			'actual' => 188,
+			'health' => 3,
+			'resource' => [
+				'Ali' => 0,
+				'Abu' => 1,
+				'Karim' => 1,
+			],
+			'task' => 8,
+			'issue' => 3,
+			'gp' => 0.5,
+		],
+	],
+	'progress' => [
+		[ 'task' => 'Letter of Acceptance (LOA)', 
+		  'pic' => 'Azhar', 
+		  'start' => '1-Jul-16', 
+		  'end' => '18-Jul-16', 
+		  'progress' => '100'
+		],
+		[ 'task' => 'Procurement', 
+		  'pic' => 'Azhar', 
+		  'start' => '27-Oct-16', 
+		  'end' => '2-Nov-16', 
+		  'progress' => '100'
+		],
+		[ 'task' => 'Design & Engeenering', 
+		  'pic' => 'Azhar', 
+		  'start' => '3-Nov-16', 
+		  'end' => '27-Mar-17', 
+		  'progress' => '81'
+		],
+		[ 'task' => 'Manufacturing', 
+		  'pic' => 'Azhar', 
+		  'start' => '13-Feb-17', 
+		  'end' => '8-Apr-17', 
+		  'progress' => '83'
+		],
+		[ 'task' => 'Factory Acceptance Test', 
+		  'pic' => 'Azhar', 
+		  'start' => '13-Feb-17', 
+		  'end' => '8-Apr-17', 
+		  'progress' => '63'
+		],
+		[ 'task' => 'Delivery', 
+		  'pic' => 'Azhar', 
+		  'start' => '16-Feb-17', 
+		  'end' => '2-May-17', 
+		  'progress' => '36'
+		],
+		[ 'task' => 'Erection', 
+		  'pic' => 'Azhar', 
+		  'start' => '3-Apr-17', 
+		  'end' => '26-Jul-17', 
+		  'progress' => '1'
+		],
+		[ 'task' => 'Testing and commissioning', 
+		  'pic' => 'Azhar', 
+		  'start' => '27-Jul-17', 
+		  'end' => '31-Jul-17', 
+		  'progress' => '0'
+		]
 	]
-
 ];

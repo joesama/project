@@ -31,117 +31,28 @@
           </tr>
         </thead>
         <tbody>
+          @foreach(config('joesama/project::data.progress') as $key => $taskschedule)
           <tr>
-            <td>1</td>
-            <td> Letter of Acceptance (LOA)
+            <td>{{ $key+1 }}</td>
+            <td> {{ data_get($taskschedule,'task') }}
               <a href="#" class="btn btn-sm btn-action text-dark" onclick="editschedule(this)">
                 <i class="far fa-edit"></i>
               </a>
             </td>                  
-            <td>Azhar</td> 
-            <td>1-Jul-16</td>    
-            <td>18-Jul-16</td>   
-            <td>100</td>
+            <td>{{ data_get($taskschedule,'pic') }}</td> 
+            <td>{{ data_get($taskschedule,'start') }}</td>    
+            <td>{{ data_get($taskschedule,'end') }}</td>   
+            <td>{{ data_get($taskschedule,'progress') }}</td>
           </tr>
-          <tr>
-            <td>2 </td>
-            <td>Procurement
-              <a href="#" class="btn btn-sm btn-action text-dark" onclick="editschedule(this)">
-                <i class="far fa-edit"></i>
-              </a>
-            </td>                                 
-            <td>Azhar</td> 
-            <td>27-Oct-16</td>    
-            <td>2-Nov-16</td>     
-            <td>100</td>
-          </tr>  
-          <tr>
-            <td>3 </td>
-            <td>Design & Engeenering
-              <a href="#" class="btn btn-sm btn-action text-dark" onclick="editschedule(this)">
-                <i class="far fa-edit"></i>
-              </a>
-            </td>              
-            <td>Azhar</td>
-            <td>3-Nov-16</td>    
-            <td>27-Mar-17</td>    
-            <td>81</td> 
-          </tr> 
-          <tr>
-            <td>4 </td>
-            <td>Manufacturing
-              <a href="#" class="btn btn-sm btn-action text-dark" onclick="editschedule(this)">
-                <i class="far fa-edit"></i>
-              </a>
-            </td>               
-            <td>Azhar</td> 
-            <td>13-Feb-17</td>   
-            <td>8-Apr-17</td>     
-            <td>83</td>
-          </tr>   
-          <tr>
-            <td>5 </td>
-            <td>Factory Acceptance Test
-              <a href="#" class="btn btn-sm btn-action text-dark" onclick="editschedule(this)">
-                <i class="far fa-edit"></i>
-              </a>
-            </td>                
-            <td>Azhar <td>13-Feb-17</td>    
-            <td>8-Apr-17</td>     
-            <td>63</td> 
-          </tr>
-          <tr> 
-            <td>6</td> 
-            <td>Delivery
-              <a href="#" class="btn btn-sm btn-action text-dark" onclick="editschedule(this)">
-                <i class="far fa-edit"></i>
-              </a>
-            </td>                
-            <td>Azhar</td> 
-            <td>16-Feb-17</td>    
-            <td>2-May-17</td>     
-            <td>36</td>
-          </tr>   
-          <tr>
-            <td>7 </td>
-            <td>Erection
-              <a href="#" class="btn btn-sm btn-action text-dark" onclick="editschedule(this)">
-                <i class="far fa-edit"></i>
-              </a>
-            </td>                
-            <td>Azhar</td> 
-            <td>3-Apr-17</td>     
-            <td>26-Jul-17</td>    
-            <td>1</td>
-          </tr>  
-          <tr>
-            <td>8</td> 
-            <td>Testing and commissioning
-              <a href="#" class="btn btn-sm btn-action text-dark" onclick="editschedule(this)">
-                <i class="far fa-edit"></i>
-              </a>
-            </td>                
-            <td>Azhar</td> 
-            <td>27-Jul-17</td>    
-            <td>31-Jul-17</td>    
-            <td>0 </td> 
-          </tr>
-          <tr>
-            <td>9</td> 
-            <td>Defect Liability Period (One Year period)
-              <a href="#" class="btn btn-sm btn-action text-dark" onclick="editschedule(this)">
-                <i class="far fa-edit"></i>
-              </a>
-            </td>                
-            <td>Azhar</td>  
-            <td>1-Aug-17</td>     
-            <td>31-Jul-19</td>    
-            <td>12.07</td> 
-          </tr>
+          @endforeach
         </tbody>
       </table>
       <div class="clearfix">&nbsp;</div>
-      <div id="chart_div"></div>
+      <div class="row">
+        <div class="col-md-12">
+          <div id="chart_div"></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -229,20 +140,13 @@
       data.addColumn('string', 'Dependencies');
 
       data.addRows([
-        ['LOA', 'Letter of Acceptance (LOA)',
-         new Date(2016, 6, 1), new Date(2016, 6, 16), null,  100,  null],
-        ['Procurement', 'Procurement',
-         new Date(2016, 6, 18), new Date(2016, 6, 20), null, 100, 'LOA'],
-        ['Design', 'Design & Engeenering',
-         new Date(2016, 6, 21), new Date(2016, 6, 25), null, 81, 'Procurement'],
-        ['Manufacturing', 'Manufacturing',
-         new Date(2016, 6, 26), new Date(2016, 6, 28), null, 83, 'Design,Procurement'],
-        ['Test', 'Factory Acceptance Test',
-         new Date(2016, 6, 28), new Date(2016, 6, 30), null, 63, 'Manufacturing']
+        @foreach(config('joesama/project::data.progress') as $key => $taskschedule)
+          [ "{{$key}}", "{{ data_get($taskschedule,'task') }}", new Date("{{ data_get($taskschedule,'start') }}"), new Date("{{ data_get($taskschedule,'end') }}"), null ,{{ data_get($taskschedule,'progress') }}, null ],
+        @endforeach
       ]);
 
       var options = {
-        height: 275
+        height: 400
       };
 
       var chart = new google.visualization.Gantt(document.getElementById('chart_div'));
