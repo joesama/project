@@ -33,7 +33,7 @@ class MenuHandler
 
         $menu->add('info','^:project')
             ->title(trans('joesama/project::project.detail'))
-            ->link(handles('joesama/project::project/info'))
+            ->link(handles('joesama/project::dashboard'))
             ->icon('icon fa fa-qrcode');
 
     }
