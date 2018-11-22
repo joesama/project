@@ -32,9 +32,11 @@
               <tr>
                 <th colspan="3" class="bg-primary text-light px-2">
                 VO
+                @if(is_null($id))
                 <a href="#" class="btn btn-sm btn-action report" onclick="openclaim(this)">
                   <i class="fas fa-plus"></i>
                 </a>
+                @endif
                 </th>
               </tr>
               <tr class="bg-secondary text-light px-2">
@@ -73,9 +75,11 @@
               <tr>
                 <th colspan="3" class="bg-primary text-light px-2">
                 Amount Claim
+                @if(is_null($id))
                 <a href="#" class="btn btn-sm btn-action report" onclick="openclaim(this)">
                   <i class="fas fa-plus"></i>
                 </a>
+                @endif
                 </th>
               </tr>
               <tr class="bg-secondary text-light px-2">
@@ -97,9 +101,11 @@
               <tr>
                 <th colspan="3" class="bg-primary text-light px-2">
                 Amount Paid
+                  @if(is_null($id))
                   <a href="#" class="btn btn-sm btn-action report" onclick="openclaim(this)">
                     <i class="fas fa-plus"></i>
                   </a>
+                  @endif
                 </th>
               </tr>
               <tr class="bg-secondary text-light px-2">
@@ -121,9 +127,11 @@
               <tr>
                 <th colspan="3" class="bg-danger text-light px-2">
                 LAD
+                @if(is_null($id))
                 <a href="#" class="btn btn-sm btn-action report" onclick="openclaim(this)">
                   <i class="fas fa-plus"></i>
                 </a>
+                @endif
                 </th>
               </tr>
               <tr class="bg-secondary text-light px-2">
@@ -145,9 +153,11 @@
               <tr>
                 <th colspan="3" class="bg-primary text-light px-2">
                 Retention
+                @if(is_null($id))
                 <a href="#" class="btn btn-sm btn-action report" onclick="openclaim(this)">
                   <i class="fas fa-plus"></i>
                 </a>
+                @endif
                 </th>
               </tr>
               <tr class="bg-secondary text-light px-2">

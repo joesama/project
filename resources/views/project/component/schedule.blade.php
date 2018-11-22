@@ -8,9 +8,11 @@
   </div>
   <div id="schedule" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
     <div class="card-body">
+      @if(is_null($id))
       <button class="btn btn-dark float-right mb-2" onclick="openischedule(this)">
         <i class="fas fa-plus"></i>
       </button>
+      @endif
       <table class="table table-sm table-borderless table-striped">
         <thead>
           <tr>
@@ -35,9 +37,11 @@
           <tr>
             <td>{{ $key+1 }}</td>
             <td> {{ data_get($taskschedule,'task') }}
+              @if(is_null($id))
               <a href="#" class="btn btn-sm btn-action text-dark" onclick="editschedule(this)">
                 <i class="far fa-edit"></i>
               </a>
+              @endif
             </td>                  
             <td>{{ data_get($taskschedule,'pic') }}</td> 
             <td>{{ data_get($taskschedule,'start') }}</td>    

@@ -28,9 +28,11 @@
             </div>
             <div class="font-weight-bold card-footer bg-primary text-light">
               {{ ucwords($title) }}
+              @if(is_null($id))
               <a href="#" class="btn btn-sm btn-action report" onclick="opensafety(this)">
                 <i class="fas fa-plus"></i>
               </a>
+              @endif
             </div>
           </div>
         </div>

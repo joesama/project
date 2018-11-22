@@ -15,9 +15,11 @@
               <tr>
                 <th colspan="4" class="bg-primary text-light px-2">
                   {{ __('joesama/project::project.owner.prepared') }}
+                  @if(is_null($id))
                   <a href="#" class="btn btn-sm btn-action" onclick="openmodal(this)">
                     <i class="far fa-edit"></i>
                   </a>
+                  @endif
                 </th>
               </tr>
             </thead>
@@ -29,19 +31,30 @@
                 <td class="w-25 text-light bg-secondary">
                   {{ __('joesama/project::project.owner.name') }}
                 </td>
-                <td class="text-left">&nbsp;</td>
+                <td class="text-left">
+                  @if($id > 0)
+                    Azhar Abdullah
+                  @endif
+                </td>
               </tr>
               <tr class="font-weight-normal px-2">
                 <td class="w-25 text-light bg-secondary">
                   {{ __('joesama/project::project.owner.mobile') }}
                 </td>
-                <td class=text-left">&nbsp;</td>
+                <td class=text-left">
+                  @if($id > 0)
+                    019-2641901
+                  @endif</td>
               </tr>
               <tr class="font-weight-normal px-2">
                 <td class="w-25 text-light bg-secondary">
                   {{ __('joesama/project::project.owner.position') }}
                 </td>
-                <td class="text-left">&nbsp;</td>
+                <td class="text-left">
+                  @if($id > 0)
+                    Assistant General Manager
+                  @endif
+                </td>
               </tr>
             </tbody>
           </table>
@@ -52,9 +65,11 @@
               <tr>
                 <th colspan="4" class="bg-primary text-light px-2">
                 {{ __('joesama/project::project.owner.approval') }}
+                @if($id == 1)
                 <a href="#" class="btn btn-sm btn-action" onclick="openmodal(this)">
                   <i class="far fa-edit"></i>
                 </a>
+                @endif
                 </th>
               </tr>
             </thead>
@@ -66,7 +81,11 @@
                 <td class="w-25 text-light bg-secondary">
                   {{ __('joesama/project::project.owner.name') }}
                 </td>
-                <td class="text-left">&nbsp;</td>
+                <td class="text-left">
+                  @if($id > 1)
+                    Mohamad Mazri Bin. Zainal Abidin
+                  @endif
+                </td>
               </tr>
               <tr class="font-weight-normal px-2">
                 <td class="w-25 text-light bg-secondary">
@@ -78,7 +97,11 @@
                 <td class="w-25 text-light bg-secondary">
                   {{ __('joesama/project::project.owner.position') }}
                 </td>
-                <td class="text-left"></td>
+                <td class="text-left">
+                  @if($id > 1)
+                    Vice President/CEO, KUB Power
+                  @endif
+                </td>
               </tr>
             </tbody>
           </table>
@@ -104,9 +127,11 @@
               <tr>
                 <th colspan="4" class="bg-primary text-light px-2">
                   {{ __('joesama/project::project.owner.validate') }}
-                <a href="#" class="btn btn-sm btn-action" onclick="openmodal(this)">
-                  <i class="far fa-edit"></i>
-                </a>
+                   @if($id == 2)
+                  <a href="#" class="btn btn-sm btn-action" onclick="openmodal(this)">
+                    <i class="far fa-edit"></i>
+                  </a>
+                  @endif
                 </th>
               </tr>
             </thead>
@@ -118,19 +143,31 @@
                 <td class="w-25 text-light bg-secondary">
                   {{ __('joesama/project::project.owner.name') }}
                 </td>
-                <td class="text-left">&nbsp;</td>
+                <td class="text-left">
+                  @if($id > 2)
+                    Mohd Aisamuddin Mohd Fadzil 
+                  @endif
+                </td>
               </tr>
               <tr class="font-weight-normal px-2">
                 <td class="w-25 text-light bg-secondary">
                   {{ __('joesama/project::project.owner.mobile') }}
                 </td>
-                <td class=text-left">&nbsp;</td>
+                <td class=text-left">
+                  @if($id > 2)
+                    017-9144813
+                  @endif
+                </td>
               </tr>
               <tr class="font-weight-normal px-2">
                 <td class="w-25 text-light bg-secondary">
                   {{ __('joesama/project::project.owner.position') }}
                 </td>
-                <td class="text-left">&nbsp;</td>
+                <td class="text-left">
+                  @if($id > 2)
+                    Assistant Manager, PMO
+                  @endif
+                </td>
               </tr>
             </tbody>
           </table>
@@ -141,9 +178,11 @@
               <tr>
                 <th colspan="4" class="bg-primary text-light px-2">
                 {{ __('joesama/project::project.owner.review') }}
+                @if($id == 3)
                 <a href="#" class="btn btn-sm btn-action" onclick="openmodal(this)">
                   <i class="far fa-edit"></i>
                 </a>
+                @endif
                 </th>
               </tr>
             </thead>
@@ -155,19 +194,31 @@
                 <td class="w-25 text-light bg-secondary">
                   {{ __('joesama/project::project.owner.name') }}
                 </td>
-                <td class="text-left">&nbsp;</td>
+                <td class="text-left">
+                  @if($id > 3)
+                    Shahril Fitri Mustapha
+                  @endif
+                </td>
               </tr>
               <tr class="font-weight-normal px-2">
                 <td class="w-25 text-light bg-secondary">
                   {{ __('joesama/project::project.owner.mobile') }}
                 </td>
-                <td class=text-left">&nbsp;</td>
+                <td class=text-left">                
+                  @if($id > 3)
+                    019-2738123
+                  @endif     
+                </td>
               </tr>
               <tr class="font-weight-normal px-2">
                 <td class="w-25 text-light bg-secondary">
                   {{ __('joesama/project::project.owner.position') }}
                 </td>
-                <td class="text-left">&nbsp;</td>
+                <td class="text-left">            
+                  @if($id > 3)
+                    Senior Manager, PMO
+                  @endif
+                </td>
               </tr>
             </tbody>
           </table>
@@ -178,9 +229,11 @@
               <tr>
                 <th colspan="4" class="bg-primary text-light px-2">
                 {{ __('joesama/project::project.owner.approval') }}
+                @if($id == 4)
                 <a href="#" class="btn btn-sm btn-action" onclick="openmodal(this)">
                   <i class="far fa-edit"></i>
                 </a>
+                @endif
                 </th>
               </tr>
             </thead>
@@ -192,19 +245,31 @@
                 <td class="w-25 text-light bg-secondary">
                   {{ __('joesama/project::project.owner.name') }}
                 </td>
-                <td class="text-left">&nbsp;</td>
+                <td class="text-left">
+                  @if($id > 4)
+                    Azman Abdullah
+                  @endif
+                </td>
               </tr>
               <tr class="font-weight-normal px-2">
                 <td class="w-25 text-light bg-secondary">
                   {{ __('joesama/project::project.owner.mobile') }}
                 </td>
-                <td class=text-left">&nbsp;</td>
+                <td class=text-left">
+                  @if($id > 4)
+                    012-4807030
+                  @endif
+                </td>
               </tr>
               <tr class="font-weight-normal px-2">
                 <td class="w-25 text-light bg-secondary">
                   {{ __('joesama/project::project.owner.position') }}
                 </td>
-                <td class="text-left">&nbsp;</td>
+                <td class="text-left">
+                  @if($id > 4)
+                    Vice President, GOSD
+                  @endif
+                </td>
               </tr>
             </tbody>
           </table>
@@ -259,7 +324,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <a href="{{ handles('joesama/report::project/info/'.(request()->segment(3)+1)) }}" class="btn btn-primary">Save changes</a>
       </div>
     </div>
   </div>

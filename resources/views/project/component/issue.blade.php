@@ -8,9 +8,11 @@
   </div>
   <div id="issues" class="collapse show" aria-labelledby="headingIssue" data-parent="#accordionExample">
     <div class="card-body">
+      @if(is_null($id))
       <button class="btn btn-dark float-right mb-2" onclick="openissue(this)">
         <i class="fas fa-plus"></i>
       </button>
+      @endif
       <div class="clearfix">&nbsp;</div>
       <table class="table table-sm table-bordered table-striped">
         <thead>
@@ -25,16 +27,21 @@
           <tr>
             <td class="text-center">1</td>
             <td>Land acquisition from Majlis Daerah Tg Malim & JKR for 33 kV transmission line work
+              @if(is_null($id))
               <a href="#" class="btn btn-sm text-dark btn-action" onclick="editissue(this)">
                   <i class="far fa-edit"></i>
-                </a>
+              </a>
+              @endif
             </td>
           </tr>
           <tr>
             <td class="text-center">2</td>
-            <td>Equipment delivery to PMU Slim River<a href="#" class="btn btn-sm text-dark btn-action" onclick="editissue(this)">
-                  <i class="far fa-edit"></i>
-                </a>
+            <td>Equipment delivery to PMU Slim River
+              @if(is_null($id))
+              <a href="#" class="btn btn-sm text-dark btn-action" onclick="editissue(this)">
+                <i class="far fa-edit"></i>
+              </a>
+              @endif
             </td>
           </tr>
         </tbody>
