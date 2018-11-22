@@ -18,10 +18,10 @@
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-md-6 font-weight-bold text-right text-{{ (data_get($subsidiary,'task') < 15) ? 'success' : (data_get($subsidiary,'task') > 15 && data_get($subsidiary,'task') < 20) ? 'warning' : 'danger'}}"  style="font-size: 50px">
+							<div class="col-md-4 font-weight-bold text-right text-{{ (data_get($subsidiary,'task') < 15) ? 'success' : (data_get($subsidiary,'task') > 15 && data_get($subsidiary,'task') < 20) ? 'warning' : 'danger'}}"  style="font-size: 50px">
 								{{ floatval(data_get($subsidiary,'task')) }}
 							</div>
-							<div class="col-md-6 font-weight-bold text-left align-middle" style="font-size: 36px;line-height: 2;">
+							<div class="col-md-8 font-weight-bold text-left align-middle" style="font-size: 36px;line-height: 2;">
 								Overdue Task
 							</div>
 						</div>
