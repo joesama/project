@@ -42,7 +42,14 @@ class DashboardController
 	 **/
 	public function projectDashboard()
 	{
-		return view('joesama/project::project.overall');
+		\Cache::forget('listproject');
+		$project = \Cache::remember('listproject', 60, function () {
+		    return config('joesama/project::project.project');
+		});
+
+		return view('joesama/project::project.overall',[
+			'project' => $project
+		]);
 	}
 
 } // END class ProjectController 

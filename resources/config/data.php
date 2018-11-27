@@ -1,6 +1,18 @@
 <?php
 
 return [
+	'status' => [
+		'color' => [
+			1 => 'success',
+			2 => 'warning',
+			3 => 'danger',
+ 		],
+ 		'icon' => [
+ 			1 => 'fas fa-check-circle',
+ 			2 => 'fas fa-exclamation-circle',
+ 			3 => 'fas fa-exclamation-circle'
+ 		]
+	],
 	'hse' => [
 		'total_hours' => 'Total Project Hours',
 		'acc_lti' => 'Accumulate Lost Time Injury (LTI)',
@@ -20,7 +32,12 @@ return [
 		'complaint' => 'Qty',
 	],
 	'project' => [
-		'Balance of Plant Electrical Works, Transmission Line Interconnection and Other Associated Works for 6 Mv Sg. Slim Mini Hydro',
+		[ 	'id' => 1,
+			'name' => 'Balance of Plant Electrical Works, Transmission Line Interconnection and Other Associated Works for 6 Mv Sg. Slim Mini Hydro',
+			'contract' => 'KUB/2018/E/B/001',
+			'start' => '01-07-2016',
+			'end' => '31-07-2019',
+		]
 	],
 	'portfolio' => [
 		'project' => [
@@ -217,5 +234,10 @@ return [
 		  'end' => '31-Jul-17', 
 		  'progress' => '0'
 		]
+	],
+	'issues' => [
+		[ 'name' => 'Land acquisition from Majlis Daerah Tg Malim & JKR for 33 kV transmission line work', 'priority' => 1 ],
+		[ 'name' => "Equipment drawing approval from TNB via client's consultant for FAT to perform prior to delivery", 'priority' => 2 ],
+		[ 'name' => 'Equipment delivery to PMU Slim River', 'priority' => 3 ]
 	]
 ];

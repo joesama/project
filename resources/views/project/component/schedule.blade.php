@@ -9,9 +9,9 @@
   <div id="schedule" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
     <div class="card-body">
       @if(is_null($id))
-      <button class="btn btn-dark float-right mb-2" onclick="openischedule(this)">
-        <i class="fas fa-plus"></i>
-      </button>
+      <a href="{{ handles('joesama/project::project/task/'.$projectId) }}" class="btn btn-dark float-right mb-2 py-1"  data-toggle="tooltip" data-placement="top" title="Tooltip on top"onclick="openischedule(this)">
+        <i class="far fa-calendar-plus"></i>&nbsp;{{ __('joesama/project::project.task.task') }}
+      </a>
       @endif
       <table class="table table-sm table-borderless table-striped">
         <thead>
@@ -36,13 +36,7 @@
           @foreach(config('joesama/project::data.progress') as $key => $taskschedule)
           <tr>
             <td>{{ $key+1 }}</td>
-            <td> {{ data_get($taskschedule,'task') }}
-              @if(is_null($id))
-              <a href="#" class="btn btn-sm btn-action text-dark" onclick="editschedule(this)">
-                <i class="far fa-edit"></i>
-              </a>
-              @endif
-            </td>                  
+            <td> {{ data_get($taskschedule,'task') }}</td>                  
             <td>{{ data_get($taskschedule,'pic') }}</td> 
             <td>{{ data_get($taskschedule,'start') }}</td>    
             <td>{{ data_get($taskschedule,'end') }}</td>   

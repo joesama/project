@@ -9,41 +9,29 @@
   <div id="issues" class="collapse show" aria-labelledby="headingIssue" data-parent="#accordionExample">
     <div class="card-body">
       @if(is_null($id))
-      <button class="btn btn-dark float-right mb-2" onclick="openissue(this)">
-        <i class="fas fa-plus"></i>
-      </button>
+      <a href="{{ handles('joesama/project::project/issues/'.$projectId) }}" class="btn btn-dark float-right mb-2 py-1"  data-toggle="tooltip" data-placement="top" title="Tooltip on top"onclick="openischedule(this)">
+        <i class="far fa-calendar-plus"></i>&nbsp;{{ __('joesama/project::project.issues.name') }}
+      </a>
       @endif
       <div class="clearfix">&nbsp;</div>
       <table class="table table-sm table-bordered table-striped">
         <thead>
           <tr class="bg-primary text-light">
             <th width="15px">No.</th>
-            <th>
-            Issues
-            </th>
+            <th>{{ __('joesama/project::project.issues.name') }}</th>
+            <th class="text-center">{{ __('joesama/project::project.issues.status') }}</th>
           </tr>
         </thead>
         <tbody>
+          @foreach(config('joesama/project::data.issues') as $key => $issues)
           <tr>
-            <td class="text-center">1</td>
-            <td>Land acquisition from Majlis Daerah Tg Malim & JKR for 33 kV transmission line work
-              @if(is_null($id))
-              <a href="#" class="btn btn-sm text-dark btn-action" onclick="editissue(this)">
-                  <i class="far fa-edit"></i>
-              </a>
-              @endif
+            <td class="text-center">{{ $key +1 }}</td>
+            <td>{{ data_get($issues,'name') }}</td>
+            <td class="text-center">
+            <i class="{{ config('joesama/project::data.status.icon.'.data_get($issues,'priority')) }} text-{{ config('joesama/project::data.status.color.'.data_get($issues,'priority')) }}"></i>
             </td>
           </tr>
-          <tr>
-            <td class="text-center">2</td>
-            <td>Equipment delivery to PMU Slim River
-              @if(is_null($id))
-              <a href="#" class="btn btn-sm text-dark btn-action" onclick="editissue(this)">
-                <i class="far fa-edit"></i>
-              </a>
-              @endif
-            </td>
-          </tr>
+          @endforeach
         </tbody>
       </table>
     </div>

@@ -1,7 +1,7 @@
 <?php
 
 return [
-	'module' => 'Project Management Officer',
+	'module' => 'Project Management Office',
 	'detail' => 'Project Information',
 	'date' => [
 		'report' =>  'Report Date'
@@ -43,6 +43,15 @@ return [
 			'start' => 'Date Start',
 			'end' => 'Date End',
 		],
+	],
+	'issues' => [
+		'name' => 'Issues',
+		'status' => 'Status',
+	],
+	'progress' => [
+		'name' => 'Progress',
+		'status' => 'Status',
+		'var' => 'Variance',
 	],
 	'owner' => [
 		'prepared' => 'Prepared By',

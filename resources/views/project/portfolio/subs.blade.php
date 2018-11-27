@@ -36,14 +36,6 @@
 	<div class="col-md-3 col-lg-3 col-sm-12">
 		<div class="row">
 			<div class="col-md-12 text-center font-weight-bold mb-1">
-				Resources
-			</div>
-		</div>
-		<div id="resources_div"></div>
-	</div>
-	<div class="col-md-3 col-lg-3 col-sm-12">
-		<div class="row">
-			<div class="col-md-12 text-center font-weight-bold mb-1">
 				Overdue Task
 			</div>
 		</div>

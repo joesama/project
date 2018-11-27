@@ -9,17 +9,21 @@ use App\Http\Controllers\Controller;
  * @package joesama/project
  * @author joharijumali@gmail.com
  **/
-class ProjectController 
+class ProjectController extends BaseController
 {
 	/**
 	 * Return Project Information
 	 *
-	 * @return void
-	 * @author joharijumali@gmail.com
+	 * @param string $part
+	 * @param int $projectId
 	 **/
-	public function projectInformation($id = null)
+	public function projectInformation(string $part, int $projectId)
 	{
-		return view('joesama/project::project.dashboard');
+
+		return view('joesama/project::project.part.'.$part,[
+			'projectPart' => $part,
+			'projectId' => $projectId
+		]);
 	}
 
 } // END class ProjectController 

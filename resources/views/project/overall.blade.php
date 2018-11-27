@@ -24,6 +24,7 @@
 		  			<tr class="bg-dark text-light">
 		  				<th width="15px">No.</th>
 		  				<th>{{ __('joesama/project::project.info.name') }}</th>
+		  				<th width="120px">PIC</th>
 		  				<th width="120px">{{ __('joesama/project::project.info.contract.no') }}</th>
 		  				<th width="120px">{{ __('joesama/project::project.info.contract.date.start') }}</th>
 		  				<th width="120px">{{ __('joesama/project::project.info.contract.date.end') }}</th>
@@ -31,15 +32,16 @@
 		  			</tr>
 		  		</thead>
 		  		<tbody>
-		  			@foreach(config('joesama/project::data.project') as $key => $title)
+		  			@foreach($project as $key => $title)
 		  			<tr>
 		  				<td class="text-center">{{$key+1 }}</td>
-		  				<td class="text-justify">{{ $title }}</td>
-		  				<td></td>
-		  				<td></td>
-		  				<td></td>
+		  				<td class="text-justify">{{ data_get($title,'name') }}</td>
+		  				<td>{{ data_get($title,'pic') }}</td>
+		  				<td>{{ data_get($title,'contract') }}</td>
+		  				<td>{{ data_get($title,'start') }}</td>
+		  				<td>{{ data_get($title,'end') }}</td>
 		  				<td class="text-center">
-		  					<a href="{{ handles('joesama/project::project/info') }}" class="btn btn-sm btn-action float-left report text-dark">
+		  					<a href="{{ handles('joesama/project::project/info/'.data_get($title,'id')) }}" class="btn btn-sm btn-action float-left report text-dark">
 			                  <i class="far fa-edit"></i>
 			                </a>
 		  				</td>
@@ -70,17 +72,7 @@
 		  			</tr>
 		  		</thead>
 		  		<tbody>
-		  			@foreach(config('joesama/project::data.project') as $key => $title)
-		  			<tr>
-		  				<td class="text-center">{{$key+1 }}</td>
-		  				<td class="text-justify">{{ $title }}</td>
-		  				<td class="text-center">
-		  					<a href="{{ handles('joesama/project::project/info') }}" class="btn btn-sm btn-action float-left report text-dark">
-			                  <i class="far fa-edit"></i>
-			                </a>
-		  				</td>
-		  			</tr>
-		  			@endforeach
+
 		  		</tbody>
 		  	</table>
 		  </div>
@@ -104,17 +96,7 @@
 		  			</tr>
 		  		</thead>
 		  		<tbody>
-		  			@foreach(config('joesama/project::data.project') as $key => $title)
-		  			<tr class="bg-success text-light">
-		  				<td class="text-center">{{$key+1 }}</td>
-		  				<td class="text-justify">{{ $title }}</td>
-		  				<td class="text-center">
-		  					<a href="{{ handles('joesama/project::project/info') }}" class="btn btn-sm btn-action float-left report text-dark">
-			                  <i class="far fa-edit"></i>
-			                </a>
-		  				</td>
-		  			</tr>
-		  			@endforeach
+
 		  		</tbody>
 		  	</table>
 		  </div>
@@ -131,7 +113,6 @@
         </button>
       </div>
       <div class="modal-body">
-      	@include('joesama/project::project.component.project-form')
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -150,7 +131,6 @@
         </button>
       </div>
       <div class="modal-body">
-      		@include('joesama/project::project.component.project-issue')
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -169,7 +149,6 @@
         </button>
       </div>
       <div class="modal-body">
-      		@include('joesama/project::project.component.project-task')
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

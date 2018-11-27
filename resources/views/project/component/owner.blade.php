@@ -16,8 +16,8 @@
                 <th colspan="4" class="bg-primary text-light px-2">
                   {{ __('joesama/project::project.owner.prepared') }}
                   @if(is_null($id))
-                  <a href="#" class="btn btn-sm btn-action" onclick="openmodal(this)">
-                    <i class="far fa-edit"></i>
+                  <a href="#" class="btn btn-sm btn-action" data-toggle="tooltip" data-placement="top" title="Tooltip on top" onclick="openmodal(this)">
+                    <i class="fas fa-file-signature"></i>
                   </a>
                   @endif
                 </th>
@@ -67,7 +67,7 @@
                 {{ __('joesama/project::project.owner.approval') }}
                 @if($id == 1)
                 <a href="#" class="btn btn-sm btn-action" onclick="openmodal(this)">
-                  <i class="far fa-edit"></i>
+                  <i class="fas fa-file-signature"></i>
                 </a>
                 @endif
                 </th>
@@ -129,7 +129,7 @@
                   {{ __('joesama/project::project.owner.validate') }}
                    @if($id == 2)
                   <a href="#" class="btn btn-sm btn-action" onclick="openmodal(this)">
-                    <i class="far fa-edit"></i>
+                    <i class="fas fa-file-signature"></i>
                   </a>
                   @endif
                 </th>
@@ -180,7 +180,7 @@
                 {{ __('joesama/project::project.owner.review') }}
                 @if($id == 3)
                 <a href="#" class="btn btn-sm btn-action" onclick="openmodal(this)">
-                  <i class="far fa-edit"></i>
+                  <i class="fas fa-file-signature"></i>
                 </a>
                 @endif
                 </th>
@@ -231,7 +231,7 @@
                 {{ __('joesama/project::project.owner.approval') }}
                 @if($id == 4)
                 <a href="#" class="btn btn-sm btn-action" onclick="openmodal(this)">
-                  <i class="far fa-edit"></i>
+                  <i class="fas fa-file-signature"></i>
                 </a>
                 @endif
                 </th>

@@ -33,8 +33,8 @@
                 <th colspan="3" class="bg-primary text-light px-2">
                 VO
                 @if(is_null($id))
-                <a href="#" class="btn btn-sm btn-action report" onclick="openclaim(this)">
-                  <i class="fas fa-plus"></i>
+                <a href="{{ handles('joesama/project::project/vo/'.$projectId) }}" class="btn btn-sm btn-action report">
+                  <i class="fas fa-list-ul"></i>
                 </a>
                 @endif
                 </th>
@@ -76,8 +76,8 @@
                 <th colspan="3" class="bg-primary text-light px-2">
                 Amount Claim
                 @if(is_null($id))
-                <a href="#" class="btn btn-sm btn-action report" onclick="openclaim(this)">
-                  <i class="fas fa-plus"></i>
+                <a href="{{ handles('joesama/project::project/claim/'.$projectId) }}" class="btn btn-sm btn-action report">
+                  <i class="fas fa-list-ul"></i>
                 </a>
                 @endif
                 </th>
@@ -102,8 +102,8 @@
                 <th colspan="3" class="bg-primary text-light px-2">
                 Amount Paid
                   @if(is_null($id))
-                  <a href="#" class="btn btn-sm btn-action report" onclick="openclaim(this)">
-                    <i class="fas fa-plus"></i>
+                  <a href="{{ handles('joesama/project::project/payment/'.$projectId) }}" class="btn btn-sm btn-action report" >
+                    <i class="fas fa-list-ul"></i>
                   </a>
                   @endif
                 </th>
@@ -128,8 +128,8 @@
                 <th colspan="3" class="bg-danger text-light px-2">
                 LAD
                 @if(is_null($id))
-                <a href="#" class="btn btn-sm btn-action report" onclick="openclaim(this)">
-                  <i class="fas fa-plus"></i>
+                <a href="{{ handles('joesama/project::project/lad/'.$projectId) }}" class="btn btn-sm btn-action report" onclick="openclaim(this)">
+                  <i class="fas fa-list-ul"></i>
                 </a>
                 @endif
                 </th>
@@ -154,8 +154,8 @@
                 <th colspan="3" class="bg-primary text-light px-2">
                 Retention
                 @if(is_null($id))
-                <a href="#" class="btn btn-sm btn-action report" onclick="openclaim(this)">
-                  <i class="fas fa-plus"></i>
+                <a href="{{ handles('joesama/project::project/retention/'.$projectId) }}" class="btn btn-sm btn-action report" >
+                  <i class="fas fa-list-ul"></i>
                 </a>
                 @endif
                 </th>

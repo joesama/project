@@ -15,7 +15,7 @@
             <div class="card">
                 <div class="card-body">
                     <?php $dateReport = Carbon\Carbon::create(2018,11,18) ?>
-                    <?php $id = request()->segment(3); ?>
+                    <?php $id = null; ?>
                     @includeIf('joesama/project::project.component.info')
                     <div class="accordion" id="accordionExample">
                         @includeIf('joesama/project::project.component.schedule')
