@@ -14,13 +14,15 @@
           <div id="physical_chart"></div> 
         </div>
         <div class="col-lg-2 col-md-2 col-sm-6 text-center">
-        <div class="row">
-          <div class="col-md-12">
-            <a href="{{ handles('joesama/project::project/physical/'.$projectId) }}" class="btn btn-block btn-dark float-right mb-2 py-1"  data-toggle="tooltip" data-placement="top" title="Tooltip on top">
-              <i class="fas fa-pen"></i></i>&nbsp;&nbsp;{{ __('joesama/project::project.progress.name') }}
-            </a>
+          @if(is_null($id))
+          <div class="row">
+            <div class="col-md-12">
+              <a href="{{ handles('joesama/project::project/physical/'.$projectId) }}" class="btn btn-block btn-dark float-right mb-2 py-1"  data-toggle="tooltip" data-placement="top" title="Tooltip on top">
+                <i class="fas fa-pen"></i></i>&nbsp;&nbsp;{{ __('joesama/project::project.progress.name') }}
+              </a>
+            </div>
           </div>
-        </div>
+          @endif
           <div class="card mb-4 mt-1">
             @php 
               $scurve = collect(config('joesama/project::project.scurve'))
@@ -45,13 +47,15 @@
           <div id="financial_chart"></div> 
         </div>
         <div class="col-lg-2 col-md-2 col-sm-6 text-center">
-        <div class="row">
-          <div class="col-md-12">
+          @if(is_null($id))
+          <div class="row">
+            <div class="col-md-12">
               <a href="{{ handles('joesama/project::project/financial/'.$projectId) }}" class="btn btn-block btn-dark float-right mb-2 py-1"  data-toggle="tooltip" data-placement="top" title="Tooltip on top">
                 <i class="fas fa-pen"></i>&nbsp;&nbsp;{{ __('joesama/project::project.progress.name') }}
               </a>
             </div>
-          </div>          
+          </div> 
+          @endif         
           <div class="card mb-4 mt-1">
             <div class="card-body font-weight-bold text-{{ ($financeVar > 0) ? 'success' : 'danger' }}" style="font-size: 24px">
                 {!! number_format($financeVar,2) !!}

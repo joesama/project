@@ -5,7 +5,11 @@
         </h4>
     </div>
     <div class="col-md-3 text-right" class="vertical">
+        @if($id > 0)
+        <p class="font-weight-bold mb-1">{{ __('joesama/project::project.date.report') }}</p>
+        @else
         <p class="font-weight-bold mb-1">{{ __('joesama/project::project.date.data') }}</p>
+        @endif
         <p class="text-muted">{!! $dateReport->format('d-m-Y') !!}</p>
     </div>
 </div>

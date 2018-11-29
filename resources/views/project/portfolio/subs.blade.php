@@ -17,7 +17,7 @@
 		<div class="row">
 			@foreach($project as $health)
 			<div class="col-md-6 text-right">
-				<a href="{{ handles('joesama/project::project/info') }}">{{data_get($health,'name')}}</a>
+				<a href="{{ handles('joesama/project::project/info/1') }}">{{data_get($health,'name')}}</a>
 			</div>
 			<div class="col-md-6 text-left">
 				@if(data_get($health,'health') == 1)

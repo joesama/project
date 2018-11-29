@@ -13,7 +13,7 @@
           <table class="table table-sm table-borderless" id="prepared">
             <thead>
               <tr>
-                <th colspan="4" class="bg-primary text-light px-2">
+                <th colspan="4" class="bg-{{ (!is_null($id)) ? 'success':'primary'}} text-light px-2">
                   {{ __('joesama/project::project.owner.prepared') }}
                   @if(is_null($id))
                   <a href="#" class="btn btn-sm btn-action" data-toggle="tooltip" data-placement="top" title="Tooltip on top" onclick="openmodal(this)">
@@ -27,7 +27,7 @@
               <tr>
                 <td colspan="4" class="text-justify" height="100px">&nbsp;</td>
               </tr>
-              <tr class="font-weight-normal px-2">
+              <tr class="font-weight-bold px-2">
                 <td class="w-25 text-light bg-secondary">
                   {{ __('joesama/project::project.owner.name') }}
                 </td>
@@ -37,7 +37,7 @@
                   @endif
                 </td>
               </tr>
-              <tr class="font-weight-normal px-2">
+              <tr class="font-weight-bold px-2">
                 <td class="w-25 text-light bg-secondary">
                   {{ __('joesama/project::project.owner.mobile') }}
                 </td>
@@ -46,7 +46,7 @@
                     019-2641901
                   @endif</td>
               </tr>
-              <tr class="font-weight-normal px-2">
+              <tr class="font-weight-bold px-2">
                 <td class="w-25 text-light bg-secondary">
                   {{ __('joesama/project::project.owner.position') }}
                 </td>
@@ -63,7 +63,7 @@
           <table class="table table-sm table-borderless" id="approvalowner">
             <thead>
               <tr>
-                <th colspan="4" class="bg-primary text-light px-2">
+                <th colspan="4" class="bg-{{ ($id>1) ? 'success':'primary'}} text-light px-2">
                 {{ __('joesama/project::project.owner.approval') }}
                 @if($id == 1)
                 <a href="#" class="btn btn-sm btn-action" onclick="openmodal(this)">
@@ -77,7 +77,7 @@
               <tr>
                 <td colspan="4"  class="text-justify" height="100px">&nbsp;</td>
               </tr>
-              <tr class="font-weight-normal px-2">
+              <tr class="font-weight-bold px-2">
                 <td class="w-25 text-light bg-secondary">
                   {{ __('joesama/project::project.owner.name') }}
                 </td>
@@ -87,13 +87,13 @@
                   @endif
                 </td>
               </tr>
-              <tr class="font-weight-normal px-2">
+              <tr class="font-weight-bold px-2">
                 <td class="w-25 text-light bg-secondary">
                   {{ __('joesama/project::project.owner.mobile') }}
                 </td>
                 <td class=text-left">&nbsp;</td>
               </tr>
-              <tr class="font-weight-normal px-2">
+              <tr class="font-weight-bold px-2">
                 <td class="w-25 text-light bg-secondary">
                   {{ __('joesama/project::project.owner.position') }}
                 </td>
@@ -125,7 +125,7 @@
           <table class="table table-sm table-borderless" id="validate">
             <thead>
               <tr>
-                <th colspan="4" class="bg-primary text-light px-2">
+                <th colspan="4" class="bg-{{ ($id>2) ? 'success':'primary'}} text-light px-2">
                   {{ __('joesama/project::project.owner.validate') }}
                    @if($id == 2)
                   <a href="#" class="btn btn-sm btn-action" onclick="openmodal(this)">
@@ -139,7 +139,7 @@
               <tr>
                 <td colspan="4"  class="text-justify" height="100px">&nbsp;</td>
               </tr>
-              <tr class="font-weight-normal px-2">
+              <tr class="font-weight-bold px-2">
                 <td class="w-25 text-light bg-secondary">
                   {{ __('joesama/project::project.owner.name') }}
                 </td>
@@ -149,7 +149,7 @@
                   @endif
                 </td>
               </tr>
-              <tr class="font-weight-normal px-2">
+              <tr class="font-weight-bold px-2">
                 <td class="w-25 text-light bg-secondary">
                   {{ __('joesama/project::project.owner.mobile') }}
                 </td>
@@ -159,7 +159,7 @@
                   @endif
                 </td>
               </tr>
-              <tr class="font-weight-normal px-2">
+              <tr class="font-weight-bold px-2">
                 <td class="w-25 text-light bg-secondary">
                   {{ __('joesama/project::project.owner.position') }}
                 </td>
@@ -176,7 +176,7 @@
           <table class="table table-sm table-borderless" id="review">
             <thead>
               <tr>
-                <th colspan="4" class="bg-primary text-light px-2">
+                <th colspan="4" class="bg-{{ ($id>3) ? 'success':'primary'}} text-light px-2">
                 {{ __('joesama/project::project.owner.review') }}
                 @if($id == 3)
                 <a href="#" class="btn btn-sm btn-action" onclick="openmodal(this)">
@@ -190,7 +190,7 @@
               <tr>
                 <td colspan="4"  class="text-justify" height="100px">&nbsp;</td>
               </tr>
-              <tr class="font-weight-normal px-2">
+              <tr class="font-weight-bold px-2">
                 <td class="w-25 text-light bg-secondary">
                   {{ __('joesama/project::project.owner.name') }}
                 </td>
@@ -200,7 +200,7 @@
                   @endif
                 </td>
               </tr>
-              <tr class="font-weight-normal px-2">
+              <tr class="font-weight-bold px-2">
                 <td class="w-25 text-light bg-secondary">
                   {{ __('joesama/project::project.owner.mobile') }}
                 </td>
@@ -210,7 +210,7 @@
                   @endif     
                 </td>
               </tr>
-              <tr class="font-weight-normal px-2">
+              <tr class="font-weight-bold px-2">
                 <td class="w-25 text-light bg-secondary">
                   {{ __('joesama/project::project.owner.position') }}
                 </td>
@@ -227,7 +227,7 @@
           <table class="table table-sm table-borderless" id="approval">
             <thead>
               <tr>
-                <th colspan="4" class="bg-primary text-light px-2">
+                <th colspan="4" class="bg-{{ ($id>4) ? 'success':'primary'}} text-light px-2">
                 {{ __('joesama/project::project.owner.approval') }}
                 @if($id == 4)
                 <a href="#" class="btn btn-sm btn-action" onclick="openmodal(this)">
@@ -241,7 +241,7 @@
               <tr>
                 <td colspan="4"  class="text-justify" height="100px">&nbsp;</td>
               </tr>
-              <tr class="font-weight-normal px-2">
+              <tr class="font-weight-bold px-2">
                 <td class="w-25 text-light bg-secondary">
                   {{ __('joesama/project::project.owner.name') }}
                 </td>
@@ -251,7 +251,7 @@
                   @endif
                 </td>
               </tr>
-              <tr class="font-weight-normal px-2">
+              <tr class="font-weight-bold px-2">
                 <td class="w-25 text-light bg-secondary">
                   {{ __('joesama/project::project.owner.mobile') }}
                 </td>
@@ -261,7 +261,7 @@
                   @endif
                 </td>
               </tr>
-              <tr class="font-weight-normal px-2">
+              <tr class="font-weight-bold px-2">
                 <td class="w-25 text-light bg-secondary">
                   {{ __('joesama/project::project.owner.position') }}
                 </td>
@@ -273,6 +273,22 @@
               </tr>
             </tbody>
           </table>
+          @if($id > 4)
+          <style type="text/css">
+            .approved{
+              position: absolute;
+              width: 70%;
+              height: 70%;
+              top: 40px;
+              right: 50px;
+              opacity: 0.4;
+              -ms-transform: rotate(-10deg); /* IE 9 */
+              -webkit-transform: rotate(-10deg); /* Safari */
+              transform: rotate(-10deg);
+            }
+          </style>
+          <img class="approved" src="{{ asset('packages/joesama/project/img/approved.png') }}" alt="logo">
+          @endif
         </div>
       </div>
     </div>
@@ -295,7 +311,7 @@
                   <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                 </td>
               </tr>
-              <tr class="font-weight-normal px-2">
+              <tr class="font-weight-bold px-2">
                 <td class="w-25 text-light bg-secondary">
                   {{ __('joesama/project::project.owner.name') }}
                 </td>
@@ -303,7 +319,7 @@
                   {{ \Auth::user()->fullname }}
                 </td>
               </tr>
-              <tr class="font-weight-normal px-2">
+              <tr class="font-weight-bold px-2">
                 <td class="w-25 text-light bg-secondary">
                   {{ __('joesama/project::project.owner.mobile') }}
                 </td>
@@ -311,7 +327,7 @@
                   Assistant General Manager
                 </td>
               </tr>
-              <tr class="font-weight-normal px-2">
+              <tr class="font-weight-bold px-2">
                 <td class="w-25 text-light bg-secondary">
                   {{ __('joesama/project::project.owner.position') }}
                 </td>
@@ -324,7 +340,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <a href="{{ handles('joesama/report::project/info/'.(request()->segment(3)+1)) }}" class="btn btn-primary">Save changes</a>
+        <a href="{{ handles('joesama/report::project/info/1/'.(request()->segment(4)+1)) }}" class="btn btn-primary">Save changes</a>
       </div>
     </div>
   </div>

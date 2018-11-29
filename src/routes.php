@@ -11,7 +11,7 @@ Foundation::group('joesama/project', '/', ['namespace' => 'Http\Controller', 'mi
     	$router->get('subsidiaries', 'DashboardController@projectSubs');
     	$router->get('dashboard', 'DashboardController@projectDashboard');
         $router->group(['prefix' => 'project'], function ($router) {
-            $router->get('/{part}/{id}', 'ProjectController@projectInformation');
+            $router->get('/{part}/{id}/{app?}', 'ProjectController@projectInformation');
     	});
 
     });

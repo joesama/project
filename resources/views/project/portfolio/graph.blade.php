@@ -1,10 +1,12 @@
+<div class="container-fluid">
 <div class="row">
 	@foreach(config('joesama/project::data.subsidiary') as $key => $subsidiary)
 	<?php $data = data_get($subsidiary,'budget.data'); ?>
 	<?php $issue = data_get($subsidiary,'issue'); ?>
-	<div class="col-lg-12 col-md-12 col-sm-12">
+	<div class="col-lg-6 col-md-6 col-sm-12 mb-3">
 		<div class="card text-center">
 			<div class="card-header text-light bg-dark" style="font-size: 24px;">
+				<img class="rounded-circle bg-light" src="{{ asset(memorize('threef.logo','packages/joesama/entree/img/profile.png')) }}" alt="logo"  style="width:50px;height:50px;" >
 				<a class=" font-weight-bold btn-link btn-category" style="color: white;" href="{{ handles('joesama/project::subsidiaries') }}">
 				{{ data_get($subsidiary,'name') }}
 				</a>
@@ -61,7 +63,6 @@
 			</div>
 		</div>
 	</div>
-	<div class="clearfix">&nbsp;</div>
 	@push('content.script')
 	<script type="text/javascript">
 	  google.charts.load('current', {'packages':['corechart']});
@@ -107,4 +108,5 @@
 	</script>
 	@endpush
 	@endforeach
+</div>
 </div>
