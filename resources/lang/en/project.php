@@ -2,9 +2,13 @@
 
 return [
 	'module' => 'Project Management Office',
+	'dashboard' => 'Project Dashboard',
 	'detail' => 'Project Information',
+	'summary' => 'Project Summary',
+	'action' => 'Action',
 	'date' => [
-		'report' =>  'Report Date'
+		'report' =>  'Report Date',
+		'data' =>  'Data As Dated'
 	],
 	'info' => [
 		'name' => 'Project Name',
@@ -47,6 +51,8 @@ return [
 	'issues' => [
 		'name' => 'Issues',
 		'status' => 'Status',
+		'dateline' => 'Dateline',
+		'progress' => 'Progress',
 	],
 	'progress' => [
 		'name' => 'Progress',
@@ -72,5 +78,12 @@ return [
 		'financial' => 'Financial Tracker',
 		'hse' => 'Health & Safety Environment (HSE)',
 		'owner' => 'Project Owner'
+	],
+	'scurve' => [
+		'physical' => 'Physical (S-Curve)',
+		'financial' => 'Financial (S-Curve) - Amount Claimed',
+		'month' => 'Month',
+		'plan' => 'Planned',
+		'actual' => 'Actual',
 	]
 ];

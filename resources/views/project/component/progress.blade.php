@@ -16,18 +16,21 @@
         <div class="col-lg-2 col-md-2 col-sm-6 text-center">
         <div class="row">
           <div class="col-md-12">
-            <a href="{{ handles('joesama/project::project/physical/'.$projectId) }}" class="btn btn-block btn-dark float-right mb-2 py-1"  data-toggle="tooltip" data-placement="top" title="Tooltip on top"onclick="openischedule(this)">
+            <a href="{{ handles('joesama/project::project/physical/'.$projectId) }}" class="btn btn-block btn-dark float-right mb-2 py-1"  data-toggle="tooltip" data-placement="top" title="Tooltip on top">
               <i class="fas fa-pen"></i></i>&nbsp;&nbsp;{{ __('joesama/project::project.progress.name') }}
             </a>
           </div>
         </div>
           <div class="card mb-4 mt-1">
             @php 
-              $physicalVar = -9.53;
-              $financeVar = 5.03;
+              $scurve = collect(config('joesama/project::project.scurve'))
+                        ->where('project_id',$projectId);
+              $lastCurve = $scurve->last();
+              $physicalVar = data_get($lastCurve,'physical_planned') - data_get($lastCurve,'physical_actual');
+              $financeVar = data_get($lastCurve,'financial_planned') - data_get($lastCurve,'financial_actual');
             @endphp
-            <div class="card-body font-weight-bold text-{{ ($physicalVar > 0) ? 'success' : 'danger' }}" style="font-size: 34px">
-                {!! $physicalVar !!}
+            <div class="card-body font-weight-bold text-{{ ($physicalVar > 0) ? 'success' : 'danger' }}" style="font-size: 24px">
+                {!! $physicalVar !!}&nbsp;%
             </div>
             <div class="card-footer font-weight-bold text-light bg-{{ ($physicalVar > 0) ? 'success' : 'danger' }}">
               {{ __('joesama/project::project.progress.var') }}
@@ -44,14 +47,14 @@
         <div class="col-lg-2 col-md-2 col-sm-6 text-center">
         <div class="row">
           <div class="col-md-12">
-              <a href="{{ handles('joesama/project::project/physical/'.$projectId) }}" class="btn btn-block btn-dark float-right mb-2 py-1"  data-toggle="tooltip" data-placement="top" title="Tooltip on top"onclick="openischedule(this)">
+              <a href="{{ handles('joesama/project::project/financial/'.$projectId) }}" class="btn btn-block btn-dark float-right mb-2 py-1"  data-toggle="tooltip" data-placement="top" title="Tooltip on top">
                 <i class="fas fa-pen"></i>&nbsp;&nbsp;{{ __('joesama/project::project.progress.name') }}
               </a>
             </div>
           </div>          
           <div class="card mb-4 mt-1">
-            <div class="card-body font-weight-bold text-{{ ($financeVar > 0) ? 'success' : 'danger' }}" style="font-size: 34px">
-                {!! $financeVar !!}
+            <div class="card-body font-weight-bold text-{{ ($financeVar > 0) ? 'success' : 'danger' }}" style="font-size: 24px">
+                {!! number_format($financeVar,2) !!}
             </div>
             <div class="card-footer font-weight-bold text-light bg-{{ ($financeVar > 0) ? 'success' : 'danger' }}">
               {{ __('joesama/project::project.progress.var') }}
@@ -69,31 +72,56 @@
       google.charts.setOnLoadCallback(drawChart);
 
       function drawChart() {
-        var data = google.visualization.arrayToDataTable([
+
+        var physicaldata = google.visualization.arrayToDataTable([
           ['Year', 'Planned', 'Actual'],
-          ['2004',  1000,      400],
-          ['2005',  1170,      460],
-          ['2006',  660,       1120],
-          ['2007',  1030,      540]
+          @foreach($scurve as $curve)
+          ["{{ data_get($curve,'month') }}",  {{ data_get($curve,'physical_planned') }},      {{ data_get($curve,'physical_actual') }}],
+          @endforeach
+        ]);
+
+        var financedata = google.visualization.arrayToDataTable([
+          ['Month', 'Planned', 'Actual'],
+          @foreach($scurve as $curve)
+          ["{{ data_get($curve,'month') }}",  {{ data_get($curve,'financial_planned') }},      {{ data_get($curve,'financial_actual') }}],
+          @endforeach
         ]);
 
         var pOptions = {
           title: '{{ __('joesama/project::project.category.progress.physical')  }}',
           curveType: 'function',
-          legend: { position: 'bottom' }
+          crosshair: {
+            color: '#000',
+            trigger: 'selection'
+          },        
+          hAxis: {
+            title: 'Month'
+          },
+          vAxis: {
+            title: 'Progress'
+          },
         };
 
         var fOptions = {
           title: '{{ __('joesama/project::project.category.progress.finance')  }}',
           curveType: 'function',
-          legend: { position: 'bottom' }
+          crosshair: {
+            color: '#000',
+            trigger: 'selection'
+          },     
+          hAxis: {
+            title: 'Month'
+          },
+          vAxis: {
+            title: 'RM'
+          },
         };
 
         var physical = new google.visualization.LineChart(document.getElementById('physical_chart'));
         var financial = new google.visualization.LineChart(document.getElementById('financial_chart'));
 
-        physical.draw(data, pOptions);
-        financial.draw(data, fOptions);
+        physical.draw(physicaldata, pOptions);
+        financial.draw(financedata, fOptions);
       }
     </script>
 

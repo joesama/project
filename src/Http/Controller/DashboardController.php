@@ -44,7 +44,7 @@ class DashboardController
 	{
 		\Cache::forget('listproject');
 		$project = \Cache::remember('listproject', 60, function () {
-		    return config('joesama/project::project.project');
+		    return config('joesama/project::project.info');
 		});
 
 		return view('joesama/project::project.overall',[

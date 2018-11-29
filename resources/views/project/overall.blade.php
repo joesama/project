@@ -37,12 +37,12 @@
 		  				<td class="text-center">{{$key+1 }}</td>
 		  				<td class="text-justify">{{ data_get($title,'name') }}</td>
 		  				<td>{{ data_get($title,'pic') }}</td>
-		  				<td>{{ data_get($title,'contract') }}</td>
+		  				<td>{{ data_get($title,'contract.no') }}</td>
 		  				<td>{{ data_get($title,'start') }}</td>
 		  				<td>{{ data_get($title,'end') }}</td>
 		  				<td class="text-center">
-		  					<a href="{{ handles('joesama/project::project/info/'.data_get($title,'id')) }}" class="btn btn-sm btn-action float-left report text-dark">
-			                  <i class="far fa-edit"></i>
+		  					<a href="{{ handles('joesama/project::project/info/'.data_get($title,'id')) }}" class="btn btn-sm btn-secondary">
+			                  <i class="far fa-eye"></i>
 			                </a>
 		  				</td>
 		  			</tr>

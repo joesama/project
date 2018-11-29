@@ -1,11 +1,11 @@
 <div class="row">
     <div class="col-md-9">
-        <h4 class="pl-2 text-justify">Balance of Plant Electrical Works, Transmission Line Interconnection and Other Associated Works for 6 Mv Sg. Slim Mini Hydro
-        <br><small class="font-italic text-muted">Contract No</small>
+        <h4 class="pl-2 text-justify">{{ data_get($component,'name') }}
+        <br><small class="font-italic text-muted">{{ data_get($component,'contract.no') }}</small>
         </h4>
     </div>
     <div class="col-md-3 text-right" class="vertical">
-        <p class="font-weight-bold mb-1">{{ __('joesama/project::project.date.report') }}</p>
+        <p class="font-weight-bold mb-1">{{ __('joesama/project::project.date.data') }}</p>
         <p class="text-muted">{!! $dateReport->format('d-m-Y') !!}</p>
     </div>
 </div>
@@ -18,7 +18,7 @@
                     {{ __('joesama/project::project.client.name') }}
                 </td>
                 <td class="pl-2">
-                    Panzana Enterprise Sdn Bhd
+                    {{ data_get($component,'client.name') }}
                 </td>
             </tr>
             <tr>
@@ -26,7 +26,7 @@
                     {{ __('joesama/project::project.client.tel') }}
                 </td>
                 <td class="pl-2">
-                    03-20950849 (Tel) / 03-20951848 (fax)
+                    {{ data_get($component,'client.tel') }}
                 </td>
             </tr>
             <tr>
@@ -34,7 +34,7 @@
                     {{ __('joesama/project::project.client.pm') }}
                 </td>
                 <td class="pl-2">
-                    Fadios Abd Rahman
+                    {{ data_get($component,'client.pmo') }}
                 </td>
             </tr>
             <tr>
@@ -42,7 +42,7 @@
                     {{ __('joesama/project::project.client.contact') }}
                 </td>
                 <td class="pl-2">
-                    012-9912084
+                    {{ data_get($component,'client.contact') }}
                 </td>
             </tr>
         </table>
@@ -52,7 +52,7 @@
                     {{ __('joesama/project::project.client.partner.name') }}
                 </td>
                 <td class="pl-2">
-                    China  Western Power International Pte Ltd
+                    {{ data_get($component,'client.partner.name') }}
                 </td>
             </tr>
             <tr>
@@ -60,7 +60,7 @@
                     {{ __('joesama/project::project.client.partner.tel') }}
                 </td>
                 <td class="pl-2">
-                    1109017661@qq.com
+                    {{ data_get($component,'client.partner.tel') }}
                 </td>
             </tr>
             <tr>
@@ -68,7 +68,7 @@
                     {{ __('joesama/project::project.client.partner.pm') }}
                 </td>
                 <td class="pl-2">
-                    Jiang Shuhong
+                    {{ data_get($component,'client.partner.pmo') }}
                 </td>
             </tr>
             <tr>
@@ -76,7 +76,7 @@
                     {{ __('joesama/project::project.client.partner.contact') }}
                 </td>
                 <td class="pl-2">
-                    65 9068 0208
+                    {{ data_get($component,'client.partner.name') }}
                 </td>
             </tr>
         </table>
@@ -88,7 +88,7 @@
                     {{ __('joesama/project::project.info.contract.value') }}
                 </td>
                 <td class="pl-2">
-                    RM 274,000.00
+                    {{ data_get($component,'contract.value') }}
                 </td>
             </tr>
             <tr>
@@ -96,7 +96,7 @@
                     {{ __('joesama/project::project.info.contract.scope') }}
                 </td>
                 <td class="pl-2">
-                    Construction and Engineering
+                    {{ data_get($component,'contract.scope') }}
                 </td>
             </tr>
             <tr>
@@ -104,7 +104,7 @@
                     {{ __('joesama/project::project.info.contract.date.start') }}
                 </td>
                 <td class="pl-2">
-                    {{ date('d-m-Y' , strtotime('01-07-2016')) }}
+                    {{ date('d-m-Y' , strtotime(data_get($component,'start'))) }}
                 </td>
             </tr>
             <tr>
@@ -112,7 +112,7 @@
                     {{ __('joesama/project::project.info.contract.date.end') }}
                 </td>
                 <td class="pl-2">
-                    {{ date('d-m-Y' , strtotime('01-07-2016')) }}
+                    {{ date('d-m-Y' , strtotime(data_get($component,'end'))) }}
                 </td>
             </tr>
         </table>
