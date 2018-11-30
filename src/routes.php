@@ -13,6 +13,10 @@ Foundation::group('joesama/project', '/', ['namespace' => 'Http\Controller', 'mi
         $router->group(['prefix' => 'project'], function ($router) {
             $router->get('/{part}/{id}/{app?}', 'ProjectController@projectInformation');
     	});
+        $router->group(['prefix' => 'report'], function ($router) {
+            $router->get('/project/{id}', 'ReportController@projectReport');
+            $router->get('/format/{id}/{report?}', 'ReportController@reportFormat');
+    	});
 
     });
 

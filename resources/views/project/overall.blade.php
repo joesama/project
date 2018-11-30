@@ -28,7 +28,7 @@
 		  				<th width="120px">{{ __('joesama/project::project.info.contract.no') }}</th>
 		  				<th width="120px">{{ __('joesama/project::project.info.contract.date.start') }}</th>
 		  				<th width="120px">{{ __('joesama/project::project.info.contract.date.end') }}</th>
-		  				<th width="15px">Action</th>
+		  				<th width="100px">Action</th>
 		  			</tr>
 		  		</thead>
 		  		<tbody>
@@ -43,6 +43,9 @@
 		  				<td class="text-center">
 		  					<a href="{{ handles('joesama/project::project/info/'.data_get($title,'id')) }}" class="btn btn-sm btn-secondary">
 			                  <i class="far fa-eye"></i>
+			                </a>
+		  					<a href="{{ handles('joesama/project::report/project/'.data_get($title,'id')) }}" class="btn btn-sm btn-secondary">
+			                  <i class="fas fa-file-alt"></i>
 			                </a>
 		  				</td>
 		  			</tr>

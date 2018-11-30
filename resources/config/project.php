@@ -31,6 +31,13 @@ return [
 		[ 'name' => "Equipment drawing approval from TNB via client's consultant for FAT to perform prior to delivery", 'priority' => 2, 'dateline' => '28-Apr-2017', 'progress' => 100,'project_id' => 1,'id' => 2,'pic' => 'Azhar' ],
 		[ 'name' => 'Equipment delivery to PMU Slim River', 'priority' => 3 , 'dateline' => '30-0ct-2017', 'progress' => 100,'project_id' => 1,'id' => 3, 'pic' => 'Azhar' ]
 	],
+	'report' => [
+		[ 'name' => 'WEEK 38', 
+		'date' => '21-Sept-2018', 
+		'project_id' => 1,
+		'id' => 1,
+		'pic' => 'Azhar' ]
+	],
 	'task' => [
 		collect([ 'task' => 'Letter of Acceptance (LOA)',
 		  'code' => 'LOA',

@@ -37,7 +37,7 @@ class MenuHandler
             ->link(handles('joesama/project::dashboard'))
             ->icon('icon fa fa-qrcode');
 
-        if(!is_null($projectId) && request()->segment(1) == 'project' && is_integer(intval($projectId))){
+        if(!is_null($projectId) && in_array(request()->segment(1),['report','project']) && is_integer(intval($projectId))){
 
             $menu->add('info','^:project')
                 ->title(trans('joesama/project::project.detail'))
@@ -68,7 +68,14 @@ class MenuHandler
                 ->title(trans('joesama/project::project.issues.name'))
                 ->link(handles('joesama/project::project/issues/'.$projectId))
                 ->icon('fas fa-list-ul');
+
+            $menu->add('report','^:project')
+                ->title(trans('joesama/project::project.report.title'))
+                ->link(handles('joesama/project::report/project/'.$projectId))
+                ->icon('fas fa-file-alt');
         }
+
+
 
 
     }

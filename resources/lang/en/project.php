@@ -6,6 +6,9 @@ return [
 	'detail' => 'Project Information',
 	'summary' => 'Project Summary',
 	'action' => 'Action',
+	'report' =>[ 
+		'title' => 'Report',
+	],
 	'date' => [
 		'report' =>  'Report Date',
 		'data' =>  'Data As Dated'
