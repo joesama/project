@@ -88,7 +88,7 @@
     <div class="col-md-6 text-left">
         <table class="table table-borderless table-sm">
             <tr>
-                <td class="font-weight-bold bg-default text-light text-capitalize" style="width: 30%">
+                <td class="font-weight-bold bg-primary text-light text-capitalize" style="width: 30%">
                     {{ __('joesama/project::project.info.contract.value') }}
                 </td>
                 <td class="pl-2">
@@ -96,7 +96,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="font-weight-bold bg-default text-light text-capitalize">
+                <td class="font-weight-bold bg-primary text-light text-capitalize">
                     {{ __('joesama/project::project.info.contract.scope') }}
                 </td>
                 <td class="pl-2">
@@ -104,7 +104,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="font-weight-bold bg-default text-light text-capitalize">
+                <td class="font-weight-bold bg-primary text-light text-capitalize">
                     {{ __('joesama/project::project.info.contract.date.start') }}
                 </td>
                 <td class="pl-2">
@@ -112,7 +112,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="font-weight-bold bg-default text-light text-capitalize">
+                <td class="font-weight-bold bg-primary text-light text-capitalize">
                     {{ __('joesama/project::project.info.contract.date.end') }}
                 </td>
                 <td class="pl-2">
@@ -122,28 +122,28 @@
         </table>
         <table class="table table-borderless table-sm">
             <tr>
-                <td class="font-weight-bold bg-default text-light text-capitalize" style="width: 30%">
+                <td class="font-weight-bold bg-primary text-light text-capitalize" style="width: 30%">
                     {{ __('joesama/project::project.info.contract.gp.original') }}
                 </td>
                 <td class="pl-2">
                 </td>
             </tr>
             <tr>
-                <td class="font-weight-bold bg-default text-light text-capitalize">
+                <td class="font-weight-bold bg-primary text-light text-capitalize">
                     {{ __('joesama/project::project.info.contract.gp.latest') }}
                 </td>
                 <td class="pl-2">
                 </td>
             </tr>
             <tr>
-                <td class="font-weight-bold bg-default text-light text-capitalize">
+                <td class="font-weight-bold bg-primary text-light text-capitalize">
                     {{ __('joesama/project::project.info.contract.bond') }}
                 </td>
                 <td class="pl-2">
                 </td>
             </tr>
             <tr>
-                <td class="font-weight-bold bg-default text-light text-capitalize">
+                <td class="font-weight-bold bg-primary text-light text-capitalize">
                     {{ __('joesama/project::project.info.contract.eot') }}
                 </td>
                 <td class="pl-2">

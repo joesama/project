@@ -7,7 +7,11 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-
+                <div class="row">
+                    <div class="col-md-12">
+                        <img width="100%" src="{{ asset('packages/joesama/project/img/weekly.png') }}">
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -10,12 +10,12 @@
     <div class="card-body">
       <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-          <table class="table table-sm table-borderless table-striped" style="margin-bottom: 0px">
+          <table class="table table-sm table-borderless " style="margin-bottom: 0px">
             <thead>
               <tr>
                 <th colspan="2" class="bg-primary text-light px-2">Contract Info</th>
               </tr>
-              <tr class="bg-secondary text-light px-2">
+              <tr class=" text-light px-2">
                 <th class="text-center">Value (RM)</th>
                 <th class="text-center">Periods (Years)</th>
               </tr>
@@ -27,7 +27,7 @@
               </tr>
             </tbody>
           </table>
-          <table class="table table-sm table-borderless table-striped" style="margin-bottom: 0px">
+          <table class="table table-sm table-borderless " style="margin-bottom: 0px">
             <thead>
               <tr>
                 <th colspan="3" class="bg-primary text-light px-2">
@@ -39,7 +39,7 @@
                 @endif
                 </th>
               </tr>
-              <tr class="bg-secondary text-light px-2">
+              <tr class=" text-light px-2">
                 <th class="text-center">{!! $dateReport->format('M-Y') !!}</th>
                 <th class="text-center">YTD (RM)</th>
                 <th class="text-center">TTD (RM)</th>
@@ -53,12 +53,12 @@
               </tr>
             </tbody>
           </table>
-          <table class="table table-sm table-borderless table-striped" style="margin-bottom: 0px">
+          <table class="table table-sm table-borderless " style="margin-bottom: 0px">
             <thead>
               <tr>
                 <th colspan="3" class="bg-primary text-light px-2">Revised Sum</th>
               </tr>
-              <tr class="bg-secondary text-light px-2">
+              <tr class=" text-light px-2">
                 <th class="text-center">TTD (RM)</th>
               </tr>
             </thead>
@@ -70,7 +70,7 @@
           </table>
         </div>
         <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-          <table class="table table-sm table-borderless table-striped"  style="margin-bottom: 0px">
+          <table class="table table-sm table-borderless "  style="margin-bottom: 0px">
             <thead>
               <tr>
                 <th colspan="3" class="bg-primary text-light px-2">
@@ -82,7 +82,7 @@
                 @endif
                 </th>
               </tr>
-              <tr class="bg-secondary text-light px-2">
+              <tr class=" text-light px-2">
                 <th class="text-center">{!! $dateReport->format('M-Y') !!}</th>
                 <th class="text-center">YTD (RM)</th>
                 <th class="text-center">TTD (RM)</th>
@@ -96,7 +96,7 @@
               </tr>
             </tbody>
           </table>
-          <table class="table table-sm table-borderless table-striped"  style="margin-bottom: 0px">
+          <table class="table table-sm table-borderless "  style="margin-bottom: 0px">
             <thead>
               <tr>
                 <th colspan="3" class="bg-primary text-light px-2">
@@ -108,7 +108,7 @@
                   @endif
                 </th>
               </tr>
-              <tr class="bg-secondary text-light px-2">
+              <tr class=" text-light px-2">
                 <th class="text-center">{!! $dateReport->format('M-Y') !!}</th>
                 <th class="text-center">YTD (RM)</th>
                 <th class="text-center">TTD (RM)</th>
@@ -122,7 +122,7 @@
               </tr>
             </tbody>
           </table>
-          <table class="table table-sm table-borderless table-striped"  style="margin-bottom: 0px">
+          <table class="table table-sm table-borderless "  style="margin-bottom: 0px">
             <thead>
               <tr>
                 <th colspan="3" class="bg-danger text-light px-2">
@@ -134,7 +134,7 @@
                 @endif
                 </th>
               </tr>
-              <tr class="bg-secondary text-light px-2">
+              <tr class=" text-light px-2">
                 <th class="text-center">{!! $dateReport->format('M-Y') !!}</th>
                 <th class="text-center">YTD (RM)</th>
                 <th class="text-center">TTD (RM)</th>
@@ -148,7 +148,7 @@
               </tr>
             </tbody>
           </table>
-          <table class="table table-sm table-borderless table-striped"  style="margin-bottom: 0px">
+          <table class="table table-sm table-borderless "  style="margin-bottom: 0px">
             <thead>
               <tr>
                 <th colspan="3" class="bg-primary text-light px-2">
@@ -160,7 +160,7 @@
                 @endif
                 </th>
               </tr>
-              <tr class="bg-secondary text-light px-2">
+              <tr class=" text-light px-2">
                 <th class="text-center">{!! $dateReport->format('M-Y') !!}</th>
                 <th class="text-center">YTD (RM)</th>
                 <th class="text-center">TTD (RM)</th>
@@ -174,7 +174,7 @@
               </tr>
             </tbody>
           </table>
-          <table class="table table-sm table-borderless table-striped"  style="margin-bottom: 0px">
+          <table class="table table-sm table-borderless "  style="margin-bottom: 0px">
             <thead>
               <tr>
                 <th class="bg-warning text-light px-2">Balance Contract (RM)</th>
@@ -204,7 +204,7 @@
           <table class="table table-sm table-borderless">
             <tbody>
               <tr class="font-weight-normal px-2">
-                <td class="w-25 text-light bg-secondary">
+                <td class="w-25 text-light ">
                   Date
                 </td>
                 <td class="text-left form-group">
@@ -212,7 +212,7 @@
                 </td>
               </tr>
               <tr class="font-weight-normal px-2">
-                <td class="w-25 text-light bg-secondary">
+                <td class="w-25 text-light ">
                   Amount (RM)
                 </td>
                 <td class="text-left form-group">

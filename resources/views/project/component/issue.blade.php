@@ -14,7 +14,7 @@
       </a>
       @endif
       <div class="clearfix">&nbsp;</div>
-      <table class="table table-sm table-bordered table-striped">
+      <table class="table table-sm table-bordered">
         <thead>
           <tr class="bg-primary text-light">
             <th width="15px">No.</th>
