@@ -16,10 +16,10 @@
   </div>
   <div class="form-group">
     <label for="staticEmail" class="col-sm-3 control-label text-semibold">
-    	{{ __('joesama/project::project.info.name') }}
+      {{ __('joesama/project::project.info.name') }}
     </label>
     <div class="col-md-9">
-      <select class="form-control input-sm" id="exampleFormControlSelect1">
+      <select class="form-control" id="exampleFormControlSelect1">
         @foreach(config('joesama/project::data.project') as $key => $title)
           <option>{{ data_get($title,'name') }}</option>
         @endforeach
@@ -28,7 +28,7 @@
   </div>
   <div class="form-group">
     <label for="staticEmail" class="col-sm-3 control-label text-semibold">
-      {{ __('joesama/project::project.priority') }}
+    	{{ __('joesama/project::project.priority') }}
     </label>
     <div class="col-md-9">
       <select class="form-control" id="exampleFormControlSelect1">
@@ -40,26 +40,10 @@
   </div>
   <div class="form-group">
     <label for="staticEmail" class="col-sm-3 control-label text-semibold">
-      {{ __('joesama/project::project.task.task') }}
+    	Risk
     </label>
     <div class="col-md-9">
-      <input type="text" class="form-control input-sm" id="staticEmail" placeholder="{{ __('joesama/project::project.task.task') }}">
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="staticEmail" class="col-sm-3 control-label text-semibold">
-    	{{ __('joesama/project::project.info.contract.date.start') }}
-    </label>
-    <div class="col-md-9">
-      <input type="text" class="form-control input-sm" id="staticEmail" placeholder="{{ __('joesama/project::project.info.contract.date.start') }}">
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="staticEmail" class="col-sm-3 control-label text-semibold">
-    	{{ __('joesama/project::project.info.contract.date.end') }}
-    </label>
-    <div class="col-md-9">
-      <input type="text" class="form-control input-sm" id="staticEmail" placeholder="{{ __('joesama/project::project.info.contract.date.end') }}">
+      <input type="text" class="form-control" id="staticEmail" placeholder="Issue">
     </div>
   </div>
 </form>	

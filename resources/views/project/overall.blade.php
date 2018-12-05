@@ -14,8 +14,8 @@
 		<div class="panel">
 		  <div class="panel-heading">
 		  	<div class="panel-control">
-		    	<button class="btn btn-default" onclick="newProject(this)">
-		        	<i class="ion-plus-round"></i>
+		    	<button class="btn btn-primary" data-toggle="modal" data-target="#projectModal">
+		        	<i class="ion-plus-round"></i>&nbsp;Project
 		      	</button>
 		  	</div>
 	      	<h3 class="panel-title text-bold">Project</h3>
@@ -43,11 +43,11 @@
 		  				<td>{{ data_get($title,'start') }}</td>
 		  				<td>{{ data_get($title,'end') }}</td>
 		  				<td class="text-center">
-		  					<a href="{{ handles('joesama/project::project/info/'.data_get($title,'id')) }}" class="btn btn-sm btn-secondary">
-			                  <i class="far fa-eye"></i>
+		  					<a href="{{ handles('joesama/project::project/info/'.data_get($title,'id')) }}" class="btn btn-default btn-circle btn-icon">
+			                  <i class="psi-magnifi-glass"></i>
 			                </a>
-		  					<a href="{{ handles('joesama/project::report/project/'.data_get($title,'id')) }}" class="btn btn-sm btn-secondary">
-			                  <i class="fas fa-file-alt"></i>
+		  					<a href="{{ handles('joesama/project::report/project/'.data_get($title,'id')) }}" class="btn btn-default btn-circle btn-icon">
+			                  <i class="psi-file-edit"></i>
 			                </a>
 		  				</td>
 		  			</tr>
@@ -63,8 +63,8 @@
 		<div class="panel">
 		  <div class="panel-heading">
 		  	<div class="panel-control">
-		  		<button class="btn btn-default text-light" data-toggle="modal" data-target="#taskModal" data-title="New Task">
-		  			<i class="ion-plus-round"></i>
+		  		<button class="btn btn-primary" data-toggle="modal" data-target="#taskModal" data-title="New Task">
+		  			<i class="ion-plus-round"></i>&nbsp;Task
 		      	</button>
 		  	</div>
 	      	<h3 class="panel-title text-bold">Open Task</h3>
@@ -91,8 +91,8 @@
 		<div class="panel">
 		  <div class="panel-heading">
 		  	<div class="panel-control">
-		  		<button class="btn btn-default text-light" data-toggle="modal" data-target="#issueModal" data-title="New Issue">
-		  			<i class="ion-plus-round"></i>
+		  		<button class="btn btn-primary" data-toggle="modal" data-target="#issueModal" data-title="New Issue">
+		  			<i class="ion-plus-round"></i>&nbsp;Issue
 		      	</button>
 		  	</div>
 	      	<h3 class="panel-title text-bold">Issue</h3>
@@ -115,26 +115,35 @@
 		  </div>
 		</div>
 	</div>
+	<div class="col-md-6">
+		<div class="panel">
+		  <div class="panel-heading">
+		  	<div class="panel-control">
+		  		<button class="btn btn-primary" data-toggle="modal" data-target="#riskModal" data-title="New Risk">
+		  			<i class="ion-plus-round"></i>&nbsp;Risk
+		      	</button>
+		  	</div>
+	      	<h3 class="panel-title text-bold">Risk</h3>
+		  </div>
+		  <div class="panel-body">
+		  	<table class="table table-sm table-borderless table-striped">
+		  		<thead>
+		  			<tr class="text-light">
+		  				<th width="15px">No.</th>
+		  				<th>Risk</th>
+		  				<th width="15px">Action</th>
+		  			</tr>
+		  		</thead>
+		  		<tbody>
+		  			<tr>
+		  				<td colspan="3" class="text-center text-capitalize">Tiada Data</td>
+		  			</tr>
+		  		</tbody>
+		  	</table>
+		  </div>
+		</div>
+	</div>
 </div>
-
-   <!--Large Bootstrap Modal-->
-    <!--===================================================-->
-    <div id="projectModal" class="modal fade" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle"></i></button>
-                    <h4 class="modal-title" id="myLargeModalLabel">Large modal</h4>
-                </div>
-                <div class="modal-body">
-                    <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--===================================================-->
-    <!--End Large Bootstrap Modal-->
-
 <div class="modal fade bd-example-modal-lg" id="projectModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
@@ -145,6 +154,7 @@
         </button>
       </div>
       <div class="modal-body">
+      	@include('joesama/project::project.component.project-form')
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -163,6 +173,7 @@
         </button>
       </div>
       <div class="modal-body">
+      	@include('joesama/project::project.component.project-issue')
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -181,6 +192,26 @@
         </button>
       </div>
       <div class="modal-body">
+      	@include('joesama/project::project.component.project-task')
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade bd-example-modal-lg" id="riskModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary">
+        <h5 class="modal-title text-capitalize font-weight-bold text-light" id="exampleModalLabel">New Project</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      	@include('joesama/project::project.component.project-risk')
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -233,6 +264,14 @@ $(document).on('nifty.ready', function() {
 	})
 
 	$('#issueModal').on('show.bs.modal', function (event) {
+	  var button = $(event.relatedTarget)
+	  var recipient = button.data('title') 
+	  console.log(recipient);
+	  var modal = $(this)
+	  modal.find('.modal-title').text(recipient)
+	})
+
+	$('#riskModal').on('show.bs.modal', function (event) {
 	  var button = $(event.relatedTarget)
 	  var recipient = button.data('title') 
 	  console.log(recipient);

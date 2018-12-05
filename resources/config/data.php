@@ -13,6 +13,9 @@ return [
  			3 => 'fas fa-exclamation-circle'
  		]
 	],
+	'priority' => [
+		'high' => 'danger' , 'medium' => 'warning' , 'low' => 'info'
+	],
 	'hse' => [
 		'total_hours' => 'Total Project Hours',
 		'acc_lti' => 'Accumulate Lost Time Injury (LTI)',
