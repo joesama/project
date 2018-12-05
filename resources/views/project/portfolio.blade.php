@@ -6,7 +6,6 @@
 @endpush
 @section('content')
 	@include('joesama/project::project.portfolio.counter')
-	<div class="clearfix">&nbsp;</div>
 	@include('joesama/project::project.portfolio.graph')
 @endsection
 @prepend('content.script')

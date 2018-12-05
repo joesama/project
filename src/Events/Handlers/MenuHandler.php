@@ -42,37 +42,37 @@ class MenuHandler
             $menu->add('info','^:project')
                 ->title(trans('joesama/project::project.detail'))
                 ->link(handles('joesama/project::project/info/'.$projectId))
-                ->icon('fas fa-info');
+                ->icon('fa fa-folder');
 
             $menu->add('summary','^:project.info')
                 ->title(trans('joesama/project::project.detail'))
                 ->link(handles('joesama/project::project/info/'.$projectId))
-                ->icon('fas fa-file-alt');
+                ->icon('fa fa-file-word-o');
 
             $menu->add('task','^:project.info')
                 ->title(trans('joesama/project::project.task.task'))
                 ->link(handles('joesama/project::project/task/'.$projectId))
-                ->icon('fas fa-list-ul');
+                ->icon('fa fa-list-ul');
 
             $menu->add('physical','^:project.info')
                 ->title(trans('joesama/project::project.scurve.physical'))
                 ->link(handles('joesama/project::project/physical/'.$projectId))
-                ->icon('fas fa-list-ul');
+                ->icon('psi-line-chart');
 
             $menu->add('financial','^:project.info')
                 ->title(trans('joesama/project::project.scurve.financial'))
                 ->link(handles('joesama/project::project/financial/'.$projectId))
-                ->icon('fas fa-list-ul');
+                ->icon('psi-line-chart');
 
             $menu->add('issues','^:project.info')
                 ->title(trans('joesama/project::project.issues.name'))
                 ->link(handles('joesama/project::project/issues/'.$projectId))
-                ->icon('fas fa-list-ul');
+                ->icon('pli-overtime');
 
-            $menu->add('report','^:project')
+            $menu->add('report','^:project.info')
                 ->title(trans('joesama/project::project.report.title'))
                 ->link(handles('joesama/project::report/project/'.$projectId))
-                ->icon('fas fa-file-alt');
+                ->icon('fa fa-file-word-o');
         }
 
 
