@@ -31,6 +31,11 @@ return [
 		[ 'name' => "Equipment drawing approval from TNB via client's consultant for FAT to perform prior to delivery", 'priority' => 2, 'dateline' => '28-Apr-2017', 'progress' => 100,'project_id' => 1,'id' => 2,'pic' => 'Azhar' ],
 		[ 'name' => 'Equipment delivery to PMU Slim River', 'priority' => 3 , 'dateline' => '30-0ct-2017', 'progress' => 100,'project_id' => 1,'id' => 3, 'pic' => 'Azhar' ]
 	],
+	'risk' => [
+		[ 'name' => 'Land acquisition from Majlis Daerah Tg Malim & JKR for 33 kV transmission line work', 'priority' => 1, 'dateline' => '20-Apr-2017', 'progress' => 100,'project_id' => 1,'id' => 1,'pic' => 'Azhar' ],
+		[ 'name' => "Equipment drawing approval from TNB via client's consultant for FAT to perform prior to delivery", 'priority' => 2, 'dateline' => '28-Apr-2017', 'progress' => 100,'project_id' => 1,'id' => 2,'pic' => 'Azhar' ],
+		[ 'name' => 'Equipment delivery to PMU Slim River', 'priority' => 3 , 'dateline' => '30-0ct-2017', 'progress' => 100,'project_id' => 1,'id' => 3, 'pic' => 'Azhar' ]
+	],
 	'report' => [
 		[ 'name' => 'WEEK 38', 
 		'date' => '21-Sept-2018', 

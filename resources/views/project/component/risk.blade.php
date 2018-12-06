@@ -1,16 +1,16 @@
 <div class="panel panel-primary">
-  <div class="panel-heading" id="headingIssue">
+  <div class="panel-heading" id="headingRisk">
     <h4 class="panel-title">
-      <a data-parent="#accordionExample" data-toggle="collapse" href="#issues" aria-expanded="true" aria-controls="budget">
-          {{ __('joesama/project::project.category.issue') }}
+      <a data-parent="#accordionExample" data-toggle="collapse" href="#risk" aria-expanded="true" aria-controls="budget">
+          {{ __('joesama/project::project.category.risk') }}
       </a>
     </h4>
   </div>
-  <div id="issues" class="panel-collapse collapse in" aria-labelledby="headingIssue" >
+  <div id="risk" class="panel-collapse collapse in" aria-labelledby="headingRisk" >
     <div class="panel-body">
       @if(is_null($id))
-      <a href="{{ handles('joesama/project::project/issues/'.$projectId) }}" class="btn btn-primary pull-right mar-btm"  data-toggle="tooltip" data-placement="top" title="Tooltip on top"onclick="openischedule(this)">
-        <i class="ion-plus-round"></i>&nbsp;{{ __('joesama/project::project.issues.name') }}
+      <a href="{{ handles('joesama/project::project/risk/'.$projectId) }}" class="btn btn-primary pull-right mar-btm"  data-toggle="tooltip" data-placement="top" title="Tooltip on top"onclick="openischedule(this)">
+        <i class="ion-plus-round"></i>&nbsp;{{ __('joesama/project::project.risk.name') }}
       </a>
       @endif
       <div class="clearfix">&nbsp;</div>

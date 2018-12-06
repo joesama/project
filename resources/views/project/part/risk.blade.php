@@ -17,21 +17,21 @@
                 </div>
                 <div class="panel-body">
                       <button class="btn btn-dark pull-right mar-btm"  data-toggle="tooltip" data-placement="top" title="Tooltip on top" onclick="newtask(this)">
-                        <i class="fa fa-calendar"></i>&nbsp;{{ __('joesama/project::project.issues.name') }}
+                        <i class="fa fa-calendar"></i>&nbsp;{{ __('joesama/project::project.risk.name') }}
                       </button>
                   <table class="table table-sm table-borderless table-striped">
                     <thead>
                       <tr>
                         <th width="10px" class="bg-primary text-light"  style="color: white">No.</th>
                         <th class="bg-primary text-light w-50"  style="color: white">
-                          {{ __('joesama/project::project.issues.name') }}
+                          {{ __('joesama/project::project.risk.name') }}
                         </th>
                         <th class="bg-primary text-light" width="100px"  style="color: white">PIC</th>
                         <th class="bg-primary text-light" width="100px"  style="color: white">
-                          {{ __('joesama/project::project.issues.dateline') }}
+                          {{ __('joesama/project::project.risk.dateline') }}
                         </th>
                         <th class="bg-primary text-light" width="100px"  style="color: white">
-                          {{ __('joesama/project::project.issues.progress') }}
+                          {{ __('joesama/project::project.risk.priority') }}
                         </th>
                         <th class="bg-primary text-light" width="50px"  style="color: white">
                           {{ __('joesama/project::project.action') }}
@@ -124,11 +124,11 @@
     var task = @json($component);
 
     function newtask(modal) {
-      $('#scheduleModal .modal-title').text('New Issue');
+      $('#scheduleModal .modal-title').text('New Risk');
       $('#scheduleModal').modal('show');
     }
     function editschedule(modal) {
-      $('#scheduleModal .modal-title').text('Edit Issue');
+      $('#scheduleModal .modal-title').text('Edit Risk');
       $('#scheduleModal table td #task').text($(modal.closest('td')).text());
       $('#scheduleModal').modal('toggle')
     }

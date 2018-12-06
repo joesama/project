@@ -8,13 +8,16 @@ return [
 			3 => 'danger',
  		],
  		'icon' => [
- 			1 => 'fas fa-check-circle',
- 			2 => 'fas fa-exclamation-circle',
- 			3 => 'fas fa-exclamation-circle'
+ 			1 => 'fa fa-check-circle',
+ 			2 => 'fa fa-exclamation-circle',
+ 			3 => 'fa fa-exclamation-circle'
  		]
 	],
 	'priority' => [
 		'high' => 'danger' , 'medium' => 'warning' , 'low' => 'info'
+	],
+	'status-progress' => [
+		'complete' => 'Project Complete' , 'inprogress' => 'In Progress' , 'new' => 'New'
 	],
 	'hse' => [
 		'total_hours' => 'Total Project Hours',
@@ -239,6 +242,11 @@ return [
 		]
 	],
 	'issues' => [
+		[ 'name' => 'Land acquisition from Majlis Daerah Tg Malim & JKR for 33 kV transmission line work', 'priority' => 1 ],
+		[ 'name' => "Equipment drawing approval from TNB via client's consultant for FAT to perform prior to delivery", 'priority' => 2 ],
+		[ 'name' => 'Equipment delivery to PMU Slim River', 'priority' => 3 ]
+	],
+	'risk' => [
 		[ 'name' => 'Land acquisition from Majlis Daerah Tg Malim & JKR for 33 kV transmission line work', 'priority' => 1 ],
 		[ 'name' => "Equipment drawing approval from TNB via client's consultant for FAT to perform prior to delivery", 'priority' => 2 ],
 		[ 'name' => 'Equipment delivery to PMU Slim River', 'priority' => 3 ]

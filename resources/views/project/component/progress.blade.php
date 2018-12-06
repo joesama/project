@@ -1,14 +1,14 @@
-<div class="card">
-  <div class="card-header py-0 bg-default" id="headingProgress">
-      <button class="btn btn-link btn-category" type="button" data-toggle="collapse" data-target="#progress" aria-expanded="true" aria-controls="progress">
-          <h4 class="my-0 font-weight-bold text-light">
-              {{ __('joesama/project::project.category.progress.physical') }}&nbsp;&&nbsp;
-              {{ __('joesama/project::project.category.progress.finance') }}
-          </h4>
-      </button>
+<div class="panel panel-primary">
+  <div class="panel-heading" id="headingProgress">
+    <h4 class="panel-title">
+      <a data-parent="#accordionExample" data-toggle="collapse" href="#progress" aria-expanded="true" aria-controls="budget">
+          {{ __('joesama/project::project.category.progress.physical') }}&nbsp;&&nbsp;
+          {{ __('joesama/project::project.category.progress.finance') }}
+      </a>
+    </h4>
   </div>
-  <div id="progress" class="collapse show" aria-labelledby="headingProgress" data-parent="#accordionExample">
-    <div class="card-body">
+  <div id="progress" class="panel-collapse collapse in" aria-labelledby="headingProgress" >
+    <div class="panel-body">
       <div class="row mt-5">
         <div class="col-lg-10 col-md-10">
           <div id="physical_chart"></div> 

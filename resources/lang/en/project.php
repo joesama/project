@@ -7,6 +7,7 @@ return [
 	'summary' => 'Project Summary',
 	'action' => 'Action',
 	'priority' => 'Priority',
+	'status' => 'Status',
 	'report' =>[ 
 		'title' => 'Report',
 	],
@@ -58,6 +59,12 @@ return [
 		'dateline' => 'Dateline',
 		'progress' => 'Progress',
 	],
+	'risk' => [
+		'name' => 'Risk',
+		'status' => 'Status',
+		'dateline' => 'Dateline',
+		'priority' => 'Priority',
+	],
 	'progress' => [
 		'name' => 'Progress',
 		'status' => 'Status',
@@ -81,7 +88,8 @@ return [
 		'issue' => 'Issues',
 		'financial' => 'Financial Tracker',
 		'hse' => 'Health & Safety Environment (HSE)',
-		'owner' => 'Project Owner'
+		'owner' => 'Project Owner',
+		'risk' => 'Project Risk'
 	],
 	'scurve' => [
 		'physical' => 'Physical (S-Curve)',

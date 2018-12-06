@@ -1,23 +1,23 @@
-<div class="card">
-  <div class="card-header py-0 bg-default" id="headingHse">
-      <button class="btn btn-link btn-category" type="button" data-toggle="collapse" data-target="#owner" aria-expanded="true" aria-controls="owner">
-          <h4 class="my-0 font-weight-bold text-light">
+<div class="panel panel-primary">
+  <div class="panel-heading" id="headingHse">
+    <h4 class="panel-title">
+      <a data-parent="#accordionExample" data-toggle="collapse" href="#owner" aria-expanded="true" aria-controls="owner">
               {{ __('joesama/project::project.category.owner') }}
-          </h4>
-      </button>
+      </a>
+    </h4>
   </div>
-  <div id="owner" class="collapse show" aria-labelledby="headingHse" data-parent="#accordionExample">
-    <div class="card-body">
+  <div id="owner" class="panel-collapse collapse in" aria-labelledby="headingHse" >
+    <div class="panel-body">
       <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-12 col-12">
           <table class="table table-sm table-borderless" id="prepared">
             <thead>
               <tr>
-                <th colspan="4" class="bg-{{ (!is_null($id)) ? 'success':'primary'}} text-light px-2">
+                <th colspan="4" class="bg-{{ (!is_null($id)) ? 'success':'primary'}}" style="color: white">
                   {{ __('joesama/project::project.owner.prepared') }}
                   @if(is_null($id))
                   <a href="#" class="btn btn-sm btn-action" data-toggle="tooltip" data-placement="top" title="Tooltip on top" onclick="openmodal(this)">
-                    <i class="fas fa-file-signature"></i>
+                    <i class="icon-2x psi-fountain-pen"></i>
                   </a>
                   @endif
                 </th>
@@ -27,8 +27,8 @@
               <tr>
                 <td colspan="4" class="text-justify" height="100px">&nbsp;</td>
               </tr>
-              <tr class="font-weight-bold px-2">
-                <td class="w-25 text-light bg-secondary">
+              <tr class="text-bold px-2">
+                <td class="bg-primary" width="100px" >
                   {{ __('joesama/project::project.owner.name') }}
                 </td>
                 <td class="text-left">
@@ -37,8 +37,8 @@
                   @endif
                 </td>
               </tr>
-              <tr class="font-weight-bold px-2">
-                <td class="w-25 text-light bg-secondary">
+              <tr class="text-bold px-2">
+                <td class="bg-primary">
                   {{ __('joesama/project::project.owner.mobile') }}
                 </td>
                 <td class=text-left">
@@ -46,8 +46,8 @@
                     019-2641901
                   @endif</td>
               </tr>
-              <tr class="font-weight-bold px-2">
-                <td class="w-25 text-light bg-secondary">
+              <tr class="text-bold px-2">
+                <td class="bg-primary">
                   {{ __('joesama/project::project.owner.position') }}
                 </td>
                 <td class="text-left">
@@ -63,11 +63,11 @@
           <table class="table table-sm table-borderless" id="approvalowner">
             <thead>
               <tr>
-                <th colspan="4" class="bg-{{ ($id>1) ? 'success':'primary'}} text-light px-2">
+                <th colspan="4" class="bg-{{ ($id>1) ? 'success':'primary'}}" style="color: white">
                 {{ __('joesama/project::project.owner.approval') }}
                 @if($id == 1)
                 <a href="#" class="btn btn-sm btn-action" onclick="openmodal(this)">
-                  <i class="fas fa-file-signature"></i>
+                  <i class="icon-2x psi-fountain-pen"></i>
                 </a>
                 @endif
                 </th>
@@ -77,8 +77,8 @@
               <tr>
                 <td colspan="4"  class="text-justify" height="100px">&nbsp;</td>
               </tr>
-              <tr class="font-weight-bold px-2">
-                <td class="w-25 text-light bg-secondary">
+              <tr class="text-bold px-2">
+                <td class="w-25  bg-primary" width="100px" >
                   {{ __('joesama/project::project.owner.name') }}
                 </td>
                 <td class="text-left">
@@ -87,14 +87,14 @@
                   @endif
                 </td>
               </tr>
-              <tr class="font-weight-bold px-2">
-                <td class="w-25 text-light bg-secondary">
+              <tr class="text-bold px-2">
+                <td class="w-25  bg-primary">
                   {{ __('joesama/project::project.owner.mobile') }}
                 </td>
                 <td class=text-left">&nbsp;</td>
               </tr>
-              <tr class="font-weight-bold px-2">
-                <td class="w-25 text-light bg-secondary">
+              <tr class="text-bold px-2">
+                <td class="w-25  bg-primary">
                   {{ __('joesama/project::project.owner.position') }}
                 </td>
                 <td class="text-left">
@@ -110,26 +110,26 @@
     </div>
   </div>
 </div>
-<div class="card">
-  <div class="card-header py-0 bg-default" id="headingHse">
-      <button class="btn btn-link btn-category" type="button" data-toggle="collapse" data-target="#gosb" aria-expanded="true" aria-controls="gosb">
-          <h4 class="my-0 font-weight-bold text-light">
-              GROUP OPERATIONS & STRATEGIC DEVELOPMENT (GOSD)
-          </h4>
-      </button>
+<div class="panel panel-primary">
+  <div class="panel-heading" id="headingHse">
+    <h4 class="panel-title">
+      <a data-parent="#accordionExample" data-toggle="collapse" href="#gosb" aria-expanded="true" aria-controls="gosb">
+          GROUP OPERATIONS & STRATEGIC DEVELOPMENT (GOSD)
+      </a>
+    </h4>
   </div>
-  <div id="gosb" class="collapse show" aria-labelledby="headingHse" data-parent="#accordionExample">
-    <div class="card-body">
+  <div id="gosb" class="panel-collapse collapse in" aria-labelledby="headingHse" >
+    <div class="panel-body">
       <div class="row">
         <div class="col-lg-4 col-md-4 col-sm-12 col-12">
           <table class="table table-sm table-borderless" id="validate">
             <thead>
               <tr>
-                <th colspan="4" class="bg-{{ ($id>2) ? 'success':'primary'}} text-light px-2">
+                <th colspan="4" class="bg-{{ ($id>2) ? 'success':'primary'}}  px-2" style="color: white">
                   {{ __('joesama/project::project.owner.validate') }}
                    @if($id == 2)
                   <a href="#" class="btn btn-sm btn-action" onclick="openmodal(this)">
-                    <i class="fas fa-file-signature"></i>
+                    <i class="icon-2x psi-fountain-pen"></i>
                   </a>
                   @endif
                 </th>
@@ -139,8 +139,8 @@
               <tr>
                 <td colspan="4"  class="text-justify" height="100px">&nbsp;</td>
               </tr>
-              <tr class="font-weight-bold px-2">
-                <td class="w-25 text-light bg-secondary">
+              <tr class="text-bold px-2">
+                <td class="bg-primary" width="100px">
                   {{ __('joesama/project::project.owner.name') }}
                 </td>
                 <td class="text-left">
@@ -149,8 +149,8 @@
                   @endif
                 </td>
               </tr>
-              <tr class="font-weight-bold px-2">
-                <td class="w-25 text-light bg-secondary">
+              <tr class="text-bold px-2">
+                <td class="bg-primary">
                   {{ __('joesama/project::project.owner.mobile') }}
                 </td>
                 <td class=text-left">
@@ -159,8 +159,8 @@
                   @endif
                 </td>
               </tr>
-              <tr class="font-weight-bold px-2">
-                <td class="w-25 text-light bg-secondary">
+              <tr class="text-bold px-2">
+                <td class="bg-primary">
                   {{ __('joesama/project::project.owner.position') }}
                 </td>
                 <td class="text-left">
@@ -176,11 +176,11 @@
           <table class="table table-sm table-borderless" id="review">
             <thead>
               <tr>
-                <th colspan="4" class="bg-{{ ($id>3) ? 'success':'primary'}} text-light px-2">
+                <th colspan="4" class="bg-{{ ($id>3) ? 'success':'primary'}}  px-2" style="color: white">
                 {{ __('joesama/project::project.owner.review') }}
                 @if($id == 3)
                 <a href="#" class="btn btn-sm btn-action" onclick="openmodal(this)">
-                  <i class="fas fa-file-signature"></i>
+                  <i class="icon-2x psi-fountain-pen"></i>
                 </a>
                 @endif
                 </th>
@@ -190,8 +190,8 @@
               <tr>
                 <td colspan="4"  class="text-justify" height="100px">&nbsp;</td>
               </tr>
-              <tr class="font-weight-bold px-2">
-                <td class="w-25 text-light bg-secondary">
+              <tr class="text-bold px-2">
+                <td class="bg-primary" width="100px" >
                   {{ __('joesama/project::project.owner.name') }}
                 </td>
                 <td class="text-left">
@@ -200,8 +200,8 @@
                   @endif
                 </td>
               </tr>
-              <tr class="font-weight-bold px-2">
-                <td class="w-25 text-light bg-secondary">
+              <tr class="text-bold px-2">
+                <td class="bg-primary">
                   {{ __('joesama/project::project.owner.mobile') }}
                 </td>
                 <td class=text-left">                
@@ -210,8 +210,8 @@
                   @endif     
                 </td>
               </tr>
-              <tr class="font-weight-bold px-2">
-                <td class="w-25 text-light bg-secondary">
+              <tr class="text-bold px-2">
+                <td class="bg-primary">
                   {{ __('joesama/project::project.owner.position') }}
                 </td>
                 <td class="text-left">            
@@ -227,11 +227,11 @@
           <table class="table table-sm table-borderless" id="approval">
             <thead>
               <tr>
-                <th colspan="4" class="bg-{{ ($id>4) ? 'success':'primary'}} text-light px-2">
+                <th colspan="4" class="bg-{{ ($id>4) ? 'success':'primary'}}  px-2" style="color: white">
                 {{ __('joesama/project::project.owner.approval') }}
                 @if($id == 4)
                 <a href="#" class="btn btn-sm btn-action" onclick="openmodal(this)">
-                  <i class="fas fa-file-signature"></i>
+                  <i class="icon-2x psi-fountain-pen"></i>
                 </a>
                 @endif
                 </th>
@@ -241,8 +241,8 @@
               <tr>
                 <td colspan="4"  class="text-justify" height="100px">&nbsp;</td>
               </tr>
-              <tr class="font-weight-bold px-2">
-                <td class="w-25 text-light bg-secondary">
+              <tr class="text-bold px-2">
+                <td class="bg-primary" width="100px" >
                   {{ __('joesama/project::project.owner.name') }}
                 </td>
                 <td class="text-left">
@@ -251,8 +251,8 @@
                   @endif
                 </td>
               </tr>
-              <tr class="font-weight-bold px-2">
-                <td class="w-25 text-light bg-secondary">
+              <tr class="text-bold px-2">
+                <td class="bg-primary">
                   {{ __('joesama/project::project.owner.mobile') }}
                 </td>
                 <td class=text-left">
@@ -261,8 +261,8 @@
                   @endif
                 </td>
               </tr>
-              <tr class="font-weight-bold px-2">
-                <td class="w-25 text-light bg-secondary">
+              <tr class="text-bold px-2">
+                <td class="bg-primary">
                   {{ __('joesama/project::project.owner.position') }}
                 </td>
                 <td class="text-left">
@@ -311,24 +311,24 @@
                   <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                 </td>
               </tr>
-              <tr class="font-weight-bold px-2">
-                <td class="w-25 text-light bg-secondary">
+              <tr class="text-bold px-2">
+                <td class="bg-primary">
                   {{ __('joesama/project::project.owner.name') }}
                 </td>
                 <td class="text-left form-group">
                   {{ \Auth::user()->fullname }}
                 </td>
               </tr>
-              <tr class="font-weight-bold px-2">
-                <td class="w-25 text-light bg-secondary">
+              <tr class="text-bold px-2">
+                <td class="bg-primary">
                   {{ __('joesama/project::project.owner.mobile') }}
                 </td>
                 <td class="text-left form-group">
                   Assistant General Manager
                 </td>
               </tr>
-              <tr class="font-weight-bold px-2">
-                <td class="w-25 text-light bg-secondary">
+              <tr class="text-bold px-2">
+                <td class="bg-primary">
                   {{ __('joesama/project::project.owner.position') }}
                 </td>
                 <td class="text-left form-group">

@@ -12,31 +12,29 @@
 
     <div class="row">
         <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                      <button class="btn btn-dark float-right"  data-toggle="tooltip" data-placement="top" title="Tooltip on top" onclick="newtask(this)">
-                        <i class="far fa-calendar-plus"></i>&nbsp;{{ __('joesama/project::project.task.task') }}
-                      </button>
-                </div>
-                <div class="card-body">
+            <div class="panel">
+                <div class="panel-body">
+                  <button class="btn btn-dark pull-right mar-btm"  data-toggle="tooltip" data-placement="top" title="Tooltip on top" onclick="newtask(this)">
+                    <i class="fa fa-calendar"></i>&nbsp;{{ __('joesama/project::project.task.task') }}
+                  </button>
                   <table class="table table-sm table-borderless table-striped">
                     <thead>
-                      <tr>
-                        <th class="bg-primary text-light">No.</th>
-                        <th class="bg-primary text-light w-50">
+                      <tr >
+                        <th class="bg-primary" style="color: white">No.</th>
+                        <th class="bg-primary w-50" style="color: white">
                           {{ __('joesama/project::project.task.task') }}
                         </th>
-                        <th class="bg-primary text-light">PIC</th>
-                        <th class="bg-primary text-light" width="150px">
+                        <th class="bg-primary" style="color: white">PIC</th>
+                        <th class="bg-primary" width="150px" style="color: white">
                           {{ __('joesama/project::project.task.date.start') }}
                         </th>
-                        <th class="bg-primary text-light" width="150px">
+                        <th class="bg-primary" width="150px" style="color: white">
                           {{ __('joesama/project::project.task.date.end') }}
                         </th>
-                        <th class="bg-primary text-light" width="100px">
+                        <th class="bg-primary" width="100px" style="color: white">
                           {{ __('joesama/project::project.task.progress') }}
                         </th>
-                        <th class="bg-primary text-light" width="50px">
+                        <th class="bg-primary" width="50px" style="color: white">
                           {{ __('joesama/project::project.action') }}
                         </th>
                       </tr>
@@ -53,7 +51,7 @@
                         <td>{{ data_get($taskschedule,'progress') }}</td>
                         <td class="text-center">
                             <button class="btn btn-dark btn-sm" onclick="editschedule(this)">
-                                <i class="fas fa-edit"></i>
+                                <i class="fa fa-edit"></i>
                             </button>
                         </td>
                       </tr>

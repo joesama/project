@@ -1,33 +1,33 @@
-<div class="card">
-  <div class="card-header py-0 bg-default" id="headingOne">
-      <button class="btn btn-link btn-category" type="button" data-toggle="collapse" data-target="#schedule" aria-expanded="true" aria-controls="schedule">
-          <h4 class="my-0 font-weight-bold text-light">
-              {{ __('joesama/project::project.category.schedule') }}
-          </h4>
-      </button>
+<div class="panel panel-primary">
+  <div class="panel-heading" id="headingOne">
+    <h4 class="panel-title">
+      <a data-parent="#accordionExample" data-toggle="collapse" href="#schedule" aria-expanded="true" aria-controls="schedule">
+          {{ __('joesama/project::project.category.schedule') }}
+      </a>
+    </h4>
   </div>
-  <div id="schedule" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-    <div class="card-body">
+  <div id="schedule" class="panel-collapse collapse in" aria-labelledby="headingOne" >
+    <div class="panel-body">
       @if(is_null($id))
-      <a href="{{ handles('joesama/project::project/task/'.$projectId) }}" class="btn btn-dark float-right mb-2 py-1"  data-toggle="tooltip" data-placement="top" title="Tooltip on top">
-        <i class="far fa-calendar-plus"></i>&nbsp;{{ __('joesama/project::project.task.task') }}
+      <a href="{{ handles('joesama/project::project/task/'.$projectId) }}" class="btn btn-primary pull-right mar-btm"  data-toggle="tooltip" data-placement="top" title="Tooltip on top">
+        <i class="ion-plus-round"></i>&nbsp;{{ __('joesama/project::project.task.task') }}
       </a>
       @endif
       <table class="table table-sm table-borderless table-striped">
         <thead>
           <tr>
-            <th class="bg-primary text-light">No.</th>
-            <th class="bg-primary text-light w-50">
+            <th>No.</th>
+            <th>
               {{ __('joesama/project::project.task.task') }}
             </th>
-            <th class="bg-primary text-light">PIC</th>
-            <th class="bg-primary text-light" width="150px">
+            <th>PIC</th>
+            <th width="150px">
               {{ __('joesama/project::project.task.date.start') }}
             </th>
-            <th class="bg-primary text-light" width="150px">
+            <th width="150px">
               {{ __('joesama/project::project.task.date.end') }}
             </th>
-            <th class="bg-primary text-light" width="100px">
+            <th width="100px">
               {{ __('joesama/project::project.task.progress') }}
             </th>
           </tr>

@@ -69,6 +69,11 @@ class MenuHandler
                 ->link(handles('joesama/project::project/issues/'.$projectId))
                 ->icon('pli-overtime');
 
+            $menu->add('issues','^:project.info')
+                ->title(trans('joesama/project::project.risk.name'))
+                ->link(handles('joesama/project::project/risk/'.$projectId))
+                ->icon('pli-overtime');
+
             $menu->add('report','^:project.info')
                 ->title(trans('joesama/project::project.report.title'))
                 ->link(handles('joesama/project::report/project/'.$projectId))

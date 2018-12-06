@@ -11,21 +11,21 @@
 @section('content')
 
     <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <?php $dateReport = Carbon\Carbon::create(2018,11,18) ?>
-                    <?php $id = null; ?>
+        <div class="col-md-12">
+            <?php $dateReport = Carbon\Carbon::create(2018,11,18) ?>
+            <?php $id = null; ?>
+            <div class="panel">{{dd('sss')}}
+                <div class="panel-body">
                     @includeIf('joesama/project::project.component.info')
-                    <div class="accordion" id="accordionExample">
-                        @includeIf('joesama/project::project.component.schedule')
-                        @includeIf('joesama/project::project.component.progress')
-                        @includeIf('joesama/project::project.component.issue')
-                        @includeIf('joesama/project::project.component.budget')
-                        @includeIf('joesama/project::project.component.hse')
-                        @includeIf('joesama/project::project.component.owner')
-                    </div>
                 </div>
+            </div>
+            <div class="accordion" id="accordionExample">
+                @includeIf('joesama/project::project.component.schedule')
+                @includeIf('joesama/project::project.component.progress')
+                @includeIf('joesama/project::project.component.issue')
+                @includeIf('joesama/project::project.component.budget')
+                @includeIf('joesama/project::project.component.hse')
+                @includeIf('joesama/project::project.component.owner')
             </div>
         </div>
     </div>

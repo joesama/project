@@ -11,27 +11,25 @@
 @section('content')
     <div class="row">
         <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                      <button class="btn btn-dark float-right"  data-toggle="tooltip" data-placement="top" title="Tooltip on top" onclick="newtask(this)">
-                        <i class="far fa-calendar-plus"></i>&nbsp;{{ __('joesama/project::project.progress.name') }}
-                      </button>
-                </div>
-                <div class="card-body">
+            <div class="panel">
+                <div class="panel-body">
+                  <button class="btn btn-dark pull-right mar-btm"  data-toggle="tooltip" data-placement="top" title="Tooltip on top" onclick="newtask(this)">
+                    <i class="fa fa-calendar"></i>&nbsp;{{ __('joesama/project::project.progress.name') }}
+                  </button>
                   <table class="table table-sm table-borderless table-striped">
                     <thead>
                       <tr>
-                        <th style="width: 10px" class="bg-primary text-light">No.</th>
-                        <th class="bg-primary text-light w-50">
+                        <th style="width: 10px" class="bg-primary text-light" style="color: white">No.</th>
+                        <th class="bg-primary text-light w-50" style="color: white">
                           Month
                         </th>
-                        <th class="bg-primary text-light" width="150px">
+                        <th class="bg-primary text-light"  style="color: white"width="150px">
                           Planned
                         </th>
-                        <th class="bg-primary text-light" width="150px">
+                        <th class="bg-primary text-light" style="color: white" width="150px">
                           Actual
                         </th>
-                        <th class="bg-primary text-light" width="50px">
+                        <th class="bg-primary text-light" style="color: white" width="50px">
                           {{ __('joesama/project::project.action') }}
                         </th>
                       </tr>
@@ -45,7 +43,7 @@
                         <td>{{ number_format(data_get($taskschedule,$projectPart.'_actual',0),2) }}</td>
                         <td class="text-center">
                             <button class="btn btn-dark btn-sm" onclick="editschedule(this)">
-                                <i class="fas fa-edit"></i>
+                                <i class="fa fa-edit"></i>
                             </button>
                         </td>
                       </tr>
