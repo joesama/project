@@ -1,5 +1,5 @@
 <?php
-namespace Joesama\Project\Http\Contracts;
+namespace Joesama\Project\Http\Contracts\Project;
 
 /**
  * Business Need For Ownership
