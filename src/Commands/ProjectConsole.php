@@ -57,7 +57,7 @@ class ProjectConsole extends Command
 
         $corporateList = $this->organizationData->corporateList()->pluck('name','id');
 
-            if($corporateList->isEmpty() || $this->confirm('New Corporate?')):
+        if($corporateList->isEmpty() || $this->confirm('New Corporate?')):
 
             $corporateObj =  $this->organizationObj->makeNewCorporate(collect([
                 'name' => $this->ask('Corporate Name')
@@ -77,7 +77,7 @@ class ProjectConsole extends Command
 
         endif;
 
-        $clientList = $this->projectData->clientList($corporateId)->pluck('name','id');
+        $clientList = $this->projectData->clientAll()->pluck('name','id');
 
         if($clientList->isEmpty() || $this->confirm('New Client?')):
 
@@ -103,6 +103,36 @@ class ProjectConsole extends Command
 
         endif;
 
+        if($this->confirm('Add Partner?')):
+            if($clientList->isEmpty() || $this->confirm('New Partner?')):
+
+                $partnerObj = $this->projectObj->makeNewClient(collect([
+                    'corporate_id' => $corporateId,
+                    'name' => $this->ask('Partner Name'),
+                    'manager' => $this->ask('Partner Manager'),
+                    'phone' => $this->ask('Partner Phone'),
+                    'contact' => $this->ask('Partner Contact')
+                ]));
+
+                $partnerId = $partnerObj->id;
+
+            else:
+
+                $partnerList = $clientList->filter(function($item,$id) use($clientId){
+                    return $id != $clientId;
+                });
+
+                $partner = $this->choice('Partner?', $partnerList->toArray());
+
+                $partnerObj = $partnerList->filter(function ($value, $key) use($partner){
+                    return strtolower($value) == strtolower($partner);
+                });
+
+                $partnerId = $partnerObj->keys()->first();
+
+            endif;
+        endif;
+
         $newProject = $this->projectObj->makeNewProject(collect([
             'corporate_id' => $corporateId,
             'client_id' => $clientId,
@@ -114,6 +144,8 @@ class ProjectConsole extends Command
         ]));
 
         if(!is_null($newProject)):
+
+        $newProject->partner()->attach($partnerId);
 
         collect($newProject->toArray())->each(function($item,$key){
             $this->line( $key.' - '.$item );

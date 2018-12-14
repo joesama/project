@@ -52,14 +52,13 @@ class ProjectInfoProcessor
 	}
 
 	/**
-	 * Get Client By Id.
+	 * Get All Client
 	 *
-	 * @param int $corporateId - id for corporate
 	 * @return Illuminate\Support\Collection
 	 **/
-	public function clientList(int $corporateId)
+	public function clientAll()
 	{
-		return $this->projectObj->clientList($corporateId);
+		return $this->projectObj->clientAll();
 	}
 
 } // END class MakeProjectProcessor 

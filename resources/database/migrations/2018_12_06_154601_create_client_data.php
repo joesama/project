@@ -16,7 +16,6 @@ class CreateClientData extends Migration
         Schema::create('client', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->integer('corporate_id')->nullable();
             $table->string('name')->nullable();
             $table->string('phone')->nullable();
             $table->string('contact')->nullable();
