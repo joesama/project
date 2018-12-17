@@ -28,6 +28,26 @@ class MakeOrganizationProcessor
 		return $this->organizationObj->initCorporate($corporateData);
 	}
 
+	/**
+	 * New Profile Info
+	 *
+	 * @param $profileData - corporate_id,name,abbr,email,phone
+	 **/
+	public function makeNewProfile($profileData)
+	{
+		return $this->organizationObj->initProfile($profileData);
+	}
+
+	/**
+	 * New Profile Role Info
+	 *
+	 * @param $roleData - role
+	 **/
+	public function makeNewRole($roleData)
+	{
+		return $this->organizationObj->initRole($roleData);
+	}
+
 	
 
 } // END class MakeProjectProcessor 

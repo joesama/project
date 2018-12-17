@@ -37,6 +37,36 @@ class OrganizationInfoProcessor
 		return $this->organizationObj->listCorporate();
 	}
 
+	/**
+	 * Profile Info
+	 *
+	 * @param $profileId - id for selected corporate
+	 **/
+	public function profileInfo(int $profileId)
+	{
+		return $this->organizationObj->getProfile($profileId);
+	}
+
+	/**
+	 * List Of Profile Under Corporate
+	 *
+	 * @param int $corporateId
+	 **/
+	public function profileList(int $corporateId)
+	{
+		return $this->organizationObj->listProfile($corporateId);
+	}
+
+	/**
+	 * List Of Profile Under Project
+	 *
+	 * @param int $corporateId
+	 **/
+	public function projectProfileList(int $projectId)
+	{
+		return $this->organizationObj->listProjectProfile($projectId);
+	}
+
 	
 
 } // END class MakeProjectProcessor 

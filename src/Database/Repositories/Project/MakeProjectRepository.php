@@ -3,6 +3,7 @@ namespace Joesama\Project\Database\Repositories\Project;
 
 use Joesama\Project\Database\Model\Project\Project;
 use Joesama\Project\Database\Model\Project\Client;
+use Joesama\Project\Database\Model\Project\Task;
 use DB;
 use Carbon\Carbon;
 
@@ -15,10 +16,14 @@ use Carbon\Carbon;
 class MakeProjectRepository 
 {
 
-	public function __construct(Project $project , Client $client)
-	{
+	public function __construct(
+		Project $project , 
+		Client $client,
+		Task $task
+	){
 		$this->projectModel = $project;
 		$this->clientModel = $client;
+		$this->taskModel = $task;
 	}
 
 	/**
@@ -26,7 +31,7 @@ class MakeProjectRepository
 	 *
 	 * @return Joesama\Project\Database\Model\Project\Project
 	 **/
-	public function initProject(\Illuminate\Support\Collection $projectData)
+	public function initProject(\Illuminate\Support\Collection $projectData, $id = null)
 	{
 		$inputData = collect($projectData)->intersectByKeys([
 		    'client_id' => 0,
@@ -41,12 +46,18 @@ class MakeProjectRepository
 		DB::beginTransaction();
 
 		try{
+			if(!is_null($id)){
+				$this->projectModel->find($id);
+			}
 
 			$inputData->each(function($record,$field){
-				if(in_array($field, ['start','end'])):
-					$record = Carbon::parse($record)->toDateTimeString();
-				endif;
-				$this->projectModel->{$field} = $record;
+				if(!is_null($record)){
+					if(in_array($field, ['start','end'])):
+						$record = Carbon::parse($record)->toDateTimeString();
+					endif;
+					
+					$this->projectModel->{$field} = $record;
+				}
 			});
 
 			$this->projectModel->save();
@@ -66,7 +77,7 @@ class MakeProjectRepository
 	 *
 	 * @return Joesama\Project\Database\Model\Project\Client
 	 **/
-	public function initClient(\Illuminate\Support\Collection $clientData)
+	public function initClient(\Illuminate\Support\Collection $clientData, $id = null)
 	{
 		$inputData = collect($clientData)->intersectByKeys([
 		    'name' => null,
@@ -79,9 +90,14 @@ class MakeProjectRepository
 		DB::beginTransaction();
 
 		try{
+			if(!is_null($id)){
+				$this->clientModel->find($id);
+			}
 
 			$inputData->each(function($record,$field){
-				$this->clientModel->{$field} = $record;
+				if(!is_null($record)){
+					$this->clientModel->{$field} = $record;
+				}
 			});
 
 			$this->clientModel->save();
@@ -89,6 +105,50 @@ class MakeProjectRepository
 			DB::commit();
 
 			return $this->clientModel;
+
+		}catch( \Exception $e){
+
+			DB::rollback();
+		}
+	}
+
+	/**
+	 * Create New Task
+	 *
+	 * @return Joesama\Project\Database\Model\Project\Task
+	 **/
+	public function initTask(\Illuminate\Support\Collection $taskData, $id = null)
+	{
+		$inputData = collect($taskData)->intersectByKeys([
+		    'name' => null,
+		    'project_id' => null,
+		    'profile_id' => null,
+		    'start'=> null,
+		    'end' => null
+		]);
+
+		DB::beginTransaction();
+
+		try{
+			if(!is_null($id)){
+				$this->taskModel->find($id);
+			}
+
+			$inputData->each(function($record,$field){
+				if(!is_null($record)){
+					if(in_array($field, ['start','end'])):
+						$record = Carbon::parse($record)->toDateTimeString();
+					endif;
+
+					$this->taskModel->{$field} = $record;
+				}
+			});
+
+			$this->taskModel->save();
+
+			DB::commit();
+
+			return $this->taskModel;
 
 		}catch( \Exception $e){
 

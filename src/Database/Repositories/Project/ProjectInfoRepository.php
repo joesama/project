@@ -3,6 +3,7 @@ namespace Joesama\Project\Database\Repositories\Project;
 
 use Joesama\Project\Database\Model\Project\Project;
 use Joesama\Project\Database\Model\Project\Client;
+use Joesama\Project\Database\Model\Project\Task;
 use DB;
 
 /**
@@ -14,10 +15,14 @@ use DB;
 class ProjectInfoRepository 
 {
 
-	public function __construct(Project $project , Client $client)
-	{
+	public function __construct(
+		Project $project , 
+		Client $client,
+		Task $task
+	){
 		$this->projectModel = $project;
 		$this->clientModel = $client;
+		$this->taskModel = $task;
 	}
 
 	/**
@@ -28,7 +33,9 @@ class ProjectInfoRepository
 	 **/
 	public function getProject(int $projectId)
 	{
-		return $this->projectModel->find($projectId);
+		return $this->projectModel
+		->with(['client','profile','task'])
+		->find($projectId);
 	}
 
 	/**
@@ -82,6 +89,28 @@ class ProjectInfoRepository
 	public function clientAll()
 	{
 		return $this->clientModel->get();
+	}
+
+	/**
+	 * List of Task for specific Id
+	 * 
+	 * @param int $projectId
+	 **/
+	public function projectTask(int $taskId)
+	{
+		return $this->taskModel->find($taskId);
+	}
+
+	/**
+	 * List of Task Under Project
+	 * 
+	 * @param int $projectId
+	 **/
+	public function listProjectTask(int $projectId)
+	{
+		return $this->taskModel->whereHas('project',function($query) use($projectId){
+			$query->where('id',$projectId);
+		})->get();
 	}
 
 

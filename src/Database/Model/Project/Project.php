@@ -29,7 +29,30 @@ class Project extends Model
      */
     public function partner()
     {
-        return $this->belongsToMany(ClientPartner::class,'project_partner','project_id','partner_id');
+        return $this->belongsToMany(Client::class,'project_partner','project_id','partner_id');
     }
 
+    /**
+     * Get the report card list.
+     */
+    public function card()
+    {
+        return $this->hasMany(Card::class,'project_id','id');
+    }
+
+    /**
+     * Get the report list.
+     */
+    public function report()
+    {
+        return $this->hasMany(Report::class,'project_id','id');
+    }
+
+    /**
+     * Get the report progress.
+     */
+    public function task()
+    {
+        return $this->hasMany(Report::class,'project_id','id');
+    }
 }
