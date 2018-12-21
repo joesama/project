@@ -79,6 +79,10 @@ class ProjectServiceProvider extends ModuleServiceProvider
         $this->addLanguageComponent('joesama/project', 'joesama/project', $path.'/lang');
         $this->addConfigComponent('joesama/project', 'joesama/project', $path.'/config');
         $this->addViewComponent('joesama/project', 'joesama/project', $path.'/views');
+
+        $this->publishes([
+            $path.'/config/policy.php' => base_path('resources/config/packages/joesama/project/policy.php'),
+        ]);
     }
 
     /**

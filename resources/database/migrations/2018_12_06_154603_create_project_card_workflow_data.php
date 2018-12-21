@@ -31,6 +31,6 @@ class CreateProjectCardWorkflowData extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('project_card_workflow');
     }
 }

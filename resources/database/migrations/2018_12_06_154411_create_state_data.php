@@ -32,6 +32,6 @@ class CreateStateData extends Migration
      */
     public function down()
     {
-        //
+         Schema::drop('master_state');
     }
 }

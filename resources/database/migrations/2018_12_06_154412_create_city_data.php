@@ -32,6 +32,6 @@ class CreateCityData extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('master_city');
     }
 }

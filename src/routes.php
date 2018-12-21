@@ -5,19 +5,62 @@ use Orchestra\Support\Facades\Foundation;
 
 Foundation::group('joesama/project', '/', ['namespace' => 'Http\Controller', 'middleware' => ['web']], function (Router $router) {
 
-    $router->group(['middleware' => ['auth']], function ($router) {
+    $webPolicies = collect(config('packages/joesama/project/policy'))->get('web');
+    $apiPolicies = collect(config('packages/joesama/project/policy'))->get('api');
 
-    	$router->get('portfolio', 'DashboardController@projectPorfolio');
-    	$router->get('subsidiaries', 'DashboardController@projectSubs');
-    	$router->get('dashboard', 'DashboardController@projectDashboard');
-        $router->group(['prefix' => 'project'], function ($router) {
-            $router->get('/{part}/{id}/{app?}', 'ProjectController@projectInformation');
-    	});
+    $router->group(['middleware' => ['auth']], function ($router) use($webPolicies){
+
+        $router->get('portfolio', 'DashboardController@projectPorfolio');
+        $router->get('subsidiaries', 'DashboardController@projectSubs');
+        $router->get('dashboard', 'DashboardController@projectDashboard');
+
+        collect($webPolicies)->each(function($policy,$module) use($router){
+            collect($policy)->except('icon')->each(function($config,$submodule) use($module,$router){
+                $router->name($module.'.'.$submodule.'.')
+                ->prefix($module.'/'.$submodule)
+                ->namespace(ucfirst($module))
+                ->group(function ($router) use($module,$submodule,$config){
+
+                    foreach($config as $page => $id){
+
+                    $params = collect($id)->map(function($param){
+                        return sprintf('{%s}', $param);
+                    })->implode('/');
+                    $router->name($page)->get(
+                        $page.'/'.$params, 
+                        ucfirst($submodule).'Controller'
+                    );
+
+                    }
+                });
+            });
+        });
+
+     //    $router->group(['prefix' => 'project'], function ($router) {
+     //        $router->get('/{part}/{id}/{app?}', 'ProjectController@projectInformation');
+        // });
         $router->group(['prefix' => 'report'], function ($router) {
             $router->get('/project/{id}', 'ReportController@projectReport');
             $router->get('/format/{id}/{report?}', 'ReportController@reportFormat');
-    	});
+        });
 
+    });
+
+    $router->group(['middleware' => ['api']], function ($router) use($apiPolicies){
+        collect($apiPolicies)->each(function($apiPolicy,$apiModule) use($router){
+            collect($apiPolicy)->each(function($apiConfig,$apiSubmodule) use($apiModule,$router){
+                $router->name('api.'.$apiModule.'.')->prefix('api/'.$apiModule)
+                ->group(function ($router) use($apiModule,$apiSubmodule,$apiConfig){
+                    $params = collect($apiConfig)->map(function($param){
+                        return sprintf('{%s}', $param);
+                    })->implode('/');
+                    $router->get(
+                        $apiSubmodule.'/'.$params, 
+                        'Api\\'.ucfirst($apiModule).'Controller'
+                    )->name($apiSubmodule);
+                });
+            });
+        });
     });
 
 });

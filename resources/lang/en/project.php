@@ -2,13 +2,21 @@
 
 return [
 	'module' => 'Project Management Office',
-	'dashboard' => 'Project Dashboard',
+	'dashboard' => [
+		'overall' => 'Project Dashboard'
+	],
 	'detail' => 'Project Information',
 	'summary' => 'Project Summary',
 	'action' => 'Action',
 	'priority' => 'Priority',
 	'status' => 'Status',
-	'report' =>[ 
+	'list' => [
+		'project' => 'List Of Project',
+		'task' => 'List Of Tasks',
+		'issue' => 'List Of Issues',
+		'risk' => 'List Of Risk'
+	],
+ 	'report' =>[ 
 		'title' => 'Report',
 	],
 	'date' => [
@@ -63,7 +71,7 @@ return [
 		'name' => 'Risk',
 		'status' => 'Status',
 		'dateline' => 'Dateline',
-		'priority' => 'Priority',
+		'severity' => 'Severity',
 	],
 	'progress' => [
 		'name' => 'Progress',

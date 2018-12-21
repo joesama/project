@@ -3,10 +3,14 @@
 namespace Joesama\Project\Database\Model\Project;
 
 use Illuminate\Database\Eloquent\Model;
+use Joesama\Project\Database\Model\Organization\Corporate;
+use Joesama\Project\Database\Model\Organization\Profile;
+use Carbon\Carbon;
 
 class Project extends Model
 {
     protected $table = 'project';
+    protected $appends = ['start_date','end_date','in_charge'];
 
     /**
      * Get the client for project.
@@ -54,5 +58,25 @@ class Project extends Model
     public function task()
     {
         return $this->hasMany(Report::class,'project_id','id');
+    }
+
+    public function scopeComponent($query)
+    {
+        return $query->with(['client','profile','task']);
+    }
+
+    public function getEndDateAttribute($value)
+    {
+        return Carbon::parse($value)->format('d-m-Y');
+    }
+
+    public function getStartDateAttribute($value)
+    {
+        return Carbon::parse($value)->format('d-m-Y');
+    }
+
+    public function getInChargeAttribute($value)
+    {
+        return $this->profile()->where('role_id',1)->first();
     }
 }

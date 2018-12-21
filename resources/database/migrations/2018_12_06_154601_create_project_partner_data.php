@@ -30,6 +30,6 @@ class CreateProjectPartnerData extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('project_partner');
     }
 }

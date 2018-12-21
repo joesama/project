@@ -32,6 +32,6 @@ class CreateTaskProgressData extends Migration
      */
     public function down()
     {
-        //
+         Schema::drop('task_progress');
     }
 }

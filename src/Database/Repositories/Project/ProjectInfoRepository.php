@@ -1,9 +1,13 @@
 <?php
 namespace Joesama\Project\Database\Repositories\Project; 
 
-use Joesama\Project\Database\Model\Project\Project;
-use Joesama\Project\Database\Model\Project\Client;
-use Joesama\Project\Database\Model\Project\Task;
+use Joesama\Project\Database\Model\Project\{
+	Project,
+	Client,
+	Task,
+	Issue,
+	Risk
+};
 use DB;
 
 /**
@@ -18,11 +22,15 @@ class ProjectInfoRepository
 	public function __construct(
 		Project $project , 
 		Client $client,
-		Task $task
+		Task $task,
+		Issue $issue,
+		Risk $risk
 	){
 		$this->projectModel = $project;
 		$this->clientModel = $client;
 		$this->taskModel = $task;
+		$this->issueModel = $issue;
+		$this->riskModel = $risk;
 	}
 
 	/**
@@ -42,11 +50,11 @@ class ProjectInfoRepository
 	 * List of project for corporate
 	 *
 	 * @param int $corporateId - id for specific corporate
-	 * @return Illuminate\Support\Collection
+	 * @return Illuminate\Pagination\LengthAwarePaginator
 	 **/
 	public function projectList(int $corporateId)
 	{
-		return $this->projectModel->where('corporate_id',$corporateId)->get();
+		return $this->projectModel->component()->where('corporate_id',$corporateId)->paginate();
 	}
 
 	/**
@@ -102,16 +110,51 @@ class ProjectInfoRepository
 	}
 
 	/**
-	 * List of Task Under Project
+	 * List of Task Under Corporate, Project
 	 * 
-	 * @param int $projectId
+	 * @param int $corporateId - id for specific corporate
+	 * @param int | NULL $projectId
 	 **/
-	public function listProjectTask(int $projectId)
+	public function listProjectTask(int $corporateId, $projectId = null)
 	{
-		return $this->taskModel->whereHas('project',function($query) use($projectId){
-			$query->where('id',$projectId);
-		})->get();
+		return $this->taskModel->whereHas('project',function($query) use($corporateId, $projectId){
+			$query->where('corporate_id',$corporateId);
+			$query->when($projectId, function ($query, $projectId) {
+                return $query->where('id', $projectId);
+            });
+		})->paginate();
 	}
 
+	/**
+	 * List of Issue Under Corporate, Project
+	 * 
+	 * @param int $corporateId - id for specific corporate
+	 * @param int | NULL $projectId
+	 **/
+	public function listProjectIssue(int $corporateId, $projectId = null)
+	{
+		return $this->issueModel->whereHas('project',function($query) use($corporateId, $projectId){
+			$query->where('corporate_id',$corporateId);
+			$query->when($projectId, function ($query, $projectId) {
+                return $query->where('id', $projectId);
+            });
+		})->paginate();
+	}
+
+	/**
+	 * List of Risk Under Corporate, Project
+	 * 
+	 * @param int $corporateId - id for specific corporate
+	 * @param int | NULL $projectId
+	 **/
+	public function listProjectRisk(int $corporateId, $projectId = null)
+	{
+		return $this->riskModel->whereHas('project',function($query) use($corporateId, $projectId){
+			$query->where('corporate_id',$corporateId);
+			$query->when($projectId, function ($query, $projectId) {
+                return $query->where('id', $projectId);
+            });
+		})->paginate();
+	}
 
 } // END class MakeProjectRepository 

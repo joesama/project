@@ -31,6 +31,6 @@ class CreateProjectRoleData extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('project_role');
     }
 }

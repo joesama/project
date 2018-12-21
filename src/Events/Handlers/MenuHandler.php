@@ -1,8 +1,8 @@
 <?php 
 namespace Joesama\Project\Events\Handlers;
 
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use Auth;
+use Joesama\Project\Database\Model\Organization\Profile;
 
 class MenuHandler
 {
@@ -14,7 +14,8 @@ class MenuHandler
      */
     public function __construct()
     {
-        //
+        $this->profile = Profile::where('user_id',Auth::id())->first();
+        $this->webPolicies = collect(collect(config('packages/joesama/project/policy'))->get('web'));
     }
 
     /**
@@ -25,17 +26,59 @@ class MenuHandler
      */
     public function handle($menu)
     {
+
+        $this->webPolicies->each(function($policy,$module) use($menu){
+
+            $menu->add($module,'>:config')
+                ->title(trans('joesama/project::menu.'.$module.'.module'))
+                ->link('#')
+                ->icon(array_get($policy,'icon'));
+
+            collect($policy)->except('icon')->each(function($component,$submodule) use($menu,$module){
+
+                $domain = $module.'.'.$submodule;
+
+                $path = 'joesama/project::'.str_replace('.', '/', $domain);
+
+                if(collect($component)->get('list') != null){
+                    $path .= '/list';
+                }else{
+                    $path .= '/'.collect($component)->keys()->first();
+                }
+
+                $path .= '/'. data_get($this->profile,'corporate_id');
+
+                $menu->add($domain,'^:'.$module)
+                    ->title(trans('joesama/project::menu.'.$domain))
+                    ->link(handles($path))
+                    ->icon('psi-arrow-right-2');
+
+                // collect($component)->each(function($params, $page) use($menu,$domain,$path,$submodule){
+                //     if(collect($params)->contains('projectId')){
+                //         $path .= '/'. request()->segment(6);
+                //     }
+
+                //     $subdomain = $submodule.'.'.$page;
+                //     $menu->add($subdomain,'^:'.$domain)
+                //         ->title(trans('joesama/project::menu.'.$subdomain))
+                //         ->link(handles($path))
+                //         ->icon('psi-arrow-right-2');
+                // });
+
+            });
+        });
+
         $projectId = request()->segment(3);
 
-        $menu->add('project','>:config')
-            ->title(trans('joesama/project::project.module'))
-            ->link('#')
-            ->icon('icon fa fa-qrcode');
+        // $menu->add('project','>:config')
+        //     ->title(trans('joesama/project::project.module'))
+        //     ->link('#')
+        //     ->icon('icon fa fa-qrcode');
 
-        $menu->add('project-dashboard','^:project')
-            ->title(trans('joesama/project::project.dashboard'))
-            ->link(handles('joesama/project::dashboard'))
-            ->icon('icon fa fa-qrcode');
+        // $menu->add('project-dashboard','^:project')
+        //     ->title(trans('joesama/project::project.dashboard.overall'))
+        //     ->link(handles('joesama/project::dashboard'))
+        //     ->icon('icon fa fa-qrcode');
 
         if(!is_null($projectId) && in_array(request()->segment(1),['report','project']) && is_integer(intval($projectId))){
 

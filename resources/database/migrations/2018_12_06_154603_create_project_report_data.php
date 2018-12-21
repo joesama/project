@@ -33,6 +33,6 @@ class CreateProjectReportData extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('project_report');
     }
 }

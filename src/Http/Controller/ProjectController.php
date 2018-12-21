@@ -2,6 +2,7 @@
 namespace Joesama\Project\Http\Controller;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 /**
  * Project Information Class
@@ -11,6 +12,30 @@ use App\Http\Controllers\Controller;
  **/
 class ProjectController extends BaseController
 {
+
+
+	/**
+	 * undocumented function
+	 *
+	 * @return void
+	 * @author 
+	 **/
+	public function __invoke(Request $request, $corporateId)
+	{
+
+		$page = data_get($this->config,'page');
+
+		set_meta('title',__($this->domain.'.'.$page));
+
+		return view(
+			$this->domain.'.'.$page,
+			app($this->processor)->$page($request,$corporateId)
+		);
+	}
+
+
+
+
 	/**
 	 * Return Project Information
 	 *

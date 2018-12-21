@@ -29,6 +29,6 @@ class CreateProfileRoleData extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('profile_role');
     }
 }

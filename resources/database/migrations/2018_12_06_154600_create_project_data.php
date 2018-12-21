@@ -38,6 +38,6 @@ class CreateProjectData extends Migration
      */
     public function down()
     {
-        //
+         Schema::drop('project');
     }
 }

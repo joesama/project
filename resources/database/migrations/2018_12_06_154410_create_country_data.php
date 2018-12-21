@@ -31,6 +31,6 @@ class CreateCountryData extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('master_country');
     }
 }

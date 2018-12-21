@@ -33,6 +33,6 @@ class CreateCorporateData extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('corporate');
     }
 }

@@ -31,6 +31,6 @@ class CreateProjectReportWorkflowData extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('project_report_workflow');
     }
 }

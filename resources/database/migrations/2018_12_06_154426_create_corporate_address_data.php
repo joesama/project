@@ -34,6 +34,6 @@ class CreateCorporateAddressData extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('corporate_address');
     }
 }

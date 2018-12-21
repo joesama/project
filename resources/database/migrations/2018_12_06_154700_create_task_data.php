@@ -33,6 +33,6 @@ class CreateTaskData extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('task');
     }
 }

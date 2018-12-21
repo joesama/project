@@ -16,6 +16,7 @@ class CreateProfileData extends Migration
         Schema::create('profile', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
+            $table->integer('user_id')->nullable();
             $table->integer('corporate_id')->nullable();
             $table->string('name')->nullable();
             $table->string('abbr')->nullable();
@@ -33,6 +34,6 @@ class CreateProfileData extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('profile');
     }
 }
