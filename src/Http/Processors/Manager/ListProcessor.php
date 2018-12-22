@@ -47,7 +47,7 @@ class ListProcessor
 
 		$action = [
 			[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
-			    'url' => handles('joesama/vuegrid::'), // URL for action
+			    'url' => handles('joesama/project::manager/project/view/'.$corporateId), // URL for action
 			    'icons' => 'psi-magnifi-glass icon-fw', // Icon for action : optional
 			    'key' => 'id'  ],
 			[ 'action' => __('product.item.variant') , // Action Description
@@ -110,7 +110,7 @@ class ListProcessor
 				 ->buildDataModel(
 				 	route('api.list.task',[$corporateId, $request->segment(5)]), 
 				 	$this->projectObj->listProjectTask($corporateId, $request->segment(5))
-				 )->buildAddButton(route('manager.issue.form',$corporateId))
+				 )->buildAddButton(route('manager.issue.form',[$corporateId, $request->segment(5)]))
 				 ->buildOption($action, TRUE)
 				 ->render();
 	}
@@ -152,7 +152,7 @@ class ListProcessor
 				 ->buildDataModel(
 				 	route('api.list.issue',[$corporateId, $request->segment(5)]), 
 				 	$this->projectObj->listProjectIssue($corporateId, $request->segment(5))
-				 )->buildAddButton(route('manager.issue.form',$corporateId))
+				 )->buildAddButton(route('manager.issue.form',[$corporateId, $request->segment(5)]))
 				 ->buildOption($action, TRUE)
 				 ->render();
 	}
@@ -194,7 +194,7 @@ class ListProcessor
 				 ->buildDataModel(
 				 	route('api.list.risk',[$corporateId, $request->segment(5)]), 
 				 	$this->projectObj->listProjectIssue($corporateId, $request->segment(5))
-				 )->buildAddButton(route('manager.risk.form',$corporateId))
+				 )->buildAddButton(route('manager.risk.form',[$corporateId, $request->segment(5)]))
 				 ->buildOption($action, TRUE)
 				 ->render();
 	}

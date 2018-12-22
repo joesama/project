@@ -4,6 +4,11 @@ return [
 	'dashboard' => [
 		'overall' => 'Project Dashboard'
 	],
+	'project' => [
+		'list' => "List of Project",
+		'form' => "Project's Form",
+		'view' => "Project's Information",
+	],
 	'issue' => [
 		'list' => "List of Project Issues",
 		'form' => "Issue's Form",

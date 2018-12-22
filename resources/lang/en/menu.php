@@ -3,10 +3,10 @@
 return [
 	'manager' => [
 		'module' => 'Project Management',
-		'dashboard' => 'Project Dashboard',
+		'dashboard' => 'Dashboard',
 		'project' => 'Project',
-		'task' => 'Project Task',
-		'issue' => 'Project Issue',
-		'risk' => 'Project Risk',
+		'task' => 'Task',
+		'issue' => 'Issue',
+		'risk' => 'Risk',
 	]
 ];

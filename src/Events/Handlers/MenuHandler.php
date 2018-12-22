@@ -38,35 +38,59 @@ class MenuHandler
 
                 $domain = $module.'.'.$submodule;
 
-                $path = 'joesama/project::'.str_replace('.', '/', $domain);
+                $domainPath = 'joesama/project::'.str_replace('.', '/', $domain);
 
                 if(collect($component)->get('list') != null){
-                    $path .= '/list';
+                    $path = '/list';
                 }else{
-                    $path .= '/'.collect($component)->keys()->first();
+                    $path = '/'.collect($component)->keys()->first();
                 }
 
-                $path .= '/'. data_get($this->profile,'corporate_id');
+                $segmentOne = '/'. data_get($this->profile,'corporate_id');
 
-                $menu->add($domain,'^:'.$module)
+                $menu->add($submodule,'^:'.$module)
                     ->title(trans('joesama/project::menu.'.$domain))
-                    ->link(handles($path))
+                    ->link(handles($domainPath.$path.$segmentOne))
                     ->icon('psi-arrow-right-2');
 
-                // collect($component)->each(function($params, $page) use($menu,$domain,$path,$submodule){
-                //     if(collect($params)->contains('projectId')){
-                //         $path .= '/'. request()->segment(6);
-                //     }
+                collect($component)->each(function($params, $page) 
+                    use($menu,$domain,$domainPath,$submodule,$segmentOne){
 
-                //     $subdomain = $submodule.'.'.$page;
-                //     $menu->add($subdomain,'^:'.$domain)
-                //         ->title(trans('joesama/project::menu.'.$subdomain))
-                //         ->link(handles($path))
-                //         ->icon('psi-arrow-right-2');
-                // });
+                    $segmentTwo = '';
+
+                    $projectIdOptional = collect($params)->contains('projectId?');
+                    $projectIdRequired = collect($params)->contains('projectId');
+
+                    if($projectIdRequired || $projectIdOptional)
+                    {
+                        $segmentTwo .= '/'. request()->segment(5);
+                    }
+
+                    if($projectIdRequired)
+                    {
+                        $segmentTwo .= '/'. request()->segment(6);
+                    }
+
+                    $subdomainPath = $domainPath.'/'.$page.$segmentOne.$segmentTwo;
+                    $subdomain = $submodule.'.'.$page;
+                    
+                    if($projectIdOptional && request()->segment(5))
+                    {   
+                        $menu->add($subdomain,'^:'.$domain)
+                            ->title(trans('joesama/project::'.$domain.'.'.$page))
+                            ->link(handles($subdomainPath));
+                    }
+                    elseif(!$projectIdOptional && !$projectIdRequired)
+                    {
+                        $menu->add($subdomain,'^:'.$domain)
+                            ->title(trans('joesama/project::'.$domain.'.'.$page))
+                            ->link(handles($subdomainPath));
+                    }
+                });
 
             });
         });
+        // dd($menu);
 
         $projectId = request()->segment(3);
 
