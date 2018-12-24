@@ -3,6 +3,7 @@ namespace Joesama\Project\Http\Controller\Manager;
 
 use Illuminate\Http\Request;
 use Joesama\Project\Http\Controller\BaseController;
+use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
 
 /**
  * Task Controller
@@ -17,6 +18,13 @@ class TaskController extends BaseController
 		set_meta('title',__($this->domain.'.'.$this->page));
 
 		$page = $this->page;
+
+		// if(in_array($page,['form','view']) && is_null($request->segment(6))){
+
+		// 	$task = app(ProjectInfoRepository::class)->projectTask($request->segment(5));
+
+		// 	return  redirect(handles($this->module.'/'.$this->submodule.'/'.$this->page.'/'.$corporateId.'/'.data_get($task,'project_id').'/'.$request->segment(5)));
+		// }
 
 		return view(
 			$this->domain.'.'.$this->page,

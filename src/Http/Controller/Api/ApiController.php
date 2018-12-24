@@ -5,9 +5,9 @@ use Illuminate\Http\Request;
 use Joesama\Project\Http\Controller\BaseController;
 
 /**
- * ListController
+ * ApiController
  */
-class ListController extends BaseController
+class ApiController extends BaseController
 {
 	/**
 	 * Main Controller For Sub Module

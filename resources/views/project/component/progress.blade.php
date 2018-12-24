@@ -26,7 +26,7 @@
           <div class="card mb-4 mt-1">
             @php 
               $scurve = collect(config('joesama/project::project.scurve'))
-                        ->where('project_id',$projectId);
+                        ->where('project_id',data_get($project,'id'));
               $lastCurve = $scurve->last();
               $physicalVar = data_get($lastCurve,'physical_planned') - data_get($lastCurve,'physical_actual');
               $financeVar = data_get($lastCurve,'financial_planned') - data_get($lastCurve,'financial_actual');

@@ -33,4 +33,9 @@ class Risk extends Model
         return  $this->hasMany(MasterData::class,'severity_id');
     }
 
+    public function scopeComponent($query)
+    {
+        return $query->with(['assignee','severity']);
+    }
+
 }

@@ -40,7 +40,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      @foreach($component as $key => $taskschedule)
+                      @foreach(data_get($component,'task') as $key => $taskschedule)
 
                       <tr>
                         <td>{{ $key+1 }}</td>

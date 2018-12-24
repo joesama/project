@@ -7,7 +7,7 @@ use Joesama\Project\Database\Model\Organization\Profile;
 class TaskProgress extends Model
 {
 	protected $table = 'task_progress';
-
+    protected $fillable = ['progress'];
     /**
      * Get the card attach.
      */

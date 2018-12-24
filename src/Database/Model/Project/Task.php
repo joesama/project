@@ -8,6 +8,8 @@ class Task extends Model
 {
 	protected $table = 'task';
 
+    protected $appends = [];
+
     /**
      * Get the task's project.
      */
@@ -29,7 +31,20 @@ class Task extends Model
      */
     public function progress()
     {
+        return  $this->hasOne(TaskProgress::class,'task_id')->latest();
+    }
+
+    /**
+     * Get the task's progress.
+     */
+    public function allProgress()
+    {
         return  $this->hasMany(TaskProgress::class,'task_id');
+    }
+
+    public function scopeComponent($query)
+    {
+        return $query->with(['assignee','progress']);
     }
 
 }

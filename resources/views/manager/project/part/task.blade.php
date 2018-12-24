@@ -43,14 +43,14 @@
       data.addColumn('string', 'Dependencies');
 
       data.addRows([
-        @foreach($task as $key => $taskschedule)
+        @foreach($task as $key => $schedule)
           [ 
             "{{ $key+1 }}", 
-            "{!! data_get($taskschedule,'name') !!}", 
-            new Date("{!! data_get($taskschedule,'start') !!}"), 
-            new Date("{!! data_get($taskschedule,'end') !!}"), 
+            "{!! data_get($schedule,'name') !!}", 
+            new Date("{!! data_get($schedule,'start') !!}"), 
+            new Date("{!! data_get($schedule,'end') !!}"), 
             null ,
-            {!! data_get($taskschedule,'progress') !!}, 
+            {!! data_get($schedule,'progress.progress') !!}, 
             null 
           ],
         @endforeach

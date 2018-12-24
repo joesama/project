@@ -3,17 +3,17 @@
 namespace Joesama\Project\Database\Model\Project;
 
 use Illuminate\Database\Eloquent\Model;
+use Joesama\Project\Database\Model\Organization\Corporate;
 
 class Client extends Model
 {
 	protected $table = 'client';
 
-    /**
-     * Get the partner list.
+   /**
+     * Get the  client partner for project.
      */
-    public function partner()
+    public function corporate()
     {
-        return $this->hasMany(ClientPartner::class,'client_id','id');
+        return $this->belongsToMany(Corporate::class,'corporate_client','corporate_id','client_id');
     }
-
 }

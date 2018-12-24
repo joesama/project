@@ -46,18 +46,22 @@ Foundation::group('joesama/project', '/', ['namespace' => 'Http\Controller', 'mi
 
     });
 
-    $router->group(['middleware' => ['api']], function ($router) use($apiPolicies){
-        collect($apiPolicies)->each(function($apiPolicy,$apiModule) use($router){
-            collect($apiPolicy)->each(function($apiConfig,$apiSubmodule) use($apiModule,$router){
-                $router->name('api.'.$apiModule.'.')->prefix('api/'.$apiModule)
-                ->group(function ($router) use($apiModule,$apiSubmodule,$apiConfig){
-                    $params = collect($apiConfig)->map(function($param){
-                        return sprintf('{%s}', $param);
-                    })->implode('/');
-                    $router->get(
-                        $apiSubmodule.'/'.$params, 
-                        'Api\\'.ucfirst($apiModule).'Controller'
-                    )->name($apiSubmodule);
+    $router->group(['middleware' => ['web']], function ($router) use($apiPolicies){
+        collect($apiPolicies)->each(function($api,$method) use($router){
+            collect($api)->each(function($apiPolicy,$apiModule) use($method,$router){
+                collect($apiPolicy)->each(function($apiConfig,$apiSubmodule) use($method,$apiModule,$router){
+
+                    $router->name('api.'.$apiModule.'.')->prefix('api/'.$apiModule)
+                    ->group(function ($router) use($method,$apiSubmodule,$apiConfig){
+
+                        $params = collect($apiConfig)->map(function($param){
+                            return sprintf('{%s}', $param);
+                        })->implode('/');
+                        $router->{strtolower($method)}(
+                            $apiSubmodule.'/'.$params, 
+                            'Api\\ApiController'
+                        )->name($apiSubmodule);
+                    });
                 });
             });
         });

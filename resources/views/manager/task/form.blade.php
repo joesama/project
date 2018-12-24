@@ -1,11 +1,16 @@
-@extends('joesama/entree::layouts.content')
-@push('content.style')
+@extends('joesama/entree::layouts.form')
+@push('form.style')
 
 @endpush
-@section('content')
-
-
+@section('form')
+<div class="row mb-3">
+    <div class="col-md-12">
+		
+		  	{!! $form !!}
+		  
+    </div>
+</div>
 @endsection
-@push('content.script')
+@push('form.script')
 
 @endpush

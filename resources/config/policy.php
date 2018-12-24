@@ -11,32 +11,39 @@ return [
 			'project' => [
 				'list' => ['corporateId'],
 				'form' => ['corporateId'],
-				'view' => ['projectId']
+				'view' => ['corporateId','projectId']
 			],
 			'task' => [
-				'list' => ['corporateId','projectId?'],
-				'form' => ['corporateId','projectId?'],
-				'view' => ['taskId']
+				'list' => ['corporateId','projectId?','taskId?'],
+				'form' => ['corporateId','projectId?','taskId?'],
+				'view' => ['corporateId','projectId','taskId']
 			],
 			'issue' => [
-				'list' => ['corporateId','projectId?'],
-				'form' => ['corporateId','projectId?'],
-				'view' => ['issueId']
+				'list' => ['corporateId','projectId?','issueId?'],
+				'form' => ['corporateId','projectId?','issueId?'],
+				'view' => ['corporateId','projectId','issueId']
 			],
 			'risk' => [
-				'list' => ['corporateId','projectId?'],
-				'form' => ['corporateId','projectId?'],
-				'view' => ['riskId']
+				'list' => ['corporateId','projectId?','riskId?'],
+				'form' => ['corporateId','projectId?','riskId?'],
+				'view' => ['corporateId','projectId','riskId']
 			],
 			'icon' => 'fa fa-folder'
 		]
 	],
 	'api' => [
-		'list' => [
-			'project' => ['corporateId'], 
-			'task' => ['corporateId','projectId?'], 
-			'issue' => ['corporateId','projectId?'],
-			'risk' => ['corporateId','projectId?'],
-		]
+		'GET' => [
+			'list' => [
+				'project' => ['corporateId'], 
+				'task' => ['corporateId','projectId?'], 
+				'issue' => ['corporateId','projectId?'],
+				'risk' => ['corporateId','projectId?'],
+			],
+		],
+		'POST' => [
+			'task' => [
+				'save' => ['corporateId','projectId','taskId?']
+			]
+		],
 	]
 ];

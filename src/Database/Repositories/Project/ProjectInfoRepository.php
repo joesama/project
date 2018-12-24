@@ -42,7 +42,7 @@ class ProjectInfoRepository
 	public function getProject(int $projectId)
 	{
 		return $this->projectModel
-		->with(['client','profile','task'])
+		->component()
 		->find($projectId);
 	}
 
@@ -122,7 +122,7 @@ class ProjectInfoRepository
 			$query->when($projectId, function ($query, $projectId) {
                 return $query->where('id', $projectId);
             });
-		})->paginate();
+		})->component()->paginate();
 	}
 
 	/**
@@ -138,7 +138,7 @@ class ProjectInfoRepository
 			$query->when($projectId, function ($query, $projectId) {
                 return $query->where('id', $projectId);
             });
-		})->paginate();
+		})->component()->paginate();
 	}
 
 	/**
@@ -154,7 +154,7 @@ class ProjectInfoRepository
 			$query->when($projectId, function ($query, $projectId) {
                 return $query->where('id', $projectId);
             });
-		})->paginate();
+		})->component()->paginate();
 	}
 
 } // END class MakeProjectRepository 

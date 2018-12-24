@@ -4,6 +4,7 @@ namespace Joesama\Project\Database\Repositories\Project;
 use Joesama\Project\Database\Model\Project\Project;
 use Joesama\Project\Database\Model\Project\Client;
 use Joesama\Project\Database\Model\Project\Task;
+use Joesama\Project\Database\Model\Project\TaskProgress;
 use DB;
 use Carbon\Carbon;
 
@@ -131,13 +132,13 @@ class MakeProjectRepository
 
 		try{
 			if(!is_null($id)){
-				$this->taskModel->find($id);
+				$this->taskModel = $this->taskModel->find($id);
 			}
 
 			$inputData->each(function($record,$field){
 				if(!is_null($record)){
 					if(in_array($field, ['start','end'])):
-						$record = Carbon::parse($record)->toDateTimeString();
+						$record = Carbon::createFromFormat('d/m/Y',$record)->toDateTimeString();
 					endif;
 
 					$this->taskModel->{$field} = $record;
@@ -146,12 +147,19 @@ class MakeProjectRepository
 
 			$this->taskModel->save();
 
+			if($inputData->get('progress') == null){
+				$this->taskModel->progress()->save(new TaskProgress([
+					'progress' => 0
+				]));
+			}
+
 			DB::commit();
 
 			return $this->taskModel;
 
 		}catch( \Exception $e){
 
+			dd($e->getMessage());
 			DB::rollback();
 		}
 	}

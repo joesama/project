@@ -2,10 +2,11 @@
 
 namespace Joesama\Project\Database\Model\Project;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Joesama\Project\Database\Model\Organization\Corporate;
 use Joesama\Project\Database\Model\Organization\Profile;
-use Carbon\Carbon;
+use Joesama\Project\Database\Model\Project\Task;
 
 class Project extends Model
 {
@@ -13,11 +14,19 @@ class Project extends Model
     protected $appends = ['start_date','end_date','in_charge'];
 
     /**
+     * Get the corporate for project.
+     */
+    public function corporate()
+    {
+        return $this->belongsTo(Corporate::class,'corporate_id','id');
+    }
+
+    /**
      * Get the client for project.
      */
     public function client()
     {
-        return $this->belongsTo(Corporate::class,'corporate_id','id');
+        return $this->belongsTo(Client::class,'client_id','id');
     }
 
     /**
@@ -57,12 +66,12 @@ class Project extends Model
      */
     public function task()
     {
-        return $this->hasMany(Report::class,'project_id','id');
+        return $this->hasMany(Task::class,'project_id','id');
     }
 
     public function scopeComponent($query)
     {
-        return $query->with(['client','profile','task']);
+        return $query->with(['client','profile','task.progress','corporate','partner']);
     }
 
     public function getEndDateAttribute($value)

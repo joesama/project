@@ -49,13 +49,14 @@
                 </td>
             </tr>
         </table>
+        @foreach(data_get($project,'partner') as $index => $partner)
         <table class="table table-bordered table-sm">
             <tr>
                 <td class="text-bold bg-primary text-light text-capitalize" style="width: 30%">
-                    {{ __('joesama/project::project.client.partner.name') }}
+                    {{ __('joesama/project::project.client.partner.name') }}  {{ ($index+1) }}
                 </td>
                 <td class="pl-2">
-                    {{ data_get($project,'client.partner.name') }}
+                    {{ data_get($partner,'name') }}
                 </td>
             </tr>
             <tr>
@@ -63,7 +64,7 @@
                     {{ __('joesama/project::project.client.partner.tel') }}
                 </td>
                 <td class="pl-2">
-                    {{ data_get($project,'client.partner.tel') }}
+                    {{ data_get($partner,'phone') }}
                 </td>
             </tr>
             <tr>
@@ -71,7 +72,7 @@
                     {{ __('joesama/project::project.client.partner.pm') }}
                 </td>
                 <td class="pl-2">
-                    {{ data_get($project,'client.partner.pmo') }}
+                    {{ data_get($partner,'manager') }}
                 </td>
             </tr>
             <tr>
@@ -79,10 +80,11 @@
                     {{ __('joesama/project::project.client.partner.contact') }}
                 </td>
                 <td class="pl-2">
-                    {{ data_get($project,'client.partner.name') }}
+                    {{ data_get($partner,'contact') }}
                 </td>
             </tr>
         </table>
+        @endforeach
     </div>
     <div class="col-md-6 text-left">
         <table class="table table-bordered table-sm">
@@ -91,7 +93,7 @@
                     {{ __('joesama/project::project.info.contract.value') }}
                 </td>
                 <td class="pl-2">
-                    {{ data_get($project,'contract.value') }}
+                    RM {{ number_format(data_get($project,'contract'),2) }}
                 </td>
             </tr>
             <tr>
@@ -99,7 +101,7 @@
                     {{ __('joesama/project::project.info.contract.scope') }}
                 </td>
                 <td class="pl-2">
-                    {{ data_get($project,'contract.scope') }}
+                    {{ data_get($project,'scope') }}
                 </td>
             </tr>
             <tr>
@@ -125,6 +127,7 @@
                     {{ __('joesama/project::project.info.contract.gp.original') }}
                 </td>
                 <td class="pl-2">
+                    RM {{ number_format(data_get($project,'gp_propose'),2) }}
                 </td>
             </tr>
             <tr>
@@ -132,6 +135,7 @@
                     {{ __('joesama/project::project.info.contract.gp.latest') }}
                 </td>
                 <td class="pl-2">
+                    RM {{ number_format(data_get($project,'gp_latest'),2) }}
                 </td>
             </tr>
             <tr>
@@ -139,6 +143,7 @@
                     {{ __('joesama/project::project.info.contract.bond') }}
                 </td>
                 <td class="pl-2">
+                    RM {{ number_format(data_get($project,'bond'),2) }}
                 </td>
             </tr>
             <tr>

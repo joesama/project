@@ -51,7 +51,7 @@ class ListProcessor
 			    'icons' => 'psi-magnifi-glass icon-fw', // Icon for action : optional
 			    'key' => 'id'  ],
 			[ 'action' => __('product.item.variant') , // Action Description
-			    'url' => url('product/list/variant'), // URL for action
+			    'url' => handles('joesama/project::manager/project/report/'.$corporateId), // URL for action
 			    'icons' => 'psi-file-edit icon-fw', // Icon for action : optional
 			    'key' => 'id'  ]
 		];
@@ -79,27 +79,23 @@ class ListProcessor
 		   [ 'field' => 'name',
 		   'title' => __('joesama/project::project.task.task'),
 		   'style' => 'text-xs-left text-capitalize'],
-		   [ 'field' => 'in_charge.name',
+		   [ 'field' => 'assignee.name',
 		   'title' => 'PIC',
-		   'style' => 'text-xs-center'],
-		   [ 'field' => 'progress',
+		   'style' => 'text-left  col-xs-3'],
+		   [ 'field' => 'progress.progress',
 		   'title' => __('joesama/project::project.task.progress'),
-		   'style' => 'text-xs-center'],
+		   'style' => 'text-center col-xs-1'],
 		   [ 'field' => 'start_date',
 		   'title' => __('joesama/project::project.task.date.start'),
-		   'style' => 'text-xs-center date hidden'],
+		   'style' => 'text-center date hidden'],
 		   [ 'field' => 'end_date',
 		   'title' => __('joesama/project::project.task.date.end'),
-		   'style' => 'text-xs-center date hidden']
+		   'style' => 'text-center date hidden']
 		];
 
 		$action = [
 			[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
-			    'url' => handles('joesama/vuegrid::'), // URL for action
-			    'icons' => 'psi-magnifi-glass icon-fw', // Icon for action : optional
-			    'key' => 'id'  ],
-			[ 'action' => __('product.item.variant') , // Action Description
-			    'url' => url('product/list/variant'), // URL for action
+			    'url' => handles('joesama/project::manager/task/form/'.$corporateId.'/'.$request->segment(5)), // URL for action
 			    'icons' => 'psi-file-edit icon-fw', // Icon for action : optional
 			    'key' => 'id'  ]
 		];
@@ -110,7 +106,7 @@ class ListProcessor
 				 ->buildDataModel(
 				 	route('api.list.task',[$corporateId, $request->segment(5)]), 
 				 	$this->projectObj->listProjectTask($corporateId, $request->segment(5))
-				 )->buildAddButton(route('manager.issue.form',[$corporateId, $request->segment(5)]))
+				 )->buildAddButton(route('manager.task.form',[$corporateId, $request->segment(5)]))
 				 ->buildOption($action, TRUE)
 				 ->render();
 	}
@@ -124,10 +120,10 @@ class ListProcessor
 	{
 
 		$columns = [
-		   [ 'field' => 'name',
+		   [ 'field' => 'description',
 		   'title' => __('joesama/project::project.issues.name'),
 		   'style' => 'text-xs-left text-capitalize'],
-		   [ 'field' => 'in_charge.name',
+		   [ 'field' => 'assignee.name',
 		   'title' => 'PIC',
 		   'style' => 'text-xs-center'],
 		   [ 'field' => 'progress.description',
@@ -137,11 +133,7 @@ class ListProcessor
 
 		$action = [
 			[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
-			    'url' => handles('joesama/vuegrid::'), // URL for action
-			    'icons' => 'psi-magnifi-glass icon-fw', // Icon for action : optional
-			    'key' => 'id'  ],
-			[ 'action' => __('product.item.variant') , // Action Description
-			    'url' => url('product/list/variant'), // URL for action
+			    'url' => handles('joesama/project::manager/issue/form/'.$corporateId.'/'.$request->segment(5)), // URL for action
 			    'icons' => 'psi-file-edit icon-fw', // Icon for action : optional
 			    'key' => 'id'  ]
 		];
@@ -169,7 +161,7 @@ class ListProcessor
 		   [ 'field' => 'name',
 		   'title' => __('joesama/project::project.risk.name'),
 		   'style' => 'text-xs-left text-capitalize'],
-		   [ 'field' => 'in_charge.name',
+		   [ 'field' => 'assignee.name',
 		   'title' => 'PIC',
 		   'style' => 'text-xs-center'],
 		   [ 'field' => 'severity.description',
@@ -179,11 +171,7 @@ class ListProcessor
 
 		$action = [
 			[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
-			    'url' => handles('joesama/vuegrid::'), // URL for action
-			    'icons' => 'psi-magnifi-glass icon-fw', // Icon for action : optional
-			    'key' => 'id'  ],
-			[ 'action' => __('product.item.variant') , // Action Description
-			    'url' => url('product/list/variant'), // URL for action
+			    'url' => handles('joesama/project::manager/risk/form/'.$corporateId.'/'.$request->segment(5)), // URL for action
 			    'icons' => 'psi-file-edit icon-fw', // Icon for action : optional
 			    'key' => 'id'  ]
 		];

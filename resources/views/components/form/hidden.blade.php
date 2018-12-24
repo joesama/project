@@ -1,0 +1,1 @@
+<input type="hidden" name="{{ $fieldId }}" id="{{ $fieldId }}"  value="{{ $mapValue }}">

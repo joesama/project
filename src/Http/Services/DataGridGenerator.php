@@ -72,6 +72,8 @@ class DataGridGenerator
 	{	
 		// Display Search Input : optional
 		$this->datagrid->autoFilter($autoFilter);
+		// Display Search Input : optional
+		$this->datagrid->showSearch(false);
 		// define action taken for each row of data
 		// Second parameter if false use text representation
 		$this->datagrid->action($dataActions,TRUE);

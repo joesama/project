@@ -33,4 +33,8 @@ class Issue extends Model
         return  $this->hasMany(MasterData::class,'progress_id');
     }
 
+    public function scopeComponent($query)
+    {
+        return $query->with(['assignee','progress']);
+    }
 }
