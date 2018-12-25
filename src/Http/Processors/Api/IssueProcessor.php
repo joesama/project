@@ -6,12 +6,12 @@ use Joesama\Project\Database\Repositories\Project\MakeProjectRepository;
 use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
 
 /**
- * Processing All List 
+ * Processing All Operation 
  *
  * @package default
  * @author 
  **/
-class TaskProcessor 
+class IssueProcessor 
 {
 
 	public function __construct(
@@ -30,9 +30,9 @@ class TaskProcessor
 	 */
 	public function save(Request $request,int $corporateId, int $projectId = null)
 	{
-		$task = $this->makeProject->initTask(collect($request->all()),$request->segment(6));
+		$issue = $this->makeProject->initIssue(collect($request->all()),$request->segment(6));
 
-		return redirect(handles('manager/'.$request->segment(2).'/list/'.$corporateId.'/'.$task->project_id));
+		return redirect(handles('manager/'.$request->segment(2).'/list/'.$corporateId.'/'.$issue->project_id));
 	}
 
 

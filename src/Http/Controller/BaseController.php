@@ -29,6 +29,20 @@ class BaseController extends Controller
 							.ucfirst($this->submodule)
 							.'Processor';
 
+		$this->view = $this->domain.'.'.$this->page;
+
+		if(!view()->exists($this->view) && $this->page == 'form'){
+			$this->view = 'joesama/project::components.form';
+		}
+
+		if(!view()->exists($this->view) && $this->page == 'list'){
+			$this->view = 'joesama/project::components.list';
+		}
+
+		if(!view()->exists($this->view) && $this->page == 'view'){
+			$this->view = 'joesama/project::components.view';
+		}
+
 		Cache::forget($this->component);//@TODO remove for deploy
 		$this->config = Cache::remember(
 			$this->component, 60, function () {

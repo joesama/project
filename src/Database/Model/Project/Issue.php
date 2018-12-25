@@ -30,11 +30,11 @@ class Issue extends Model
      */
     public function progress()
     {
-        return  $this->hasMany(MasterData::class,'progress_id');
+        return  $this->belongsTo(MasterData::class,'progress_id');
     }
 
     public function scopeComponent($query)
     {
-        return $query->with(['assignee','progress']);
+        return $query->with(['assignee','progress','project']);
     }
 }

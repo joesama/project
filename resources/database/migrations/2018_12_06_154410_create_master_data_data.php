@@ -18,6 +18,7 @@ class CreateMasterDataData extends Migration
             $table->increments('id');
             $table->integer('master_id')->nullable();
             $table->string('description')->nullable();
+            $table->text('formula')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

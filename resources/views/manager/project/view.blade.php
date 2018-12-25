@@ -20,9 +20,21 @@
                 </div>
             </div>
             <div class="panel-group accordion" id="accordionExample">
-                @includeIf('joesama/project::manager.project.part.task')
+                @foreach($policies as $policyId => $policy)
+                    @php
+                        $view = 'joesama/project::manager.project.part.'.$policyId;
+                    @endphp
+                    @if(view()->exists($view))
+                        @include($view)
+                    @else
+                        @include('joesama/project::manager.project.part.table',[
+                            'table' => ${$policyId.'Table'},
+                            'title' => 'joesama/project::manager.'.$policyId.'.list',
+                        ])
+                    @endif
+                @endforeach
                 {{-- @includeIf('joesama/project::project.component.progress') --}}
-                {{-- @includeIf('joesama/project::project.component.issue') --}}
+                {{-- @includeIf('joesama/project::manager.project.part.issue') --}}
                 {{-- @includeIf('joesama/project::project.component.risk') --}}
                 {{-- @includeIf('joesama/project::project.component.budget') --}}
                 {{-- @includeIf('joesama/project::project.component.hse') --}}

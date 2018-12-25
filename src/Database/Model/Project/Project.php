@@ -78,6 +78,14 @@ class Project extends Model
         return $this->hasMany(Task::class,'project_id','id');
     }
 
+    /**
+     * Get the report progress.
+     */
+    public function scopeSameGroup($query)
+    {
+        return $this->where('corporate_id',request()->segment(4));
+    }
+
     public function scopeComponent($query)
     {
         return $query->with(['client','profile','task.progress','corporate','partner']);

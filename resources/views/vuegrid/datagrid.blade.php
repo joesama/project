@@ -69,17 +69,17 @@
 </div>
 <script type="text/x-template" id="{{ 'tpl-'.$tableId  }}">
 <div class="table-responsive-md">
-  <table  id="{{ 'tbl-'.$tableId }}" class="table table-sm table-borderless table-striped table-condensed">
+  <table  id="{{ 'tbl-'.$tableId }}" class="table table-sm table-borderless table-striped table-condensed table-vcenter">
     <thead>
       <tr>
-        <th class="bg-primary text-light" width="20px" style="color:white" >#</th>
-        <th class="bg-primary text-light" :class="key.style" style="color:white"  v-for="key in columns"
+        <th class="bg-dark text-light" width="20px" style="color:white" >#</th>
+        <th class="bg-dark text-light" :class="key.style" style="color:white"  v-for="key in columns"
           @click="sortBy(key.field)">
           @{{ key.title | capitalize }}
           <i :class="sortOrders[key.field] > 0 ? 'pull-right fa fa-caret-down' : 'pull-right  fa fa-caret-up'">
           </i>
         </th>
-        <th class="bg-primary text-light text-center" style="color:white"  v-if="actions" width="10%px">
+        <th class="bg-dark text-light text-center" style="color:white"  v-if="actions" width="10%px">
           {{ trans('joesama/vuegrid::datagrid.actions') }}
         </th>
       </tr>

@@ -83,6 +83,7 @@ class ProjectProcessor
 			'scheduleTable' => $this->listProcessor->task($request,$corporateId),
 			'issueTable' => $this->listProcessor->issue($request,$corporateId),
 			'riskTable' => $this->listProcessor->risk($request,$corporateId),
+			'policies' => collect(config('joesama/project::policy.dashboard'))
 		];
 	}
 

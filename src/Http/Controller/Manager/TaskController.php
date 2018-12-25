@@ -27,7 +27,7 @@ class TaskController extends BaseController
 		}
 
 		return view(
-			$this->domain.'.'.$this->page,
+			$this->view ,
 			app($this->processor)->$page($request,$corporateId)
 		);
 	}

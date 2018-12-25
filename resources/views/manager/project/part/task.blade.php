@@ -22,6 +22,7 @@
   </div>
 </div>
 @push('pages.script')
+@if($task->count() > 0)
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
     google.charts.load('current', {'packages':['gantt']});
@@ -66,4 +67,5 @@
       chart.draw(data, options);
     }
   </script>
+@endif
 @endpush

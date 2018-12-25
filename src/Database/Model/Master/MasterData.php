@@ -7,4 +7,36 @@ use Joesama\Project\Database\Model\Organization\Profile;
 class MasterData extends Model
 {
 	protected $table = 'master_data';
+
+
+	/**
+     * Get the master relation
+     */
+    public function master()
+    {
+        return $this->belongsTo(Master::class,'master_id','id');
+    }
+
+    /**
+     * @param  [type]
+     * @return [type]
+     */
+    public function scopeProgress($query)
+    {
+        return $query->whereHas('master',function($subquery){
+        	$subquery->progress();
+        });
+    }
+
+    /**
+     * @param  [type]
+     * @return [type]
+     */
+    public function scopeSeverity($query)
+    {
+        return $query->whereHas('master',function($subquery){
+        	$subquery->severity();
+        });
+    }
+
 }

@@ -7,7 +7,7 @@ use Joesama\Project\Database\Model\Organization\Profile;
 
 class Risk extends Model
 {
-	protected $table = 'issue';
+	protected $table = 'risk';
 
     /**
      * Get the task's project.
@@ -30,12 +30,12 @@ class Risk extends Model
      */
     public function severity()
     {
-        return  $this->hasMany(MasterData::class,'severity_id');
+        return  $this->belongsTo(MasterData::class,'severity_id');
     }
 
     public function scopeComponent($query)
     {
-        return $query->with(['assignee','severity']);
+        return $query->with(['assignee','severity','project']);
     }
 
 }

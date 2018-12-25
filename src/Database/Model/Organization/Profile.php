@@ -25,4 +25,12 @@ class Profile extends Model
         return $this->belongsToMany(Project::class,'project_role','project_id','profile_id');
     }
 
+    /**
+     * Get the report progress.
+     */
+    public function scopeSameGroup($query)
+    {
+        return $this->where('corporate_id',request()->segment(4));
+    }
+
 }

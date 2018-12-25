@@ -2,14 +2,6 @@
 
 return [
 	'submit' => 'Submit',
-	'task' => [
-		'profile_id' => "Task's Assignee", 
-		'project_id' => "Project Name", 
-		'name' => "Task's Name", 
-		'start' => "Start Date", 
-		'end' => "End Date", 
-		'progress' => "End Date", 
-	],
 	'project' => [
 		'profile_id' => 'Project Manager',
 		'client_id' => 'Project Client',
@@ -24,5 +16,25 @@ return [
 		'bond' => 'Performance Bond',
 		'eot' => 'Extension of Time',
 
-	]
+	],
+	'task' => [
+		'profile_id' => "Task's Assignee", 
+		'project_id' => "Project Name", 
+		'name' => "Task's Name", 
+		'start' => "Start Date", 
+		'end' => "End Date", 
+		'progress' => "Progress", 
+	],
+	'issue' => [
+		'profile_id' => "Person In Charge", 
+		'project_id' => "Project Name", 
+		'progress_id' => "Status", 
+		'description' => "Issue Description"
+	],
+	'risk' => [
+		'profile_id' => "Person In Charge", 
+		'project_id' => "Project Name", 
+		'description' => "Risk Description", 
+		'severity_id' => "Status", 
+	],
 ];

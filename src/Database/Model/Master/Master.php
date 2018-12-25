@@ -2,9 +2,32 @@
 namespace Joesama\Project\Database\Model\Master;
 
 use Illuminate\Database\Eloquent\Model;
-use Joesama\Project\Database\Model\Organization\Profile;
 
 class Master extends Model
 {
 	protected $table = 'master';
+
+	/**
+     * Get the master data
+     */
+    public function data()
+    {
+        return $this->hasMany(MasterData::class,'master_id','id');
+    }
+
+    /**
+     * Progress Definition
+     */
+    public function scopeProgress($query)
+    {
+        return $query->where('id', 1);
+    }
+
+    /**
+     * Progress Definition
+     */
+    public function scopeSeverity($query)
+    {
+        return $query->where('id', 2);
+    }
 }

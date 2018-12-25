@@ -100,7 +100,7 @@ class ProjectInfoRepository
 	}
 
 	/**
-	 * List of Task for specific Id
+	 * Get Project Task for specific Id
 	 * 
 	 * @param int $projectId
 	 **/
@@ -126,6 +126,16 @@ class ProjectInfoRepository
 	}
 
 	/**
+	 * Get Project Issue for specific Id
+	 * 
+	 * @param int $issueId
+	 **/
+	public function projectIssue(int $issueId)
+	{
+		return $this->issueModel->find($issueId);
+	}
+
+	/**
 	 * List of Issue Under Corporate, Project
 	 * 
 	 * @param int $corporateId - id for specific corporate
@@ -139,6 +149,16 @@ class ProjectInfoRepository
                 return $query->where('id', $projectId);
             });
 		})->component()->paginate();
+	}
+
+	/**
+	 * Get Project Risk for specific Id
+	 * 
+	 * @param int $riskId
+	 **/
+	public function projectRisk(int $riskId)
+	{
+		return $this->riskModel->find($issueId);
 	}
 
 	/**

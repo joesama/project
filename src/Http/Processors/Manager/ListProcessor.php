@@ -81,10 +81,10 @@ class ListProcessor
 		   'style' => 'text-xs-left text-capitalize'],
 		   [ 'field' => 'assignee.name',
 		   'title' => 'PIC',
-		   'style' => 'text-left  col-xs-3'],
+		   'style' => 'text-left'],
 		   [ 'field' => 'progress.progress',
 		   'title' => __('joesama/project::form.task.progress'),
-		   'style' => 'text-center col-xs-1'],
+		   'style' => 'text-center'],
 		   [ 'field' => 'start_date',
 		   'title' => __('joesama/project::form.task.start'),
 		   'style' => 'text-center date hidden'],
@@ -97,7 +97,7 @@ class ListProcessor
 			$columns = array_merge($columns,[[ 
 				'field' => 'project.name',
 		   		'title' => __('joesama/project::form.task.project_id'),
-		   		'style' => 'text-xs-center'
+		   		'style' => 'text-xs-center col-xs-3'
 		   	]]);
 		}
 
@@ -108,7 +108,7 @@ class ListProcessor
 			    'key' => 'id'  ]
 		];
 
-		if($request->segment(6)){
+		if($request->segment(5)){
 			$editAction = [
 				[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
 				    'url' => handles('joesama/project::manager/task/form/'.$corporateId.'/'.$request->segment(5)), // URL for action
@@ -144,18 +144,37 @@ class ListProcessor
 		   'style' => 'text-xs-left text-capitalize'],
 		   [ 'field' => 'assignee.name',
 		   'title' => 'PIC',
-		   'style' => 'text-xs-center'],
+		   'style' => 'text-xs-center col-xs-3'],
 		   [ 'field' => 'progress.description',
 		   'title' => __('joesama/project::project.issues.status'),
-		   'style' => 'text-xs-center']
+		   'style' => 'text-xs-center col-xs-2']
 		];
+
+		if(is_null($request->segment(5))){
+			$columns = array_merge($columns,[[ 
+				'field' => 'project.name',
+		   		'title' => __('joesama/project::form.task.project_id'),
+		   		'style' => 'text-xs-center col-xs-3'
+		   	]]);
+		}
 
 		$action = [
 			[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
-			    'url' => handles('joesama/project::manager/issue/form/'.$corporateId.'/'.$request->segment(5)), // URL for action
-			    'icons' => 'psi-file-edit icon', // Icon for action : optional
+			    'url' => handles('joesama/project::manager/issue/view/'.$corporateId.'/'.$request->segment(5)), // URL for action
+			    'icons' => 'psi-magnifi-glass icon', // Icon for action : optional
 			    'key' => 'id'  ]
 		];
+
+		if($request->segment(5)){
+			$editAction = [
+				[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
+				    'url' => handles('joesama/project::manager/issue/form/'.$corporateId.'/'.$request->segment(5)), // URL for action
+				    'icons' => 'psi-file-edit icon', // Icon for action : optional
+				    'key' => 'id'  ]
+			];
+
+			$action = array_merge($action,$editAction);
+		}
 
 		$datagrid = new DataGridGenerator();
 		
@@ -177,25 +196,22 @@ class ListProcessor
 	{
 
 		$columns = [
-		   [ 'field' => 'name',
+		   [ 'field' => 'description',
 		   'title' => __('joesama/project::project.risk.name'),
 		   'style' => 'text-xs-left text-capitalize'],
-		   [ 'field' => 'assignee.name',
-		   'title' => 'PIC',
-		   'style' => 'text-xs-center'],
 		   [ 'field' => 'severity.description',
 		   'title' => __('joesama/project::project.risk.severity'),
-		   'style' => 'text-xs-center']
+		   'style' => 'text-xs-center col-xs-2']
 		];
 
 		$action = [
 			[ 'action' => trans('joesama/vuegrid::datagrid.buttons.view') , // Action Description
-			    'url' => handles('joesama/project::manager/risk/form/'.$corporateId.'/'.$request->segment(5)), // URL for action
+			    'url' => handles('joesama/project::manager/risk/view/'.$corporateId.'/'.$request->segment(5)), // URL for action
 			    'icons' => 'psi-magnifi-glass icon', // Icon for action : optional
 			    'key' => 'id'  ]
 		];
 
-		if($request->segment(6)){
+		if($request->segment(5)){
 			$editAction = [
 				[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
 				    'url' => handles('joesama/project::manager/risk/form/'.$corporateId.'/'.$request->segment(5)), // URL for action
@@ -211,7 +227,7 @@ class ListProcessor
 		return $datagrid->buildTable($columns, __('joesama/project::project.list.risk') )
 				 ->buildDataModel(
 				 	route('api.list.risk',[$corporateId, $request->segment(5)]), 
-				 	$this->projectObj->listProjectIssue($corporateId, $request->segment(5))
+				 	$this->projectObj->listProjectRisk($corporateId, $request->segment(5))
 				 )->buildAddButton(route('manager.risk.form',[$corporateId, $request->segment(5)]))
 				 ->buildOption($action, TRUE)
 				 ->render();

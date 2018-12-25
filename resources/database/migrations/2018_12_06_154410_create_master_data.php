@@ -16,7 +16,6 @@ class CreateMasterData extends Migration
         Schema::create('master', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->integer('master_id')->nullable();
             $table->string('description')->nullable();
             $table->timestamps();
             $table->softDeletes();

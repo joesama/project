@@ -14,12 +14,10 @@ class FormGenerator
 	private $model, $modelId, $formId, $fields, $inputFields, $optionlist = [], $mappinglist = [];
 
 	/**
-	 * @param  string $formId Id For The Form
-	 * @return void
-	 */
+	 * Generate Model Attributes
+	 **/
 	public function newModelForm(Model $model)
 	{
-
 		$this->model = $model->newQuery();
 		$this->formId = $model->getTable();
 		$this->optionlist = collect([]);
