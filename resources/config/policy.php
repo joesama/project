@@ -10,23 +10,23 @@ return [
 			],
 			'project' => [
 				'list' => ['corporateId'],
-				'form' => ['corporateId'],
+				'form' => ['corporateId','projectId?'],
 				'view' => ['corporateId','projectId']
 			],
 			'task' => [
 				'list' => ['corporateId','projectId?','taskId?'],
 				'form' => ['corporateId','projectId?','taskId?'],
-				'view' => ['corporateId','projectId','taskId']
+				'view' => ['corporateId','projectId','taskId?']
 			],
 			'issue' => [
 				'list' => ['corporateId','projectId?','issueId?'],
 				'form' => ['corporateId','projectId?','issueId?'],
-				'view' => ['corporateId','projectId','issueId']
+				'view' => ['corporateId','projectId','issueId?']
 			],
 			'risk' => [
 				'list' => ['corporateId','projectId?','riskId?'],
 				'form' => ['corporateId','projectId?','riskId?'],
-				'view' => ['corporateId','projectId','riskId']
+				'view' => ['corporateId','projectId','riskId?']
 			],
 			'icon' => 'fa fa-folder'
 		]
@@ -41,9 +41,23 @@ return [
 			],
 		],
 		'POST' => [
+			'project' => [
+				'save' => ['corporateId','projectId?']
+			],
 			'task' => [
-				'save' => ['corporateId','projectId','taskId?']
+				'save' => ['corporateId','projectId?','taskId?']
+			],
+			'issue' => [
+				'save' => ['corporateId','projectId?','issueId?']
+			],
+			'risk' => [
+				'save' => ['corporateId','projectId?','issueId?']
 			]
 		],
+	],
+	'dashboard' => [
+		'task' => ['read','write'],
+		'issue' => ['read','write'],
+		'risk' => ['read','write']
 	]
 ];
