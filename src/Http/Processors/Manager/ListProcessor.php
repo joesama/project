@@ -31,7 +31,7 @@ class ListProcessor
 		   [ 'field' => 'name',
 		   'title' => __('joesama/project::project.info.name'),
 		   'style' => 'text-xs-left text-capitalize'],
-		   [ 'field' => 'in_charge.name',
+		   [ 'field' => 'profile.name',
 		   'title' => 'PIC',
 		   'style' => 'text-xs-left'],
 		   [ 'field' => 'contract',
@@ -48,11 +48,11 @@ class ListProcessor
 		$action = [
 			[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
 			    'url' => handles('joesama/project::manager/project/view/'.$corporateId), // URL for action
-			    'icons' => 'psi-magnifi-glass icon-fw', // Icon for action : optional
+			    'icons' => 'psi-magnifi-glass icon', // Icon for action : optional
 			    'key' => 'id'  ],
 			[ 'action' => __('product.item.variant') , // Action Description
-			    'url' => handles('joesama/project::manager/project/report/'.$corporateId), // URL for action
-			    'icons' => 'psi-file-edit icon-fw', // Icon for action : optional
+			    'url' => handles('joesama/project::manager/project/form/'.$corporateId), // URL for action
+			    'icons' => 'psi-file-edit icon', // Icon for action : optional
 			    'key' => 'id'  ]
 		];
 
@@ -77,28 +77,47 @@ class ListProcessor
 
 		$columns = [
 		   [ 'field' => 'name',
-		   'title' => __('joesama/project::project.task.task'),
+		   'title' => __('joesama/project::form.task.name'),
 		   'style' => 'text-xs-left text-capitalize'],
 		   [ 'field' => 'assignee.name',
 		   'title' => 'PIC',
 		   'style' => 'text-left  col-xs-3'],
 		   [ 'field' => 'progress.progress',
-		   'title' => __('joesama/project::project.task.progress'),
+		   'title' => __('joesama/project::form.task.progress'),
 		   'style' => 'text-center col-xs-1'],
 		   [ 'field' => 'start_date',
-		   'title' => __('joesama/project::project.task.date.start'),
+		   'title' => __('joesama/project::form.task.start'),
 		   'style' => 'text-center date hidden'],
 		   [ 'field' => 'end_date',
-		   'title' => __('joesama/project::project.task.date.end'),
+		   'title' => __('joesama/project::form.task.end'),
 		   'style' => 'text-center date hidden']
 		];
 
+		if(is_null($request->segment(5))){
+			$columns = array_merge($columns,[[ 
+				'field' => 'project.name',
+		   		'title' => __('joesama/project::form.task.project_id'),
+		   		'style' => 'text-xs-center'
+		   	]]);
+		}
+
 		$action = [
 			[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
-			    'url' => handles('joesama/project::manager/task/form/'.$corporateId.'/'.$request->segment(5)), // URL for action
-			    'icons' => 'psi-file-edit icon-fw', // Icon for action : optional
+			    'url' => handles('joesama/project::manager/task/view/'.$corporateId.'/'.$request->segment(5)), // URL for action
+			    'icons' => 'psi-magnifi-glass icon', // Icon for action : optional
 			    'key' => 'id'  ]
 		];
+
+		if($request->segment(6)){
+			$editAction = [
+				[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
+				    'url' => handles('joesama/project::manager/task/form/'.$corporateId.'/'.$request->segment(5)), // URL for action
+				    'icons' => 'psi-file-edit icon', // Icon for action : optional
+				    'key' => 'id'  ]
+			];
+
+			$action = array_merge($action,$editAction);
+		}
 
 		$datagrid = new DataGridGenerator();
 		
@@ -134,7 +153,7 @@ class ListProcessor
 		$action = [
 			[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
 			    'url' => handles('joesama/project::manager/issue/form/'.$corporateId.'/'.$request->segment(5)), // URL for action
-			    'icons' => 'psi-file-edit icon-fw', // Icon for action : optional
+			    'icons' => 'psi-file-edit icon', // Icon for action : optional
 			    'key' => 'id'  ]
 		];
 
@@ -170,11 +189,22 @@ class ListProcessor
 		];
 
 		$action = [
-			[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
+			[ 'action' => trans('joesama/vuegrid::datagrid.buttons.view') , // Action Description
 			    'url' => handles('joesama/project::manager/risk/form/'.$corporateId.'/'.$request->segment(5)), // URL for action
-			    'icons' => 'psi-file-edit icon-fw', // Icon for action : optional
+			    'icons' => 'psi-magnifi-glass icon', // Icon for action : optional
 			    'key' => 'id'  ]
 		];
+
+		if($request->segment(6)){
+			$editAction = [
+				[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
+				    'url' => handles('joesama/project::manager/risk/form/'.$corporateId.'/'.$request->segment(5)), // URL for action
+				    'icons' => 'psi-file-edit icon', // Icon for action : optional
+				    'key' => 'id'  ]
+			];
+
+			$action = array_merge($action,$editAction);
+		}
 
 		$datagrid = new DataGridGenerator();
 		

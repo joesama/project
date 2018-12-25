@@ -19,12 +19,12 @@ class TaskController extends BaseController
 
 		$page = $this->page;
 
-		// if(in_array($page,['form','view']) && is_null($request->segment(6))){
+		if(in_array($page,['view']) && is_null($request->segment(6))){
 
-		// 	$task = app(ProjectInfoRepository::class)->projectTask($request->segment(5));
+			$task = app(ProjectInfoRepository::class)->projectTask($request->segment(5));
 
-		// 	return  redirect(handles($this->module.'/'.$this->submodule.'/'.$this->page.'/'.$corporateId.'/'.data_get($task,'project_id').'/'.$request->segment(5)));
-		// }
+			return  redirect(handles($this->module.'/'.$this->submodule.'/'.$this->page.'/'.$corporateId.'/'.data_get($task,'project_id').'/'.$request->segment(5)));
+		}
 
 		return view(
 			$this->domain.'.'.$this->page,

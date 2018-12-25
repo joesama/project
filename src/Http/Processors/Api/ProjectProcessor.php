@@ -11,7 +11,7 @@ use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
  * @package default
  * @author 
  **/
-class TaskProcessor 
+class ProjectProcessor 
 {
 
 	public function __construct(
@@ -28,11 +28,11 @@ class TaskProcessor
 	 * @param  int $projectId
 	 * @return [type]
 	 */
-	public function save(Request $request,int $corporateId, int $projectId = null)
+	public function save(Request $request,int $corporateId)
 	{
-		$task = $this->makeProject->initTask(collect($request->all()),$request->segment(6));
+		$project = $this->makeProject->initProject(collect($request->all()),$request->segment(5));
 
-		return redirect(handles('manager/'.$request->segment(2).'/list/'.$corporateId.'/'.$projectId.'/'.$request->segment(6)));
+		return redirect(handles('manager/'.$request->segment(2).'/view/'.$corporateId.'/'.$project->id));
 	}
 
 

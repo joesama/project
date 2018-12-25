@@ -14,7 +14,7 @@
       @endphp
       <div class="clearfix">&nbsp;</div>
       <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12" style="overflow: auto;padding: 10px 0px;">
           <div id="chart_div"></div>
         </div>
       </div>
@@ -55,9 +55,10 @@
           ],
         @endforeach
       ]);
-
+      var height = data.getNumberOfRows() * 41 + 50;
       var options = {
-        height: 400
+        height: height,
+        barHeight:10
       };
 
       var chart = new google.visualization.Gantt(document.getElementById('chart_div'));

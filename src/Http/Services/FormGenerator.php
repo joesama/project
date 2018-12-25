@@ -2,6 +2,7 @@
 namespace Joesama\Project\Http\Services;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
 use \DB;
 
@@ -10,7 +11,7 @@ use \DB;
  **/
 class FormGenerator 
 {
-	private $model, $modelId, $formId, $fields, $inputFields, $optionlist, $mappinglist;
+	private $model, $modelId, $formId, $fields, $inputFields, $optionlist = [], $mappinglist = [];
 
 	/**
 	 * @param  string $formId Id For The Form
@@ -21,6 +22,7 @@ class FormGenerator
 
 		$this->model = $model->newQuery();
 		$this->formId = $model->getTable();
+		$this->optionlist = collect([]);
 
 		$table =  $model->fromQuery("SHOW FIELDS FROM ".$this->formId);
 
@@ -46,7 +48,7 @@ class FormGenerator
 	 */
 	public function option(array $optionList)
 	{
-		$this->optionlist = collect($optionList);
+		$this->optionlist = $this->optionlist->merge($optionList);
 
 		return $this;
 	}
@@ -58,6 +60,31 @@ class FormGenerator
 	public function mapping(array $mappings)
 	{
 		$this->mappinglist = collect($mappings);
+
+		return $this;
+	}
+
+	/**
+	 * @param  array $extras [field name => field type]
+	 * @return void
+	 */
+	public function extras(array $extras)
+	{
+		$this->extras = collect($extras);
+
+		$this->extras->each(function($type,$field){
+
+			if(is_string($type)){
+				$this->fields->put($field,$type);
+			}else{
+
+				if( $type instanceof Collection){
+					$this->fields->put($field,'int');
+					$this->optionlist->put($field,$type);
+				}
+			}
+
+		});
 
 		return $this;
 	}
@@ -102,7 +129,7 @@ class FormGenerator
 				$type = trim(stristr($field,'(', true)," \t\n\r\0\x0B");
 			}
 
-			if(in_array($type,['varchar',])){
+			if(in_array($type,['varchar','double','text'])){
 				return 'text';
 			}
 
@@ -110,11 +137,11 @@ class FormGenerator
 				return 'datepicker';
 			}
 
-			if(in_array($key,$this->optionlist->keys()->toArray())){
+			if(in_array($key,collect($this->optionlist)->keys()->toArray())){
 				return 'select';
 			}
 
-			if(in_array($key,$this->mappinglist->keys()->toArray())){
+			if(in_array($key,collect($this->mappinglist)->keys()->toArray())){
 				return 'hidden';
 			}
 

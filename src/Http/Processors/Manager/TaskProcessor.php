@@ -3,6 +3,7 @@ namespace Joesama\Project\Http\Processors\Manager;
 
 use Illuminate\Http\Request;
 use Joesama\Project\Database\Model\Organization\Profile;
+use Joesama\Project\Database\Model\Project\Project;
 use Joesama\Project\Http\Processors\Manager\ListProcessor;
 use Joesama\Project\Http\Services\FormGenerator;
 
@@ -45,19 +46,26 @@ class TaskProcessor
 	{
 		$form = $this->formBuilder->newModelForm(
 			app(\Joesama\Project\Database\Model\Project\Task::class)
-		)
-		->option([
+		);
+
+		if(is_null($request->segment(5))){
+			$form->extras([
+				'project_id' => Project::pluck('name','id')
+			]);
+		}else{
+			$form = $form->mapping([
+				'project_id' => $request->segment(5)
+			]);
+		}
+
+		$form = $form->option([
 			'profile_id' => Profile::where('corporate_id',$request->segment(4))->pluck('name','id')
 		])
 		->id($request->segment(6))
-		->mapping([
-			'project_id' => $request->segment(5)
-		])
 		->renderForm(
 			__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),
 			route('api.task.save',[$corporateId, $request->segment(5), $request->segment(6)])
 		);
-
 
 		return compact('form');
 	}

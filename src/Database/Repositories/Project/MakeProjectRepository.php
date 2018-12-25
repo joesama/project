@@ -48,13 +48,13 @@ class MakeProjectRepository
 
 		try{
 			if(!is_null($id)){
-				$this->projectModel->find($id);
+				$this->projectModel = $this->projectModel->find($id);
 			}
 
 			$inputData->each(function($record,$field){
 				if(!is_null($record)){
 					if(in_array($field, ['start','end'])):
-						$record = Carbon::parse($record)->toDateTimeString();
+						$record = Carbon::createFromFormat('d/m/Y',$record)->toDateTimeString();
 					endif;
 					
 					$this->projectModel->{$field} = $record;
@@ -63,12 +63,15 @@ class MakeProjectRepository
 
 			$this->projectModel->save();
 
+			$this->projectModel->profile()->attach($projectData->get('profile_id'),['role_id' => 1 ]);
+
+
 			DB::commit();
 
 			return $this->projectModel;
 
 		}catch( \Exception $e){
-
+			dd($e->getMessage());
 			DB::rollback();
 		}
 	}
@@ -92,7 +95,7 @@ class MakeProjectRepository
 
 		try{
 			if(!is_null($id)){
-				$this->clientModel->find($id);
+				$this->clientModel = $this->clientModel->find($id);
 			}
 
 			$inputData->each(function($record,$field){

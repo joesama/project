@@ -5,9 +5,7 @@
 @section('form')
 <div class="row mb-3">
     <div class="col-md-12">
-		
-		  	{!! $form !!}
-		  
+		{!! $form !!}
     </div>
 </div>
 @endsection

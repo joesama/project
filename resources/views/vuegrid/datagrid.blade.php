@@ -69,7 +69,7 @@
 </div>
 <script type="text/x-template" id="{{ 'tpl-'.$tableId  }}">
 <div class="table-responsive-md">
-  <table  id="{{ 'tbl-'.$tableId }}" class="table table-sm table-borderless table-striped">
+  <table  id="{{ 'tbl-'.$tableId }}" class="table table-sm table-borderless table-striped table-condensed">
     <thead>
       <tr>
         <th class="bg-primary text-light" width="20px" style="color:white" >#</th>

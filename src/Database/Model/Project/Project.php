@@ -32,6 +32,15 @@ class Project extends Model
     /**
      * Get the  client partner for project.
      */
+    public function manager()
+    {
+        return $this->belongsToMany(Profile::class,'project_role','project_id','profile_id')
+        ->wherePivot('role_id',1);
+    }
+
+    /**
+     * Get the  client partner for project.
+     */
     public function profile()
     {
         return $this->belongsToMany(Profile::class,'project_role','project_id','profile_id');

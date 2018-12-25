@@ -44,7 +44,7 @@ class Task extends Model
 
     public function scopeComponent($query)
     {
-        return $query->with(['assignee','progress']);
+        return $query->with(['assignee','progress','project']);
     }
 
 }
