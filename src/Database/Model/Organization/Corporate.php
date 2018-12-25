@@ -8,6 +8,7 @@ use Joesama\Project\Database\Model\Project\Client;
 class Corporate extends Model
 {
 	protected $table = 'corporate';
+    protected $guarded = ['id'];
 
     /**
      * Get the subsidiary for the corporate.
@@ -15,6 +16,14 @@ class Corporate extends Model
     public function subsidiary()
     {
         return $this->hasMany(Corporate::class,'child_to','id');
+    }
+
+    /**
+     * Get the parent for the corporate.
+     */
+    public function parent()
+    {
+        return $this->belongsTo(Corporate::class,'child_to','id');
     }
 
     /**

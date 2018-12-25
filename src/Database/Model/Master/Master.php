@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 class Master extends Model
 {
 	protected $table = 'master';
+    protected $guarded = ['id'];
 
 	/**
      * Get the master data

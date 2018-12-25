@@ -7,6 +7,7 @@ use Joesama\Project\Database\Model\Organization\Profile;
 class MasterData extends Model
 {
 	protected $table = 'master_data';
+    protected $guarded = ['id'];
 
 
 	/**

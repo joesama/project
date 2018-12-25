@@ -8,5 +8,5 @@ class ProfileRole extends Model
 {
     protected $table = 'profile_role';
 
-
+    protected $guarded = ['id'];
 }
