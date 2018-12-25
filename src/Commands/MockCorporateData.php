@@ -11,6 +11,7 @@ use Joesama\Project\Database\Model\Master\Master;
 use Joesama\Project\Database\Model\Master\MasterData;
 use Joesama\Project\Database\Model\Organization\Corporate;
 use Joesama\Project\Database\Model\Organization\CorporateAddress;
+use Joesama\Project\Database\Model\Organization\Profile;
 use Joesama\Project\Database\Model\Organization\ProfileRole;
 
 
@@ -167,6 +168,9 @@ class MockCorporateData extends Command
                 $user->username = snake_case(strtolower($role->role).$group->id);
                 $user->email = snake_case(strtolower($role->role)).$group->id.'@kub.com';
                 $user->password = '123456';
+                if($role->id == 1){
+                    $user->isAdmin = 1;
+                }
                 $user->status = 1;
                 $user->fullname = ucwords($role->role.' '.str_limit($group->name,25,''));
                 $user->save();
@@ -176,6 +180,18 @@ class MockCorporateData extends Command
                 }else{
                     $user->roles()->sync(4);
                 }
+
+                $abbr = collect(explode(' ', $user->fullname))->map(function($abbr){
+                    return $abbr[0];
+                })->implode('');
+
+                $profile = Profile::firstOrNew(['id' => $id-1]);
+                $profile->name = $user->fullname;
+                $profile->user_id = $user->id;
+                $profile->corporate_id = $group->id;
+                $profile->email = $user->email;
+                $profile->abbr = $abbr;
+                $profile->save();
 
                 $startId->put('id',data_get($startId,'id')+1);
             });
@@ -190,9 +206,24 @@ class MockCorporateData extends Command
                     $user->username = snake_case(strtolower($role->role).$subsidiary->id);
                     $user->email = snake_case(strtolower($role->role)).$subsidiary->id.'@kub.com';
                     $user->password = '123456';
+                    if($role->id == 1){
+                        $user->isAdmin = 1;
+                    }
                     $user->status = 1;
                     $user->fullname = ucwords($role->role.' '.str_limit($subsidiary->name,25,''));
                     $user->save();
+
+                    $abbr = collect(explode(' ', $user->fullname))->map(function($abbr){
+                        return $abbr[0];
+                    })->implode('');
+
+                    $profile = Profile::firstOrNew(['id' => $id-1]);
+                    $profile->name = $user->fullname;
+                    $profile->user_id = $user->id;
+                    $profile->email = $user->email;
+                    $profile->corporate_id = $subsidiary->id;
+                    $profile->abbr = $abbr;
+                    $profile->save();
 
                     if($role->id == 1){
                         $user->roles()->sync(3);
