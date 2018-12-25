@@ -1,22 +1,29 @@
-<div class="panel panel-primary">
-  <div class="panel-heading" id="headingOne">
-    <h4 class="panel-title">
-      <a data-parent="#accordionExample" data-toggle="collapse" href="#schedule" aria-expanded="true" aria-controls="schedule">
-          {{ __('joesama/project::project.category.schedule') }}
-      </a>
-    </h4>
-  </div>
-  <div id="schedule" class="panel-collapse collapse in" aria-labelledby="headingOne" >
-    <div class="panel-body">
-      {!! $scheduleTable !!}
-      @php
-        $task = data_get($project,'task');
-      @endphp
-      <div class="clearfix">&nbsp;</div>
-      <div class="row">
-        <div class="col-md-12" style="overflow: auto;padding: 10px 0px;">
-          <div id="chart_div"></div>
+<div class="col-md-12" style="padding: 0px 5px">
+  <div class="panel">
+    <div class="panel-heading bg-primary">
+        <div class="panel-control">
+            <button class="btn btn-default" data-panel="fullscreen">
+                <i class="icon-max psi-maximize-3"></i>
+                <i class="icon-min psi-minimize-3"></i>
+            </button>
+            <button class="btn btn-default collapsed" data-panel="minmax" data-target="#{{$tableId}}" data-toggle="collapse" aria-expanded="false"><i class="psi-chevron-up"></i></button>
         </div>
+        <h3 class="panel-title">{{ __($title) }}</h3>
+    </div>
+
+    <!--Panel body-->
+    <div class="collapse in" id="{{$tableId}}">
+      <div class="panel-body">
+            {!! $table !!}
+            @php
+              $task = data_get($project,'task');
+            @endphp
+            <div class="clearfix">&nbsp;</div>
+            <div class="row">
+              <div class="col-md-12" style="overflow: auto;padding: 10px 0px;">
+                <div id="chart_div"></div>
+              </div>
+            </div>
       </div>
     </div>
   </div>
