@@ -62,6 +62,14 @@ class TaskProcessor
 			]);
 		}
 
+		if(!is_null($request->segment(6))){
+			$form->extras([
+				'task_progress' => 'text'
+			]);
+
+			$form->readonly(['end','start']);
+		}
+
 		$form = $form->option([
 			'profile_id' => Profile::where('corporate_id',$request->segment(4))->pluck('name','id')
 		])
@@ -70,6 +78,8 @@ class TaskProcessor
 			__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),
 			route('api.task.save',[$corporateId, $request->segment(5), $request->segment(6)])
 		);
+;
+		// dd($form);
 
 		return compact('form');
 	}

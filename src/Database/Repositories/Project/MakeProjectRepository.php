@@ -158,11 +158,10 @@ class MakeProjectRepository
 
 			$this->taskModel->save();
 
-			if($inputData->get('progress') == null){
-				$this->taskModel->progress()->save(new TaskProgress([
-					'progress' => 0
-				]));
-			}
+			$this->taskModel->progress()->save(new TaskProgress([
+				'progress' => ($taskData->get('task_progress') > 100) ? 100 : $taskData->get('task_progress',0)
+			]));
+
 
 			DB::commit();
 

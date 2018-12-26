@@ -3,7 +3,7 @@
     	{{ __('joesama/project::form.'.$formId.'.'.$fieldId) }}
     </label>
     <div class="col-md-10">
-        <input type="text" name="{{ $fieldId }}" value="{{ $value }}"  id="{{ $fieldId }}" class="form-control" placeholder="{{ __('joesama/project::form.'.$formId.'.'.$fieldId) }}">
+        <input type="text" {{ ($readonly) ? 'readonly':'' }} name="{{ $fieldId }}" value="{{ $value }}"  id="{{ $fieldId }}" class="form-control" placeholder="{{ __('joesama/project::form.'.$formId.'.'.$fieldId) }}">
         <small class="help-block hidden">
         	{{ __('joesama/project::form.'.$formId.'.helpblock.'.$fieldId) }}
     	</small>

@@ -11,7 +11,8 @@ use \DB;
  **/
 class FormGenerator 
 {
-	private $model, $modelId, $formId, $fields, $inputFields, $static = FALSE, $optionlist = [], $mappinglist = [];
+	private $model, $modelId, $formId, $fields, $inputFields, $static = FALSE, 
+			$optionlist = [], $mappinglist = [], $readonly = [];
 
 	/**
 	 * Generate Model Attributes
@@ -21,6 +22,9 @@ class FormGenerator
 		$this->model = $model->newQuery();
 		$this->formId = $model->getTable();
 		$this->optionlist = collect([]);
+		$this->extras = collect([]);
+		$this->mappinglist = collect([]);
+		$this->readonlyList = collect([]);
 
 		$table =  $model->fromQuery("SHOW FIELDS FROM ".$this->formId);
 
@@ -68,7 +72,18 @@ class FormGenerator
 	 */
 	public function mapping(array $mappings)
 	{
-		$this->mappinglist = collect($mappings);
+		$this->mappinglist = $this->mappinglist->merge($mappings);
+
+		return $this;
+	}
+
+	/**
+	 * @param  array $readonly 
+	 * @return void
+	 */
+	public function readonly(array $readonly)
+	{
+		$this->readonlyList = $this->readonlyList->merge($readonly);
 
 		return $this;
 	}
@@ -79,7 +94,7 @@ class FormGenerator
 	 */
 	public function extras(array $extras)
 	{
-		$this->extras = collect($extras);
+		$this->extras = $this->extras->merge($extras);
 
 		$this->extras->each(function($type,$field){
 
@@ -117,6 +132,7 @@ class FormGenerator
 			'method' => $method,
 			'option' => $this->optionlist,
 			'mapping' => $this->mappinglist,
+			'readonly' => $this->readonlyList,
 			'value' => $this->model->find($this->modelId)
 		]);
 	}
@@ -143,7 +159,7 @@ class FormGenerator
 					return 'text';
 				}
 
-				if(in_array($type,[])){
+				if(in_array($type,['date'])){
 					return 'datepicker';
 				}
 

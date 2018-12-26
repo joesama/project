@@ -25,6 +25,7 @@ return [
 		'start' => "Start Date", 
 		'end' => "End Date", 
 		'progress' => "Progress", 
+		'task_progress' => "% Progress", 
 	],
 	'issue' => [
 		'profile_id' => "Person In Charge", 

@@ -12,7 +12,8 @@
 				@includeIf('joesama/project::components.form.'.$type,[
 					'mapValue' => array_get($mapping,$fieldId),
 					'optionList' => array_get($option,$fieldId),
-					'value' => data_get($value,$fieldId)
+					'value' => data_get($value,$fieldId),
+					'readonly' => $readonly->contains($fieldId) ? TRUE : FALSE
 				])
 			@endforeach
 		</div>

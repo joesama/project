@@ -3,7 +3,7 @@
     	{{ __('joesama/project::form.'.$formId.'.'.$fieldId) }}
     </label>
     <div class="col-md-10">
-    	<select class="selectpicker" id="{{ $fieldId }}" name="{{ $fieldId }}" data-live-search="true" data-width="100%">
+    	<select class="selectpicker" {{ ($readonly) ? 'disabled':'' }} id="{{ $fieldId }}" name="{{ $fieldId }}" data-live-search="true" data-width="100%">
     		@foreach($optionList as $id => $option)
     			<option {{ ($value == $id) ?  'selected':'' }} value="{{$id}}">
     				{{ ucwords($option) }}
