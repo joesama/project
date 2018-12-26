@@ -14,19 +14,27 @@ return [
 				'view' => ['corporateId','projectId']
 			],
 			'task' => [
-				'list' => ['corporateId','projectId?','taskId?'],
+				'list' => ['corporateId','projectId?'],
 				'form' => ['corporateId','projectId?','taskId?'],
 				'view' => ['corporateId','projectId','taskId?']
 			],
 			'issue' => [
-				'list' => ['corporateId','projectId?','issueId?'],
+				'list' => ['corporateId','projectId?'],
 				'form' => ['corporateId','projectId?','issueId?'],
 				'view' => ['corporateId','projectId','issueId?']
 			],
 			'risk' => [
-				'list' => ['corporateId','projectId?','riskId?'],
+				'list' => ['corporateId','projectId?'],
 				'form' => ['corporateId','projectId?','riskId?'],
 				'view' => ['corporateId','projectId','riskId?']
+			],
+			'partner' => [
+				'form' => ['corporateId','projectId?','partnerId?'],
+				'no_menu' => TRUE
+			],
+			'attribute' => [
+				'form' => ['corporateId','projectId','attrId?'],
+				'no_menu' => TRUE
 			],
 			'icon' => 'fa fa-folder'
 		]
@@ -52,6 +60,12 @@ return [
 			],
 			'risk' => [
 				'save' => ['corporateId','projectId?','issueId?']
+			],
+			'partner' => [
+				'save' => ['corporateId','projectId?','partnerId?']
+			],
+			'attribute' => [
+				'save' => ['corporateId','projectId?','attrId?']
 			]
 		],
 	],
