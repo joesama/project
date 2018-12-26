@@ -4,6 +4,7 @@ namespace Joesama\Project\Database\Repositories\Project;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Collection;
+use Joesama\Project\Database\Model\Project\Attribute;
 use Joesama\Project\Database\Model\Project\Client;
 use Joesama\Project\Database\Model\Project\Issue;
 use Joesama\Project\Database\Model\Project\Project;
@@ -263,5 +264,70 @@ class MakeProjectRepository
 		}
 	}
 
+	/**
+	 * Create New Partner
+	 *
+	 * @return Joesama\Project\Database\Model\Project\Project
+	 **/
+	public function initPartner(Collection $partnerData, $id = null)
+	{
+		$inputData = collect($partnerData)->intersectByKeys([
+		    'partner_id'=> null
+		]);
 
+		DB::beginTransaction();
+
+		try{
+
+			$this->projectModel = $this->projectModel->find($id);
+			$this->projectModel->partner()->detach(data_get($inputData,'partner_id'));
+			$this->projectModel->partner()->attach(data_get($inputData,'partner_id'));
+
+			DB::commit();
+
+			return $this->projectModel;
+
+		}catch( \Exception $e){
+
+			dd($e->getMessage());
+			DB::rollback();
+		}
+	}
+
+	/**
+	 * Create New Partner
+	 *
+	 * @return Joesama\Project\Database\Model\Project\Project
+	 **/
+	public function initAttribute(Collection $partnerData, $id = null)
+	{
+		$inputData = collect($partnerData)->intersectByKeys([
+		    'project_id'=> null,
+		    'variable'=> null,
+		    'data'=> null,
+		]);
+
+		DB::beginTransaction();
+
+		try{
+
+			$this->projectModel = $this->projectModel->find(data_get($inputData,'project_id'));
+
+			$attr = new Attribute([
+			    'variable'=> data_get($inputData,'variable'),
+			    'data'=> data_get($inputData,'data')
+			]);
+
+			$this->projectModel->attributes()->save($attr);
+
+			DB::commit();
+
+			return $this->projectModel;
+
+		}catch( \Exception $e){
+
+			dd($e->getMessage());
+			DB::rollback();
+		}
+	}
 } // END class MakeProjectRepository 

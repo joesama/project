@@ -53,41 +53,42 @@ class MenuHandler
                     ->link(handles($domainPath.$path.$segmentOne))
                     ->icon('psi-arrow-right-2');
 
-                collect($component)->each(function($params, $page) 
-                    use($menu,$domain,$domainPath,$submodule,$segmentOne){
+                if(!collect($component)->get('no_menu')){
+                    collect($component)->each(function($params, $page) 
+                        use($menu,$domain,$domainPath,$submodule,$segmentOne){
 
-                    $segmentTwo = '';
+                        $segmentTwo = '';
 
-                    $projectIdOptional = collect($params)->contains('projectId?');
-                    $projectIdRequired = collect($params)->contains('projectId');
+                        $projectIdOptional = collect($params)->contains('projectId?');
+                        $projectIdRequired = collect($params)->contains('projectId');
 
-                    if($projectIdRequired || $projectIdOptional)
-                    {
-                        $segmentTwo .= '/'. request()->segment(5);
-                    }
+                        if($projectIdRequired || $projectIdOptional)
+                        {
+                            $segmentTwo .= '/'. request()->segment(5);
+                        }
 
-                    if($projectIdRequired)
-                    {
-                        $segmentTwo .= '/'. request()->segment(6);
-                    }
+                        if($projectIdRequired)
+                        {
+                            $segmentTwo .= '/'. request()->segment(6);
+                        }
 
-                    $subdomainPath = $domainPath.'/'.$page.$segmentOne.$segmentTwo;
-                    $subdomain = $submodule.'.'.$page;
-                    
-                    if($projectIdOptional && request()->segment(5))
-                    {   
-                        $menu->add($subdomain,'^:'.$domain)
-                            ->title(trans('joesama/project::'.$domain.'.'.$page))
-                            ->link(handles($subdomainPath));
-                    }
-                    elseif(!$projectIdOptional && !$projectIdRequired)
-                    {
-                        $menu->add($subdomain,'^:'.$domain)
-                            ->title(trans('joesama/project::'.$domain.'.'.$page))
-                            ->link(handles($subdomainPath));
-                    }
-                });
-
+                        $subdomainPath = $domainPath.'/'.$page.$segmentOne.$segmentTwo;
+                        $subdomain = $submodule.'.'.$page;
+                        
+                        if($projectIdOptional && request()->segment(5))
+                        {   
+                            $menu->add($subdomain,'^:'.$domain)
+                                ->title(trans('joesama/project::'.$domain.'.'.$page))
+                                ->link(handles($subdomainPath));
+                        }
+                        elseif(!$projectIdOptional && !$projectIdRequired)
+                        {
+                            $menu->add($subdomain,'^:'.$domain)
+                                ->title(trans('joesama/project::'.$domain.'.'.$page))
+                                ->link(handles($subdomainPath));
+                        }
+                    });
+                }
             });
         });
         // dd($menu);

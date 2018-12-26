@@ -22,15 +22,15 @@ Foundation::group('joesama/project', '/', ['namespace' => 'Http\Controller', 'mi
                 ->group(function ($router) use($module,$submodule,$config){
 
                     foreach($config as $page => $id){
-
-                    $params = collect($id)->map(function($param){
-                        return sprintf('{%s}', $param);
-                    })->implode('/');
-                    $router->name($page)->get(
-                        $page.'/'.$params, 
-                        ucfirst($submodule).'Controller'
-                    );
-
+                        if('no_menu' != $page){
+                            $params = collect($id)->map(function($param){
+                                return sprintf('{%s}', $param);
+                            })->implode('/');
+                            $router->name($page)->get(
+                                $page.'/'.$params, 
+                                ucfirst($submodule).'Controller'
+                            );
+                        }
                     }
                 });
             });

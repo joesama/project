@@ -11,7 +11,7 @@ use \DB;
  **/
 class FormGenerator 
 {
-	private $model, $modelId, $formId, $fields, $inputFields, $optionlist = [], $mappinglist = [];
+	private $model, $modelId, $formId, $fields, $inputFields, $static = FALSE, $optionlist = [], $mappinglist = [];
 
 	/**
 	 * Generate Model Attributes
@@ -36,6 +36,17 @@ class FormGenerator
 	public function id($id = NULL)
 	{
 		$this->modelId = $id;
+
+		return $this;
+	}
+
+	/**
+	 * Set the current model to view only
+	 * @return void
+	 */
+	public function staticForm()
+	{
+		$this->static = TRUE;
 
 		return $this;
 	}
@@ -116,7 +127,6 @@ class FormGenerator
 	 */
 	protected function recognizeType(array $fields)
 	{
-
 		return collect($fields)->map(function($field, $key){
 
 			$pos = strripos($field, '(');
@@ -127,20 +137,33 @@ class FormGenerator
 				$type = trim(stristr($field,'(', true)," \t\n\r\0\x0B");
 			}
 
-			if(in_array($type,['varchar','double','text'])){
-				return 'text';
-			}
+			if(!$this->static){
 
-			if(in_array($type,['date'])){
-				return 'datepicker';
-			}
+				if(in_array($type,['varchar','double','text'])){
+					return 'text';
+				}
 
-			if(in_array($key,collect($this->optionlist)->keys()->toArray())){
-				return 'select';
-			}
+				if(in_array($type,[])){
+					return 'datepicker';
+				}
 
-			if(in_array($key,collect($this->mappinglist)->keys()->toArray())){
-				return 'hidden';
+				if(in_array($key,collect($this->optionlist)->keys()->toArray())){
+					return 'select';
+				}
+
+				if(in_array($key,collect($this->mappinglist)->keys()->toArray())){
+					return 'hidden';
+				}
+
+			}else{
+
+				if(in_array($type,['varchar','double','text','date'])){
+					return 'static';
+				}
+
+				if(in_array($key,collect($this->extras)->keys()->toArray())){
+					return 'select';
+				}
 			}
 
 		});

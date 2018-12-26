@@ -53,7 +53,11 @@
                                 </td>
                             </tr>
                         </table>
-                        @foreach(data_get($project,'partner') as $index => $partner)
+                        <a class="btn btn-dark btn-xs mar-btm pull-right" href="{{ handles('joesama/project::manager/partner/form/'.request()->segment(4).'/'.request()->segment(5)) }}">
+                            <i class="fa fa-plus icon-fw"></i>
+                            {{ __('joesama/project::project.client.partner.name') }}
+                        </a>
+                        @forelse(data_get($project,'partner') as $index => $partner)
                         <table class="table table-bordered table-sm">
                             <tr>
                                 <td class="text-bold bg-primary text-light text-capitalize" style="width: 30%">
@@ -88,7 +92,34 @@
                                 </td>
                             </tr>
                         </table>
-                        @endforeach
+                        @empty
+                        <table class="table table-bordered table-sm">
+                            <tr>
+                                <td class="text-bold bg-primary text-light text-capitalize" style="width: 30%">
+                                    {{ __('joesama/project::project.client.partner.name') }}
+                                </td>
+                                <td class="pl-2">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td class="text-bold bg-primary text-light text-capitalize">
+                                    {{ __('joesama/project::project.client.partner.tel') }}
+                                </td>
+                                <td class="pl-2">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td class="text-bold bg-primary text-light text-capitalize">
+                                    {{ __('joesama/project::project.client.partner.pm') }}
+                                </td>
+                                <td class="pl-2">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td class="text-bold bg-primary text-light text-capitalize">
+                                    {{ __('joesama/project::project.client.partner.contact') }}
+                                </td>
+                                <td class="pl-2">&nbsp;</td>
+                            </tr>
+                        </table>
+                        @endforelse
                     </div>
                     <div class="col-md-6 text-left">
                         <table class="table table-bordered table-sm">
@@ -125,6 +156,10 @@
                                 </td>
                             </tr>
                         </table>
+                        <a class="btn btn-dark btn-xs mar-btm pull-right" href="{{ handles('joesama/project::manager/attribute/form/'.request()->segment(4).'/'.request()->segment(5)) }}">
+                            <i class="fa fa-plus icon-fw"></i>
+                            {{ __('joesama/project::project.attr') }}
+                        </a>
                         <table class="table table-bordered table-sm">
                             <tr>
                                 <td class="text-bold bg-primary text-light text-capitalize" style="width: 30%">
@@ -158,6 +193,16 @@
                                     31 July 2017 (1st EOT), 28 February 2018 (2nd EOT), 30 June 2018 (3rd EOT), 30 November 2018 (4th EOT)
                                 </td>
                             </tr>
+                            @foreach(data_get($project,'attributes') as $index => $attributes)
+                            <tr>
+                                <td class="text-bold bg-primary text-light text-capitalize">
+                                    {{ data_get($attributes,'variable') }}
+                                </td>
+                                <td class="pl-2">
+                                    {{ data_get($attributes,'data') }}
+                                </td>
+                            </tr>
+                            @endforeach
                         </table>
                     </div>
                 </div>

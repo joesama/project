@@ -88,7 +88,7 @@ class DataGridGenerator
 	{
 		$data = $this->datagrid->build();
 
-		return view('joesama/project::vuegrid.vuegrid',compact('data','tableId'));
+		return view('joesama/project::vuegrid.vuegrid',compact('data'));
 	}
 
 } // END class DataGridGenerator 

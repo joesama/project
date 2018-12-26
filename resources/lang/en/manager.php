@@ -24,4 +24,12 @@ return [
 		'form' => "Risk's Form",
 		'view' => "Risk's Information",
 	],
+	'partner' => [
+		'form' => "Project Partner",
+		'view' => "Project Partner Information",
+	],
+	'attribute' => [
+		'form' => "Project Attributes",
+		'view' => "Project Partner Information",
+	],
 ];

@@ -81,6 +81,14 @@ class Project extends Model
     /**
      * Get the report progress.
      */
+    public function attributes()
+    {
+        return $this->hasMany(Attribute::class,'project_id','id');
+    }
+
+    /**
+     * Get the report progress.
+     */
     public function scopeSameGroup($query)
     {
         return $this->where('corporate_id',request()->segment(4));
@@ -88,7 +96,7 @@ class Project extends Model
 
     public function scopeComponent($query)
     {
-        return $query->with(['client','profile','task.progress','corporate','partner']);
+        return $query->with(['client','profile','task.progress','corporate','partner','attributes']);
     }
 
     public function getEndDateAttribute($value)

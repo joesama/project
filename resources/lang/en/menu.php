@@ -8,5 +8,7 @@ return [
 		'task' => 'Task',
 		'issue' => 'Issue',
 		'risk' => 'Risk',
+		'partner' => 'Project Partner',
+		'attribute' => 'Project Attributes',
 	]
 ];

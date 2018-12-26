@@ -15,6 +15,7 @@ return [
 		'gp_latest' => 'GP - Latest Calc.',
 		'bond' => 'Performance Bond',
 		'eot' => 'Extension of Time',
+		'partner_id' => 'Project Partner'
 
 	],
 	'task' => [
@@ -37,4 +38,8 @@ return [
 		'description' => "Risk Description", 
 		'severity_id' => "Status", 
 	],
+	'project_attribute' => [
+		'variable' => "Variable", 
+		'data' => "Data" 
+	]
 ];

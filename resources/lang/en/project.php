@@ -5,6 +5,7 @@ return [
 	'dashboard' => [
 		'overall' => 'Project Dashboard'
 	],
+	'attr' => 'Project Attributes',
 	'detail' => 'Project Information',
 	'summary' => 'Project Summary',
 	'action' => 'Action',
