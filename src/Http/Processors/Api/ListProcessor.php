@@ -81,4 +81,14 @@ class ListProcessor
 	{
 		return $this->masterDataObj->listData($corporateId,$request->segment(5));
 	}
+
+	/**
+	 * @param  array $request
+	 * @param  int $request,$corporateId
+	 * @return Illuminate\Pagination\LengthAwarePaginator
+	 */
+	public function client($request,$corporateId)
+	{
+		return $this->projectObj->clientAll();
+	}
 } // END class MakeProjectProcessor 

@@ -12,8 +12,9 @@ return [
 		'attribute' => 'Project Attributes',
 	],
 	'setup' => [
-		'module' => 'Configurations',
+		'module' => 'Administration',
 		'master' => 'Data Management',
-		'data' => 'Data Category'
+		'data' => 'Data Category',
+		'client' => 'Client Information'
 	]
 ];

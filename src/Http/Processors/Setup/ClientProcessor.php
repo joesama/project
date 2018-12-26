@@ -1,33 +1,31 @@
 <?php
-namespace Joesama\Project\Http\Processors\Manager; 
+namespace Joesama\Project\Http\Processors\Setup; 
 
 use Illuminate\Http\Request;
-use Joesama\Project\Database\Model\Organization\Profile;
-use Joesama\Project\Database\Model\Project\Project;
-use Joesama\Project\Database\Model\Project\Task;
-use Joesama\Project\Http\Processors\Manager\ListProcessor;
+use Joesama\Project\Database\Model\Project\Client;
+use Joesama\Project\Http\Processors\Setup\ListProcessor;
 use Joesama\Project\Http\Services\FormGenerator;
 use Joesama\Project\Http\Services\ViewGenerator;
 
 /**
- * Project Record 
+ * Client Record 
  *
  * @package default
  * @author 
  **/
-class TaskProcessor 
+class ClientProcessor 
 {
 
 	public function __construct(
 		ListProcessor $listProcessor,
 		FormGenerator $formBuilder,
 		ViewGenerator $viewBuilder,
-		Task $task
+		Client $client
 	){
 		$this->listProcessor = $listProcessor;
 		$this->formBuilder = $formBuilder;
 		$this->viewBuilder = $viewBuilder;
-		$this->modelObj = $task;
+		$this->modelObj = $client;
 	}
 
 
@@ -38,7 +36,7 @@ class TaskProcessor
 	 */
 	public function list(Request $request, int $corporateId)
 	{
-		$table = $this->listProcessor->task($request,$corporateId);
+		$table = $this->listProcessor->client($request,$corporateId);
 		
 		return compact('table');
 	}
@@ -52,31 +50,10 @@ class TaskProcessor
 	{
 		$form = $this->formBuilder->newModelForm($this->modelObj);
 
-		if(is_null($request->segment(5))){
-			$form->extras([
-				'project_id' => Project::pluck('name','id')
-			]);
-		}else{
-			$form = $form->mapping([
-				'project_id' => $request->segment(5)
-			]);
-		}
-
-		if(!is_null($request->segment(6))){
-			$form->extras([
-				'task_progress' => 'text'
-			]);
-
-			$form->readonly(['end','start']);
-		}
-
-		$form = $form->option([
-			'profile_id' => Profile::where('corporate_id',$request->segment(4))->pluck('name','id')
-		])
-		->id($request->segment(6))
+		$form = $form->id($request->segment(5))
 		->renderForm(
 			__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),
-			route('api.task.save',[$corporateId, $request->segment(5), $request->segment(6)])
+			route('api.client.save',[$corporateId, $request->segment(5)])
 		);
 
 		return compact('form');
@@ -90,11 +67,7 @@ class TaskProcessor
 	public function view(Request $request, int $corporateId)
 	{
 		$view = $this->viewBuilder->newView($this->modelObj)
-		->relation([
-			'project_id' => 'project.name',
-			'profile_id' => 'assignee.name'
-		])
-		->id($request->segment(6))
+		->id($request->segment(5))
 		->renderView(
 			__('joesama/project::'.$request->segment(1).'.'
 				.$request->segment(2).'.'
@@ -104,4 +77,4 @@ class TaskProcessor
 		return compact('view');
 	}
 
-} // END class MakeProjectProcessor 
+} // END class ClientProcessor 

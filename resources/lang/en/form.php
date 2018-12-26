@@ -49,5 +49,11 @@ return [
 	'master_data' => [
 		'master_id' => 'Category',
 		'description' => 'Data Description',
+	],
+	'client' => [
+		'name' => 'Client Name',
+		'phone' => 'Tel. Number',
+		'manager' => 'Manager',
+		'contact' => 'Contact Number',
 	]
 ];

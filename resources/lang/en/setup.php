@@ -11,4 +11,9 @@ return [
 		'form' => 'Data Form',
 		'view' => 'Data Information'
 	],
+	'client' => [
+		'list' => 'Client List',
+		'form' => 'Client Form',
+		'view' => 'Client Information'
+	],
 ];

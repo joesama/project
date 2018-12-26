@@ -10,6 +10,11 @@ return [
 				'form' => ['corporateId','masterId?'],
 				'view' => ['corporateId','masterId']
 			],
+			'client' => [
+				'list' => ['corporateId'],
+				'form' => ['corporateId','masterId?'],
+				'view' => ['corporateId','masterId']
+			],
 			'data' => [
 				'list' => ['corporateId','masterId'],
 				'form' => ['corporateId','masterId','dataId?'],
@@ -62,6 +67,7 @@ return [
 				'risk' => ['corporateId','projectId?'],
 				'master' => ['corporateId','projectId?'],
 				'data' => ['corporateId','projectId?'],
+				'client' => ['corporateId','projectId?'],
 			],
 		],
 		'POST' => [
@@ -88,6 +94,9 @@ return [
 			],
 			'data' => [
 				'save' => ['corporateId','masterId','dataId?']
+			],
+			'client' => [
+				'save' => ['corporateId','masterId?']
 			]
 		],
 	],

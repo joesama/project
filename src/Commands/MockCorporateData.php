@@ -151,6 +151,8 @@ class MockCorporateData extends Command
             $inforMaster->toArray()
         );
 
+        if ($this->confirm('Do you wish to create administration user?')) {
+
         $this->info('Generating Administration User');
 
         $profileRole =  ProfileRole::all();
@@ -245,5 +247,6 @@ class MockCorporateData extends Command
 
         file_put_contents($setupFile, User::where('id','!=',1)->get(['username','email','fullname'])->toJson());
 
+        }
     }
 }

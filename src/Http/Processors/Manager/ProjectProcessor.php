@@ -51,7 +51,7 @@ class ProjectProcessor
 			app(\Joesama\Project\Database\Model\Project\Project::class)
 		)
 		->option([
-			'client_id' => Client::whereHas('project')->pluck('name','id')
+			'client_id' => Client::pluck('name','id')
 		])
 		->mapping([
 			'corporate_id' => $corporateId

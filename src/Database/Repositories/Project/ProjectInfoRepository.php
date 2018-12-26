@@ -96,7 +96,7 @@ class ProjectInfoRepository
 	 **/
 	public function clientAll()
 	{
-		return $this->clientModel->get();
+		return $this->clientModel->paginate();
 	}
 
 	/**
