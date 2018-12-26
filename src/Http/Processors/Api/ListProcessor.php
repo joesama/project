@@ -2,6 +2,7 @@
 namespace Joesama\Project\Http\Processors\Api; 
 
 use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
+use Joesama\Project\Database\Repositories\Setup\MasterDataRepository;
 use Joesama\Project\Http\Services\DataGridGenerator;
 
 /**
@@ -14,9 +15,11 @@ class ListProcessor
 {
 
 	public function __construct(
-		ProjectInfoRepository $projectInfo
+		ProjectInfoRepository $projectInfo,
+		MasterDataRepository $masterData
 	){
 		$this->projectObj = $projectInfo;
+		$this->masterDataObj = $masterData;
 	}
 
 	/**
@@ -57,5 +60,25 @@ class ListProcessor
 	public function risk($request,$corporateId)
 	{
 		return $this->projectObj->listProjectRisk($corporateId, $request->segment(5));
+	}
+
+	/**
+	 * @param  array $request
+	 * @param  int $request,$corporateId
+	 * @return Illuminate\Pagination\LengthAwarePaginator
+	 */
+	public function master($request,$corporateId)
+	{
+		return $this->masterDataObj->listMaster($corporateId);
+	}
+
+	/**
+	 * @param  array $request
+	 * @param  int $request,$corporateId
+	 * @return Illuminate\Pagination\LengthAwarePaginator
+	 */
+	public function data($request,$corporateId)
+	{
+		return $this->masterDataObj->listData($corporateId,$request->segment(5));
 	}
 } // END class MakeProjectProcessor 

@@ -42,5 +42,12 @@ return [
 	'project_attribute' => [
 		'variable' => "Variable", 
 		'data' => "Data" 
+	],
+	'master' => [
+		'description' => 'Category Description'
+	],
+	'master_data' => [
+		'master_id' => 'Category',
+		'description' => 'Data Description',
 	]
 ];

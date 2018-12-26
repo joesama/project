@@ -4,6 +4,20 @@
 
 return [
 	'web' => [
+		'setup' => [
+			'master' => [
+				'list' => ['corporateId'],
+				'form' => ['corporateId','masterId?'],
+				'view' => ['corporateId','masterId']
+			],
+			'data' => [
+				'list' => ['corporateId','masterId'],
+				'form' => ['corporateId','masterId','dataId?'],
+				'view' => ['corporateId','masterId','dataId'],
+				'no_menu' => TRUE
+			],
+			'icon' => 'pli-wrench icon-lg icon-fw'
+		],
 		'manager' => [
 			'dashboard' => [
 				'overall' => ['corporateId']
@@ -36,7 +50,7 @@ return [
 				'form' => ['corporateId','projectId','attrId?'],
 				'no_menu' => TRUE
 			],
-			'icon' => 'fa fa-folder'
+			'icon' => 'psi-folder-archive icon-lg icon-fw'
 		]
 	],
 	'api' => [
@@ -46,6 +60,8 @@ return [
 				'task' => ['corporateId','projectId?'], 
 				'issue' => ['corporateId','projectId?'],
 				'risk' => ['corporateId','projectId?'],
+				'master' => ['corporateId','projectId?'],
+				'data' => ['corporateId','projectId?'],
 			],
 		],
 		'POST' => [
@@ -66,6 +82,12 @@ return [
 			],
 			'attribute' => [
 				'save' => ['corporateId','projectId?','attrId?']
+			],
+			'master' => [
+				'save' => ['corporateId','masterId?']
+			],
+			'data' => [
+				'save' => ['corporateId','masterId','dataId?']
 			]
 		],
 	],

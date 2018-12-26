@@ -26,7 +26,6 @@ class MenuHandler
      */
     public function handle($menu)
     {
-
         $this->webPolicies->each(function($policy,$module) use($menu){
 
             $menu->add($module,'>:config')
@@ -48,21 +47,24 @@ class MenuHandler
 
                 $segmentOne = '/'. data_get($this->profile,'corporate_id');
 
+                if(!collect($component)->get('no_menu')){
+
                 $menu->add($submodule,'^:'.$module)
                     ->title(trans('joesama/project::menu.'.$domain))
                     ->link(handles($domainPath.$path.$segmentOne))
                     ->icon('psi-arrow-right-2');
-
-                if(!collect($component)->get('no_menu')){
+                    
                     collect($component)->each(function($params, $page) 
                         use($menu,$domain,$domainPath,$submodule,$segmentOne){
 
                         $segmentTwo = '';
 
+                        $masterId = collect($params)->contains('masterId');
+                        $corporateId = collect($params)->contains('corporateId');
                         $projectIdOptional = collect($params)->contains('projectId?');
                         $projectIdRequired = collect($params)->contains('projectId');
 
-                        if($projectIdRequired || $projectIdOptional)
+                        if($projectIdRequired || $projectIdOptional && $masterId)
                         {
                             $segmentTwo .= '/'. request()->segment(5);
                         }
@@ -75,13 +77,13 @@ class MenuHandler
                         $subdomainPath = $domainPath.'/'.$page.$segmentOne.$segmentTwo;
                         $subdomain = $submodule.'.'.$page;
                         
-                        if($projectIdOptional && request()->segment(5))
+                        if($projectIdOptional && request()->segment(5) && $masterId)
                         {   
                             $menu->add($subdomain,'^:'.$domain)
                                 ->title(trans('joesama/project::'.$domain.'.'.$page))
                                 ->link(handles($subdomainPath));
                         }
-                        elseif(!$projectIdOptional && !$projectIdRequired)
+                        elseif(!$projectIdOptional && !$projectIdRequired && !$masterId)
                         {
                             $menu->add($subdomain,'^:'.$domain)
                                 ->title(trans('joesama/project::'.$domain.'.'.$page))

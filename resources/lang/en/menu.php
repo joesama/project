@@ -10,5 +10,10 @@ return [
 		'risk' => 'Risk',
 		'partner' => 'Project Partner',
 		'attribute' => 'Project Attributes',
+	],
+	'setup' => [
+		'module' => 'Configurations',
+		'master' => 'Data Management',
+		'data' => 'Data Category'
 	]
 ];

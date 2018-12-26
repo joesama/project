@@ -31,16 +31,10 @@ class BaseController extends Controller
 
 		$this->view = $this->domain.'.'.$this->page;
 
-		if(!view()->exists($this->view) && $this->page == 'form'){
-			$this->view = 'joesama/project::components.form';
-		}
+		if(!view()->exists($this->view)){
+			$page = ($this->submodule == 'project') ? $this->submodule.'-'.$this->page : $this->page;
 
-		if(!view()->exists($this->view) && $this->page == 'list'){
-			$this->view = 'joesama/project::components.list';
-		}
-
-		if(!view()->exists($this->view) && $this->page == 'view'){
-			$this->view = 'joesama/project::components.view';
+			$this->view = 'joesama/project::components.'.$page;
 		}
 
 		Cache::forget($this->component);//@TODO remove for deploy

@@ -1,7 +1,7 @@
 <form class="form-horizontal form-padding">
 	<div class="panel">
 		<div class="panel-heading">
-	        <h3 class="panel-title">{{ $title }}</h3>
+	        <h3 class="panel-title text-bold">{{ $title }}</h3>
 	    </div>
 	  	<div class="panel-body">
 
@@ -13,6 +13,7 @@
                     </label>
                     <div class="col-md-9">
                     	<p class="form-control-static">
+                    		:&nbsp;&nbsp;
                     		{{ ucwords( data_get( $data, data_get($relation, $field, $field) ) ) }}
                     	</p>
                     </div>
