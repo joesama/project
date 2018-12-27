@@ -55,6 +55,11 @@ return [
 				'form' => ['corporateId','projectId','attrId?'],
 				'no_menu' => TRUE
 			],
+			'hse' => [
+				'form' => ['corporateId','projectId'],
+				'list' => ['corporateId','projectId'],
+				'no_menu' => TRUE
+			],
 			'icon' => 'psi-folder-archive icon-lg icon-fw'
 		]
 	],
@@ -68,6 +73,7 @@ return [
 				'master' => ['corporateId','projectId?'],
 				'data' => ['corporateId','projectId?'],
 				'client' => ['corporateId','projectId?'],
+				'incident' => ['corporateId','projectId'],
 			],
 		],
 		'POST' => [
@@ -96,6 +102,9 @@ return [
 				'save' => ['corporateId','masterId','dataId?']
 			],
 			'client' => [
+				'save' => ['corporateId','masterId?']
+			],
+			'incident' => [
 				'save' => ['corporateId','masterId?']
 			]
 		],
