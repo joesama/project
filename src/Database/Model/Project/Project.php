@@ -6,11 +6,11 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Joesama\Project\Database\Model\Organization\Corporate;
 use Joesama\Project\Database\Model\Organization\Profile;
-use Joesama\Project\Database\Model\Project\Task;
 
 class Project extends Model
 {
     protected $table = 'project';
+    protected $guarded = ['id'];
     protected $appends = ['start_date','end_date','in_charge'];
 
     /**
@@ -30,7 +30,7 @@ class Project extends Model
     }
 
     /**
-     * Get the  client partner for project.
+     * Get the  client manager for project.
      */
     public function manager()
     {
@@ -87,6 +87,22 @@ class Project extends Model
     }
 
     /**
+     * Get the incident reported.
+     */
+    public function incident()
+    {
+        return $this->hasMany(Incident::class,'project_id','id');
+    }
+
+    /**
+     * Get the hse scored card.
+     */
+    public function hsecard()
+    {
+        return  $this->hasOne(HseScore::class,'id','hse_id');
+    }
+
+    /**
      * Get the report progress.
      */
     public function scopeSameGroup($query)
@@ -96,7 +112,11 @@ class Project extends Model
 
     public function scopeComponent($query)
     {
-        return $query->with(['client','profile','task.progress','corporate','partner','attributes']);
+        return $query->with([
+            'client','profile','task.progress',
+            'corporate','partner','attributes',
+            'hsecard','manager','incident'
+        ]);
     }
 
     public function getEndDateAttribute($value)

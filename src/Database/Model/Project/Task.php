@@ -7,7 +7,7 @@ use Joesama\Project\Database\Model\Organization\Profile;
 class Task extends Model
 {
 	protected $table = 'task';
-
+    protected $guarded = ['id'];
     protected $appends = [];
 
     /**

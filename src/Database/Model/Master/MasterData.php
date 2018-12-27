@@ -36,7 +36,18 @@ class MasterData extends Model
     public function scopeSeverity($query)
     {
         return $query->whereHas('master',function($subquery){
-        	$subquery->severity();
+            $subquery->severity();
+        });
+    }
+
+    /**
+     * @param  [type]
+     * @return [type]
+     */
+    public function scopeIncident($query)
+    {
+        return $query->whereHas('master',function($subquery){
+        	$subquery->incident();
         });
     }
 

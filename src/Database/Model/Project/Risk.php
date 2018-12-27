@@ -8,6 +8,7 @@ use Joesama\Project\Database\Model\Organization\Profile;
 class Risk extends Model
 {
 	protected $table = 'risk';
+    protected $guarded = ['id'];
 
     /**
      * Get the task's project.

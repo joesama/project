@@ -11,7 +11,7 @@ use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
  * @package default
  * @author 
  **/
-class AttributeProcessor 
+class IncidentProcessor 
 {
 
 	public function __construct(
@@ -30,9 +30,9 @@ class AttributeProcessor
 	 */
 	public function save(Request $request,int $corporateId, int $projectId)
 	{
-		$project = $this->makeProject->initAttribute(collect($request->all()),$request->segment(5));
+		$this->makeProject->initIncident(collect($request->all()),$projectId);
 
-		return redirect(handles('manager/project/view/'.$project->corporate_id.'/'.$project->id));
+		return redirect(handles('manager/project/view/'.$corporateId.'/'.$projectId));
 	}
 
 

@@ -128,7 +128,7 @@
                                     {{ __('joesama/project::project.info.contract.value') }}
                                 </td>
                                 <td class="pl-2">
-                                    RM {{ number_format(data_get($project,'contract'),2) }}
+                                    RM {{ number_format(data_get($project,'value'),2) }}
                                 </td>
                             </tr>
                             <tr>

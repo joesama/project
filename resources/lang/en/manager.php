@@ -32,4 +32,9 @@ return [
 		'form' => "Project Attributes",
 		'view' => "Project Partner Information",
 	],
+	'hse' => [
+		'list' => "List Of Incident Reported",
+		'form' => "Report Incident",
+		'view' => "Health & Safety Environment",
+	],
 ];

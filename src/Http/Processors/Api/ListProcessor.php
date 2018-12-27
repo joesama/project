@@ -91,4 +91,14 @@ class ListProcessor
 	{
 		return $this->projectObj->clientAll();
 	}
+
+	/**
+	 * @param  array $request
+	 * @param  int $request,$corporateId
+	 * @return Illuminate\Pagination\LengthAwarePaginator
+	 */
+	public function incident($request,$corporateId)
+	{
+		return $this->projectObj->listProjectIncident($corporateId,$request->segment(5));
+	}
 } // END class MakeProjectProcessor 

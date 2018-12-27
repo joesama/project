@@ -8,6 +8,7 @@ use Joesama\Project\Database\Model\Organization\Corporate;
 class Client extends Model
 {
 	protected $table = 'client';
+    protected $guarded = ['id'];
 
    /**
      * Get the  client partner for project.

@@ -6,6 +6,8 @@ use DB;
 use Illuminate\Support\Collection;
 use Joesama\Project\Database\Model\Project\Attribute;
 use Joesama\Project\Database\Model\Project\Client;
+use Joesama\Project\Database\Model\Project\HseScore;
+use Joesama\Project\Database\Model\Project\Incident;
 use Joesama\Project\Database\Model\Project\Issue;
 use Joesama\Project\Database\Model\Project\Project;
 use Joesama\Project\Database\Model\Project\Risk;
@@ -69,10 +71,24 @@ class MakeProjectRepository
 				}
 			});
 
+			if(is_null($id)){
+
+				$startDate = Carbon::parse($this->projectModel->start);
+
+				$endDate = Carbon::parse($this->projectModel->end);
+
+				$hse = new HseScore();
+
+				$hse->project_hour = $startDate->diffInHours($endDate);
+
+				$hse->save();
+
+				$this->projectModel->hse_id = $hse->id;
+			}
+
 			$this->projectModel->save();
 
 			$this->projectModel->profile()->attach($projectData->get('profile_id'),['role_id' => 1 ]);
-
 
 			DB::commit();
 
@@ -294,9 +310,9 @@ class MakeProjectRepository
 	}
 
 	/**
-	 * Create New Partner
+	 * Create New Attribute
 	 *
-	 * @return Joesama\Project\Database\Model\Project\Project
+	 * @return Joesama\Project\Database\Model\Project\Attribute
 	 **/
 	public function initAttribute(Collection $partnerData, $id = null)
 	{
@@ -318,6 +334,60 @@ class MakeProjectRepository
 			]);
 
 			$this->projectModel->attributes()->save($attr);
+
+			DB::commit();
+
+			return $this->projectModel;
+
+		}catch( \Exception $e){
+
+			dd($e->getMessage());
+			DB::rollback();
+		}
+	}
+
+	/**
+	 * Create New Incident Report
+	 *
+	 * @return Joesama\Project\Database\Model\Project\Project
+	 **/
+	public function initIncident(Collection $partnerData, $id = null)
+	{
+		$inputData = collect($partnerData)->intersectByKeys([
+		    'project_id'=> null,
+		    'incident_id'=> null,
+		    'report_by'=> null,
+		    'incident'=> null,
+		]);
+
+		DB::beginTransaction();
+
+		try{
+
+			$this->projectModel = $this->projectModel->find(data_get($inputData,'project_id'));
+
+			$incident = new Incident([
+			    'incident_id'=> data_get($inputData,'incident_id'),
+			    'incident'=> data_get($inputData,'incident'),
+			    'report_by'=> data_get($inputData,'report_by')
+			]);
+
+			$this->projectModel->incident()->save($incident);
+
+			$currentIncident = data_get($inputData,'incident_id');
+
+			$scoreCard = $this->projectModel->hsecard;
+			$incidentRecord = $this->projectModel->incident;
+			$incidentGroup = $incidentRecord->groupBy('incident_id');
+
+			$scoreCard->update([
+				'acc_lti' => collect($incidentGroup->get(8))->sum('incident'), //8
+				'zero_lti' => 0, //9
+				'unsafe' => collect($incidentGroup->get(9))->sum('incident'),//9
+				'stop' => collect($incidentGroup->get(10))->sum('incident'),//10
+				'summon' => collect($incidentGroup->get(11))->sum('incident'),//11
+				'complaint' => collect($incidentGroup->get(12))->sum('incident') //12
+			]);
 
 			DB::commit();
 

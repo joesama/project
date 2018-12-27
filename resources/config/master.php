@@ -7,7 +7,9 @@ return [
 	],
 	'master' => [
 		'progress' => ['0-25','26-50','51-75','76-100'],
-		'severity' => ['low','medium','critical']
+		'severity' => ['low','medium','critical'],
+		'hse' => [	'Lost Time Injuries (LTI)','Unsafe Act / Unsafe Condition',
+					'Stop Work Order','Summon By Authorities','Complaint By Communities']
 	],
 	'corporate' => [
 		'KUB Malaysia' => [

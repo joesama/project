@@ -232,4 +232,45 @@ class ListProcessor
 				 ->buildOption($action, TRUE)
 				 ->render();
 	}
+
+	/**
+	 * @param  array $request
+	 * @param  int $request,$corporateId
+	 * @return HTML
+	 */
+	public function incident($request,$corporateId)
+	{
+
+		$columns = [
+		   [ 'field' => 'type.description',
+		   'title' => __('joesama/project::form.project_incident.incident_id'),
+		   'style' => 'text-left text-capitalize'],
+		   [ 'field' => 'incident',
+		   'title' => __('joesama/project::form.project_incident.incident'),
+		   'style' => 'text-center'],
+		   [ 'field' => 'reporter.name',
+		   'title' => __('joesama/project::form.project_incident.report'),
+		   'style' => 'text-left'],
+		   [ 'field' => 'report_date',
+		   'title' => __('joesama/project::form.project_incident.date'),
+		   'style' => 'text-center']
+		];
+
+		$action = [
+			[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
+			    'url' => handles('joesama/project::manager/hse/form/'.$corporateId.'/'.$request->segment(5)), // URL for action
+			    'icons' => 'psi-file-edit icon', // Icon for action : optional
+			    'key' => 'id'  ]
+		];
+
+		$datagrid = new DataGridGenerator();
+		
+		return $datagrid->buildTable($columns, __('joesama/project::manager.hse.list') )
+				 ->buildDataModel(
+				 	route('api.list.incident',[$corporateId, $request->segment(5)]), 
+				 	$this->projectObj->listProjectIncident($corporateId, $request->segment(5))
+				 )->buildAddButton(route('manager.hse.form',[$corporateId, $request->segment(5)]))
+				 ->buildOption($action, TRUE)
+				 ->render();
+	}
 } // END class MakeProjectProcessor 

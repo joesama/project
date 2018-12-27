@@ -55,5 +55,21 @@ return [
 		'phone' => 'Tel. Number',
 		'manager' => 'Manager',
 		'contact' => 'Contact Number',
+	],
+	'project_incident' => [
+		'incident_id' => 'Type Of Incident',
+		'incident' => 'Time Lost / Summons or Complaint Quantity',
+		'last' => 'Date Last Incident',
+		'report' => 'Reported By',
+		'date' => 'Date Reported'
+	],
+	'project_hse' => [
+		'project_hour' => 'Total Project Hours',
+		'acc_lti' => 'Accumulate Lost Time Injury (LTI)',
+		'zero_lti' => 'Zero Lost Time Injuries (LTI)',
+		'unsafe' => 'Unsafe Act / Unsafe Condition',
+		'stop' => 'Stop Work Order (To Date)',
+		'summon' => 'Summon by authorities (To Date)',
+		'complaint' => 'Complaint by communities (To Date)',
 	]
 ];

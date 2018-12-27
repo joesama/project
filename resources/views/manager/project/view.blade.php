@@ -18,20 +18,20 @@
             @includeIf('joesama/project::manager.project.part.info')
             @foreach($policies as $policyId => $policy)
                 @php
-                    $view = 'joesama/project::manager.project.part.'.$policyId
+                    $currentView = 'joesama/project::manager.project.part.'.$policyId
                 @endphp
-                @if(!view()->exists($view))
-                    @php
-                    $view = 'joesama/project::manager.project.part.table'
-                    @endphp
-                @endif
 
-                @include($view,[
+                @php
+                $view = 'joesama/project::manager.project.part.table'
+                @endphp
+
+                @includeFirst([$currentView,$view],[
                         'table' => ${$policyId.'Table'},
                         'title' => 'joesama/project::manager.'.$policyId.'.list',
                         'tableId' => $policyId
                     ])
             @endforeach
+            @includeIf('joesama/project::manager.project.part.hse')
             {{-- @includeIf('joesama/project::project.component.progress') --}}
             {{-- @includeIf('joesama/project::project.component.budget') --}}
             {{-- @includeIf('joesama/project::project.component.hse') --}}
@@ -42,7 +42,5 @@
 @endsection
 @push('content.script')
 
-
-</script>
 @stack('datagrid')
 @endpush

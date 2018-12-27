@@ -19,6 +19,7 @@ class CreateProjectData extends Migration
             $table->integer('client_id')->nullable();
             $table->integer('corporate_id')->nullable();
             $table->string('name')->nullable();
+            $table->string('value')->nullable();
             $table->string('contract')->nullable();
             $table->string('gp_propose')->nullable();
             $table->string('gp_latest')->nullable();

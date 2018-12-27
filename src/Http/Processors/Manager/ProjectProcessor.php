@@ -4,8 +4,9 @@ namespace Joesama\Project\Http\Processors\Manager;
 use Illuminate\Http\Request;
 use Joesama\Project\Database\Model\Organization\Profile;
 use Joesama\Project\Database\Model\Project\Client;
+use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
+use Joesama\Project\Http\Processors\Manager\HseProcessor;
 use Joesama\Project\Http\Processors\Manager\ListProcessor;
-use Joesama\Project\Http\Processors\Project\ProjectInfoProcessor;
 use Joesama\Project\Http\Services\FormGenerator;
 
 /**
@@ -19,11 +20,13 @@ class ProjectProcessor
 
 	public function __construct(
 		ListProcessor $listProcessor,
-		ProjectInfoProcessor $projectProcessor,
+		ProjectInfoRepository $projectInfo,
+		HseProcessor $hseScoreCard,
 		FormGenerator $formBuilder
 	){
 		$this->listProcessor = $listProcessor;
-		$this->projectProcessor = $projectProcessor;
+		$this->hseScoreProcessor = $hseScoreCard;
+		$this->projectInfo = $projectInfo;
 		$this->formBuilder = $formBuilder;
 	}
 
@@ -78,11 +81,14 @@ class ProjectProcessor
 	{
 		$projectId = $request->segment(5);
 
+		$project = $this->projectInfo->getProject($projectId);
+
 		return [
-			'project' => $this->projectProcessor->projectInfo($projectId),
+			'project' => $project,
 			'taskTable' => $this->listProcessor->task($request,$corporateId),
 			'issueTable' => $this->listProcessor->issue($request,$corporateId),
 			'riskTable' => $this->listProcessor->risk($request,$corporateId),
+			'hsecard' => data_get($project,'hsecard'),
 			'policies' => collect(config('joesama/project::policy.dashboard'))
 		];
 	}

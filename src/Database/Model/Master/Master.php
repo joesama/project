@@ -31,4 +31,12 @@ class Master extends Model
     {
         return $query->where('id', 2);
     }
+
+    /**
+     * Incident Definition
+     */
+    public function scopeIncident($query)
+    {
+        return $query->where('id', 3);
+    }
 }
