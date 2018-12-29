@@ -95,6 +95,14 @@ class Project extends Model
     }
 
     /**
+     * Get the project payment
+     */
+    public function payment()
+    {
+        return $this->hasMany(ProjectPayment::class,'project_id','id');
+    }
+
+    /**
      * Get the hse scored card.
      */
     public function hsecard()
@@ -115,7 +123,7 @@ class Project extends Model
         return $query->with([
             'client','profile','task.progress',
             'corporate','partner','attributes',
-            'hsecard','manager','incident'
+            'hsecard','manager','incident','payment'
         ]);
     }
 

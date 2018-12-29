@@ -32,6 +32,7 @@
                     ])
             @endforeach
             @includeIf('joesama/project::manager.project.part.hse')
+            @includeIf('joesama/project::manager.project.part.financial')
             {{-- @includeIf('joesama/project::project.component.progress') --}}
             {{-- @includeIf('joesama/project::project.component.budget') --}}
             {{-- @includeIf('joesama/project::project.component.hse') --}}

@@ -10,6 +10,7 @@ use Joesama\Project\Database\Model\Project\HseScore;
 use Joesama\Project\Database\Model\Project\Incident;
 use Joesama\Project\Database\Model\Project\Issue;
 use Joesama\Project\Database\Model\Project\Project;
+use Joesama\Project\Database\Model\Project\ProjectPayment;
 use Joesama\Project\Database\Model\Project\Risk;
 use Joesama\Project\Database\Model\Project\Task;
 use Joesama\Project\Database\Model\Project\TaskProgress;
@@ -392,6 +393,77 @@ class MakeProjectRepository
 			DB::commit();
 
 			return $this->projectModel;
+
+		}catch( \Exception $e){
+
+			dd($e->getMessage());
+			DB::rollback();
+		}
+	}
+
+	/**
+	 * Create New Incident Report
+	 *
+	 * @return Joesama\Project\Database\Model\Project\Project
+	 **/
+	public function initClaim(Collection $claimData, $id = null)
+	{
+		$inputData = collect($claimData)->intersectByKeys([
+		    'project_id'=> null,
+		    'claim_date'=> null,
+		    'claim_report_by'=> null,
+		    'claim_amount'=> null,
+		]);
+
+		DB::beginTransaction();
+
+		try{
+
+			$this->projectModel = $this->projectModel->find(data_get($inputData,'project_id'));
+
+			$claim = new ProjectPayment([
+			    'claim_date'=> Carbon::createFromFormat('d/m/Y',data_get($inputData,'claim_date'))->toDateTimeString(),
+			    'claim_amount'=> data_get($inputData,'claim_amount'),
+			    'claim_report_by'=> data_get($inputData,'claim_report_by')
+			]);
+
+			$this->projectModel->payment()->save($claim);
+
+			DB::commit();
+
+			return $this->projectModel;
+
+		}catch( \Exception $e){
+
+			dd($e->getMessage());
+			DB::rollback();
+		}
+	}
+
+	/**
+	 * Create New Incident Report
+	 *
+	 * @return Joesama\Project\Database\Model\Project\ProjectPayment
+	 **/
+	public function updateClaim(Collection $claimData, $id)
+	{
+		$inputData = collect($claimData)->intersectByKeys([
+		    'paid_date'=> null,
+		    'paid_amount'=> null,
+		]);
+
+		DB::beginTransaction();
+
+		try{
+
+			$payment = ProjectPayment::find($id);
+			$payment->paid_date = Carbon::createFromFormat('d/m/Y',data_get($inputData,'paid_date'))->toDateTimeString();
+			$payment->paid_amount = data_get($inputData,'paid_amount');
+			$payment->save();
+
+			DB::commit();
+
+			return $payment;
 
 		}catch( \Exception $e){
 

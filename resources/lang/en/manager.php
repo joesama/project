@@ -37,4 +37,9 @@ return [
 		'form' => "Report Incident",
 		'view' => "Health & Safety Environment",
 	],
+	'financial' => [
+		'list' => "Financial Transaction",
+		'claim' => "Project Claim",
+		'payment' => "Project Payment",
+	]
 ];

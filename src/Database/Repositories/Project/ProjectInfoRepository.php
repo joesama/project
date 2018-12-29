@@ -7,7 +7,8 @@ use Joesama\Project\Database\Model\Project\{
 	Task,
 	Issue,
 	Risk,
-	Incident
+	Incident,
+	ProjectPayment
 };
 use DB;
 
@@ -26,7 +27,8 @@ class ProjectInfoRepository
 		Task $task,
 		Issue $issue,
 		Risk $risk,
-		Incident $incident
+		Incident $incident,
+		ProjectPayment $payment
 	){
 		$this->projectModel = $project;
 		$this->clientModel = $client;
@@ -34,6 +36,7 @@ class ProjectInfoRepository
 		$this->issueModel = $issue;
 		$this->riskModel = $risk;
 		$this->incidentModel = $incident;
+		$this->paymentModel = $payment;
 	}
 
 	/**
@@ -189,6 +192,22 @@ class ProjectInfoRepository
 	public function listProjectIncident(int $corporateId, $projectId)
 	{
 		return $this->incidentModel->whereHas('project',function($query) use($corporateId, $projectId){
+			$query->where('corporate_id',$corporateId);
+			$query->when($projectId, function ($query, $projectId) {
+                return $query->where('id', $projectId);
+            });
+		})->component()->paginate();
+	}
+
+	/**
+	 * List of Incident Project
+	 * 
+	 * @param int $corporateId - id for specific corporate
+	 * @param int $projectId
+	 **/
+	public function listProjectPayment(int $corporateId, $projectId)
+	{
+		return $this->paymentModel->whereHas('project',function($query) use($corporateId, $projectId){
 			$query->where('corporate_id',$corporateId);
 			$query->when($projectId, function ($query, $projectId) {
                 return $query->where('id', $projectId);

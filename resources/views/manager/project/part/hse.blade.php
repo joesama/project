@@ -14,6 +14,7 @@
     <!--Panel body-->
     <div class="collapse in" id="hse">
       <div class="panel-body">
+            @if(!is_null($hsecard))
             <div class="row">
               <div class="col-md-6">
                 <p class="text-bold mar-no">
@@ -39,6 +40,7 @@
                   'value' => $hse,
                 ])
             @endforeach()
+            @endif
       </div>
     </div>
   </div>

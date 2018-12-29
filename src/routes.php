@@ -35,18 +35,9 @@ Foundation::group('joesama/project', '/', ['namespace' => 'Http\Controller', 'mi
                 });
             });
         });
-
-     //    $router->group(['prefix' => 'project'], function ($router) {
-     //        $router->get('/{part}/{id}/{app?}', 'ProjectController@projectInformation');
-        // });
-        $router->group(['prefix' => 'report'], function ($router) {
-            $router->get('/project/{id}', 'ReportController@projectReport');
-            $router->get('/format/{id}/{report?}', 'ReportController@reportFormat');
-        });
-
     });
 
-    $router->group(['middleware' => ['web']], function ($router) use($apiPolicies){
+    $router->group(['middleware' => ['api']], function ($router) use($apiPolicies){
         collect($apiPolicies)->each(function($api,$method) use($router){
             collect($api)->each(function($apiPolicy,$apiModule) use($method,$router){
                 collect($apiPolicy)->each(function($apiConfig,$apiSubmodule) use($method,$apiModule,$router){

@@ -71,5 +71,25 @@ return [
 		'stop' => 'Stop Work Order (To Date)',
 		'summon' => 'Summon by authorities (To Date)',
 		'complaint' => 'Complaint by communities (To Date)',
+	],
+	'project_payment' => [
+		'project_id' => 'Project',
+		'claim_date' => 'Claim Date',
+		'paid_date' => 'Payment Date',
+		'claim_report_by' => 'Claim Report By',
+		'paid_report_by' => 'Payment Report By',
+		'claim_amount' => 'Claim Amount',
+		'paid_amount' => 'Payment Amount',
+	],
+	'financial' => [
+		'record' => 'Payment Record',
+		'contract' => 'Contract Info',
+		'vo' => 'VO',
+		'lad' => 'LAD',
+		'revise' => 'Revised Sum',
+		'claim' => 'Amount Claim',
+		'paid' => 'Amount Paid',
+		'retention' => 'Retention',
+		'balance' => 'Balance Contract (RM)',
 	]
 ];

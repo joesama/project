@@ -155,6 +155,10 @@ class FormGenerator
 
 			if(!$this->static){
 
+				if(in_array($key,collect($this->mappinglist)->keys()->toArray())){
+					return 'hidden';
+				}
+
 				if(in_array($type,['varchar','double','text'])){
 					return 'text';
 				}
@@ -165,10 +169,6 @@ class FormGenerator
 
 				if(in_array($key,collect($this->optionlist)->keys()->toArray())){
 					return 'select';
-				}
-
-				if(in_array($key,collect($this->mappinglist)->keys()->toArray())){
-					return 'hidden';
 				}
 
 			}else{
