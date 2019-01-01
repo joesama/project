@@ -60,7 +60,7 @@ class ProjectInfoRepository
 	 **/
 	public function projectList(int $corporateId)
 	{
-		return $this->projectModel->component()->sameGroup($corporateId)->paginate();
+		return $this->projectModel->sameGroup($corporateId)->component()->paginate();
 	}
 
 	/**
