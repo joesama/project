@@ -31,7 +31,7 @@ class ListProcessor
 		   [ 'field' => 'name',
 		   'title' => __('joesama/project::project.info.name'),
 		   'style' => 'text-xs-left text-capitalize'],
-		   [ 'field' => 'profile.name',
+		   [ 'field' => 'manager.0.name',
 		   'title' => 'PIC',
 		   'style' => 'text-xs-left'],
 		   [ 'field' => 'contract',
