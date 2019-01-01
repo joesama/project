@@ -15,10 +15,12 @@
                 <div class="text-lg">
                     <div class="media">
                         <div class="media-left">
-                            <span class="text-5x text-thin text-main text-right">43.7</span>
+                            <span class="text-5x text-thin text-main text-right">
+                            	{{ data_get($contract,'contract.total.value') }}
+                            </span>
                         </div>
                         <div class="media-body">
-                            <p class="mar-no text-left">M</p>
+                            <p class="mar-no text-left">{{ data_get($contract,'contract.total.unit') }}</p>
                         </div>
                     </div>
                 </div>

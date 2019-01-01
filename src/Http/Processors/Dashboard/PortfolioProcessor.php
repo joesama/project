@@ -3,7 +3,6 @@ namespace Joesama\Project\Http\Processors\Dashboard;
 
 use Illuminate\Http\Request;
 use Joesama\Project\Database\Repositories\Dashboard\MasterRepository;
-use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
 
 /**
  * Processing All List 
@@ -15,10 +14,8 @@ class PortfolioProcessor
 {
 
 	public function __construct(
-		ProjectInfoRepository $projectInfo,
 		MasterRepository $masterPortfolio
 	){
-		$this->projectObj = $projectInfo;
 		$this->masterRepo = $masterPortfolio;
 	}
 
@@ -31,7 +28,8 @@ class PortfolioProcessor
 	public function master(Request $request,int $corporateId)
 	{
 		return [
-			'project' => $this->masterRepo->projectSummary($this->projectObj->projectAll())
+			'project' => $this->masterRepo->projectSummary(),
+			'contract' => $this->masterRepo->projectContract(),
 		];
 	}
 
