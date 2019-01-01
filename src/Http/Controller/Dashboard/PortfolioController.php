@@ -1,14 +1,14 @@
 <?php
-namespace Joesama\Project\Http\Controller\Manager;
+namespace Joesama\Project\Http\Controller\Dashboard;
 
 use Illuminate\Http\Request;
 use Joesama\Project\Http\Controller\BaseController;
 use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
 
 /**
- * Task Controller
+ * PortfolioController
  */
-class HseController extends BaseController
+class PortfolioController extends BaseController
 {
 	/**
 	 * Main Controller For Sub Module
@@ -24,4 +24,4 @@ class HseController extends BaseController
 			app($this->processor)->$page($request,$corporateId)
 		);
 	}
-} // END class AtrributeController  
+} // END class PortfolioController  

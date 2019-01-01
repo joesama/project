@@ -85,7 +85,7 @@ class FinancialProcessor
 				 ->buildDataModel(
 				 	route('api.list.payment',[$corporateId, $request->segment(5)]), 
 				 	$this->projectObj->listProjectPayment($corporateId, $request->segment(5))
-				 )->buildAddButton(route('manager.financial.payment',[$corporateId, $request->segment(5)]))
+				 )->buildAddButton(route('manager.financial.claim',[$corporateId, $request->segment(5)]))
 				 ->buildOption($action, TRUE)
 				 ->render();
 

@@ -95,11 +95,19 @@ class Project extends Model
     }
 
     /**
+     * Get the project claim
+     */
+    public function claim()
+    {
+        return $this->hasMany(ProjectPayment::class,'project_id','id')->whereNotNull('claim_amount');
+    }
+
+    /**
      * Get the project payment
      */
     public function payment()
     {
-        return $this->hasMany(ProjectPayment::class,'project_id','id');
+        return $this->hasMany(ProjectPayment::class,'project_id','id')->whereNotNull('paid_amount');
     }
 
     /**
@@ -113,9 +121,9 @@ class Project extends Model
     /**
      * Get the report progress.
      */
-    public function scopeSameGroup($query)
+    public function scopeSameGroup($query,$corporateId)
     {
-        return $this->where('corporate_id',request()->segment(4));
+        return $this->where('corporate_id',$corporateId);
     }
 
     public function scopeComponent($query)
@@ -123,7 +131,8 @@ class Project extends Model
         return $query->with([
             'client','profile','task.progress',
             'corporate','partner','attributes',
-            'hsecard','manager','incident','payment'
+            'hsecard','manager','incident','claim',
+            'payment'
         ]);
     }
 

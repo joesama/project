@@ -60,6 +60,12 @@ return [
 				'list' => ['corporateId','projectId'],
 				'no_menu' => TRUE
 			],
+			'financial' => [
+				'list' => ['corporateId','projectId','attrId?'],
+				'claim' => ['corporateId','projectId'],
+				'payment' => ['corporateId','projectId','attrId?'],
+				'no_menu' => TRUE
+			],
 			'icon' => 'psi-folder-archive icon-lg icon-fw'
 		]
 	],
@@ -74,6 +80,7 @@ return [
 				'data' => ['corporateId','projectId?'],
 				'client' => ['corporateId','projectId?'],
 				'incident' => ['corporateId','projectId'],
+				'payment' => ['corporateId','projectId'],
 			],
 		],
 		'POST' => [
@@ -106,6 +113,10 @@ return [
 			],
 			'incident' => [
 				'save' => ['corporateId','masterId?']
+			],
+			'financial' => [
+				'claim' => ['corporateId','projectId'],
+				'payment' => ['corporateId','projectId','masterId?']
 			]
 		],
 	],

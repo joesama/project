@@ -38,6 +38,7 @@ return [
 		'view' => "Health & Safety Environment",
 	],
 	'financial' => [
+		'summary' => 'Financial Tracker',
 		'list' => "Financial Transaction",
 		'claim' => "Project Claim",
 		'payment' => "Project Payment",

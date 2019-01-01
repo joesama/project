@@ -42,6 +42,12 @@
 </div>
 @endsection
 @push('content.script')
-
+<script type="text/javascript">
+    $('.mh-byrow').each(function() {
+        $(this).find('.panel').matchHeight({
+            byRow: true
+        });
+    });
+</script>
 @stack('datagrid')
 @endpush

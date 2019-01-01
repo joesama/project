@@ -60,7 +60,7 @@ class ProjectInfoRepository
 	 **/
 	public function projectList(int $corporateId)
 	{
-		return $this->projectModel->component()->where('corporate_id',$corporateId)->paginate();
+		return $this->projectModel->component()->sameGroup($corporateId)->paginate();
 	}
 
 	/**
@@ -124,7 +124,7 @@ class ProjectInfoRepository
 	public function listProjectTask(int $corporateId, $projectId = null)
 	{
 		return $this->taskModel->whereHas('project',function($query) use($corporateId, $projectId){
-			$query->where('corporate_id',$corporateId);
+			$query->sameGroup($corporateId);
 			$query->when($projectId, function ($query, $projectId) {
                 return $query->where('id', $projectId);
             });
@@ -150,7 +150,7 @@ class ProjectInfoRepository
 	public function listProjectIssue(int $corporateId, $projectId = null)
 	{
 		return $this->issueModel->whereHas('project',function($query) use($corporateId, $projectId){
-			$query->where('corporate_id',$corporateId);
+			$query->sameGroup($corporateId);
 			$query->when($projectId, function ($query, $projectId) {
                 return $query->where('id', $projectId);
             });
@@ -176,7 +176,7 @@ class ProjectInfoRepository
 	public function listProjectRisk(int $corporateId, $projectId = null)
 	{
 		return $this->riskModel->whereHas('project',function($query) use($corporateId, $projectId){
-			$query->where('corporate_id',$corporateId);
+			$query->sameGroup($corporateId);
 			$query->when($projectId, function ($query, $projectId) {
                 return $query->where('id', $projectId);
             });
@@ -192,7 +192,7 @@ class ProjectInfoRepository
 	public function listProjectIncident(int $corporateId, $projectId)
 	{
 		return $this->incidentModel->whereHas('project',function($query) use($corporateId, $projectId){
-			$query->where('corporate_id',$corporateId);
+			$query->sameGroup($corporateId);
 			$query->when($projectId, function ($query, $projectId) {
                 return $query->where('id', $projectId);
             });
@@ -208,7 +208,7 @@ class ProjectInfoRepository
 	public function listProjectPayment(int $corporateId, $projectId)
 	{
 		return $this->paymentModel->whereHas('project',function($query) use($corporateId, $projectId){
-			$query->where('corporate_id',$corporateId);
+			$query->sameGroup($corporateId);
 			$query->when($projectId, function ($query, $projectId) {
                 return $query->where('id', $projectId);
             });

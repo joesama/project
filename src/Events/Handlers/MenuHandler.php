@@ -55,7 +55,7 @@ class MenuHandler
                     ->icon('psi-arrow-right-2');
                     
                     collect($component)->each(function($params, $page) 
-                        use($menu,$domain,$domainPath,$submodule,$segmentOne){
+                        use($menu,$domain,$domainPath,$module,$submodule,$segmentOne){
 
                         $segmentTwo = '';
 
@@ -64,7 +64,7 @@ class MenuHandler
                         $projectIdOptional = collect($params)->contains('projectId?');
                         $projectIdRequired = collect($params)->contains('projectId');
 
-                        if($projectIdRequired || $projectIdOptional && $masterId)
+                        if($projectIdRequired || $projectIdOptional || $masterId)
                         {
                             $segmentTwo .= '/'. request()->segment(5);
                         }
@@ -77,7 +77,7 @@ class MenuHandler
                         $subdomainPath = $domainPath.'/'.$page.$segmentOne.$segmentTwo;
                         $subdomain = $submodule.'.'.$page;
                         
-                        if($projectIdOptional && request()->segment(5) && $masterId)
+                        if(($projectIdOptional || $masterId ) && request()->segment(5) && $module == request()->segment(1))
                         {   
                             $menu->add($subdomain,'^:'.$domain)
                                 ->title(trans('joesama/project::'.$domain.'.'.$page))

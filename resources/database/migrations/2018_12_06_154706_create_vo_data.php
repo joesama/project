@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePaymentData extends Migration
+class CreateVoData extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,13 @@ class CreatePaymentData extends Migration
      */
     public function up()
     {
-        Schema::create('project_payment', function (Blueprint $table) {
+        Schema::create('project_vo', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->unsignedInteger('project_id')->nullable();
-            $table->date('claim_date')->nullable();
-            $table->date('paid_date')->nullable();
-            $table->unsignedInteger('claim_report_by')->nullable();
-            $table->unsignedInteger('paid_report_by')->nullable();
-            $table->double('claim_amount')->nullable();
-            $table->double('paid_amount')->nullable();
+            $table->date('date')->nullable();
+            $table->unsignedInteger('report_by')->nullable();
+            $table->double('amount')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -36,6 +33,6 @@ class CreatePaymentData extends Migration
      */
     public function down()
     {
-        Schema::drop('project_payment');
+        Schema::drop('project_vo');
     }
 }

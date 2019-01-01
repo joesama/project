@@ -84,12 +84,14 @@ return [
 	'financial' => [
 		'record' => 'Payment Record',
 		'contract' => 'Contract Info',
+		'balance' => 'Balance Contract',
+		'duration'=> 'Duration',
+		'value'=> 'Value',
 		'vo' => 'VO',
 		'lad' => 'LAD',
 		'revise' => 'Revised Sum',
 		'claim' => 'Amount Claim',
 		'paid' => 'Amount Paid',
-		'retention' => 'Retention',
-		'balance' => 'Balance Contract (RM)',
+		'retention' => 'Retention'
 	]
 ];
