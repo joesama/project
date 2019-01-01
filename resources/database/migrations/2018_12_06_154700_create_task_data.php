@@ -16,8 +16,8 @@ class CreateTaskData extends Migration
         Schema::create('task', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->integer('project_id')->nullable();
-            $table->integer('profile_id')->nullable();
+            $table->unsignedInteger('project_id')->nullable();
+            $table->unsignedInteger('profile_id')->nullable();
             $table->string('name')->nullable();
             $table->date('start')->nullable();
             $table->date('end')->nullable();

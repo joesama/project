@@ -16,8 +16,8 @@ class CreateProjectPartnerData extends Migration
         Schema::create('project_partner', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->integer('project_id')->nullable();
-            $table->integer('partner_id')->nullable();
+            $table->unsignedInteger('project_id')->nullable();
+            $table->unsignedInteger('partner_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

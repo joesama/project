@@ -16,9 +16,9 @@ class CreateTaskProgressData extends Migration
         Schema::create('task_progress', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->integer('task_id')->nullable();
-            $table->integer('card_id')->nullable();
-            $table->integer('report_id')->nullable();
+            $table->unsignedInteger('task_id')->nullable();
+            $table->unsignedInteger('card_id')->nullable();
+            $table->unsignedInteger('report_id')->nullable();
             $table->double('progress')->nullable();
             $table->timestamps();
             $table->softDeletes();

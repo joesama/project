@@ -16,9 +16,9 @@ class CreateProjectCardData extends Migration
         Schema::create('project_card', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->integer('project_id')->nullable();
-            $table->integer('workflow_id')->nullable();
-            $table->integer('creator_id')->nullable();
+            $table->unsignedInteger('project_id')->nullable();
+            $table->unsignedInteger('workflow_id')->nullable();
+            $table->unsignedInteger('creator_id')->nullable();
             $table->date('card_date')->nullable();
             $table->date('verify')->nullable();
             $table->date('approved')->nullable();

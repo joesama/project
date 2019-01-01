@@ -121,6 +121,21 @@ class Project extends Model
     /**
      * Get the report progress.
      */
+    public function scopeOnTrack($query)
+    {
+        return $this->whereDate('end','>',Carbon::now())->whereColumn('planned_progress', '<=' , 'actual_progress');
+    }
+    /**
+     * Get the report progress.
+     */
+    public function scopeDelayed($query)
+    {
+        return $this->whereColumn('planned_progress', '>' , 'actual_progress');
+    }
+
+    /**
+     * Get the report progress.
+     */
     public function scopeSameGroup($query,$corporateId)
     {
         return $this->where('corporate_id',$corporateId);

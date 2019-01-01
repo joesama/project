@@ -16,5 +16,8 @@ return [
 		'master' => 'Data Management',
 		'data' => 'Data Category',
 		'client' => 'Client Information'
+	],
+	'dashboard' => [
+		'module' => 'Project Portfolio',
 	]
 ];

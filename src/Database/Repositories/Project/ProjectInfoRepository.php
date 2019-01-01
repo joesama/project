@@ -70,7 +70,7 @@ class ProjectInfoRepository
 	 **/
 	public function projectAll()
 	{
-		return $this->projectModel->get();
+		return $this->projectModel->component()->get();
 	}
 
 	/**

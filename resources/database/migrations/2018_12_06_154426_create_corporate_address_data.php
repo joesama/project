@@ -16,7 +16,7 @@ class CreateCorporateAddressData extends Migration
         Schema::create('corporate_address', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->integer('corporate_id')->nullable();
+            $table->unsignedInteger('corporate_id')->nullable();
             $table->string('line_1')->nullable();
             $table->string('line_2')->nullable();
             $table->string('line_3')->nullable();

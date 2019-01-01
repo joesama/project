@@ -16,8 +16,8 @@ class CreateCorporateClientData extends Migration
         Schema::create('corporate_client', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->integer('corporate_id')->nullable();
-            $table->integer('client_id')->nullable();
+            $table->unsignedInteger('corporate_id')->nullable();
+            $table->unsignedInteger('client_id')->nullable();
             $table->timestamps();
         });
     }

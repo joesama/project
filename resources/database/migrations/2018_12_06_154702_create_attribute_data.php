@@ -16,7 +16,7 @@ class CreateAttributeData extends Migration
         Schema::create('project_attribute', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->integer('project_id')->nullable();
+            $table->unsignedInteger('project_id')->nullable();
             $table->string('variable')->nullable();
             $table->text('data')->nullable();
             $table->timestamps();

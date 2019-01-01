@@ -52,7 +52,8 @@ class MakeProjectRepository
 		    'contract' => null,
 		    'bond' => null,
 		    'start' => null,
-		    'end' => null
+		    'end' => null,
+		    'active' => 1
 		]);
 
 		DB::beginTransaction();

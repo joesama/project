@@ -16,9 +16,9 @@ class CreateIssueData extends Migration
         Schema::create('issue', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->integer('project_id')->nullable();
-            $table->integer('profile_id')->nullable();
-            $table->integer('progress_id')->nullable();
+            $table->unsignedInteger('project_id')->nullable();
+            $table->unsignedInteger('profile_id')->nullable();
+            $table->unsignedInteger('progress_id')->nullable();
             $table->string('description')->nullable();
             $table->timestamps();
             $table->softDeletes();

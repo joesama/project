@@ -2,6 +2,9 @@
 
 return [
 	'portfolio'	=> [
+		'master' => 'Group Performance',
+		'group' => 'Subsidiaries Performance',
+		'subsidiaries' => 'Project Performance',
 		'project' => 'Total Project',
 		'contract' => 'Total Contract',
 		'over' => 'Over Budget',

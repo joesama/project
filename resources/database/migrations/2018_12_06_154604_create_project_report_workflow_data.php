@@ -16,8 +16,8 @@ class CreateProjectReportWorkflowData extends Migration
         Schema::create('project_report_workflow', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->integer('report_id')->nullable();
-            $table->integer('user_id')->nullable();
+            $table->unsignedInteger('report_id')->nullable();
+            $table->unsignedInteger('user_id')->nullable();
             $table->text('remark')->nullable();
             $table->timestamps();
             $table->softDeletes();

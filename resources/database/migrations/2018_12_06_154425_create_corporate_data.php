@@ -19,8 +19,8 @@ class CreateCorporateData extends Migration
             $table->string('name')->nullable();
             $table->string('shortname')->nullable();
             $table->string('logo')->nullable();
-            $table->integer('child_to')->nullable();
-            $table->integer('active')->nullable();
+            $table->unsignedInteger('child_to')->nullable();
+            $table->unsignedInteger('active')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

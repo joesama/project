@@ -16,17 +16,19 @@ class CreateProjectData extends Migration
         Schema::create('project', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->integer('client_id')->nullable();
-            $table->integer('corporate_id')->nullable();
+            $table->unsignedInteger('client_id')->nullable();
+            $table->unsignedInteger('corporate_id')->nullable();
             $table->string('name')->nullable();
             $table->string('value')->nullable();
             $table->string('contract')->nullable();
             $table->string('gp_propose')->nullable();
             $table->string('gp_latest')->nullable();
-            $table->double('bond')->nullable();
+            $table->float('bond', 8, 2)->nullable();
             $table->text('scope')->nullable();
             $table->date('start')->nullable();
             $table->date('end')->nullable();
+            $table->float('acc_progress', 8, 2)->default(0)->nullable();
+            $table->unsignedInteger('active')->default(1)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

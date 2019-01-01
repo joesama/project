@@ -16,8 +16,8 @@ class CreateRiskData extends Migration
         Schema::create('risk', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->integer('project_id')->nullable();
-            $table->integer('severity_id')->nullable();
+            $table->unsignedInteger('project_id')->nullable();
+            $table->unsignedInteger('severity_id')->nullable();
             $table->string('description')->nullable();
             $table->timestamps();
             $table->softDeletes();

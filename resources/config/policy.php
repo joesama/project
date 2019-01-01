@@ -67,6 +67,15 @@ return [
 				'no_menu' => TRUE
 			],
 			'icon' => 'psi-folder-archive icon-lg icon-fw'
+		],
+		'dashboard' => [
+			'portfolio' => [
+				'master' => ['corporateId'],
+				'group' => ['corporateId'],
+				'subsidiaries' => ['corporateId'],
+				'no_menu' => TRUE
+			],
+			'icon' => 'psi-dashboard icon-lg icon-fw'
 		]
 	],
 	'api' => [
