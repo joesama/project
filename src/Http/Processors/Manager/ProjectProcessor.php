@@ -100,22 +100,22 @@ class ProjectProcessor
 		);
 
 		$claimTransdata = collect([
-	        'monthTrans' => $claim->get(Carbon::now()->format('Y'))
+	        'monthTrans' => collect($claim->get(Carbon::now()->format('Y'))
 	                    ->get(Carbon::now()->format('m'))
-	                    ->sum('claim_amount'),
-	        'ytd' => $claim->get(Carbon::now()->format('Y'))->flatten(1)->sum('claim_amount'),
-	        'ttd' => $claim->flatten(2)->sum('claim_amount'),
+	                    )->sum('claim_amount'),
+	        'ytd' => collect($claim->get(Carbon::now()->format('Y'))->flatten(1))->sum('claim_amount'),
+	        'ttd' => collect($claim->flatten(2))->sum('claim_amount'),
 	        'sparlineData' => $claim->flatten(2)->pluck('claim_amount')->map(function($item){
 	        	return is_null($item) ? 0 :$item;
  	        })->toArray()
 	    ]);
 
 		$paidTransdata = collect([
-	        'monthTrans' => $paid->get(Carbon::now()->format('Y'))
-	                    ->get(Carbon::now()->format('m'))
+	        'monthTrans' => collect($paid->get(Carbon::now()->format('Y'))
+	                    ->get(Carbon::now()->format('m')))
 	                    ->sum('paid_amount'),
-	        'ytd' => $paid->get(Carbon::now()->format('Y'))->flatten(1)->sum('paid_amount'),
-	        'ttd' => $paid->flatten(2)->sum('paid_amount'),
+	        'ytd' => collect($paid->get(Carbon::now()->format('Y'))->flatten(1))->sum('paid_amount'),
+	        'ttd' => collect($paid->flatten(2))->sum('paid_amount'),
 	        'sparlineData' => $paid->flatten(2)->pluck('paid_amount')->map(function($item){
 	        	return is_null($item) ? 0 :$item;
  	        })->toArray()
