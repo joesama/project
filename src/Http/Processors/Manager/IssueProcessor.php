@@ -55,7 +55,7 @@ class IssueProcessor
 
 		if(is_null($request->segment(5))){
 			$form->extras([
-				'project_id' => Project::sameGroup()->pluck('name','id')
+				'project_id' => Project::sameGroup($corporateId)->pluck('name','id')
 			]);
 		}else{
 			$form = $form->mapping([

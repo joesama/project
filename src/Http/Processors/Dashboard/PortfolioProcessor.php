@@ -2,6 +2,7 @@
 namespace Joesama\Project\Http\Processors\Dashboard; 
 
 use Illuminate\Http\Request;
+use Joesama\Project\Database\Repositories\Dashboard\GroupRepository;
 use Joesama\Project\Database\Repositories\Dashboard\MasterRepository;
 
 /**
@@ -14,9 +15,11 @@ class PortfolioProcessor
 {
 
 	public function __construct(
-		MasterRepository $masterPortfolio
+		MasterRepository $masterPortfolio,
+		GroupRepository $groupPorfolio
 	){
 		$this->masterRepo = $masterPortfolio;
+		$this->groupRepo = $groupPorfolio;
 	}
 
 	/**
@@ -28,8 +31,15 @@ class PortfolioProcessor
 	public function master(Request $request,int $corporateId)
 	{
 		return [
+			'corporateId' => $corporateId,
 			'project' => $this->masterRepo->projectSummary(),
 			'contract' => $this->masterRepo->projectContract(),
+			'task' => $this->masterRepo->projectTask(),
+			'issue' => $this->masterRepo->projectIssue(),
+			'summary' => [
+				'task' => $this->masterRepo->projectTask(),
+				'issue' => $this->masterRepo->projectIssue(),
+			]
 		];
 	}
 
@@ -41,7 +51,28 @@ class PortfolioProcessor
 	 */
 	public function group(Request $request,int $corporateId)
 	{
-		return [];
+		$corporate = $this->groupRepo->subsidiaries();
+
+		$corporateData = collect([]);
+		$corporate->each(function($subs)use($corporateData){
+
+			$corporateData->push(collect([
+				'corporate' => $subs,
+				'summary' => [
+					'task' => $this->masterRepo->projectTask($subs->id),
+					'issue' => $this->masterRepo->projectIssue($subs->id),
+				]
+			]));
+		});
+
+		return [
+			'project' => $this->masterRepo->projectSummary(),
+			'contract' => $this->masterRepo->projectContract(),
+			'task' => $this->masterRepo->projectTask(),
+			'issue' => $this->masterRepo->projectIssue(),
+			'corporate' => $corporateData,
+
+		];
 	}
 
 	/**

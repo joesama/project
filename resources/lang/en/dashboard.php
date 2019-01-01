@@ -10,6 +10,7 @@ return [
 		'over' => 'Over Budget',
 		'issue' => 'Open Issues',
 		'task' => 'Overdue Tasks',
+		'gp' => 'GP Variance',
 	],
 	'subsidiary' => [
 		'dashboard' => 'View Subsidiary Dashboard',

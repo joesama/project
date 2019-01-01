@@ -94,7 +94,7 @@ class MockCorporateData extends Command
 
             $group = Corporate::firstOrNew(
                     ['name' => ucwords($kubGroup)],
-                    ['logo' => 'packagesjoesama/project/img/kub.png']
+                    ['logo' => 'packages/joesama/project/img/kub.png']
                 );
             $group->save();
 
@@ -103,7 +103,7 @@ class MockCorporateData extends Command
                     ['name' => ucwords($sub)],
                     [
                         'child_to' => $group->id,
-                        'logo' => 'packagesjoesama/project/img/'.str_replace('_','.',$subId),
+                        'logo' => 'packages/joesama/project/img/'.str_replace('_','.',$subId),
                     ]
                 );
                 $subsidiary->save();

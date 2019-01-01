@@ -27,7 +27,6 @@ class CreateProjectData extends Migration
             $table->text('scope')->nullable();
             $table->date('start')->nullable();
             $table->date('end')->nullable();
-            $table->float('acc_progress', 8, 2)->default(0)->nullable();
             $table->unsignedInteger('active')->default(1)->nullable();
             $table->timestamps();
             $table->softDeletes();

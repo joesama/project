@@ -1,38 +1,45 @@
-<div id="demo-panel-network" class="panel">
+<div id="demo-panel-network" class="panel panel-warning panel-colorful clearfix">
     <!--Chart information-->
     <div class="panel-body text-center clearfix">
         <div class="row">
+			<div class="col-sm-{{($summary) ? '12' : '4'}} pad-top">
+                <div class="text-lg">
+                    <div class="media">
+                        <div class="media-left" style="width: 95%">
+                            <span class="text-5x text-thin text-right">
+                            	{{ data_get($contract,'total.value') }}
+                            </span>
+                        </div>
+                        <div class="media-body" style="width: 5%">
+                            <p class="mar-no text-left">
+                            {{ data_get($contract,'total.unit') }}
+                        	</p>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-sm text-bold text-uppercase">
+                	{{ __('joesama/project::dashboard.portfolio.contract') }}
+                </p>
+            </div>
+            @if(!$summary)
             <div class="col-sm-8">
 			    <!--chart placeholder-->
 			    <div class="pad-top pad-lft">
 			        <div id="demo-chart-network" style="height: 100px"></div>
 			    </div>
             </div>
-			<div class="col-sm-4 pad-top">
-                <p class="text-sm text-bold text-uppercase">
-                	{{ __('joesama/project::dashboard.portfolio.contract') }}
-                </p>
-                <div class="text-lg">
-                    <div class="media">
-                        <div class="media-left">
-                            <span class="text-5x text-thin text-main text-right">
-                            	{{ data_get($contract,'contract.total.value') }}
-                            </span>
-                        </div>
-                        <div class="media-body">
-                            <p class="mar-no text-left">{{ data_get($contract,'contract.total.unit') }}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @endif
         </div>
     </div>
 </div>
+@php
+	$chart = data_get($contract,'chartData')
+@endphp
 
 @push('content.script')
 <script type="text/javascript">
 	
-    var upData = [[1, 2], [2, 22], [3, 7], [4, 6], [5, 17], [6, 15], [7, 17], [8, 7], [9, 18], [10, 18], [11, 18], [12, 29], [13, 23], [14, 10], [15, 22], [16, 7], [17, 6], [18, 17], [19, 15], [20, 17], [21, 7], [22, 18], [23, 18], [24, 18], [25, 29], [26, 13], [27, 2], [28, 22], [29, 7], [30, 6], [31, 17], [32, 15], [33, 17], [34, 7], [35, 18], [36, 18], [37, 18], [38, 29], [39, 23], [40, 10], [41, 22], [42, 7], [43, 6], [44, 17], [45, 15], [46, 17], [47, 7], [48, 18], [49, 18], [50, 18], [51, 29], [52, 13], [53, 24]];
+    var upData = @json($chart);
 
     var plot = $.plot('#demo-chart-network', [
         {
@@ -82,7 +89,7 @@
         },
         xaxis: {
             show: true,
-            ticks: 10,
+            ticks: 20,
             tickColor: 'transparent'
         },
         tooltip: {

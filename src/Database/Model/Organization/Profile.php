@@ -29,9 +29,16 @@ class Profile extends Model
     /**
      * Get the report progress.
      */
-    public function scopeSameGroup($query)
+    public function scopeSameGroup($query,$corporateId)
     {
-        return $this->where('corporate_id',request()->segment(4));
+        return $this->where('corporate_id',$corporateId);
+    }
+
+    public function scopeComponent($query)
+    {
+        return $query->with([
+            'project','corporate'
+        ]);
     }
 
 }

@@ -5,17 +5,25 @@
 @section('content')
 <div class="row mb-3" id="group-dashboard">
     <div class="col-md-6">
-    	@include('joesama/project::dashboard.portfolio.panel-project')
+    	@include('joesama/project::dashboard.portfolio.panel-project',['summary' => false])
     </div>
     <div class="col-md-6">
-    	@include('joesama/project::dashboard.portfolio.panel-contract')
+    	@include('joesama/project::dashboard.portfolio.panel-contract',['summary' => false])
     </div>
     <div class="col-md-6">
-    	@include('joesama/project::dashboard.portfolio.panel-task')
+    	@include('joesama/project::dashboard.portfolio.panel-task',['summary' => false])
     </div>
     <div class="col-md-6">
-    	@include('joesama/project::dashboard.portfolio.panel-issue')
+    	@include('joesama/project::dashboard.portfolio.panel-issue',['summary' => false])
     </div>
+</div>
+<div class="row pad-no">
+    @include('joesama/project::dashboard.portfolio.panel-summary',[
+    		'title' => __('joesama/project::dashboard.portfolio.master'),
+    		'panelId' => 'psummary',
+    		'summary' => $summary,
+    		'nextLevel' => handles('joesama/project::dashboard/portfolio/group/'.$corporateId),
+    	])
 </div>
 @endsection
 @push('content.script')

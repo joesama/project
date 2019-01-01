@@ -38,4 +38,23 @@ class Issue extends Model
     {
         return $query->with(['assignee','progress','project']);
     }
+
+   /**
+     * Get the issue progress.
+     * @TODO should get the latest progress
+     */
+    public function scopeComplete($query)
+    {
+        return $query->where('active',0);
+    }
+
+   /**
+     * Get the issue progress.
+     * @TODO should get the latest progress
+     */
+    public function scopeOpen($query)
+    {
+        return $query->where('active',1);
+    }
+
 }
