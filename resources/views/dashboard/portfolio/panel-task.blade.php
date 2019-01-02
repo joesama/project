@@ -29,7 +29,7 @@
                 @endphp
                 <p class="mar-no">
                     <span class="pull-right text-bold">
-                        {{ data_get($task,'task.overdue') }}
+                        {{ $taskOverdue }}
                     </span> Overdue
                 </p>
                 <div class="progress progress-sm">
@@ -44,7 +44,7 @@
                 @endphp
                 <p class="mar-no">
                     <span class="pull-right text-bold">
-                        {{ data_get($task,'task.complete') }}
+                        {{ $taskComplete }}
                     </span> Completed
                 </p>
                 <div class="progress progress-sm">

@@ -83,7 +83,13 @@ class PortfolioProcessor
 	 */
 	public function subsidiaries(Request $request,int $corporateId)
 	{
-		return [];
+		return [
+			'corporateId' => $corporateId,
+			'project' => $this->masterRepo->projectSummary($corporateId),
+			'contract' => $this->masterRepo->projectContract($corporateId),
+			'task' => $this->masterRepo->projectTask($corporateId),
+			'issue' => $this->masterRepo->projectIssue($corporateId),
+		];
 	}
 
 

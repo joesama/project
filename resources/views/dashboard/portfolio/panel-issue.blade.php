@@ -15,7 +15,7 @@
         <div class="pad-all">
             <p class="mar-no">
                 <span class="pull-right text-bold">
-                    {{ data_get($issue,'issue.total') }}
+                    {{ data_get($issue,'total') }}
                 </span> Total
             </p>
         </div>
@@ -29,7 +29,7 @@
                 @endphp
                 <p class="mar-no">
                     <span class="pull-right text-bold">
-                        {{ data_get($issue,'issue.open') }}
+                        {{ $issueOpen }}
                     </span> Open
                 </p>
                 <div class="progress progress-sm">
@@ -44,7 +44,7 @@
                 @endphp
                 <p class="mar-no">
                     <span class="pull-right text-bold">
-                        {{ data_get($issue,'issue.complete') }}
+                        {{ $issueCompleted }}
                     </span> Completed
                 </p>
                 <div class="progress progress-sm">
