@@ -20,7 +20,7 @@ class DashboardController
 	 **/
 	public function projectPorfolio()
 	{
-		return view('joesama/project::project.portfolio');
+		return redirect(handles('joesama/project::dashboard/portfolio/master/1'));
 	}
 
 	/**

@@ -17,14 +17,28 @@ class MasterRepository
 	 */
 	public function projectSummary(int $corporateId = null)
 	{
-
 		return collect([
-			'active' => Project::where('active',1)->count(),
-			'closed' => Project::where('active',0)->count(),
-			'ontrack' => Project::onTrack()->count(),
-			'delayed' => Project::delayed()->count(),
-			'total' => Project::count()
+			'active' => Project::when($corporateId, function ($query, $corporateId) {
+			            return $query->sameGroup($corporateId);
+			        })->where('active',1)->count(),
+
+			'closed' => Project::when($corporateId, function ($query, $corporateId) {
+				            return $query->sameGroup($corporateId);
+				        })->where('active',0)->count(),
+
+			'ontrack' => Project::when($corporateId, function ($query, $corporateId) {
+				            return $query->sameGroup($corporateId);
+				        })->onTrack()->count(),
+
+			'delayed' => Project::when($corporateId, function ($query, $corporateId) {
+				            return $query->sameGroup($corporateId);
+				        })->delayed()->count(),
+
+			'total' => Project::when($corporateId, function ($query, $corporateId) {
+				            return $query->sameGroup($corporateId);
+				        })->count()
 		]);
+
 	}
 
 	/**
@@ -34,7 +48,9 @@ class MasterRepository
 	 */
 	public function projectContract(int $corporateId = null)
 	{
-		$sumValue = Project::sum('value');
+		$sumValue = Project::when($corporateId, function ($query, $corporateId) {
+            return $query->sameGroup($corporateId);
+        })->sum('value');
 
 		if ($sumValue < 1000000000) {
 		    // Anything less than a billion
@@ -45,7 +61,9 @@ class MasterRepository
 		    $format = round($sumValue / 1000000000,2);
 		}
 
-		$chart = Project::pluck('value','id')->map(function($item,$key){
+		$chart = Project::when($corporateId, function ($query, $corporateId) {
+	            return $query->sameGroup($corporateId);
+	        })->pluck('value','id')->map(function($item,$key){
 	        	return [ $key,(is_null($item) ? 0 : $item)] ;
  	        })->values()->toArray();
 
@@ -66,20 +84,24 @@ class MasterRepository
 	 */
 	public function projectTask(int $corporateId = null)
 	{
-		$builder = Task::when($corporateId, function ($query, $corporateId) {
-            return $query->whereHas('project',function($query) use($corporateId){
-				$query->sameGroup($corporateId);
-			});
-        });
-
-        $total = $builder->count();
-        $overdue = $builder->overdue()->count();
-        $complete = $builder->complete()->count();
-
 		return collect([
-			'total' => $total,
-			'complete' => $complete,
-			'overdue' => $overdue
+			'total' => Task::when($corporateId, function ($query, $corporateId) {
+		            return $query->whereHas('project',function($query) use($corporateId){
+						$query->sameGroup($corporateId);
+					});
+		        })->count(),
+
+			'complete' => Task::when($corporateId, function ($query, $corporateId) {
+		            return $query->whereHas('project',function($query) use($corporateId){
+						$query->sameGroup($corporateId);
+					});
+		        })->complete()->count(),
+
+			'overdue' => Task::when($corporateId, function ($query, $corporateId) {
+		            return $query->whereHas('project',function($query) use($corporateId){
+						$query->sameGroup($corporateId);
+					});
+		        })->overdue()->count()
 		]);
 
 	}
@@ -91,16 +113,24 @@ class MasterRepository
 	 */
 	public function projectIssue(int $corporateId = null)
 	{
-		$builder = Issue::when($corporateId, function ($query, $corporateId) {
-            return $query->whereHas('project',function($query) use($corporateId){
-				$query->sameGroup($corporateId);
-			});
-        });
-
 		return collect([
-			'open' => $builder->open()->count(),
-			'complete' => $builder->complete()->count(),
-			'total' => $builder->count()
+			'open' => Issue::when($corporateId, function ($query, $corporateId) {
+		            return $query->whereHas('project',function($query) use($corporateId){
+						$query->sameGroup($corporateId);
+					});
+		        })->open()->count(),
+
+			'complete' => Issue::when($corporateId, function ($query, $corporateId) {
+		            return $query->whereHas('project',function($query) use($corporateId){
+						$query->sameGroup($corporateId);
+					});
+		        })->complete()->count(),
+
+			'total' => Issue::when($corporateId, function ($query, $corporateId) {
+		            return $query->whereHas('project',function($query) use($corporateId){
+						$query->sameGroup($corporateId);
+					});
+		        })->count()
 		]);
 
 	}
