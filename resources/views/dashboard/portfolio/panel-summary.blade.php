@@ -10,7 +10,7 @@
         </div>
         <h3 class="panel-title">
           @if(isset($nextLevel))
-          <a class="add-tooltip text-semibold" data-toggle="tooltip" data-container="body" data-placement="right" data-original-title="{{ $title }} {{__('joesama/project::dashboard.portfolio.subsidiaries')}}" href="{{ $nextLevel }}">
+          <a class="add-tooltip text-semibold" data-toggle="tooltip" data-container="body" data-placement="right" data-original-title="{{ $title }} {{ (isset($nextTitle)) ? $nextTitle : '' }}" href="{{ $nextLevel }}">
             {{ $title }}<i class="psi-magnifi-glass-plus icon-fw"></i>
           </a>
           @else

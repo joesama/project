@@ -2,7 +2,6 @@
 namespace Joesama\Project\Http\Processors\Dashboard; 
 
 use Illuminate\Http\Request;
-use Joesama\Project\Database\Repositories\Dashboard\GroupRepository;
 use Joesama\Project\Database\Repositories\Dashboard\MasterRepository;
 
 /**
@@ -15,11 +14,9 @@ class PortfolioProcessor
 {
 
 	public function __construct(
-		MasterRepository $masterPortfolio,
-		GroupRepository $groupPorfolio
+		MasterRepository $masterPortfolio
 	){
 		$this->masterRepo = $masterPortfolio;
-		$this->groupRepo = $groupPorfolio;
 	}
 
 	/**
@@ -51,7 +48,7 @@ class PortfolioProcessor
 	 */
 	public function group(Request $request,int $corporateId)
 	{
-		$corporate = $this->groupRepo->subsidiaries();
+		$corporate = $this->masterRepo->subsidiaries();
 
 		$corporateData = collect([]);
 		$corporate->each(function($subs)use($corporateData){
@@ -61,6 +58,7 @@ class PortfolioProcessor
 				'summary' => [
 					'task' => $this->masterRepo->projectTask($subs->id),
 					'issue' => $this->masterRepo->projectIssue($subs->id),
+					'progress' => $this->masterRepo->projectProgress($subs->id),
 				]
 			]));
 		});
@@ -89,6 +87,11 @@ class PortfolioProcessor
 			'contract' => $this->masterRepo->projectContract($corporateId),
 			'task' => $this->masterRepo->projectTask($corporateId),
 			'issue' => $this->masterRepo->projectIssue($corporateId),
+			'costing' => $this->masterRepo->projectCosting($corporateId),
+			'variance' => $this->masterRepo->projectVariance($corporateId),
+			'health' => $this->masterRepo->projectHealth($corporateId),
+			'pertask' => $this->masterRepo->perProjectTask($corporateId),
+			'perIssue' => $this->masterRepo->perProjectIssue($corporateId)
 		];
 	}
 

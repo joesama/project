@@ -4,17 +4,20 @@
 @endpush
 @section('content')
 <div class="row" id="group-dashboard">
-    <div class="col-md-3">
+    <div class="col-md-2">
     	@include('joesama/project::dashboard.portfolio.panel-project',['summary' => true])
+    </div>
+    <div class="col-md-2">
+    	@include('joesama/project::dashboard.portfolio.panel-task',['summary' => true])
+    </div>
+    <div class="col-md-2">
+    	@include('joesama/project::dashboard.portfolio.panel-issue',['summary' => true])
     </div>
     <div class="col-md-3">
     	@include('joesama/project::dashboard.portfolio.panel-contract',['summary' => true])
     </div>
     <div class="col-md-3">
-    	@include('joesama/project::dashboard.portfolio.panel-task',['summary' => true])
-    </div>
-    <div class="col-md-3">
-    	@include('joesama/project::dashboard.portfolio.panel-issue',['summary' => true])
+    	@include('joesama/project::dashboard.portfolio.panel-overspent',['summary' => true])
     </div>
 </div>
 <div class="row">
@@ -25,6 +28,7 @@
 	    		'panelId' => 'subs'.data_get($subs,'corporate.id'),
 	    		'width' => 'col-md-12',
 	    		'nextLevel' => handles('joesama/project::dashboard/portfolio/subsidiaries/'.data_get($subs,'corporate.id')),
+	    		'nextTitle' => __('joesama/project::dashboard.portfolio.subsidiaries'),
 	    		'summary' => data_get($subs,'summary')
 	    	])
 
@@ -33,10 +37,12 @@
 @endsection
 @push('content.script')
 <script type="text/javascript">
+$(document).on('nifty.ready', function () {
     $('#group-dashboard').each(function() {
         $(this).find('.panel').matchHeight({
             byRow: true
         });
     });
+});
 </script>
 @endpush

@@ -4,17 +4,20 @@
 @endpush
 @section('content')
 <div class="row mb-3" id="group-dashboard">
-    <div class="col-md-6">
+    <div class="col-md-4">
     	@include('joesama/project::dashboard.portfolio.panel-project',['summary' => false])
+    </div>
+    <div class="col-md-4">
+    	@include('joesama/project::dashboard.portfolio.panel-task',['summary' => false])
+    </div>
+    <div class="col-md-4">
+    	@include('joesama/project::dashboard.portfolio.panel-issue',['summary' => false])
     </div>
     <div class="col-md-6">
     	@include('joesama/project::dashboard.portfolio.panel-contract',['summary' => false])
     </div>
     <div class="col-md-6">
-    	@include('joesama/project::dashboard.portfolio.panel-task',['summary' => false])
-    </div>
-    <div class="col-md-6">
-    	@include('joesama/project::dashboard.portfolio.panel-issue',['summary' => false])
+    	@include('joesama/project::dashboard.portfolio.panel-overspent',['summary' => false])
     </div>
 </div>
 <div class="row pad-no">
@@ -28,10 +31,12 @@
 @endsection
 @push('content.script')
 <script type="text/javascript">
+$(document).on('nifty.ready', function () {
     $('#group-dashboard').each(function() {
         $(this).find('.panel').matchHeight({
             byRow: true
         });
     });
+});
 </script>
 @endpush

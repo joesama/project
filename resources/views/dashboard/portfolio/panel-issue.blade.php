@@ -1,14 +1,15 @@
 <!--Sparkline pie chart -->
-<div class="panel panel-mint panel-colorful clearfix">
+<div class="panel panel-warning panel-colorful clearfix">
+    <div class="panel-body text-center clearfix">
     <div class="col-sm-{{($summary) ? '12' : '4'}} pad-top text-center">
+        <p class="text-sm text-bold text-uppercase">
+            {{ __('joesama/project::dashboard.portfolio.issue') }}
+        </p>
         <div class="text-lg">
             <p class="text-5x text-thin">
                 {{ data_get($issue,'open') }}
             </p>
         </div>
-        <p class="text-sm text-bold text-uppercase">
-            {{ __('joesama/project::dashboard.portfolio.issue') }}
-        </p>
     </div>
     @if(!$summary)
     <div class="col-sm-8"> 
@@ -33,7 +34,7 @@
                     </span> Open
                 </p>
                 <div class="progress progress-sm">
-                    <div style="width: {{$open}}%;" class="progress-bar progress-bar-warning">
+                    <div style="width: {{$open}}%;" class="progress-bar progress-bar-light">
                         <span class="sr-only">{{$open}}%</span>
                     </div>
                 </div>
@@ -56,4 +57,5 @@
         </div>
     </div>
     @endif
+    </div>
 </div>  

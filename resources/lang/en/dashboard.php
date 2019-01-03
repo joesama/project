@@ -7,7 +7,7 @@ return [
 		'subsidiaries' => 'Project Performance',
 		'project' => 'Total Project',
 		'contract' => 'Total Contract',
-		'over' => 'Over Budget',
+		'overspent' => 'Over Budget',
 		'issue' => 'Open Issues',
 		'task' => 'Overdue Tasks',
 		'gp' => 'GP Variance',
@@ -16,6 +16,8 @@ return [
 		'dashboard' => 'View Subsidiary Dashboard',
 		'health' => 'Project Health',
 		'cost' => 'Project Cost',
+		'task' => 'Overdue Task Per Project',
+		'issue' => 'Open Issue Task Per Project',
 		'variance' => 'Project Variance',
 		'report' => 'Project Report'
 	]

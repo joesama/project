@@ -4,12 +4,16 @@ namespace Joesama\Project\Database\Repositories\Dashboard;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Collection;
+use Joesama\Project\Database\Model\Organization\Corporate;
 use Joesama\Project\Database\Model\Project\Issue;
 use Joesama\Project\Database\Model\Project\Project;
 use Joesama\Project\Database\Model\Project\Task;
+use Joesama\Project\Http\Traits\EffectiveDays;
 
 class MasterRepository 
 {
+	use EffectiveDays;
+
 	/**
 	 * Summarize Project Info
 	 * @param  int|null   $corporateId Corporate Id
@@ -133,6 +137,196 @@ class MasterRepository
 		        })->count()
 		]);
 
+	}
+
+	/**
+	 * Retrieve Project Costing
+	 * @param  int|null $corporateId
+	 * @return Collection
+	 */
+	public function projectProgress(int $corporateId = null)
+	{
+		$projectDuration = collect([]);
+		$actualProgress = collect([]);
+		$plannedProgess = collect([]);
+
+		Project::when($corporateId, function ($query, $corporateId) {
+            return $query->sameGroup($corporateId);
+        })->where('active',1)->orderBy('created_at')->get()
+        ->each(function($project) use($projectDuration,$actualProgress,$plannedProgess){
+
+        	$duration = data_get($project,'effective_days');
+
+        	if(intval($duration) == 0){
+        		$duration = $this->nonWeekendCount(data_get($project,'start'),data_get($project,'end'));
+        	}
+
+        	$planned = data_get($project,'planned_progress');
+        	$actual = data_get($project,'actual_progress');
+
+        	$projectDuration->push($duration);
+        	$plannedProgess->push($duration*$planned);
+        	$actualProgress->push($duration*$actual);
+
+        });
+
+        $sumProjectDuration = $projectDuration->sum();
+        $sumPlannedProgress = $plannedProgess->sum();
+        $sumActualProgress = $actualProgress->sum();
+
+		return collect([
+			'planned' => ($sumProjectDuration > 0) ? round($sumPlannedProgress/$sumProjectDuration,2) : 0,
+			'actual' => ($sumProjectDuration > 0) ? round($sumActualProgress/$sumProjectDuration,2) : 0,
+		]);
+	}
+
+	/**
+	 * Retrieve Project Costing
+	 * @param  int|null $corporateId
+	 * @return Collection
+	 */
+	public function projectCosting(int $corporateId = null)
+	{
+		$costing = collect([]);
+
+		Project::when($corporateId, function ($query, $corporateId) {
+            return $query->sameGroup($corporateId);
+        })->where('active',1)->orderBy('created_at')->get()->each(function($project) use($costing){
+        	$costing->push([
+        		'project' => str_limit(data_get($project,'name'),20,'...'),
+        		'planned' => data_get($project,'planned_progress'),
+        		'actual' => data_get($project,'actual_progress')
+        	]);
+        });
+
+		return $costing;
+	}
+
+	/**
+	 * Retrieve Project Costing
+	 * @param  int|null $corporateId
+	 * @return Collection
+	 */
+	public function projectVariance(int $corporateId = null)
+	{
+		$costing = collect([]);
+
+		Project::when($corporateId, function ($query, $corporateId) {
+            return $query->sameGroup($corporateId);
+        })->where('active',1)->orderBy('created_at')->get()->each(function($project) use($costing){
+        	$costing->push([
+        		'project' => str_limit(data_get($project,'name'),20,'...'),
+        		'variance' => data_get($project,'variance')
+        	]);
+        });
+
+		return $costing;
+	}
+
+	/**
+	 * Retrieve Project Overdue Task
+	 * @param  int|null $corporateId
+	 * @return Collection
+	 */
+	public function perProjectTask(int $corporateId = null)
+	{
+		$task = collect([]);
+
+		Task::when($corporateId, function ($query, $corporateId) {
+            return $query->whereHas('project',function($query) use($corporateId){
+				$query->sameGroup($corporateId);
+			});
+        })->overdue()->with('project')->get()->groupBy('project_id')->each(function($projectTask) use($task){
+
+        	$task->push([
+        		'label' => str_limit(data_get($projectTask->first(),'project.name'),20,'...'),
+        		'value' => $projectTask->count()
+        	]);
+
+        });
+
+        return $task;
+	}
+
+	/**
+	 * Retrieve Project Open Issues
+	 * @param  int|null $corporateId
+	 * @return Collection
+	 */
+	public function perProjectIssue(int $corporateId = null)
+	{
+		$issue = collect([]);
+
+		Issue::when($corporateId, function ($query, $corporateId) {
+            return $query->whereHas('project',function($query) use($corporateId){
+				$query->sameGroup($corporateId);
+			});
+        })->open()->with('project')->get()->groupBy('project_id')->each(function($projectIssue) use($issue){
+
+        	$issue->push([
+        		'label' => str_limit(data_get($projectIssue->first(),'project.name'),20,'...'),
+        		'value' => $projectIssue->count()
+        	]);
+
+        });
+
+        return $issue;
+	}
+
+	/**
+	 * Retrieve Project Health
+	 * @param  int|null $corporateId
+	 * @return Collection
+	 */
+	public function projectHealth(int $corporateId = null)
+	{
+		$health = collect([]);
+
+		Project::when($corporateId, function ($query, $corporateId) {
+            return $query->sameGroup($corporateId);
+        })->where('active',1)->get()->each(function($project) use($health){
+        	$health->push([
+        		'id' => data_get($project,'id'),
+        		'name' => data_get($project,'name'),
+        		'condition' => $this->calcHealth(data_get($project,'planned_progress'),data_get($project,'actual_progress')) 
+        	]);
+        });
+
+		return $health->sortByDesc('id');
+	}
+
+	/**
+	 * calculate health variance
+	 * @param  float  $planned Planned Progress
+	 * @param  float  $actual  Actual Progress
+	 * @return int - refer to master config
+	 */
+	protected function calcHealth(float $planned, float $actual)
+	{
+		$difference = $planned - $actual;
+
+		if($difference <= 5){
+			return 1;
+		}
+
+		if($difference <= 10 && $difference > 5){
+			return 2;
+		}
+
+		if($difference > 10){
+			return 3;
+		}
+
+	}
+
+
+	/**
+	 * Return All Subsidiaries
+	 * @return Collection
+	 */
+	public function subsidiaries()
+	{
+		return Corporate::all();
 	}
 
 } // END class FinancialRepository 

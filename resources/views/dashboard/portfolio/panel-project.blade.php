@@ -1,14 +1,14 @@
 <div class="panel">
     <div class="panel-body text-center clearfix">
-        <div class="col-sm-{{($summary) ? '12' : '4'}} pad-top">
+        <div class="col-sm-{{($summary) ? '12' : '4'}} pad-top text-center">
+            <p class="text-sm text-bold text-uppercase">
+            	{{ __('joesama/project::dashboard.portfolio.project') }}
+            </p>
             <div class="text-lg">
                 <p class="text-5x text-thin text-main">
                     {{ data_get($project,'total') }}
                 </p>
             </div>
-            <p class="text-sm text-bold text-uppercase">
-            	{{ __('joesama/project::dashboard.portfolio.project') }}
-            </p>
         </div>
         @if(!$summary)
         <div class="col-sm-8">  

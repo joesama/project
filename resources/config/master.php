@@ -25,5 +25,17 @@ return [
 			'tower_png' => 'KUB Tower Sdn Bhd',
 			'power_png' => 'KUB Power Sdn Bhd',
 		]
-	]
+	],
+	'status' => [
+		'color' => [
+			1 => 'success',
+			2 => 'warning',
+			3 => 'danger',
+ 		],
+ 		'icon' => [
+ 			1 => 'fa fa-check-circle',
+ 			2 => 'fa fa-exclamation-circle',
+ 			3 => 'fa fa-exclamation-circle'
+ 		]
+	],
 ];

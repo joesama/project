@@ -1,20 +1,20 @@
-<div id="demo-panel-network" class="panel panel-mint panel-colorful clearfix">
+<div id="demo-panel-network" class="panel clearfix">
     <!--Chart information-->
     <div class="panel-body text-center clearfix">
         <div class="row">
 			<div class="col-sm-{{($summary) ? '12' : '4'}} pad-top">
-                <p class="text-sm text-bold text-uppercase">
-                    {{ __('joesama/project::dashboard.portfolio.contract') }}
+                <p class="text-sm text-bold text-uppercase text-danger">
+                    {{ __('joesama/project::dashboard.portfolio.overspent') }}
                 </p>
                 <div class="text-lg">
                     <div class="media">
                         <div class="media-left" style="width: 95%">
-                            <span class="text-5x text-thin text-right">
+                            <span class="text-5x text-thin text-right  text-danger">
                             	{{ data_get($contract,'total.value') }}
                             </span>
                         </div>
                         <div class="media-body" style="width: 5%">
-                            <p class="mar-no text-left">
+                            <p class="mar-no text-left text-danger">
                             {{ data_get($contract,'total.unit') }}
                         	</p>
                         </div>
@@ -25,7 +25,7 @@
             <div class="col-sm-8">
 			    <!--chart placeholder-->
 			    <div class="pad-top pad-lft">
-			        <div id="demo-chart-network" style="height: 100px"></div>
+			        <div id="chart-overspent" style="height: 100px"></div>
 			    </div>
             </div>
             @endif
@@ -41,9 +41,9 @@
 	
     var upData = @json($chart);
 
-    var plot = $.plot('#demo-chart-network', [
+    var plot = $.plot('#chart-overspent', [
         {
-            label: '{{ __('joesama/project::dashboard.portfolio.contract') }}',
+            label: '{{ __('joesama/project::dashboard.portfolio.overspent') }}',
             data: upData,
             lines: {
                 show: true,
@@ -67,13 +67,13 @@
                 show: true
             },
             points: {
-                show: true
+                show: false
             },
             shadowSize: 0 // Drawing is faster without shadows
         },
-        colors: ['#476a25'],
+        colors: ['#f44336'],
         legend: {
-            show: false,
+            show: true,
             position: 'nw',
             margin: [0, 0]
         },
