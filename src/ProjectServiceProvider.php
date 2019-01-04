@@ -81,8 +81,8 @@ class ProjectServiceProvider extends ModuleServiceProvider
         $this->addViewComponent('joesama/project', 'joesama/project', $path.'/views');
 
         $this->publishes([
-            $path.'/config/policy.php' => base_path('resources/config/packages/joesama/project/policy.php'),
-        ]);
+            $path.'/config/policy.php' => config_path('packages/joesama/project/policy.php'),
+        ], 'config');
     }
 
     /**
