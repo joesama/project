@@ -54,7 +54,7 @@ class TaskProcessor
 
 		if(is_null($request->segment(5))){
 			$form->extras([
-				'project_id' => Project::pluck('name','id')
+				'project_id' => Project::sameGroup($corporateId)->pluck('name','id')
 			]);
 		}else{
 			$form = $form->mapping([
@@ -71,7 +71,7 @@ class TaskProcessor
 		}
 
 		$form = $form->option([
-			'profile_id' => Profile::where('corporate_id',$request->segment(4))->pluck('name','id')
+			'profile_id' => Profile::sameGroup($corporateId)->pluck('name','id')
 		])
 		->id($request->segment(6))
 		->renderForm(

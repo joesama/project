@@ -30,8 +30,9 @@ class BaseController extends Controller
 							.'Processor';
 
 		$this->view = $this->domain.'.'.$this->page;
+
 		if(!view()->exists($this->view)){
-			$page = ($this->submodule == 'project') ? $this->submodule.'-'.$this->page : $this->page;
+			$page = ($this->module == 'manager' && !is_null($request->segment(5))) ? 'project-'.$this->page : $this->page;
 
 			$this->view = 'joesama/project::components.'.$page;
 		}

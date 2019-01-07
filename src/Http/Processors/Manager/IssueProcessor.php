@@ -64,9 +64,10 @@ class IssueProcessor
 		}
 
 		$form = $form->option([
-			'profile_id' => Profile::sameGroup()->pluck('name','id'),
+			'profile_id' => Profile::sameGroup($corporateId)->pluck('name','id'),
 			'progress_id' => MasterData::progress()->pluck('description','id')
 		])
+		->excludes(['effective_days'])
 		->id($request->segment(6))
 		->renderForm(
 			__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),
