@@ -11,6 +11,9 @@ use Joesama\Project\Database\Model\Project\Incident;
 use Joesama\Project\Database\Model\Project\Issue;
 use Joesama\Project\Database\Model\Project\Project;
 use Joesama\Project\Database\Model\Project\ProjectPayment;
+use Joesama\Project\Database\Model\Project\ProjectRetention;
+use Joesama\Project\Database\Model\Project\ProjectVo;
+use Joesama\Project\Database\Model\Project\ProjectLad;
 use Joesama\Project\Database\Model\Project\Risk;
 use Joesama\Project\Database\Model\Project\Task;
 use Joesama\Project\Database\Model\Project\TaskProgress;
@@ -472,4 +475,161 @@ class MakeProjectRepository
 			DB::rollback();
 		}
 	}
+
+	/**
+	 * Create New VO 
+	 *
+	 * @return Joesama\Project\Database\Model\Project\Project
+	 **/
+	public function initVo(Collection $voData, $id = null)
+	{
+
+		$inputData = collect($voData)->intersectByKeys([
+		    'project_id'=> null,
+		    'date'=> null,
+		    'report_by'=> null,
+		    'amount'=> null,
+		]);
+
+		DB::beginTransaction();
+
+		try{
+
+			$this->projectModel = $this->projectModel->find(data_get($inputData,'project_id'));
+			
+			if(is_null($id)){
+
+			$vo = new ProjectVo([
+			    'date'=> Carbon::createFromFormat('d/m/Y',data_get($inputData,'date'))->toDateTimeString(),
+			    'amount'=> data_get($inputData,'amount'),
+			    'report_by'=> data_get($inputData,'report_by')
+			]);
+
+			$this->projectModel->vo()->save($vo);
+
+			}else{
+
+				ProjectVo::find($id)->update([
+				    'date'=> Carbon::createFromFormat('d/m/Y',data_get($inputData,'date'))->toDateTimeString(),
+				    'amount'=> data_get($inputData,'amount'),
+				    'report_by'=> data_get($inputData,'report_by')
+				]);
+
+			}
+
+			DB::commit();
+
+			return $this->projectModel;
+
+		}catch( \Exception $e){
+
+			dd($e->getMessage());
+			DB::rollback();
+		}
+	}
+
+	/**
+	 * Create New VO 
+	 *
+	 * @return Joesama\Project\Database\Model\Project\Project
+	 **/
+	public function initRetention(Collection $retentionData, $id = null)
+	{
+
+		$inputData = collect($retentionData)->intersectByKeys([
+		    'project_id'=> null,
+		    'date'=> null,
+		    'report_by'=> null,
+		    'amount'=> null,
+		]);
+
+		DB::beginTransaction();
+
+		try{
+
+			$this->projectModel = $this->projectModel->find(data_get($inputData,'project_id'));
+
+			if(is_null($id)){
+
+			$vo = new ProjectRetention([
+			    'date'=> Carbon::createFromFormat('d/m/Y',data_get($inputData,'date'))->toDateTimeString(),
+			    'amount'=> data_get($inputData,'amount'),
+			    'report_by'=> data_get($inputData,'report_by')
+			]);
+
+			$this->projectModel->retention()->save($vo);
+
+			}else{
+
+				ProjectRetention::find($id)->update([
+				    'date'=> Carbon::createFromFormat('d/m/Y',data_get($inputData,'date'))->toDateTimeString(),
+				    'amount'=> data_get($inputData,'amount'),
+				    'report_by'=> data_get($inputData,'report_by')
+				]);
+
+			}
+
+			DB::commit();
+
+			return $this->projectModel;
+
+		}catch( \Exception $e){
+
+			dd($e->getMessage());
+			DB::rollback();
+		}
+	}
+
+	/**
+	 * Create New LAD 
+	 *
+	 * @return Joesama\Project\Database\Model\Project\Project
+	 **/
+	public function initLad(Collection $ladData, $id = null)
+	{
+
+		$inputData = collect($ladData)->intersectByKeys([
+		    'project_id'=> null,
+		    'date'=> null,
+		    'report_by'=> null,
+		    'amount'=> null,
+		]);
+
+		DB::beginTransaction();
+
+		try{
+
+			$this->projectModel = $this->projectModel->find(data_get($inputData,'project_id'));
+
+			if(is_null($id)){
+
+			$vo = new ProjectLad([
+			    'date'=> Carbon::createFromFormat('d/m/Y',data_get($inputData,'date'))->toDateTimeString(),
+			    'amount'=> data_get($inputData,'amount'),
+			    'report_by'=> data_get($inputData,'report_by')
+			]);
+
+			$this->projectModel->retention()->save($vo);
+
+			}else{
+
+				ProjectLad::find($id)->update([
+				    'date'=> Carbon::createFromFormat('d/m/Y',data_get($inputData,'date'))->toDateTimeString(),
+				    'amount'=> data_get($inputData,'amount'),
+				    'report_by'=> data_get($inputData,'report_by')
+				]);
+
+			}
+
+			DB::commit();
+
+			return $this->projectModel;
+
+		}catch( \Exception $e){
+
+			dd($e->getMessage());
+			DB::rollback();
+		}
+	}
+
 } // END class MakeProjectRepository 

@@ -6,6 +6,8 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Joesama\Project\Database\Model\Organization\Corporate;
 use Joesama\Project\Database\Model\Organization\Profile;
+use Joesama\Project\Database\Model\Project\ProjectRetention;
+use Joesama\Project\Database\Model\Project\ProjectVo;
 
 class Project extends Model
 {
@@ -108,6 +110,22 @@ class Project extends Model
     public function payment()
     {
         return $this->hasMany(ProjectPayment::class,'project_id','id')->whereNotNull('paid_amount');
+    }
+
+    /**
+     * Get the project vo
+     */
+    public function vo()
+    {
+        return $this->hasMany(ProjectVo::class,'project_id','id');
+    }
+
+    /**
+     * Get the project retention
+     */
+    public function retention()
+    {
+        return $this->hasMany(ProjectRetention::class,'project_id','id');
     }
 
     /**

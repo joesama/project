@@ -2,7 +2,10 @@
 namespace Joesama\Project\Http\Processors\Manager; 
 
 use Illuminate\Http\Request;
+use Joesama\Project\Database\Model\Project\ProjectLad;
 use Joesama\Project\Database\Model\Project\ProjectPayment;
+use Joesama\Project\Database\Model\Project\ProjectRetention;
+use Joesama\Project\Database\Model\Project\ProjectVo;
 use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
 use Joesama\Project\Http\Services\DataGridGenerator;
 use Joesama\Project\Http\Services\FormGenerator;
@@ -22,12 +25,18 @@ class FinancialProcessor
 		FormGenerator $formBuilder,
 		ViewGenerator $viewBuilder,
 		ProjectInfoRepository $projectInfo,
-		ProjectPayment $payment
+		ProjectPayment $payment,
+		ProjectVo $vo,
+		ProjectRetention $retention,
+		ProjectLad $lad
 	){
 		$this->listProcessor = $listProcessor;
 		$this->formBuilder = $formBuilder;
 		$this->viewBuilder = $viewBuilder;
 		$this->modelObj = $payment;
+		$this->voObj = $vo;
+		$this->retentionObj = $retention;
+		$this->ladObj = $lad;
 		$this->projectObj = $projectInfo;
 	}
 
@@ -123,7 +132,6 @@ class FinancialProcessor
 				);
 
 		return compact('form');
-
 	}
 
 	/**
@@ -155,9 +163,210 @@ class FinancialProcessor
 						$request->segment(6)]
 					)
 				);
-// dd($form);
-		return compact('form');
 
+		return compact('form');
+	}
+
+	/**
+	 * Manage VO 
+	 * @param  Request $request     [description]
+	 * @param  int     $corporateId [description]
+	 * @param  int     $projectId   [description]
+	 * @return [type]               [description]
+	 */
+	public function vo(Request $request, int $corporateId)
+	{
+		$columns = [
+		   [ 'field' => 'date',
+		   'title' => __('joesama/project::form.project_vo.date'),
+		   'style' => 'text-xs-left text-capitalize'],
+		   [ 'field' => 'amount',
+		   'title' => __('joesama/project::form.project_vo.amount'),
+		   'style' => 'text-xs-center'],
+		];
+
+		$action = [
+			[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
+			    'url' => handles('joesama/project::manager/financial/voform/'.$corporateId.'/'.$request->segment(5)), // URL for action
+			    'icons' => 'psi-file-edit icon', // Icon for action : optional
+			    'key' => 'id'  ]
+		];
+
+		$datagrid = new DataGridGenerator();
+		
+		$table = $datagrid->buildTable($columns, __('joesama/project::manager.financial.vo') )
+				 ->buildDataModel(
+				 	route('api.list.vo',[$corporateId, $request->segment(5)]), 
+				 	$this->projectObj->listProjectVo($corporateId, $request->segment(5))
+				 )->buildAddButton(route('manager.financial.voform',[$corporateId, $request->segment(5)]))
+				 ->buildOption($action, TRUE)
+				 ->render();
+
+		return compact('table');
+	}
+
+
+	/**
+	 * VO Form
+	 **/
+	public function voform(Request $request, int $corporateId)
+	{
+		$form = $this->formBuilder
+				->newModelForm($this->voObj)
+				->mapping([
+					'project_id' => $request->segment(5),
+					'report_by' => auth()->id()
+				])
+				->id($request->segment(6))
+				->renderForm(
+					__('joesama/project::'
+						.$request->segment(1).'.'
+						.$request->segment(2).'.'
+						.$request->segment(3)
+					),
+					route('api.financial.vo',[
+						$corporateId, 
+						$request->segment(5), 
+						$request->segment(6)]
+					)
+				);
+
+		return compact('form');
+	}
+
+
+	/**
+	 * Manage Retention 
+	 * @param  Request $request     [description]
+	 * @param  int     $corporateId [description]
+	 * @param  int     $projectId   [description]
+	 * @return [type]               [description]
+	 */
+	public function retention(Request $request, int $corporateId)
+	{
+		$columns = [
+		   [ 'field' => 'date',
+		   'title' => __('joesama/project::form.project_retention.date'),
+		   'style' => 'text-xs-left text-capitalize'],
+		   [ 'field' => 'amount',
+		   'title' => __('joesama/project::form.project_retention.amount'),
+		   'style' => 'text-xs-center'],
+		];
+
+		$action = [
+			[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
+			    'url' => handles('joesama/project::manager/financial/retentionform/'.$corporateId.'/'.$request->segment(5)), // URL for action
+			    'icons' => 'psi-file-edit icon', // Icon for action : optional
+			    'key' => 'id'  ]
+		];
+
+		$datagrid = new DataGridGenerator();
+		
+		$table = $datagrid->buildTable($columns, __('joesama/project::manager.financial.retention') )
+				 ->buildDataModel(
+				 	route('api.list.retention',[$corporateId, $request->segment(5)]), 
+				 	$this->projectObj->listProjectRetention($corporateId, $request->segment(5))
+				 )->buildAddButton(route('manager.financial.retentionform',[$corporateId, $request->segment(5)]))
+				 ->buildOption($action, TRUE)
+				 ->render();
+
+		return compact('table');
+	}
+
+
+	/**
+	 * Retention Form
+	 **/
+	public function retentionform(Request $request, int $corporateId)
+	{
+		$form = $this->formBuilder
+				->newModelForm($this->retentionObj)
+				->mapping([
+					'project_id' => $request->segment(5),
+					'report_by' => auth()->id()
+				])
+				->id($request->segment(6))
+				->renderForm(
+					__('joesama/project::'
+						.$request->segment(1).'.'
+						.$request->segment(2).'.'
+						.$request->segment(3)
+					),
+					route('api.financial.retention',[
+						$corporateId, 
+						$request->segment(5), 
+						$request->segment(6)]
+					)
+				);
+
+		return compact('form');
+	}
+
+	/**
+	 * Manage LAD 
+	 * @param  Request $request     [description]
+	 * @param  int     $corporateId [description]
+	 * @param  int     $projectId   [description]
+	 * @return [type]               [description]
+	 */
+	public function lad(Request $request, int $corporateId)
+	{
+		$columns = [
+		   [ 'field' => 'date',
+		   'title' => __('joesama/project::form.project_lad.date'),
+		   'style' => 'text-xs-left text-capitalize'],
+		   [ 'field' => 'amount',
+		   'title' => __('joesama/project::form.project_lad.amount'),
+		   'style' => 'text-xs-center'],
+		];
+
+		$action = [
+			[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
+			    'url' => handles('joesama/project::manager/financial/ladform/'.$corporateId.'/'.$request->segment(5)), // URL for action
+			    'icons' => 'psi-file-edit icon', // Icon for action : optional
+			    'key' => 'id'  ]
+		];
+
+		$datagrid = new DataGridGenerator();
+		
+		$table = $datagrid->buildTable($columns, __('joesama/project::manager.financial.lad') )
+				 ->buildDataModel(
+				 	route('api.list.lad',[$corporateId, $request->segment(5)]), 
+				 	$this->projectObj->listProjectLad($corporateId, $request->segment(5))
+				 )->buildAddButton(route('manager.financial.ladform',[$corporateId, $request->segment(5)]))
+				 ->buildOption($action, TRUE)
+				 ->render();
+
+		return compact('table');
+	}
+
+
+	/**
+	 * LAD Form
+	 **/
+	public function ladform(Request $request, int $corporateId)
+	{
+		$form = $this->formBuilder
+				->newModelForm($this->ladObj)
+				->mapping([
+					'project_id' => $request->segment(5),
+					'report_by' => auth()->id()
+				])
+				->id($request->segment(6))
+				->renderForm(
+					__('joesama/project::'
+						.$request->segment(1).'.'
+						.$request->segment(2).'.'
+						.$request->segment(3)
+					),
+					route('api.financial.lad',[
+						$corporateId, 
+						$request->segment(5), 
+						$request->segment(6)]
+					)
+				);
+
+		return compact('form');
 	}
 
 } // END class MakeProjectProcessor 

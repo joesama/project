@@ -48,5 +48,44 @@ class FinancialProcessor
 		return redirect(handles('manager/project/view/'.$corporateId.'/'.$payment->project_id));
 	}
 
+	/**
+	 * @param  Request $request
+	 * @param  int $corporateId
+	 * @param  int $projectId
+	 * @return [type]
+	 */
+	public function vo(Request $request,int $corporateId, int $projectId)
+	{
+		$project = $this->makeProject->initVo(collect($request->all()),$request->segment(6));
+
+		return redirect(handles('manager/financial/vo/'.$corporateId.'/'.$project->id));
+	}
+
+	/**
+	 * @param  Request $request
+	 * @param  int $corporateId
+	 * @param  int $projectId
+	 * @return [type]
+	 */
+	public function retention(Request $request,int $corporateId, int $projectId)
+	{
+		$project = $this->makeProject->initRetention(collect($request->all()),$request->segment(6));
+
+		return redirect(handles('manager/financial/retention/'.$corporateId.'/'.$project->id));
+	}
+
+	/**
+	 * @param  Request $request
+	 * @param  int $corporateId
+	 * @param  int $projectId
+	 * @return [type]
+	 */
+	public function lad(Request $request,int $corporateId, int $projectId)
+	{
+		$project = $this->makeProject->initLad(collect($request->all()),$request->segment(6));
+
+		return redirect(handles('manager/financial/lad/'.$corporateId.'/'.$project->id));
+	}
+
 
 } // END class MakeProjectProcessor 

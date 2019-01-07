@@ -111,4 +111,34 @@ class ListProcessor
 	{
 		return $this->projectObj->listProjectPayment($corporateId,$request->segment(5));
 	}
+
+	/**
+	 * @param  array $request
+	 * @param  int $request,$corporateId
+	 * @return Illuminate\Pagination\LengthAwarePaginator
+	 */
+	public function vo($request,$corporateId)
+	{
+		return $this->projectObj->listProjectVo($corporateId,$request->segment(5));
+	}
+
+	/**
+	 * @param  array $request
+	 * @param  int $request,$corporateId
+	 * @return Illuminate\Pagination\LengthAwarePaginator
+	 */
+	public function retention($request,$corporateId)
+	{
+		return $this->projectObj->listProjectRetention($corporateId,$request->segment(5));
+	}
+
+	/**
+	 * @param  array $request
+	 * @param  int $request,$corporateId
+	 * @return Illuminate\Pagination\LengthAwarePaginator
+	 */
+	public function lad($request,$corporateId)
+	{
+		return $this->projectObj->listProjectLad($corporateId,$request->segment(5));
+	}
 } // END class MakeProjectProcessor 

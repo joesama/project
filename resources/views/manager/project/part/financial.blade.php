@@ -16,9 +16,21 @@
       <div class="panel-body">
         <div class="row">
           <div class="col-md-12 pad-no mar-btm">
-            <a class="btn btn-dark pull-right" href="{{ handles('joesama/project::manager/financial/list/'.request()->segment(4).'/'.request()->segment(5)) }}">
+            <a class="btn btn-dark pull-right mar-hor" href="{{ handles('joesama/project::manager/financial/list/'.request()->segment(4).'/'.request()->segment(5)) }}">
               <i class="psi-numbering-list icon-fw"></i>
               {{ __('joesama/project::form.financial.record')  }}
+            </a>
+            <a class="btn btn-dark pull-right mar-lft" href="{{ handles('joesama/project::manager/financial/retention/'.request()->segment(4).'/'.request()->segment(5)) }}">
+              <i class="psi-numbering-list icon-fw"></i>
+              {{ __('joesama/project::form.financial.retention')  }}
+            </a>
+            <a class="btn btn-dark pull-right mar-lft" href="{{ handles('joesama/project::manager/financial/lad/'.request()->segment(4).'/'.request()->segment(5)) }}">
+              <i class="psi-numbering-list icon-fw"></i>
+              {{ __('joesama/project::form.financial.lad')  }}
+            </a>
+            <a class="btn btn-dark pull-right mar-lft" href="{{ handles('joesama/project::manager/financial/vo/'.request()->segment(4).'/'.request()->segment(5)) }}">
+              <i class="psi-numbering-list icon-fw"></i>
+              {{ __('joesama/project::form.financial.vo')  }}
             </a>
           </div>
         </div>

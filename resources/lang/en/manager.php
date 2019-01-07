@@ -42,5 +42,11 @@ return [
 		'list' => "Financial Transaction",
 		'claim' => "Project Claim",
 		'payment' => "Project Payment",
+		'vo' => "Project VO",
+		'voform' => "VO Information",
+		'retention' => "Project Retention",
+		'retentionform' => "Retention Information",
+		'lad' => "Project LAD",
+		'ladform' => "LAD Information",
 	]
 ];

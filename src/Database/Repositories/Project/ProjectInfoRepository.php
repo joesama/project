@@ -8,7 +8,10 @@ use Joesama\Project\Database\Model\Project\{
 	Issue,
 	Risk,
 	Incident,
-	ProjectPayment
+	ProjectPayment,
+	ProjectVo,
+	ProjectLad,
+	ProjectRetention
 };
 use DB;
 
@@ -28,7 +31,10 @@ class ProjectInfoRepository
 		Issue $issue,
 		Risk $risk,
 		Incident $incident,
-		ProjectPayment $payment
+		ProjectPayment $payment,
+		ProjectVo $vo,
+		ProjectRetention $retention,
+		ProjectLad $lad
 	){
 		$this->projectModel = $project;
 		$this->clientModel = $client;
@@ -37,6 +43,9 @@ class ProjectInfoRepository
 		$this->riskModel = $risk;
 		$this->incidentModel = $incident;
 		$this->paymentModel = $payment;
+		$this->voModel = $vo;
+		$this->retentionModel = $retention;
+		$this->ladModel = $lad;
 	}
 
 	/**
@@ -200,7 +209,7 @@ class ProjectInfoRepository
 	}
 
 	/**
-	 * List of Incident Project
+	 * List of Project Payment
 	 * 
 	 * @param int $corporateId - id for specific corporate
 	 * @param int $projectId
@@ -208,6 +217,54 @@ class ProjectInfoRepository
 	public function listProjectPayment(int $corporateId, $projectId)
 	{
 		return $this->paymentModel->whereHas('project',function($query) use($corporateId, $projectId){
+			$query->sameGroup($corporateId);
+			$query->when($projectId, function ($query, $projectId) {
+                return $query->where('id', $projectId);
+            });
+		})->component()->paginate();
+	}
+
+	/**
+	 * List of Project VO
+	 * 
+	 * @param int $corporateId - id for specific corporate
+	 * @param int $projectId
+	 **/
+	public function listProjectVo(int $corporateId, $projectId)
+	{
+		return $this->voModel->whereHas('project',function($query) use($corporateId, $projectId){
+			$query->sameGroup($corporateId);
+			$query->when($projectId, function ($query, $projectId) {
+                return $query->where('id', $projectId);
+            });
+		})->component()->paginate();
+	}
+
+	/**
+	 * List of Project Retention
+	 * 
+	 * @param int $corporateId - id for specific corporate
+	 * @param int $projectId
+	 **/
+	public function listProjectRetention(int $corporateId, $projectId)
+	{
+		return $this->retentionModel->whereHas('project',function($query) use($corporateId, $projectId){
+			$query->sameGroup($corporateId);
+			$query->when($projectId, function ($query, $projectId) {
+                return $query->where('id', $projectId);
+            });
+		})->component()->paginate();
+	}
+
+	/**
+	 * List of Project LAD
+	 * 
+	 * @param int $corporateId - id for specific corporate
+	 * @param int $projectId
+	 **/
+	public function listProjectLad(int $corporateId, $projectId)
+	{
+		return $this->ladModel->whereHas('project',function($query) use($corporateId, $projectId){
 			$query->sameGroup($corporateId);
 			$query->when($projectId, function ($query, $projectId) {
                 return $query->where('id', $projectId);

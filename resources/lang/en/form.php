@@ -81,6 +81,18 @@ return [
 		'claim_amount' => 'Claim Amount',
 		'paid_amount' => 'Payment Amount',
 	],
+	'project_vo' => [
+		'date' => 'Date VO',
+		'amount' => 'Amount VO',
+	],
+	'project_retention' => [
+		'date' => 'Date Retention',
+		'amount' => 'Amount Retention',
+	],
+	'project_lad' => [
+		'date' => 'Date LAD',
+		'amount' => 'Amount LAD',
+	],
 	'financial' => [
 		'record' => 'Payment Record',
 		'contract' => 'Contract Info',
