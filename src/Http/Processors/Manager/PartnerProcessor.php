@@ -37,7 +37,7 @@ class PartnerProcessor
 	 */
 	public function list(Request $request, int $corporateId)
 	{
-		$table = $this->listProcessor->risk($request,$corporateId);
+		$table = $this->listProcessor->partner($request,$corporateId);
 
 		return compact('table');
 	}
@@ -57,7 +57,7 @@ class PartnerProcessor
 						'corporate_id' => $request->segment(4)
 				])
 				->extras([
-					'partner_id' => Client::pluck('name','id')
+					'partner_id' => Client::whereNotIn('id',$this->modelObj->where('id',$request->segment(5))->pluck('client_id'))->pluck('name','id')
 				])
 				->id($request->segment(5))
 				->renderForm(

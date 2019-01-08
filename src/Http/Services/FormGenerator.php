@@ -12,7 +12,7 @@ use \DB;
 class FormGenerator 
 {
 	private $model, $modelId, $formId, $fields, $inputFields, $static = FALSE, 
-			$optionlist = [], $mappinglist = [], $readonly = [], $exclude = [];
+			$optionlist = [], $mappinglist = [], $readonly = [], $exclude = [], $defaultValue = [];
 
 	/**
 	 * Generate Model Attributes
@@ -33,6 +33,7 @@ class FormGenerator
 		$this->optionlist = collect([]);
 		$this->extras = collect([]);
 		$this->exclude = collect([]);
+		$this->defaultValue = collect([]);
 		$this->mappinglist = collect([]);
 		$this->readonlyList = collect([]);
 
@@ -110,6 +111,17 @@ class FormGenerator
 	}
 
 	/**
+	 * @param  array $excludes [field name]
+	 * @return void
+	 */
+	public function default(array $defaults)
+	{
+		$this->defaultValue = $this->defaultValue->merge($defaults);
+
+		return $this;
+	}
+
+	/**
 	 * @param  array $extras [field name => field type]
 	 * @return void
 	 */
@@ -154,7 +166,8 @@ class FormGenerator
 			'option' => $this->optionlist,
 			'mapping' => $this->mappinglist,
 			'readonly' => $this->readonlyList,
-			'value' => $this->model->find($this->modelId)
+			'value' => $this->model->find($this->modelId),
+			'default' => $this->defaultValue
 		]);
 	}
 

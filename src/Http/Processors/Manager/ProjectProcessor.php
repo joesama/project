@@ -68,8 +68,9 @@ class ProjectProcessor
 			'corporate_id' => $corporateId
 		])
 		->extras([
-			'profile_id' => Profile::pluck('name','id')
+			'profile_id' => Profile::sameGroup($corporateId)->pluck('name','id')
 		])
+		->excludes(['effective_days','planned_progress','actual_progress','actual_payment','planned_payment','current_variance'])
 		->id($request->segment(5))
 		->renderForm(
 			__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),

@@ -72,6 +72,9 @@ class TaskProcessor
 
 		$form = $form->option([
 			'profile_id' => Profile::sameGroup($corporateId)->pluck('name','id')
+		])->default([
+			'start' => Project::find($request->segment(5))->start,
+			'end' => Project::find($request->segment(5))->start
 		])
 		->excludes(['effective_days','planned_progress','actual_progress'])
 		->id($request->segment(6))
