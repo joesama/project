@@ -62,6 +62,13 @@ return [
 			],
 			'financial' => [
 				'list' => ['corporateId','projectId','attrId?'],
+				'vo' => ['corporateId','projectId'],
+				'voform' => ['corporateId','projectId','attrId?'],
+				'retention' => ['corporateId','projectId'],
+				'retentionform' => ['corporateId','projectId','attrId?'],
+				'lad' => ['corporateId','projectId'],
+				'ladform' => ['corporateId','projectId','attrId?'],
+				'revise' => ['corporateId','projectId','attrId?'],
 				'claim' => ['corporateId','projectId'],
 				'payment' => ['corporateId','projectId','attrId?'],
 				'no_menu' => TRUE
@@ -90,6 +97,9 @@ return [
 				'client' => ['corporateId','projectId?'],
 				'incident' => ['corporateId','projectId'],
 				'payment' => ['corporateId','projectId'],
+				'vo' => ['corporateId','projectId'],
+				'retention' => ['corporateId','projectId'],
+				'lad' => ['corporateId','projectId'],
 			],
 		],
 		'POST' => [
@@ -125,7 +135,10 @@ return [
 			],
 			'financial' => [
 				'claim' => ['corporateId','projectId'],
-				'payment' => ['corporateId','projectId','masterId?']
+				'payment' => ['corporateId','projectId','paymentId?'],
+				'vo' => ['corporateId','projectId','voId?'],
+				'retention' => ['corporateId','projectId','retentionId?'],
+				'lad' => ['corporateId','projectId','ladId?']
 			]
 		],
 	],
