@@ -38,7 +38,7 @@
     var barValues = @json($sparlineData);
     var barValueCount = barValues.length;
     var barSpacing = 1;
-
+console.log(barValues);
     var salesSparkline = function(){
          barEl.sparkline(barValues, {
             type: 'bar',

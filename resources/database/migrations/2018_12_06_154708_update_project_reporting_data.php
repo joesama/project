@@ -16,6 +16,8 @@ class UpdateProjectReportingData extends Migration
         Schema::table('project', function (Blueprint $table) {
             $table->float('effective_days')->after('planned_progress')->default(0)->nullable();
             $table->float('current_variance', 8, 2)->after('effective_days')->default(0)->nullable();
+            $table->float('actual_payment', 8, 2)->after('current_variance')->default(0)->nullable();
+            $table->float('planned_payment', 8, 2)->after('actual_payment')->default(0)->nullable();
         });
 
         Schema::table('task', function (Blueprint $table) {

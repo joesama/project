@@ -93,7 +93,7 @@
             @includeIf('joesama/project::manager.project.part.sparkline',[
                 'title' => __('joesama/project::form.financial.lad'),
                 'chartId' => 'lad',
-                'transData' => $vo,
+                'transData' => $lad,
                 'background' => 'danger'
               ])
           </div>
@@ -101,7 +101,7 @@
             @includeIf('joesama/project::manager.project.part.sparkline',[
                 'title' => __('joesama/project::form.financial.retention'),
                 'chartId' => 'retention',
-                'transData' => $vo,
+                'transData' => $retention,
                 'background' => 'danger'
               ])
           </div>

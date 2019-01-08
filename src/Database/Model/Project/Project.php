@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Joesama\Project\Database\Model\Organization\Corporate;
 use Joesama\Project\Database\Model\Organization\Profile;
+use Joesama\Project\Database\Model\Project\ProjectLad;
 use Joesama\Project\Database\Model\Project\ProjectRetention;
 use Joesama\Project\Database\Model\Project\ProjectVo;
 
@@ -129,6 +130,14 @@ class Project extends Model
     }
 
     /**
+     * Get the project retention
+     */
+    public function lad()
+    {
+        return $this->hasMany(ProjectLad::class,'project_id','id');
+    }
+
+    /**
      * Get the hse scored card.
      */
     public function hsecard()
@@ -165,7 +174,7 @@ class Project extends Model
             'client','profile','task.progress',
             'corporate','partner','attributes',
             'hsecard','manager','incident','claim',
-            'payment'
+            'payment','retention','lad','vo'
         ]);
     }
 

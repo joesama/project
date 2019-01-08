@@ -26,12 +26,17 @@ return [
 		'end' => "End Date", 
 		'progress' => "Progress", 
 		'task_progress' => "% Progress", 
+		'actual_progress' => "Actual Progress", 
+		'planned_progress' => "Planned Progress", 
+		'effective_days' => "Duration In Days", 
 	],
 	'issue' => [
 		'profile_id' => "Person In Charge", 
 		'project_id' => "Project Name", 
 		'progress_id' => "Status", 
-		'description' => "Issue Description"
+		'description' => "Issue Description",
+		'active' => "Active",
+		'effective_days' => "Duration In Days", 
 	],
 	'risk' => [
 		'profile_id' => "Person In Charge", 

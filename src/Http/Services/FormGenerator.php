@@ -12,10 +12,19 @@ use \DB;
 class FormGenerator 
 {
 	private $model, $modelId, $formId, $fields, $inputFields, $static = FALSE, 
-			$optionlist = [], $mappinglist = [], $readonly = [];
+			$optionlist = [], $mappinglist = [], $readonly = [], $exclude = [];
 
 	/**
 	 * Generate Model Attributes
+	 *
+	 * $this->model - model for form
+	 * $this->formId - form Id
+	 * $this->optionlist - declaration for option / selection
+	 * $this->extras - extra field to be pass ass parameter
+	 * $this->exclude - field to be exclude from form generation
+	 * $this->mappinglist - mapping field to specific value
+	 * $this->readonlyList - display field that readonly
+	 * $this->fields - all field from table
 	 **/
 	public function newModelForm(Model $model)
 	{
@@ -23,6 +32,7 @@ class FormGenerator
 		$this->formId = $model->getTable();
 		$this->optionlist = collect([]);
 		$this->extras = collect([]);
+		$this->exclude = collect([]);
 		$this->mappinglist = collect([]);
 		$this->readonlyList = collect([]);
 
@@ -84,6 +94,17 @@ class FormGenerator
 	public function readonly(array $readonly)
 	{
 		$this->readonlyList = $this->readonlyList->merge($readonly);
+
+		return $this;
+	}
+
+	/**
+	 * @param  array $excludes [field name]
+	 * @return void
+	 */
+	public function excludes(array $excludes)
+	{
+		$this->exclude = $this->exclude->merge($excludes);
 
 		return $this;
 	}
@@ -153,32 +174,34 @@ class FormGenerator
 				$type = trim(stristr($field,'(', true)," \t\n\r\0\x0B");
 			}
 
-			if(!$this->static){
+			if(!$this->exclude->contains($key)){
+				if(!$this->static){
 
-				if(in_array($key,collect($this->mappinglist)->keys()->toArray())){
-					return 'hidden';
-				}
+					if(in_array($key,collect($this->mappinglist)->keys()->toArray())){
+						return 'hidden';
+					}
 
-				if(in_array($type,['varchar','double','text'])){
-					return 'text';
-				}
+					if(in_array($type,['varchar','double','text'])){
+						return 'text';
+					}
 
-				if(in_array($type,['date'])){
-					return 'datepicker';
-				}
+					if(in_array($type,['date'])){
+						return 'datepicker';
+					}
 
-				if(in_array($key,collect($this->optionlist)->keys()->toArray())){
-					return 'select';
-				}
+					if(in_array($key,collect($this->optionlist)->keys()->toArray())){
+						return 'select';
+					}
 
-			}else{
+				}else{
 
-				if(in_array($type,['varchar','double','text','date'])){
-					return 'static';
-				}
+					if(in_array($type,['varchar','double','text','date'])){
+						return 'static';
+					}
 
-				if(in_array($key,collect($this->extras)->keys()->toArray())){
-					return 'select';
+					if(in_array($key,collect($this->extras)->keys()->toArray())){
+						return 'select';
+					}
 				}
 			}
 

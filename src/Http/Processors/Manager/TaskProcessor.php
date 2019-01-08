@@ -73,6 +73,7 @@ class TaskProcessor
 		$form = $form->option([
 			'profile_id' => Profile::sameGroup($corporateId)->pluck('name','id')
 		])
+		->excludes(['effective_days','planned_progress','actual_progress'])
 		->id($request->segment(6))
 		->renderForm(
 			__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),

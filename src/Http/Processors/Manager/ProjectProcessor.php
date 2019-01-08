@@ -36,6 +36,8 @@ class ProjectProcessor
 
 
 	/**
+	 * Project data listing
+	 * 
 	 * @param  Request $request
 	 * @param  int $corporateId
 	 * @return mixed
@@ -48,6 +50,8 @@ class ProjectProcessor
 	}
 
 	/**
+	 * Form to create project
+	 * 
 	 * @param  Request $request
 	 * @param  int $corporateId
 	 * @return mixed
@@ -77,6 +81,8 @@ class ProjectProcessor
 	}
 
 	/**
+	 * Project Information
+	 * 
 	 * @param  Request $request
 	 * @param  int $corporateId
 	 * @return mixed
@@ -87,48 +93,42 @@ class ProjectProcessor
 
 		$project = $this->projectInfo->getProject($projectId);
 
-		$claim = $this->financialRepo->projectClaimTransaction(
-			data_get($project,'start'),
-			data_get($project,'end'),
-			data_get($project,'claim')
+		$projectStart = data_get($project,'start');
+		$projectEnd = data_get($project,'end');
+
+		$claim = $this->financialRepo->projectComponentTransaction(
+			$projectStart,
+			$projectEnd,
+			data_get($project,'claim'),
+			'claim_date',
+			'claim_amount'
 		);
 
-		$paid = $this->financialRepo->projectPaymentTransaction(
-			data_get($project,'start'),
-			data_get($project,'end'),
-			data_get($project,'payment')
+		$paid = $this->financialRepo->projectComponentTransaction(
+			$projectStart,
+			$projectEnd,
+			data_get($project,'payment'),
+			'payment_date',
+			'paid_amount'
 		);
 
-		$claimTransdata = collect([
-	        'monthTrans' => collect($claim->get(Carbon::now()->format('Y'))
-	                    ->get(Carbon::now()->format('m'))
-	                    )->sum('claim_amount'),
-	        'ytd' => collect($claim->get(Carbon::now()->format('Y'))->flatten(1))->sum('claim_amount'),
-	        'ttd' => collect($claim->flatten(2))->sum('claim_amount'),
-	        'sparlineData' => $claim->flatten(2)->pluck('claim_amount')->map(function($item){
-	        	return is_null($item) ? 0 :$item;
- 	        })->toArray()
-	    ]);
+		$vo = $this->financialRepo->projectComponentTransaction(
+			$projectStart,
+			$projectEnd,
+			data_get($project,'vo')
+		);
 
-		$paidTransdata = collect([
-	        'monthTrans' => collect($paid->get(Carbon::now()->format('Y'))
-	                    ->get(Carbon::now()->format('m')))
-	                    ->sum('paid_amount'),
-	        'ytd' => collect($paid->get(Carbon::now()->format('Y'))->flatten(1))->sum('paid_amount'),
-	        'ttd' => collect($paid->flatten(2))->sum('paid_amount'),
-	        'sparlineData' => $paid->flatten(2)->pluck('paid_amount')->map(function($item){
-	        	return is_null($item) ? 0 :$item;
- 	        })->toArray()
-	    ]);
+		$retention = $this->financialRepo->projectComponentTransaction(
+			$projectStart,
+			$projectEnd,
+			data_get($project,'retention')
+		);
 
-		$voTransdata = collect([
-	        'monthTrans' => 0,
-	        'ytd' => 0,
-	        'ttd' => 0,
-	        'sparlineData' => collect([])->map(function($item){
-	        	return is_null($item) ? 0 :$item;
- 	        })->toArray()
-	    ]);
+		$lad = $this->financialRepo->projectComponentTransaction(
+			$projectStart,
+			$projectEnd,
+			data_get($project,'lad')
+		);
 
 		return [
 			'project' => $project,
@@ -136,9 +136,11 @@ class ProjectProcessor
 			'issueTable' => $this->listProcessor->issue($request,$corporateId),
 			'riskTable' => $this->listProcessor->risk($request,$corporateId),
 			'hsecard' => data_get($project,'hsecard'),
-			'claim' => $claimTransdata,
-			'payment' => $paidTransdata,
-			'vo' => $voTransdata,
+			'claim' => $this->financialRepo->getSparklineData($claim,'claim_amount'),
+			'payment' => $this->financialRepo->getSparklineData($paid,'paid_amount'),
+			'vo' => $this->financialRepo->getSparklineData($vo,'amount'),
+			'retention' => $this->financialRepo->getSparklineData($retention,'amount'),
+			'lad' => $this->financialRepo->getSparklineData($lad,'amount'),
 			'balanceSheet' => $this->financialRepo->balanceSheet($project),
 			'policies' => collect(config('joesama/project::policy.dashboard'))
 		];
