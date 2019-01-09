@@ -82,6 +82,9 @@ class ListProcessor
 		   [ 'field' => 'assignee.name',
 		   'title' => 'PIC',
 		   'style' => 'text-left'],
+		   [ 'field' => 'effective_days',
+		   'title' => __('joesama/project::form.task.effective_days'),
+		   'style' => 'text-center'],
 		   [ 'field' => 'progress.progress',
 		   'title' => __('joesama/project::form.task.progress'),
 		   'style' => 'text-center'],
@@ -270,6 +273,75 @@ class ListProcessor
 				 	route('api.list.incident',[$corporateId, $request->segment(5)]), 
 				 	$this->projectObj->listProjectIncident($corporateId, $request->segment(5))
 				 )->buildAddButton(route('manager.hse.form',[$corporateId, $request->segment(5)]))
+				 ->buildOption($action, TRUE)
+				 ->render();
+	}
+
+	/**
+	 * @param  array $request
+	 * @param  int $request,$corporateId
+	 * @return HTML
+	 */
+	public function partner($request,$corporateId)
+	{
+
+		$columns = [
+		   [ 'field' => 'name',
+		   'title' => __('joesama/project::form.project_partner.partner_id'),
+		   'style' => 'text-left text-capitalize']
+		];
+
+		$action = [
+			[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
+			    'url' => handles('joesama/project::manager/partner/form/'.$corporateId.'/'.$request->segment(5)), // URL for action
+			    'icons' => 'psi-file-edit icon', // Icon for action : optional
+			    'key' => 'id'  ]
+		];
+
+		$datagrid = new DataGridGenerator();
+		
+		return $datagrid->buildTable($columns, __('joesama/project::manager.partner.list') )
+				 ->buildDataModel(
+				 	route('api.list.partner',[$corporateId, $request->segment(5)]), 
+				 	$this->projectObj->listProjectPartner($corporateId, $request->segment(5))
+				 )->buildAddButton(route('manager.partner.form',[$corporateId, $request->segment(5)]))
+				 ->buildOption($action, TRUE)
+				 ->render();
+	}
+
+	/**
+	 * [attribute description]
+	 * @param  Request $request    Http request
+	 * @param  int    $corporateId Corporate Id
+	 * @param  int    $projectId   Project Id
+	 * @return mixed              
+	 */
+	public function attribute($request, int $corporateId, int $projectId)
+	{
+
+		$columns = [
+		   [ 'field' => 'variable',
+		   'title' => __('joesama/project::form.project_attribute.variable'),
+		   'style' => 'text-left text-capitalize'],
+		   [ 'field' => 'data',
+		   'title' => __('joesama/project::form.project_attribute.data'),
+		   'style' => 'text-center']
+		];
+
+		$action = [
+			[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
+			    'url' => handles('joesama/project::manager/attribute/form/'.$corporateId.'/'.$projectId), // URL for action
+			    'icons' => 'psi-file-edit icon', // Icon for action : optional
+			    'key' => 'id'  ]
+		];
+
+		$datagrid = new DataGridGenerator();
+		
+		return $datagrid->buildTable($columns, __('joesama/project::manager.attribute.list') )
+				 ->buildDataModel(
+				 	route('api.list.attribute',[$corporateId, $projectId]), 
+				 	$this->projectObj->listProjectAttribute($corporateId, $projectId)
+				 )->buildAddButton(route('manager.attribute.form',[$corporateId, $projectId]))
 				 ->buildOption($action, TRUE)
 				 ->render();
 	}

@@ -1,19 +1,19 @@
 <?php
-namespace Joesama\Project\Http\Controller\Manager;
+namespace Joesama\Project\Http\Controller\Report;
 
 use Illuminate\Http\Request;
 use Joesama\Project\Http\Controller\BaseController;
 use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
 
 /**
- * Task Controller
+ * Monthly Report Controller
  */
-class AttributeController extends BaseController
+class MonthlyController extends BaseController
 {
 	/**
 	 * Main Controller For Sub Module
 	 **/
-	public function __invoke(Request $request, $corporateId, $projectId)
+	public function __invoke(Request $request, $corporateId)
 	{
 		set_meta('title',__($this->domain.'.'.$this->page));
 
@@ -21,7 +21,7 @@ class AttributeController extends BaseController
 
 		return view(
 			$this->view ,
-			app($this->processor)->$page($request, $corporateId, $projectId)
+			app($this->processor)->$page($request,$corporateId)
 		);
 	}
-} // END class AtrributeController  
+} // END class ClientController  

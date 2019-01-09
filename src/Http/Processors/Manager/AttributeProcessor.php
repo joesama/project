@@ -33,6 +33,19 @@ class AttributeProcessor
 	 * @param  int $corporateId
 	 * @return mixed
 	 */
+	public function list(Request $request, int $corporateId, int $projectId)
+	{
+		$table = $this->listProcessor->attribute($request, $corporateId, $projectId);
+
+		return compact('table');
+	}
+
+
+	/**
+	 * @param  Request $request
+	 * @param  int $corporateId
+	 * @return mixed
+	 */
 	public function form(Request $request, int $corporateId)
 	{
 		$form = $this->formBuilder

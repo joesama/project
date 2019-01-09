@@ -107,48 +107,48 @@ class MenuHandler
         //     ->link(handles('joesama/project::dashboard'))
         //     ->icon('icon fa fa-qrcode');
 
-        if(!is_null($projectId) && in_array(request()->segment(1),['report','project']) && is_integer(intval($projectId))){
+        // if(!is_null($projectId) && in_array(request()->segment(1),['report','project']) && is_integer(intval($projectId))){
 
-            $menu->add('info','^:project')
-                ->title(trans('joesama/project::project.detail'))
-                ->link(handles('joesama/project::project/info/'.$projectId))
-                ->icon('fa fa-folder');
+        //     $menu->add('info','^:project')
+        //         ->title(trans('joesama/project::project.detail'))
+        //         ->link(handles('joesama/project::project/info/'.$projectId))
+        //         ->icon('fa fa-folder');
 
-            $menu->add('summary','^:project.info')
-                ->title(trans('joesama/project::project.detail'))
-                ->link(handles('joesama/project::project/info/'.$projectId))
-                ->icon('fa fa-file-word-o');
+        //     $menu->add('summary','^:project.info')
+        //         ->title(trans('joesama/project::project.detail'))
+        //         ->link(handles('joesama/project::project/info/'.$projectId))
+        //         ->icon('fa fa-file-word-o');
 
-            $menu->add('task','^:project.info')
-                ->title(trans('joesama/project::project.task.task'))
-                ->link(handles('joesama/project::project/task/'.$projectId))
-                ->icon('fa fa-list-ul');
+        //     $menu->add('task','^:project.info')
+        //         ->title(trans('joesama/project::project.task.task'))
+        //         ->link(handles('joesama/project::project/task/'.$projectId))
+        //         ->icon('fa fa-list-ul');
 
-            $menu->add('physical','^:project.info')
-                ->title(trans('joesama/project::project.scurve.physical'))
-                ->link(handles('joesama/project::project/physical/'.$projectId))
-                ->icon('psi-line-chart');
+        //     $menu->add('physical','^:project.info')
+        //         ->title(trans('joesama/project::project.scurve.physical'))
+        //         ->link(handles('joesama/project::project/physical/'.$projectId))
+        //         ->icon('psi-line-chart');
 
-            $menu->add('financial','^:project.info')
-                ->title(trans('joesama/project::project.scurve.financial'))
-                ->link(handles('joesama/project::project/financial/'.$projectId))
-                ->icon('psi-line-chart');
+        //     $menu->add('financial','^:project.info')
+        //         ->title(trans('joesama/project::project.scurve.financial'))
+        //         ->link(handles('joesama/project::project/financial/'.$projectId))
+        //         ->icon('psi-line-chart');
 
-            $menu->add('issues','^:project.info')
-                ->title(trans('joesama/project::project.issues.name'))
-                ->link(handles('joesama/project::project/issues/'.$projectId))
-                ->icon('pli-overtime');
+        //     $menu->add('issues','^:project.info')
+        //         ->title(trans('joesama/project::project.issues.name'))
+        //         ->link(handles('joesama/project::project/issues/'.$projectId))
+        //         ->icon('pli-overtime');
 
-            $menu->add('issues','^:project.info')
-                ->title(trans('joesama/project::project.risk.name'))
-                ->link(handles('joesama/project::project/risk/'.$projectId))
-                ->icon('pli-overtime');
+        //     $menu->add('issues','^:project.info')
+        //         ->title(trans('joesama/project::project.risk.name'))
+        //         ->link(handles('joesama/project::project/risk/'.$projectId))
+        //         ->icon('pli-overtime');
 
-            $menu->add('report','^:project.info')
-                ->title(trans('joesama/project::project.report.title'))
-                ->link(handles('joesama/project::report/project/'.$projectId))
-                ->icon('fa fa-file-word-o');
-        }
+        //     $menu->add('report','^:project.info')
+        //         ->title(trans('joesama/project::project.report.title'))
+        //         ->link(handles('joesama/project::report/project/'.$projectId))
+        //         ->icon('fa fa-file-word-o');
+        // }
 
 
 
