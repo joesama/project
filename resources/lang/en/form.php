@@ -15,7 +15,13 @@ return [
 		'gp_latest' => 'GP - Latest Calc.',
 		'bond' => 'Performance Bond',
 		'eot' => 'Extension of Time',
-		'partner_id' => 'Project Partner'
+		'partner_id' => 'Project Partner',
+		'actual_progress' => 'Actual Progress',
+		'actual_payment' => 'Actual Payment',
+		'planned_progress' => 'Planned Progress',
+		'planned_payment' => 'Planned Payment',
+		'effective_days' => 'Effective Days',
+		'current_variance' => 'Current Variance',
 
 	],
 	'task' => [
@@ -48,6 +54,9 @@ return [
 		'variable' => "Variable", 
 		'data' => "Data" 
 	],
+	'project_partner' => [
+		'partner_id' => "Partner Name"
+	],
 	'master' => [
 		'description' => 'Category Description'
 	],
@@ -56,7 +65,7 @@ return [
 		'description' => 'Data Description',
 	],
 	'client' => [
-		'name' => 'Client Name',
+		'name' => 'Client / Partner Name',
 		'phone' => 'Tel. Number',
 		'manager' => 'Manager',
 		'contact' => 'Contact Number',

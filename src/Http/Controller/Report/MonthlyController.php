@@ -11,9 +11,14 @@ use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
 class MonthlyController extends BaseController
 {
 	/**
-	 * Main Controller For Sub Module
-	 **/
-	public function __invoke(Request $request, $corporateId)
+	 * Controller for weekly report
+	 * 
+	 * @param  Request $request     HTTP Request
+	 * @param  int     $corporateId Corporate Id
+	 * @param  int     $projectId   Project Id
+	 * @return view                 View
+	 */
+	public function __invoke(Request $request, int $corporateId, int $projectId )
 	{
 		set_meta('title',__($this->domain.'.'.$this->page));
 
@@ -21,7 +26,7 @@ class MonthlyController extends BaseController
 
 		return view(
 			$this->view ,
-			app($this->processor)->$page($request,$corporateId)
+			app($this->processor)->$page($request,$corporateId,$projectId)
 		);
 	}
 } // END class ClientController  

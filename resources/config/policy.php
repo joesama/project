@@ -48,10 +48,12 @@ return [
 				'view' => ['corporateId','projectId','riskId?']
 			],
 			'partner' => [
+				'list' => ['corporateId','projectId'],
 				'form' => ['corporateId','projectId?','partnerId?'],
 				'no_menu' => TRUE
 			],
 			'attribute' => [
+				'list' => ['corporateId','projectId'],
 				'form' => ['corporateId','projectId','attrId?'],
 				'no_menu' => TRUE
 			],
@@ -83,6 +85,18 @@ return [
 				'no_menu' => TRUE
 			],
 			'icon' => 'psi-dashboard icon-lg icon-fw'
+		],
+		'report' => [
+			'monthly' => [
+				'list' => ['corporateId','projectId'],
+				'form' => ['corporateId','projectId'],
+				'view' => ['corporateId','projectId']
+			],
+			'weekly' => [
+				'list' => ['corporateId','projectId'],
+				'form' => ['corporateId','projectId'],
+				'view' => ['corporateId','projectId']
+			]
 		]
 	],
 	'api' => [
@@ -100,6 +114,8 @@ return [
 				'vo' => ['corporateId','projectId'],
 				'retention' => ['corporateId','projectId'],
 				'lad' => ['corporateId','projectId'],
+				'partner' => ['corporateId','projectId'],
+				'attribute' => ['corporateId','projectId'],
 			],
 		],
 		'POST' => [

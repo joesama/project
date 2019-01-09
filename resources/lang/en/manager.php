@@ -11,31 +11,38 @@ return [
 	],
 	'issue' => [
 		'list' => "List of Project Issues",
-		'form' => "Issue's Form",
+		'form' => "Issue's Information",
 		'view' => "Issue's Information",
 	],
 	'task' => [
 		'list' => "List of Project Tasks",
-		'form' => "Task's Form",
+		'form' => "Task's Information",
 		'view' => "Task's Information",
 	],
 	'risk' => [
 		'list' => "List of Project Risks",
-		'form' => "Risk's Form",
+		'form' => "Risk's Information",
 		'view' => "Risk's Information",
 	],
 	'partner' => [
 		'form' => "Project Partner",
+		'list' => "Project Partner List",
 		'view' => "Project Partner Information",
 	],
 	'attribute' => [
 		'form' => "Project Attributes",
-		'view' => "Project Partner Information",
+		'list' => "Project Attributes List",
+		'view' => "Project Attributes Information",
 	],
 	'hse' => [
 		'list' => "List Of Incident Reported",
 		'form' => "Report Incident",
 		'view' => "Health & Safety Environment",
+	],
+	'workflow' => [
+		'report' => "Project Report",
+		'monthly' => "Monthly Project Report",
+		'weekly' => "Weekly Project Report",
 	],
 	'financial' => [
 		'summary' => 'Financial Tracker',

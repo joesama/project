@@ -43,7 +43,7 @@ return [
 		]
 	],
 	'client' => [
-		'name' => 'Client Name',
+		'name' => 'Client / Partner Name',
 		'tel' => 'Tel / Fax No.',
 		'pm' => 'Client Project Mgr',
 		'contact' => 'Contact No.',

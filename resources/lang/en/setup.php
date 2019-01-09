@@ -8,12 +8,12 @@ return [
 	],
 	'data' => [
 		'list' => 'Data List',
-		'form' => 'Data Form',
+		'form' => 'Data Information',
 		'view' => 'Data Information'
 	],
 	'client' => [
-		'list' => 'Client List',
-		'form' => 'Client Form',
-		'view' => 'Client Information'
+		'list' => 'Client / Partner List',
+		'form' => 'Client / Partner Information',
+		'view' => 'Client / Partner Information'
 	],
 ];

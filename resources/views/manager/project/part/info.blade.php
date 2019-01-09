@@ -190,7 +190,7 @@
                                     {{ __('joesama/project::project.info.contract.eot') }}
                                 </td>
                                 <td class="pl-2">
-                                    31 July 2017 (1st EOT), 28 February 2018 (2nd EOT), 30 June 2018 (3rd EOT), 30 November 2018 (4th EOT)
+
                                 </td>
                             </tr>
                             @foreach(data_get($project,'attributes') as $index => $attributes)

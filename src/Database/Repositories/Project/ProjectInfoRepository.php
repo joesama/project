@@ -14,6 +14,7 @@ use Joesama\Project\Database\Model\Project\{
 	ProjectRetention
 };
 use DB;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 /**
  * Data Handling For Create Project Record
@@ -174,6 +175,46 @@ class ProjectInfoRepository
 	public function projectRisk(int $riskId)
 	{
 		return $this->riskModel->find($issueId);
+	}
+
+	/**
+	 * List of Partner Under Corporate, Project
+	 * 
+	 * @param int $corporateId - id for specific corporate
+	 * @param int $projectId
+	 **/
+	public function listProjectPartner(int $corporateId, $projectId)
+	{
+
+		$project = $this->getProject($projectId);
+		$partner = data_get($project,'partner');
+
+		return new LengthAwarePaginator(
+			$partner,
+			$partner->count(),
+			20
+		);
+
+	}
+
+	/**
+	 * List of Attribute Under Corporate, Project
+	 * 
+	 * @param int $corporateId - id for specific corporate
+	 * @param int $projectId
+	 **/
+	public function listProjectAttribute(int $corporateId, $projectId)
+	{
+
+		$project = $this->getProject($projectId);
+		$attribute = data_get($project,'attributes');
+
+		return new LengthAwarePaginator(
+			$attribute,
+			$attribute->count(),
+			20
+		);
+
 	}
 
 	/**

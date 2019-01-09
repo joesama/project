@@ -10,13 +10,14 @@ use Joesama\Project\Database\Model\Project\HseScore;
 use Joesama\Project\Database\Model\Project\Incident;
 use Joesama\Project\Database\Model\Project\Issue;
 use Joesama\Project\Database\Model\Project\Project;
+use Joesama\Project\Database\Model\Project\ProjectLad;
 use Joesama\Project\Database\Model\Project\ProjectPayment;
 use Joesama\Project\Database\Model\Project\ProjectRetention;
 use Joesama\Project\Database\Model\Project\ProjectVo;
-use Joesama\Project\Database\Model\Project\ProjectLad;
 use Joesama\Project\Database\Model\Project\Risk;
 use Joesama\Project\Database\Model\Project\Task;
 use Joesama\Project\Database\Model\Project\TaskProgress;
+use Joesama\Project\Traits\ProjectCalculator;
 
 /**
  * Data Handling For Create Project Record
@@ -26,6 +27,7 @@ use Joesama\Project\Database\Model\Project\TaskProgress;
  **/
 class MakeProjectRepository 
 {
+	use ProjectCalculator;
 
 	public function __construct(
 		Project $project , 
@@ -89,6 +91,7 @@ class MakeProjectRepository
 				$hse->save();
 
 				$this->projectModel->hse_id = $hse->id;
+				$this->projectModel->effective_days = $this->effectiveDays($this->projectModel->start,$this->projectModel->end);
 			}
 
 			$this->projectModel->save();
@@ -176,7 +179,7 @@ class MakeProjectRepository
 					$this->taskModel->{$field} = $record;
 				}
 			});
-
+			$this->taskModel->effective_days = $this->effectiveDays($this->taskModel->start,$this->taskModel->end);
 			$this->taskModel->save();
 
 			$this->taskModel->progress()->save(new TaskProgress([

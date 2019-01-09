@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Joesama\Project\Database\Model\Organization\Corporate;
 use Joesama\Project\Database\Model\Organization\Profile;
+use Joesama\Project\Database\Model\Project\Issue;
 use Joesama\Project\Database\Model\Project\ProjectLad;
 use Joesama\Project\Database\Model\Project\ProjectRetention;
 use Joesama\Project\Database\Model\Project\ProjectVo;
@@ -74,11 +75,19 @@ class Project extends Model
     }
 
     /**
-     * Get the report progress.
+     * Get the task progress.
      */
     public function task()
     {
         return $this->hasMany(Task::class,'project_id','id');
+    }
+
+    /**
+     * Get the issue progress.
+     */
+    public function issue()
+    {
+        return $this->hasMany(Issue::class,'project_id','id');
     }
 
     /**
@@ -171,11 +180,15 @@ class Project extends Model
     public function scopeComponent($query)
     {
         return $query->with([
-            'client','profile','task.progress',
+            'client','profile',
             'corporate','partner','attributes',
             'hsecard','manager','incident','claim',
-            'payment','retention','lad','vo'
-        ]);
+            'payment','retention','lad','vo','issue'
+        ])->with(['task' => function($query){
+            $query->component();
+        }])->with(['issue' => function($query){
+            $query->component();
+        }]);
     }
 
     public function getEndDateAttribute($value)

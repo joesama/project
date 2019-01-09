@@ -19,5 +19,11 @@ return [
 	],
 	'dashboard' => [
 		'module' => 'Project Portfolio',
+	],
+	'report' => [
+		'module' => 'Project Report',
+		'monthly' => 'Monthly Project Report',
+		'weekly' => 'Weekly Project Report',
 	]
+
 ];

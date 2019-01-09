@@ -11,7 +11,7 @@ use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
  * @package default
  * @author 
  **/
-class WeeklyProcessor 
+class MonthlyProcessor 
 {
 	private $project;
 
@@ -44,9 +44,9 @@ class WeeklyProcessor
 	public function form(Request $request, int $corporateId, int $projectId)
 	{
 		$project = $this->projectInfo->getProject($projectId);
-		$reportDue = Carbon::now()->weekOfYear;
-		$reportStart = Carbon::now()->startOfWeek()->format('d-m-Y');
-		$reportEnd = Carbon::now()->endOfWeek()->format('d-m-Y');
+		$reportDue = Carbon::now()->format('F');
+		$reportStart = Carbon::now()->startOfMonth()->format('d-m-Y');
+		$reportEnd = Carbon::now()->endOfMonth()->format('d-m-Y');
 
 		return compact('project','reportDue','reportStart','reportEnd','corporateId','projectId');
 	}
