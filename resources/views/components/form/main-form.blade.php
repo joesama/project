@@ -1,20 +1,31 @@
-
-
-
-<form class="form-horizontal form-padding" id="{{$formId}}" action="{{ $action }}" method="{{ $method}}">
+<form class="form-horizontal form-padding" id="{{$formId}}" action="{{ $action }}" method="{{ $method}}" novalidate="novalidate">
 	<div class="panel">
 		<div class="panel-heading">
 	        <h3 class="panel-title">{{ $title }}</h3>
 	    </div>
 	  	<div class="panel-body">
 	  		@csrf
+	  		@php
+	  			$allRequired = $required->contains('*') ? TRUE : FALSE;
+	  		@endphp
 			@foreach($fields as $fieldId => $type)
+				@php
+					$requiredExclude = $notRequired->contains($fieldId);
+					$requiredInclude = ( $allRequired && !$requiredExclude) ? $allRequired : ( $required->contains($fieldId) ? TRUE : FALSE );
+				@endphp
 				@includeIf('joesama/project::components.form.'.$type,[
 					'mapValue' => array_get($mapping,$fieldId),
 					'optionList' => array_get($option,$fieldId),
 					'value' => data_get($value,$fieldId,array_get($default,$fieldId)),
-					'readonly' => $readonly->contains($fieldId) ? TRUE : FALSE
+					'readonly' => $readonly->contains($fieldId) ? TRUE : FALSE,
+					'required' => $requiredInclude
 				])
+				@php
+					$validator = ($requiredInclude) ? [ 'notEmpty' => [ 'message' => __('joesama/project::form.is.required') ] ] : null;
+					$fields->put($fieldId,[
+						'validators' => $validator
+					]);
+				@endphp
 			@endforeach
 		</div>
 		<div class="panel-footer text-right">
@@ -43,14 +54,27 @@
 	    </div>
 	</div>
 </form>
+
 @push('form.script')
 <script type="text/javascript">
 $(document).on('nifty.ready', function() {
 
-$('.input-group.date').datepicker({
-	autoclose:true,
-	format: 'dd/mm/yyyy'
-});
+    var faIcon = {
+        valid: 'fa fa-check-circle fa-lg text-success',
+        invalid: 'fa fa-times-circle fa-lg',
+        validating: 'fa fa-refresh'
+    }
+
+	$('.input-group.date').datepicker({
+		autoclose:true,
+		format: 'dd/mm/yyyy'
+	});
+
+    $("{{'#'.$formId}}").bootstrapValidator({
+        excluded: [':disabled'],
+        feedbackIcons: faIcon,
+        fields: @json($fields)
+    })
 
 });
 </script>

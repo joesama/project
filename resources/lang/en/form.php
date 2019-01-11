@@ -2,12 +2,18 @@
 
 return [
 	'submit' => 'Submit',
+	'is' => [
+		'required' => 'Information Is Required'
+	],
+	'action' => [
+		'assign' => 'Assignation'
+	],
 	'project' => [
 		'profile_id' => 'Project Manager',
 		'client_id' => 'Project Client',
 		'name' => 'Project Name',
-		'contract' => 'Contract No.',
-		'value'=> 'Total Contract Value',
+		'contract_number' => 'Contract No.',
+		'contract_value'=> 'Total Contract Value',
 		'scope'=> 'Scope of Contract',
 		'start' => 'Start Date',
 		'end' => 'End Date',
@@ -119,5 +125,15 @@ return [
 		'claim' => 'Amount Claim',
 		'paid' => 'Amount Paid',
 		'retention' => 'Retention'
+	],
+	'profile' => [
+		'name' => 'Name',
+		'abbr' => 'ABBR',
+		'email' => 'Email',
+		'phone' => 'Contact No.',
+		'project_id' => 'Project',
+		'corporate_id' => 'Company Name',
+		'user_id' => 'User Id',
+		'role_id' => 'Project Role',
 	]
 ];

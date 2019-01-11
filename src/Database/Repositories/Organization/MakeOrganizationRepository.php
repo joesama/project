@@ -1,10 +1,12 @@
 <?php
 namespace Joesama\Project\Database\Repositories\Organization; 
 
+use DB;
+use Illuminate\Support\Collection;
+use Joesama\Entree\Database\Model\User;
 use Joesama\Project\Database\Model\Organization\Corporate;
 use Joesama\Project\Database\Model\Organization\Profile;
 use Joesama\Project\Database\Model\Organization\ProfileRole;
-use DB;
 
 /**
  * Data Handling For Create Project Record
@@ -57,11 +59,13 @@ class MakeOrganizationRepository
 	}
 
 	/**
-	 * Create New Profile
-	 *
-	 * @return Joesama\Project\Database\Model\Organization\Profile
-	 **/
-	public function initProfile($profileData)
+	 * Manage Profile Information
+	 * 
+	 * @param  Collection $profileData Form Request
+	 * @param  int     $profileID   Profile Id
+	 * @return [type]               [description]
+	 */
+	public function initProfile(Collection $profileData, ?int $profileID)
 	{
 		$inputData = collect($profileData)->intersectByKeys([
 		    'corporate_id' => null,
@@ -75,9 +79,42 @@ class MakeOrganizationRepository
 
 		try{
 
+			$password = str_random(12);
+
+			if(!is_null($profileID)){
+				$this->profileModel = $this->profileModel->find($profileID);
+			}
+
 			$inputData->each(function($record,$field){
 				$this->profileModel->{$field} = $record;
 			});
+
+			if(is_null($profileID)){
+
+                $user = User::firstOrNew(['email' => $this->profileModel->email]);
+
+                $user->username = $this->profileModel->email;
+
+                $user->password = $password;
+
+                $user->status = 1;
+
+                $user->fullname = ucwords($this->profileModel->name);
+
+                $user->save();
+
+                $user->roles()->sync(4);
+
+		      	if (config('joesama/entree::entree.validation')):
+
+		            event('joesama.email.user: new', [$user]); else:
+
+		            $user->sendWelcomeNotification($password);
+
+		        endif;
+
+				$this->profileModel->user_id = $user->id;
+			}
 
 			$this->profileModel->save();
 
@@ -86,7 +123,35 @@ class MakeOrganizationRepository
 			return $this->profileModel;
 
 		}catch( \Exception $e){
+			dd($e->getMessage());
+			DB::rollback();
+		}
+	}
 
+
+	/**
+	 * undocumented function
+	 *
+	 * @return void
+	 * @author 
+	 **/
+	public function assignProfile(Collection $profileData, int $profileID)
+	{
+
+		DB::beginTransaction();
+
+		try{
+
+			$this->profileModel = $this->profileModel->find($profileID);
+
+			$this->profileModel->project()->attach($profileData->get('project_id'),['role_id' => $profileData->get('project_id')]);
+			
+			DB::commit();
+
+			return $this->profileModel;
+
+		}catch( \Exception $e){
+			dd($e->getMessage());
 			DB::rollback();
 		}
 	}

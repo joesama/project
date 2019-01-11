@@ -77,7 +77,6 @@ class ProjectProcessor
 			route('api.project.save',[$corporateId, $request->segment(5)])
 		);
 
-
 		return compact('form');
 	}
 

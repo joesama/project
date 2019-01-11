@@ -11,8 +11,19 @@ use \DB;
  **/
 class FormGenerator 
 {
-	private $model, $modelId, $formId, $fields, $inputFields, $static = FALSE, 
-			$optionlist = [], $mappinglist = [], $readonly = [], $exclude = [], $defaultValue = [];
+	private $model, 
+			$modelId, 
+			$formId, 
+			$fields, 
+			$inputFields, 
+			$static = FALSE, 
+			$optionlist = [], 
+			$mappinglist = [], 
+			$readonly = [], 
+			$exclude = [],
+			$defaultValue = [], 
+			$requiredField = [],
+			$notRequiredField = [];
 
 	/**
 	 * Generate Model Attributes
@@ -25,6 +36,9 @@ class FormGenerator
 	 * $this->mappinglist - mapping field to specific value
 	 * $this->readonlyList - display field that readonly
 	 * $this->fields - all field from table
+	 * $this->requiredField - all field that required
+	 * $this->notRequiredField - all field that not required
+	 * $this->defaultValue - default value for specific
 	 **/
 	public function newModelForm(Model $model)
 	{
@@ -36,6 +50,8 @@ class FormGenerator
 		$this->defaultValue = collect([]);
 		$this->mappinglist = collect([]);
 		$this->readonlyList = collect([]);
+		$this->requiredField = collect([]);
+		$this->notRequiredField = collect([]);
 
 		$table =  $model->fromQuery("SHOW FIELDS FROM ".$this->formId);
 
@@ -84,6 +100,28 @@ class FormGenerator
 	public function mapping(array $mappings)
 	{
 		$this->mappinglist = $this->mappinglist->merge($mappings);
+
+		return $this;
+	}
+
+	/**
+	 * @param  array $mapping 
+	 * @return void
+	 */
+	public function required(array $required)
+	{
+		$this->requiredField = $this->requiredField->merge($required);
+
+		return $this;
+	}
+
+	/**
+	 * @param  array $mapping 
+	 * @return void
+	 */
+	public function notRequired(array $required)
+	{
+		$this->notRequiredField = $this->notRequiredField->merge($required);
 
 		return $this;
 	}
@@ -167,7 +205,9 @@ class FormGenerator
 			'mapping' => $this->mappinglist,
 			'readonly' => $this->readonlyList,
 			'value' => $this->model->find($this->modelId),
-			'default' => $this->defaultValue
+			'default' => $this->defaultValue,
+			'required' => $this->requiredField,
+			'notRequired' => $this->notRequiredField
 		]);
 	}
 
@@ -203,7 +243,14 @@ class FormGenerator
 					}
 
 					if(in_array($key,collect($this->optionlist)->keys()->toArray())){
-						return 'select';
+
+						$extraKey = $this->extras->get($key);
+
+						if ( $extraKey instanceof Collection){
+							return 'select';
+						} else {
+							return $this->extras->get($key,'select');
+						}
 					}
 
 				}else{

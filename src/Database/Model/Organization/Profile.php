@@ -1,9 +1,9 @@
 <?php
 namespace Joesama\Project\Database\Model\Organization;
 
-use Joesama\Project\Database\Model\Project\Project;
-
 use Illuminate\Database\Eloquent\Model;
+use Joesama\Entree\Database\Model\User;
+use Joesama\Project\Database\Model\Project\Project;
 
 class Profile extends Model
 {
@@ -27,6 +27,14 @@ class Profile extends Model
     }
 
     /**
+     * Get the profile user.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class,'user_id');
+    }
+
+    /**
      * Get the report progress.
      */
     public function scopeSameGroup($query,$corporateId)
@@ -37,7 +45,7 @@ class Profile extends Model
     public function scopeComponent($query)
     {
         return $query->with([
-            'project','corporate'
+            'project','corporate','user'
         ]);
     }
 

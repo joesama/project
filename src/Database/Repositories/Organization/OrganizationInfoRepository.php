@@ -46,7 +46,7 @@ class OrganizationInfoRepository
 	 **/
 	public function getProfile(int $profileId)
 	{
-		return $this->profileModel->find($profileId);
+		return $this->profileModel->component()->find($profileId);
 	}
 
 	/**
@@ -56,7 +56,7 @@ class OrganizationInfoRepository
 	 **/
 	public function listProfile(int $corporateId)
 	{
-		return $this->profileModel->where('corporate_id',$corporateId)->get();
+		return $this->profileModel->sameGroup($corporateId)->paginate();
 	}
 
 	/**

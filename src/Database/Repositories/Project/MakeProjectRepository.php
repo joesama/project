@@ -54,8 +54,12 @@ class MakeProjectRepository
 		    'client_id' => 0,
 		    'corporate_id' => 0,
 		    'name' => null, 
+		    'value' => null,
 		    'contract' => null,
+		    'gp_propose' => null,
+		    'gp_latest' => null,
 		    'bond' => null,
+		    'scope' => null,
 		    'start' => null,
 		    'end' => null,
 		    'active' => 1

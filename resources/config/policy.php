@@ -86,6 +86,15 @@ return [
 			],
 			'icon' => 'psi-dashboard icon-lg icon-fw'
 		],
+		'corporate' => [
+			'profile' => [
+				'list' => ['corporateId'],
+				'form' => ['corporateId','masterId?'],
+				'view' => ['corporateId','masterId'],
+				'assign' => ['corporateId','masterId'],
+			],
+			'icon' => 'psi-business-man-woman icon-lg icon-fw'
+		],
 		'report' => [
 			'monthly' => [
 				'list' => ['corporateId','projectId'],
@@ -96,7 +105,8 @@ return [
 				'list' => ['corporateId','projectId'],
 				'form' => ['corporateId','projectId'],
 				'view' => ['corporateId','projectId']
-			]
+			],
+			'icon' => 'psi-notepad icon-lg icon-fw'
 		]
 	],
 	'api' => [
@@ -106,8 +116,8 @@ return [
 				'task' => ['corporateId','projectId?'], 
 				'issue' => ['corporateId','projectId?'],
 				'risk' => ['corporateId','projectId?'],
-				'master' => ['corporateId','projectId?'],
-				'data' => ['corporateId','projectId?'],
+				'master' => ['corporateId','masterId?'],
+				'data' => ['corporateId','masterId?'],
 				'client' => ['corporateId','projectId?'],
 				'incident' => ['corporateId','projectId'],
 				'payment' => ['corporateId','projectId'],
@@ -116,6 +126,7 @@ return [
 				'lad' => ['corporateId','projectId'],
 				'partner' => ['corporateId','projectId'],
 				'attribute' => ['corporateId','projectId'],
+				'profile' => ['corporateId','masterId?'],
 			],
 		],
 		'POST' => [
@@ -148,6 +159,10 @@ return [
 			],
 			'incident' => [
 				'save' => ['corporateId','masterId?']
+			],
+			'profile' => [
+				'save' => ['corporateId','masterId?'],
+				'assign' => ['corporateId','masterId']
 			],
 			'financial' => [
 				'claim' => ['corporateId','projectId'],

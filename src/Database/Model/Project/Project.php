@@ -15,7 +15,7 @@ class Project extends Model
 {
     protected $table = 'project';
     protected $guarded = ['id'];
-    protected $appends = ['start_date','end_date','in_charge'];
+    protected $appends = ['start_date','end_date','in_charge','duration_word'];
 
     /**
      * Get the corporate for project.
@@ -177,6 +177,18 @@ class Project extends Model
         return $query->where('corporate_id',$corporateId);
     }
 
+    /**
+     * Get the unassign project to profile.
+     */
+    public function scopeUnassigned($query,$profileId)
+    {
+        return $query->whereExists(function ($query) use($profileId){
+                $query->select('id')
+                      ->from('project_role')
+                      ->where('profile_id',$profileId);
+            });
+    }
+
     public function scopeComponent($query)
     {
         return $query->with([
@@ -199,6 +211,14 @@ class Project extends Model
     public function getStartDateAttribute($value)
     {
         return Carbon::parse($value)->format('d-m-Y');
+    }
+
+    public function getDurationWordAttribute($value)
+    {
+        $startDate = Carbon::parse($this->attributes['start']);
+        $endDate = $this->attributes['end'];
+
+        return ucwords($startDate->diffForHumans($endDate,true));
     }
 
     public function getInChargeAttribute($value)

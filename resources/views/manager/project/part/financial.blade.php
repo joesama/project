@@ -52,7 +52,7 @@
                     {{ __('joesama/project::form.financial.duration') }}
                     </p>
                     <p class="text-bold mar-no">
-                    {{ \Carbon\Carbon::parse(data_get($project,'start'))->diffInYears(\Carbon\Carbon::parse(data_get($project,'end'))) }} Years
+                    {{ data_get($project,'duration_word') }}
                     </p>
                 </div>
             </div>

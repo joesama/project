@@ -1,6 +1,7 @@
 <?php
 namespace Joesama\Project\Http\Processors\Api; 
 
+use Joesama\Project\Database\Repositories\Organization\OrganizationInfoRepository;
 use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
 use Joesama\Project\Database\Repositories\Setup\MasterDataRepository;
 use Joesama\Project\Http\Services\DataGridGenerator;
@@ -13,13 +14,16 @@ use Joesama\Project\Http\Services\DataGridGenerator;
  **/
 class ListProcessor 
 {
+	private $projectObj, $masterDataObj, $organizationObj;
 
 	public function __construct(
 		ProjectInfoRepository $projectInfo,
-		MasterDataRepository $masterData
+		MasterDataRepository $masterData,
+		OrganizationInfoRepository $organizationData
 	){
 		$this->projectObj = $projectInfo;
 		$this->masterDataObj = $masterData;
+		$this->organizationObj = $organizationData;
 	}
 
 	/**
@@ -140,5 +144,15 @@ class ListProcessor
 	public function lad($request,$corporateId)
 	{
 		return $this->projectObj->listProjectLad($corporateId,$request->segment(5));
+	}
+
+	/**
+	 * @param  array $request
+	 * @param  int $request,$corporateId
+	 * @return Illuminate\Pagination\LengthAwarePaginator
+	 */
+	public function profile($request,$corporateId)
+	{
+		return $this->organizationObj->listProfile($corporateId);
 	}
 } // END class MakeProjectProcessor 

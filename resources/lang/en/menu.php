@@ -20,6 +20,10 @@ return [
 	'dashboard' => [
 		'module' => 'Project Portfolio',
 	],
+	'corporate' => [
+		'module' => 'Corporate',
+		'profile' => 'Profile',
+	],
 	'report' => [
 		'module' => 'Project Report',
 		'monthly' => 'Monthly Project Report',
