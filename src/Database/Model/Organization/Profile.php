@@ -23,7 +23,15 @@ class Profile extends Model
      */
     public function project()
     {
-        return $this->belongsToMany(Project::class,'project_role','profile_id');
+        return $this->belongsToMany(Project::class,'project_role','profile_id','project_id');
+    }
+
+    /**
+     * Get the project profile.
+     */
+    public function role()
+    {
+        return $this->belongsToMany(ProfileRole::class,'project_role','profile_id','role_id')->withPivot('project_id');
     }
 
     /**
@@ -47,6 +55,11 @@ class Profile extends Model
         return $query->with([
             'project.role','corporate','user'
         ]);
+    }
+
+    public function scopeIsProjectManager($query,$projectId)
+    {
+        return $query->role()->where('project_id',$projectId)->where('role_id',2);
     }
 
 }

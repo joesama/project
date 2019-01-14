@@ -4,7 +4,9 @@ namespace Joesama\Project\Http\Processors\Manager;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Joesama\Project\Database\Model\Organization\Profile;
+use Joesama\Project\Database\Model\Project\CardWorkflow;
 use Joesama\Project\Database\Model\Project\Client;
+use Joesama\Project\Database\Model\Project\ReportWorkflow;
 use Joesama\Project\Database\Repositories\Project\FinancialRepository;
 use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
 use Joesama\Project\Http\Processors\Manager\HseProcessor;
@@ -72,6 +74,7 @@ class ProjectProcessor
 		])
 		->excludes(['effective_days','planned_progress','actual_progress','actual_payment','planned_payment','current_variance'])
 		->id($request->segment(5))
+		->required(['*'])
 		->renderForm(
 			__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),
 			route('api.project.save',[$corporateId, $request->segment(5)])
@@ -130,8 +133,26 @@ class ProjectProcessor
 			data_get($project,'lad')
 		);
 
+		$workflow = collect(config('joesama/project::workflow.1'))->map(function($role,$state) use($corporateId,$projectId){
+			return [
+				'weekly' => ReportWorkflow::whereHas('report',function($query) use($projectId){
+								$query->where('project_id',$projectId);
+								$query->whereBetween('report_date',[ Carbon::now()->startOfMonth() , Carbon::now()->endOfMonth() ]);
+							})->with('report')->first(),
+				'monthly' => CardWorkflow::whereHas('card',function($query) use($projectId){
+								$query->where('project_id',$projectId);
+								$query->whereBetween('card_date',[ Carbon::now()->startOfMonth() , Carbon::now()->endOfMonth() ]);
+							})->with('card')->first(),
+				'profile' => Profile::where('corporate_id',$corporateId)->whereHas('role',function($query) use($projectId,$role){
+								$query->where('project_id',$projectId);
+								$query->where('role_id',$role);
+							})->with('role')->first()
+			];
+		});
+
 		return [
 			'project' => $project,
+			'workflow' => $workflow,
 			'taskTable' => $this->listProcessor->task($request,$corporateId),
 			'issueTable' => $this->listProcessor->issue($request,$corporateId),
 			'riskTable' => $this->listProcessor->risk($request,$corporateId),

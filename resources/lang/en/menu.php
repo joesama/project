@@ -3,7 +3,7 @@
 return [
 	'manager' => [
 		'module' => 'Project Management',
-		'dashboard' => 'Dashboard',
+		'dashboard' => 'My Task',
 		'project' => 'Project',
 		'task' => 'Task',
 		'issue' => 'Issue',
@@ -18,7 +18,13 @@ return [
 		'client' => 'Client Information'
 	],
 	'dashboard' => [
-		'module' => 'Project Portfolio',
+		'module' => 'Executive Information',
+		'portfolio' => 'Project Portfolio',
+		// 'portfolio'	=> [
+		// 	'master' => 'Group Performance',
+		// 	'group' => 'Subsidiaries Performance',
+		// 	'subsidiaries' => 'Project Performance'
+		// ]
 	],
 	'corporate' => [
 		'module' => 'Corporate',

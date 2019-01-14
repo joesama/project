@@ -13,7 +13,7 @@ class ReportWorkflow extends Model
      */
     public function report()
     {
-        return $this->belongsTo(Project::class,'report_id','id');
+        return $this->belongsTo(Report::class,'report_id','id');
     }
     
     /**

@@ -28,5 +28,14 @@ return [
 		'approval' => 'Project Information Workflow',
 		'trail' => 'Report Progress',
 		'mo' => 'Project Management Office - Group Operations & Strategis Planning '
+	],
+	'workflow' => [
+		'pm' => 'Prepared By',
+		'approver' => 'Approved By',
+		'validate' => 'Validate By',
+		'review' => 'Review By',
+		'name' => 'Name',
+		'mobile' => 'Mobile No.',
+		'position' => 'Position',
 	]
 ];

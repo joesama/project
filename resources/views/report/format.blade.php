@@ -119,7 +119,20 @@
 </div>
 <div class="row bord-hor bord-btm">
 	<div class="col-md-12 text-left text-bold bord-rgt pad-all">
-		@include('joesama/project::report.workflow.panel-info')
-		@include('joesama/project::report.workflow.panel-form')
+		@foreach($workflow as $state => $workflow)
+			@if( ( is_null( data_get($workflow,'weekly') ) || is_null( data_get($workflow,'monthly') ) )  && $state == "pm")
+			  @include('joesama/project::report.workflow.panel-form',[
+			      'state' => $state,
+			      'status' => data_get($workflow,'status'),
+			      'profile' => data_get($workflow,'profile'),
+			    ])
+			@elseif( !is_null( data_get($workflow,'weekly') ) || !is_null( data_get($workflow,'monthly') ) )
+			  @include('joesama/project::report.workflow.panel-info',[
+			      'state' => $state,
+			      'status' => data_get($workflow,'status'),
+			      'profile' => data_get($workflow,'profile'),
+			    ])
+			@endif
+		@endforeach
 	</div>
 </div>

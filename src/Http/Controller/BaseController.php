@@ -2,8 +2,9 @@
 namespace Joesama\Project\Http\Controller;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Cache;
+use Illuminate\Http\Request;
+use Joesama\Project\Database\Model\Organization\Profile;
 
 /**
  * Project Information Class
@@ -42,6 +43,15 @@ class BaseController extends Controller
 			$this->component, 60, function () {
 		    return collect(config('joesama/project::policy.web.'.$this->component));
 		});
+
+		Cache::forget('profile-'.auth()->id());
+		
+		$profile = Cache::remember(
+			'profile-'.auth()->id(), 60, function () {
+		    return Profile::where('user_id',auth()->id())->with('role')->first();
+		});
+
+		view()->share('profile',$profile);
 	}
 
 } // END class BaseController 

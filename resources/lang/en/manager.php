@@ -2,7 +2,7 @@
 
 return [
 	'dashboard' => [
-		'overall' => 'Project Dashboard'
+		'overall' => 'Project Task'
 	],
 	'project' => [
 		'list' => "List of Project",

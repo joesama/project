@@ -8,7 +8,7 @@ Foundation::group('joesama/project', '/', ['namespace' => 'Http\Controller', 'mi
     $webPolicies = collect(config('packages/joesama/project/policy'))->get('web');
     $apiPolicies = collect(config('packages/joesama/project/policy'))->get('api');
 
-    $router->group(['middleware' => ['auth']], function ($router) use($webPolicies){
+    $router->group(['middleware' => ['auth', 'entree']], function ($router) use($webPolicies){
 
         $router->get('portfolio', 'DashboardController@projectPorfolio');
         $router->get('subsidiaries', 'DashboardController@projectSubs');

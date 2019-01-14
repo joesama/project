@@ -20,6 +20,8 @@ class WeeklyController extends BaseController
 	 */
 	public function __invoke(Request $request, int $corporateId, int $projectId )
 	{
+		parent::__construct($request);
+		
 		set_meta('title',__($this->domain.'.'.$this->page));
 
 		$page = $this->page;

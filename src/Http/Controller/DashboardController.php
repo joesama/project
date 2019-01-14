@@ -2,6 +2,7 @@
 namespace Joesama\Project\Http\Controller;
 
 use App\Http\Controllers\Controller;
+use Joesama\Project\Database\Model\Organization\Profile;
 
 /**
  * Project Information Class
@@ -20,7 +21,10 @@ class DashboardController
 	 **/
 	public function projectPorfolio()
 	{
-		return redirect(handles('joesama/project::dashboard/portfolio/master/1'));
+
+		$profile = Profile::where('user_id',auth()->id())->first();
+
+		return redirect(handles('joesama/project::manager/dashboard/overall/'. $profile->corporate_id));
 	}
 
 	/**

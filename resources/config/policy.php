@@ -82,7 +82,6 @@ return [
 				'master' => ['corporateId'],
 				'group' => ['corporateId'],
 				'subsidiaries' => ['corporateId'],
-				'no_menu' => TRUE
 			],
 			'icon' => 'psi-dashboard icon-lg icon-fw'
 		],

@@ -14,6 +14,8 @@ class ProjectController extends BaseController
 	 **/
 	public function __invoke(Request $request, $corporateId)
 	{
+		parent::__construct($request);
+
 		set_meta('title',__($this->domain.'.'.$this->page));
 
 		$page = $this->page;

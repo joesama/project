@@ -13,7 +13,7 @@ class CardWorkflow extends Model
      */
     public function card()
     {
-        return $this->belongsTo(Project::class,'card_id','id');
+        return $this->belongsTo(Card::class,'card_id','id');
     }
     
     /**
