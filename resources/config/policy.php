@@ -34,27 +34,27 @@ return [
 			],
 			'task' => [
 				'list' => ['corporateId','projectId?'],
-				'form' => ['corporateId','projectId?','taskId?'],
-				'view' => ['corporateId','projectId','taskId?']
+				'form' => ['corporateId','projectId?','dataId?'],
+				'view' => ['corporateId','projectId','dataId?']
 			],
 			'issue' => [
 				'list' => ['corporateId','projectId?'],
-				'form' => ['corporateId','projectId?','issueId?'],
-				'view' => ['corporateId','projectId','issueId?']
+				'form' => ['corporateId','projectId?','dataId?'],
+				'view' => ['corporateId','projectId','dataId?']
 			],
 			'risk' => [
 				'list' => ['corporateId','projectId?'],
-				'form' => ['corporateId','projectId?','riskId?'],
-				'view' => ['corporateId','projectId','riskId?']
+				'form' => ['corporateId','projectId?','dataId?'],
+				'view' => ['corporateId','projectId','dataId?']
 			],
 			'partner' => [
 				'list' => ['corporateId','projectId'],
-				'form' => ['corporateId','projectId?','partnerId?'],
+				'form' => ['corporateId','projectId?','dataId?'],
 				'no_menu' => TRUE
 			],
 			'attribute' => [
 				'list' => ['corporateId','projectId'],
-				'form' => ['corporateId','projectId','attrId?'],
+				'form' => ['corporateId','projectId','dataId?'],
 				'no_menu' => TRUE
 			],
 			'hse' => [
@@ -63,16 +63,16 @@ return [
 				'no_menu' => TRUE
 			],
 			'financial' => [
-				'list' => ['corporateId','projectId','attrId?'],
+				'list' => ['corporateId','projectId','dataId?'],
 				'vo' => ['corporateId','projectId'],
-				'voform' => ['corporateId','projectId','attrId?'],
+				'voform' => ['corporateId','projectId','dataId?'],
 				'retention' => ['corporateId','projectId'],
-				'retentionform' => ['corporateId','projectId','attrId?'],
+				'retentionform' => ['corporateId','projectId','dataId?'],
 				'lad' => ['corporateId','projectId'],
-				'ladform' => ['corporateId','projectId','attrId?'],
-				'revise' => ['corporateId','projectId','attrId?'],
+				'ladform' => ['corporateId','projectId','dataId?'],
+				'revise' => ['corporateId','projectId','dataId?'],
 				'claim' => ['corporateId','projectId'],
-				'payment' => ['corporateId','projectId','attrId?'],
+				'payment' => ['corporateId','projectId','dataId?'],
 				'no_menu' => TRUE
 			],
 			'icon' => 'psi-folder-archive icon-lg icon-fw'
@@ -88,7 +88,7 @@ return [
 		],
 		'corporate' => [
 			'profile' => [
-				'list' => ['corporateId'],
+				'list' => ['corporateId','masterId?'],
 				'form' => ['corporateId','masterId?'],
 				'view' => ['corporateId','masterId'],
 				'assign' => ['corporateId','masterId'],
@@ -128,6 +128,9 @@ return [
 				'attribute' => ['corporateId','projectId'],
 				'profile' => ['corporateId','masterId?'],
 			],
+			'profile' => [
+				'reassign' => ['masterId','projectId']
+			]
 		],
 		'POST' => [
 			'project' => [
