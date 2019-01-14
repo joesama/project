@@ -58,5 +58,20 @@ class ProfileProcessor
 		return redirect(handles('joesama/project::corporate/profile/assign/'.$corporateId.'/'.$profile->id));
 	}
 
+	/**
+	 * Assign Profile To Project
+	 * 
+	 * @param  Request $request     [description]
+	 * @param  int     $corporateId [description]
+	 * @param  int     $profileId   [description]
+	 * @return [type]               [description]
+	 */
+	public function reassign(Request $request,int $profileId, int $projectId)
+	{
+		$profile = $this->makeorganization->reassignProfile($profileId,$projectId);
+
+		return redirect(handles('joesama/project::corporate/profile/assign/'.$profile->corporate_id.'/'.$profileId));
+	}
+
 
 } // END class MakeProjectProcessor 

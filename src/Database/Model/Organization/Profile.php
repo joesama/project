@@ -23,7 +23,7 @@ class Profile extends Model
      */
     public function project()
     {
-        return $this->belongsToMany(Project::class,'project_role','project_id','profile_id');
+        return $this->belongsToMany(Project::class,'project_role','profile_id');
     }
 
     /**
@@ -45,7 +45,7 @@ class Profile extends Model
     public function scopeComponent($query)
     {
         return $query->with([
-            'project','corporate','user'
+            'project.role','corporate','user'
         ]);
     }
 

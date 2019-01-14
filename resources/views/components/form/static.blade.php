@@ -1,5 +1,5 @@
 <div class="form-group">
-    <label class="col-md-2 control-label" for="{{ $fieldId }}">
+    <label class="col-md-2 control-label text-semibold" for="{{ $fieldId }}">
     	{{ __('joesama/project::form.'.$formId.'.'.$fieldId) }}
     </label>
     <div class="col-md-10">

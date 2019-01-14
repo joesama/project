@@ -1,7 +1,5 @@
 <div class="form-group has-feedback">
-    <label class="col-md-2 control-label" for="{{ $fieldId }}">
-    	{{ __('joesama/project::form.'.$formId.'.'.$fieldId) }}
-    </label>
+    @include('joesama/project::components.form.label-form')
     <div class="col-md-10">
     	<select class="selectpicker" {{ ($required) ? 'required="TRUE"':'' }} {{ ($readonly) ? 'disabled':'' }} id="{{ $fieldId }}" name="{{ $fieldId }}" data-live-search="true" data-width="100%">
     		@foreach($optionList as $id => $option)

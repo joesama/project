@@ -1,7 +1,5 @@
 <div class="form-group has-feedback">
-    <label class="col-md-2 control-label" for="{{ $fieldId }}">
-    	{{ __('joesama/project::form.'.$formId.'.'.$fieldId) }}
-    </label>
+	@include('joesama/project::components.form.label-form')
     <div class="col-md-10">
 		<div id="date-{{ $fieldId }}">
 		    <div class="input-group date">

@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Joesama\Project\Database\Model\Organization\Corporate;
 use Joesama\Project\Database\Model\Organization\Profile;
+use Joesama\Project\Database\Model\Organization\ProfileRole;
 use Joesama\Project\Database\Model\Project\Issue;
 use Joesama\Project\Database\Model\Project\ProjectLad;
 use Joesama\Project\Database\Model\Project\ProjectRetention;
@@ -48,6 +49,14 @@ class Project extends Model
     public function profile()
     {
         return $this->belongsToMany(Profile::class,'project_role','project_id','profile_id');
+    }
+
+    /**
+     * Get the  client partner for project.
+     */
+    public function role()
+    {
+        return $this->belongsToMany(ProfileRole::class,'project_role','project_id','role_id')->withPivot('profile_id');
     }
 
     /**
@@ -182,7 +191,7 @@ class Project extends Model
      */
     public function scopeUnassigned($query,$profileId)
     {
-        return $query->whereExists(function ($query) use($profileId){
+        return $query->whereNotExists(function ($query) use($profileId){
                 $query->select('id')
                       ->from('project_role')
                       ->where('profile_id',$profileId);
@@ -195,7 +204,7 @@ class Project extends Model
             'client','profile',
             'corporate','partner','attributes',
             'hsecard','manager','incident','claim',
-            'payment','retention','lad','vo','issue'
+            'payment','retention','lad','vo','issue','role'
         ])->with(['task' => function($query){
             $query->component();
         }])->with(['issue' => function($query){

@@ -94,6 +94,7 @@ class ProfileProcessor
 			'project_id' => Project::sameGroup($corporateId)->unassigned($request->segment(5))->pluck('name','id'),
 			'role_id' => ProfileRole::pluck('role','id')
 		])
+		->required(['project_id','role_id'])
 		->id($request->segment(5))
 		->renderForm(
 			__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),
@@ -101,7 +102,7 @@ class ProfileProcessor
 		);
 		$profile = $this->organizationInfo->getProfile($request->segment(5));
 
-		return compact('form');
+		return compact('form','profile');
 	}
 
 	/**

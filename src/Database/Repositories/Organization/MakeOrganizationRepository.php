@@ -130,11 +130,12 @@ class MakeOrganizationRepository
 
 
 	/**
-	 * undocumented function
-	 *
-	 * @return void
-	 * @author 
-	 **/
+	 * Assign Profile To Project & Role
+	 * 
+	 * @param  Collection $profileData Form Data
+	 * @param  int        $profileID   Profile Id
+	 * @return Joesama\Project\Database\Model\Organization\Profile
+	 */
 	public function assignProfile(Collection $profileData, int $profileID)
 	{
 
@@ -144,7 +145,35 @@ class MakeOrganizationRepository
 
 			$this->profileModel = $this->profileModel->find($profileID);
 
-			$this->profileModel->project()->attach($profileData->get('project_id'),['role_id' => $profileData->get('project_id')]);
+			$this->profileModel->project()->attach($profileData->get('project_id'),['role_id' => $profileData->get('role_id')]);
+			
+			DB::commit();
+
+			return $this->profileModel;
+
+		}catch( \Exception $e){
+			dd($e->getMessage());
+			DB::rollback();
+		}
+	}
+
+	/**
+	 * Reassign Profile To Project & Role
+	 * 
+	 * @param  int        $profileID   Profile Id
+	 * @param  int        $projectId   Project Id
+	 * @return Joesama\Project\Database\Model\Organization\Profile
+	 */
+	public function reassignProfile(int $profileID, int $projectId)
+	{
+
+		DB::beginTransaction();
+
+		try{
+
+			$this->profileModel = $this->profileModel->find($profileID);
+
+			$this->profileModel->project()->detach($projectId);
 			
 			DB::commit();
 
