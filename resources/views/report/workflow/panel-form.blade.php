@@ -8,7 +8,7 @@
         <div class="panel-body text-center">
             <img alt="Profile Picture" class="img-md img-circle mar-btm" src="{{ asset('packages/joesama/entree/img/profile.png') }}">
             <p class="text-lg text-semibold mar-no text-main">
-            	{{ $profile->name }}
+            	{{ data_get($profile,'name') }}
             </p>
             <p class="text-muted">Position</p>
             <form method="POST" action="{{ handles('joesama/project::workflow/process/'.$corporateId.'/'.$projectId) }}">
