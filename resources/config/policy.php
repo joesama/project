@@ -10,11 +10,6 @@ return [
 				'form' => ['corporateId','masterId?'],
 				'view' => ['corporateId','masterId']
 			],
-			'client' => [
-				'list' => ['corporateId'],
-				'form' => ['corporateId','masterId?'],
-				'view' => ['corporateId','masterId']
-			],
 			'data' => [
 				'list' => ['corporateId','masterId'],
 				'form' => ['corporateId','masterId','dataId?'],
@@ -91,6 +86,11 @@ return [
 				'form' => ['corporateId','masterId?'],
 				'view' => ['corporateId','masterId'],
 				'assign' => ['corporateId','masterId'],
+			],
+			'client' => [
+				'list' => ['corporateId'],
+				'form' => ['corporateId','masterId?'],
+				'view' => ['corporateId','masterId']
 			],
 			'icon' => 'psi-business-man-woman icon-lg icon-fw'
 		],
@@ -172,6 +172,9 @@ return [
 				'vo' => ['corporateId','projectId','voId?'],
 				'retention' => ['corporateId','projectId','retentionId?'],
 				'lad' => ['corporateId','projectId','ladId?']
+			],
+			'workflow' => [
+				'process' => ['corporateId','projectId']
 			]
 		],
 	],
