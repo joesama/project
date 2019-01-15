@@ -61,24 +61,24 @@ class ProjectProcessor
 	public function form(Request $request, int $corporateId)
 	{
 		$form = $this->formBuilder->newModelForm(
-			app(\Joesama\Project\Database\Model\Project\Project::class)
-		)
-		->option([
-			'client_id' => Client::pluck('name','id')
-		])
-		->mapping([
-			'corporate_id' => $corporateId
-		])
-		->extras([
-			'profile_id' => Profile::sameGroup($corporateId)->pluck('name','id')
-		])
-		->excludes(['effective_days','planned_progress','actual_progress','actual_payment','planned_payment','current_variance'])
-		->id($request->segment(5))
-		->required(['*'])
-		->renderForm(
-			__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),
-			route('api.project.save',[$corporateId, $request->segment(5)])
-		);
+					app(\Joesama\Project\Database\Model\Project\Project::class)
+				)
+				->option([
+					'client_id' => Client::pluck('name','id')
+				])
+				->mapping([
+					'corporate_id' => $corporateId
+				])
+				->extras([
+					'profile_id' => Profile::sameGroup($corporateId)->pluck('name','id')
+				])
+				->excludes(['effective_days','planned_progress','actual_progress','actual_payment','planned_payment','current_variance'])
+				->id($request->segment(5))
+				->required(['*'])
+				->renderForm(
+					__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),
+					route('api.project.save',[$corporateId, $request->segment(5)])
+				);
 
 		return compact('form');
 	}

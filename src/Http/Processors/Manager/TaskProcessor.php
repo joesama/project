@@ -71,17 +71,18 @@ class TaskProcessor
 		}
 
 		$form = $form->option([
-			'profile_id' => Profile::sameGroup($corporateId)->pluck('name','id')
-		])->default([
-			'start' => Project::find($request->segment(5))->start,
-			'end' => Project::find($request->segment(5))->start
-		])
-		->excludes(['effective_days','planned_progress','actual_progress'])
-		->id($request->segment(6))
-		->renderForm(
-			__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),
-			route('api.task.save',[$corporateId, $request->segment(5), $request->segment(6)])
-		);
+					'profile_id' => Profile::sameGroup($corporateId)->pluck('name','id')
+				])->default([
+					'start' => Project::find($request->segment(5))->start,
+					'end' => Project::find($request->segment(5))->start
+				])
+				->excludes(['effective_days','planned_progress','actual_progress'])
+				->id($request->segment(6))
+				->required(['*'])
+				->renderForm(
+					__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),
+					route('api.task.save',[$corporateId, $request->segment(5), $request->segment(6)])
+				);
 
 		return compact('form');
 	}

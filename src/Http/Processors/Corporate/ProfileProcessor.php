@@ -63,19 +63,20 @@ class ProfileProcessor
 	public function form(Request $request, int $corporateId)
 	{
 		$form = $this->formBuilder->newModelForm($this->profileObj)
-		->option([
-			'position_id' => MasterData::position()->pluck('description','id')
-		])
-		->required(['*'])
-		->mapping([
-			'corporate_id' => $corporateId
-		])
-		// ->notRequired(['project_id'])
-		->id($request->segment(5))
-		->renderForm(
-			__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),
-			route('api.profile.save',[$corporateId, $request->segment(5), $request->segment(6)])
-		);
+				->option([
+					'position_id' => MasterData::position()->pluck('description','id')
+				])
+				->required(['*'])
+				->mapping([
+					'corporate_id' => $corporateId
+				])
+				// ->notRequired(['project_id'])
+				->id($request->segment(5))
+				->required(['*'])
+				->renderForm(
+					__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),
+					route('api.profile.save',[$corporateId, $request->segment(5), $request->segment(6)])
+				);
 
 		return compact('form');
 	}

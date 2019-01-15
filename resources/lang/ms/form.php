@@ -3,7 +3,9 @@
 return [
 	'submit' => 'Hantar',
 	'is' => [
-		'required' => 'Informasi Diperlukan'
+		'required' => 'Maklumat Ini Diperlukan',
+		'choose' => 'Sila Pilih Satu Dari Senarai',
+		'multiple' => 'Anda Boleh Memilih Lebih Dari Satu',
 	],
 	'action' => [
 		'assign' => 'Tugasan'

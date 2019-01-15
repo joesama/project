@@ -32,7 +32,7 @@ class ClientProcessor
 	{
 		$task = $this->makeProject->initClient(collect($request->all()),$clientId);
 
-		return redirect(handles('setup/'.$request->segment(2).'/list/'.$corporateId));
+		return redirect(handles('corporate/'.$request->segment(2).'/list/'.$corporateId));
 	}
 
 

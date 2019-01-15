@@ -63,13 +63,14 @@ class RiskProcessor
 		}
 
 		$form = $form->option([
-			'severity_id' => MasterData::severity()->pluck('description','id')
-		])
-		->id($request->segment(6))
-		->renderForm(
-			__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),
-			route('api.risk.save',[$corporateId, $request->segment(5), $request->segment(6)])
-		);
+					'severity_id' => MasterData::severity()->pluck('description','id')
+				])
+				->id($request->segment(6))
+				->required(['*'])
+				->renderForm(
+					__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),
+					route('api.risk.save',[$corporateId, $request->segment(5), $request->segment(6)])
+				);
 
 		return compact('form');
 

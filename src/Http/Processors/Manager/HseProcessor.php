@@ -58,6 +58,7 @@ class HseProcessor
 					'incident_id' => MasterData::incident()->pluck('description','id')
 				])
 				->id($request->segment(5))
+				->required(['*'])
 				->renderForm(
 					__('joesama/project::'
 						.$request->segment(1).'.'

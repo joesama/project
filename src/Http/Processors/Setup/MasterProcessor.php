@@ -48,34 +48,13 @@ class MasterProcessor
 	 */
 	public function form(Request $request, int $corporateId)
 	{
-		$form = $this->formBuilder->newModelForm($this->modelObj);
-
-		// if(is_null($request->segment(5))){
-		// 	$form->extras([
-
-		// 	]);
-		// }else{
-		// 	$form = $form->mapping([
-		// 		'project_id' => $request->segment(5)
-		// 	]);
-		// }
-
-		// if(!is_null($request->segment(6))){
-		// 	$form->extras([
-		// 		'task_progress' => 'text'
-		// 	]);
-
-		// 	$form->readonly(['end','start']);
-		// }
-
-		$form = $form->option([
-
-		])
-		->id($request->segment(5))
-		->renderForm(
-			__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),
-			route('api.master.save',[$corporateId, $request->segment(5)])
-		);
+		$form = $this->formBuilder->newModelForm($this->modelObj)
+				->id($request->segment(5))
+				->required(['*'])
+				->renderForm(
+					__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),
+					route('api.master.save',[$corporateId, $request->segment(5)])
+				);
 
 		return compact('form');
 	}
@@ -88,12 +67,12 @@ class MasterProcessor
 	public function view(Request $request, int $corporateId)
 	{
 		$view = $this->viewBuilder->newView($this->modelObj)
-		->id($request->segment(5))
-		->renderView(
-			__('joesama/project::'.$request->segment(1).'.'
-				.$request->segment(2).'.'
-				.$request->segment(3))
-		);
+				->id($request->segment(5))
+				->renderView(
+					__('joesama/project::'.$request->segment(1).'.'
+						.$request->segment(2).'.'
+						.$request->segment(3))
+				);
 
 		$table = $this->listProcessor->data($request,$corporateId);
 

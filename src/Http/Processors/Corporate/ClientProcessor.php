@@ -51,10 +51,11 @@ class ClientProcessor
 		$form = $this->formBuilder->newModelForm($this->modelObj);
 
 		$form = $form->id($request->segment(5))
-		->renderForm(
-			__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),
-			route('api.client.save',[$corporateId, $request->segment(5)])
-		);
+				->required(['*'])
+				->renderForm(
+					__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),
+					route('api.client.save',[$corporateId, $request->segment(5)])
+				);
 
 		return compact('form');
 	}

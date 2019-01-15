@@ -54,6 +54,7 @@ class AttributeProcessor
 						'project_id' => $request->segment(5)
 				])
 				->id($request->segment(5))
+				->required(['*'])
 				->renderForm(
 					__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),
 					route('api.attribute.save',[$corporateId, $request->segment(5), $request->segment(6)])

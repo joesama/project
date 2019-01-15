@@ -3,7 +3,9 @@
 return [
 	'submit' => 'Submit',
 	'is' => [
-		'required' => 'Information Is Required'
+		'required' => 'Information Is Required',
+		'choose' => 'Please Choose One From The List',
+		'multiple' => 'You Can Choose More Than One',
 	],
 	'action' => [
 		'assign' => 'Assignation'

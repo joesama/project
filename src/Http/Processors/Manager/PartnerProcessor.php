@@ -60,6 +60,7 @@ class PartnerProcessor
 					'partner_id' => Client::whereNotIn('id',$this->modelObj->where('id',$request->segment(5))->pluck('client_id'))->pluck('name','id')
 				])
 				->id($request->segment(5))
+				->required(['*'])
 				->renderForm(
 					__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),
 					route('api.partner.save',[$corporateId, $request->segment(5), $request->segment(6)])
@@ -77,16 +78,16 @@ class PartnerProcessor
 	public function view(Request $request, int $corporateId)
 	{
 		$view = $this->viewBuilder->newView($this->modelObj)
-		->relation([
-			'project_id' => 'project.name',
-			'severity_id' => 'severity.description',
-		])
-		->id($request->segment(6))
-		->renderView(
-			__('joesama/project::'.$request->segment(1).'.'
-				.$request->segment(2).'.'
-				.$request->segment(3))
-		);
+				->relation([
+					'project_id' => 'project.name',
+					'severity_id' => 'severity.description',
+				])
+				->id($request->segment(6))
+				->renderView(
+					__('joesama/project::'.$request->segment(1).'.'
+						.$request->segment(2).'.'
+						.$request->segment(3))
+				);
 
 		return compact('view');
 	}
