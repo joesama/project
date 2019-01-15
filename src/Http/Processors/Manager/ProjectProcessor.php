@@ -72,7 +72,7 @@ class ProjectProcessor
 				->extras([
 					'profile_id' => Profile::sameGroup($corporateId)->pluck('name','id')
 				])
-				->excludes(['effective_days','planned_progress','actual_progress','actual_payment','planned_payment','current_variance'])
+				->excludes(['effective_days','planned_progress','acc_progress','actual_progress','actual_payment','planned_payment','current_variance'])
 				->id($request->segment(5))
 				->required(['*'])
 				->renderForm(

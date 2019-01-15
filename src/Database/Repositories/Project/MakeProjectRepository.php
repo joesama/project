@@ -4,6 +4,7 @@ namespace Joesama\Project\Database\Repositories\Project;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Support\Collection;
+use Joesama\Project\Database\Model\Organization\Profile;
 use Joesama\Project\Database\Model\Project\Attribute;
 use Joesama\Project\Database\Model\Project\Client;
 use Joesama\Project\Database\Model\Project\HseScore;
