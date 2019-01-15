@@ -9,7 +9,12 @@ return [
 		'progress' => ['0-25','26-50','51-75','76-100'],
 		'severity' => ['low','medium','critical'],
 		'hse' => [	'Lost Time Injuries (LTI)','Unsafe Act / Unsafe Condition',
-					'Stop Work Order','Summon By Authorities','Complaint By Communities']
+					'Stop Work Order','Summon By Authorities','Complaint By Communities'],
+		'position' => [
+			'Asisstant Manager', 'Senior Manager',
+			'Asisstant General Manager', 'General Manager', 
+			'Vice President', 'CEO'
+		]
 	],
 	'corporate' => [
 		'KUB Malaysia' => [

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 class Card extends Model
 {
 	protected $table = 'project_card';
+    protected $guarded = ['id'];
 
     /**
      * Get the project.

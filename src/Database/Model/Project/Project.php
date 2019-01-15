@@ -37,10 +37,19 @@ class Project extends Model
     /**
      * Get the  client manager for project.
      */
-    public function manager()
+    public function admin()
     {
         return $this->belongsToMany(Profile::class,'project_role','project_id','profile_id')
         ->wherePivot('role_id',1);
+    }
+
+    /**
+     * Get the  client manager for project.
+     */
+    public function manager()
+    {
+        return $this->belongsToMany(Profile::class,'project_role','project_id','profile_id')
+        ->wherePivot('role_id',2);
     }
 
     /**

@@ -7,4 +7,9 @@ return [
 		'view' => 'Profile Information',
 		'assign' => 'Project Assignation',
 	],
+	'client' => [
+		'list' => 'Client / Partner List',
+		'form' => 'Client / Partner Information',
+		'view' => 'Client / Partner Information'
+	],
 ];

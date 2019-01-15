@@ -2,6 +2,7 @@
 namespace Joesama\Project\Http\Processors\Corporate; 
 
 use Joesama\Project\Database\Repositories\Organization\OrganizationInfoRepository;
+use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
 use Joesama\Project\Http\Services\DataGridGenerator;
 
 /**
@@ -12,7 +13,7 @@ use Joesama\Project\Http\Services\DataGridGenerator;
  **/
 class ListProcessor 
 {
-	private $organization;
+	private $organization, $project;
 
 	/**
 	 * Class constructor
@@ -20,10 +21,12 @@ class ListProcessor
 	 * @param OrganizationInfoRepository $organization 
 	 */
 	public function __construct(
-		OrganizationInfoRepository $organization
+		OrganizationInfoRepository $organization,
+		ProjectInfoRepository $projectInfo
 	)
 	{
 		$this->organization = $organization;
+		$this->project = $projectInfo;
 	}
 
 	/**
@@ -68,6 +71,52 @@ class ListProcessor
 				 	route('api.list.profile',$corporateId), 
 				 	$this->organization->listProfile($corporateId)
 				 )->buildAddButton(route('corporate.profile.form',$corporateId))
+				 ->buildOption($action, TRUE)
+				 ->render();
+	}
+
+
+	/**
+	 * @param  array $request
+	 * @param  int $request,$corporateId
+	 * @return HTML
+	 */
+	public function client($request,$corporateId)
+	{
+
+		$columns = [
+		   [ 'field' => 'name',
+		   'title' => __('joesama/project::form.client.name'),
+		   'style' => 'text-xs-left text-capitalize'],
+		   [ 'field' => 'phone',
+		   'title' => __('joesama/project::form.client.phone'),
+		   'style' => 'text-xs-left text-capitalize'],
+		   [ 'field' => 'manager',
+		   'title' => __('joesama/project::form.client.manager'),
+		   'style' => 'text-xs-left text-capitalize'],
+		   [ 'field' => 'contact',
+		   'title' => __('joesama/project::form.client.contact'),
+		   'style' => 'text-xs-left text-capitalize'],
+		];
+
+		$action = [
+			[ 'action' => trans('joesama/vuegrid::datagrid.buttons.view') , // Action Description
+			    'url' => handles('joesama/project::corporate/client/view/'.$corporateId.'/'.$request->segment(5)), // URL for action
+			    'icons' => 'psi-magnifi-glass icon', // Icon for action : optional
+			    'key' => 'id'  ],
+			[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
+			    'url' => handles('joesama/project::corporate/client/form/'.$corporateId.'/'.$request->segment(5)), // URL for action
+			    'icons' => 'psi-file-edit icon', // Icon for action : optional
+			    'key' => 'id'  ]
+		];
+
+		$datagrid = new DataGridGenerator();
+		
+		return $datagrid->buildTable($columns, __('joesama/project::corporate.client.list') )
+				 ->buildDataModel(
+				 	route('api.list.client',$corporateId), 
+				 	$this->project->clientAll()
+				 )->buildAddButton(route('corporate.client.form',[$corporateId,$request->segment(5)]))
 				 ->buildOption($action, TRUE)
 				 ->render();
 	}

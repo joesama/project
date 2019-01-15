@@ -1,9 +1,9 @@
 <?php
-namespace Joesama\Project\Http\Processors\Setup; 
+namespace Joesama\Project\Http\Processors\Corporate; 
 
 use Illuminate\Http\Request;
 use Joesama\Project\Database\Model\Project\Client;
-use Joesama\Project\Http\Processors\Setup\ListProcessor;
+use Joesama\Project\Http\Processors\Corporate\ListProcessor;
 use Joesama\Project\Http\Services\FormGenerator;
 use Joesama\Project\Http\Services\ViewGenerator;
 

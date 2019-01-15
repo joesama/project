@@ -1,11 +1,13 @@
 <?php
 namespace Joesama\Project\Database\Repositories\Project; 
 
+use Carbon\Carbon;
+use DB;
 use Joesama\Project\Database\Model\Project\Card;
 use Joesama\Project\Database\Model\Project\CardWorkflow;
+use Joesama\Project\Database\Model\Project\Project;
 use Joesama\Project\Database\Model\Project\Report;
-use DB;
-use Carbon\Carbon;
+use Joesama\Project\Database\Model\Project\ReportWorkflow;
 
 /**
  * Data Handling For Create Project Card & Report Record
@@ -19,29 +21,29 @@ class MakeReportCardRepository
 	/**
 	 * Create New Project
 	 *
-	 * @return Joesama\Project\Database\Model\Project\Project
+	 * @param 	Project $project Project Related
+	 * @param 	Request $request Report Data
+	 * @return  Project
 	 **/
-	public function initProjectCard(\Joesama\Project\Database\Model\Project\Project $project)
+	public function initMonthly(Project $project, $request)
 	{
 
 		DB::beginTransaction();
 
 		try{
-
+dd($request->all());
 			$card = new Card([
 				'project_id' => $project->id,
 				'creator_id' => \Auth::user()->id,
 				'created_at' => Carbon::now(),
 				'updated_at' => Carbon::now()
 			]);
-
-			$project->card()->save($card);
+dd($card);
+			// $project->card()->save($card);
 
 			DB::commit();
 
-			return $project->with(['card' => function($query) use($card){
-				$query->latest();
-			}]);
+			return $project;
 
 		}catch( \Exception $e){
 
@@ -52,32 +54,40 @@ class MakeReportCardRepository
 	/**
 	 * Create New Project Report
 	 *
-	 * @return Joesama\Project\Database\Model\Project\Project
+	 * @param 	Project $project Project Related
+	 * @param 	Request $request Report Data
+	 * @return  Project
 	 **/
-	public function initProjectReport(\Joesama\Project\Database\Model\Project\Project $project)
+	public function initWeekly(Project $project, $request)
 	{
 
 		DB::beginTransaction();
 
+		$initialFlow = collect(config('joesama/project::workflow.1'))->keys()->first();
+
 		try{
 
-			$report = new Report([
-				'project_id' => $project->id,
-				'creator_id' => \Auth::user()->id,
-				'created_at' => Carbon::now(),
-				'updated_at' => Carbon::now()
+			$report = Report::firstOrNew([
+				'week' => $request->get('cycle'),
 			]);
 
-			$project->report()->save($report);
+			if ( $initialFlow == $request->get('state') ){
 
-			DB::commit();
+				$report->project_id = $project->id;
+				$report->report_date = Carbon::parse($request->get('start'))->format('Y-m-d');
+				$report->report_end = Carbon::parse($request->get('end'))->format('Y-m-d');
+				$report->report_date = Carbon::now()->format('Y-m-d H:i:s');
+				$report->creator_id = \Auth::user()->id;
+				$report->save();
 
-			return $project->with(['report' => function($query) use(report){
-				$query->latest();
-			}]);
+				DB::commit();
+
+			}
+
+			return $report;
 
 		}catch( \Exception $e){
-
+			dd($e->getMessage());
 			DB::rollback();
 		}
 	}
@@ -88,7 +98,7 @@ class MakeReportCardRepository
 	 * @return oesama\Project\Database\Model\Project\Card
 	 **/
 	public function initProjectWorkflow(
-		\Joesama\Project\Database\Model\Project\Card $card,
+		Card $card,
 		array $workflowData
 	){
 
@@ -116,12 +126,13 @@ class MakeReportCardRepository
 	}
 
 	/**
-	 * Create Project Report Workflow
-	 *
+	 * Create Weekly Workflow
+	 * @param  Report $report       Get Report Header
+	 * @param  array  $workflowData Get Form Data
 	 * @return Joesama\Project\Database\Model\Project\Report
-	 **/
-	public function initCardWorkflow(
-		\Joesama\Project\Database\Model\Project\Report $report,
+	 */
+	public function initWeeklyWorkflow(
+		Report $report,
 		array $workflowData
 	){
 
@@ -129,11 +140,10 @@ class MakeReportCardRepository
 
 		try{
 
-			$workflow = new CardWorkflow([
+			$workflow = new ReportWorkflow([
 				'remark' => data_get($workflowData,'remark'),
+				'state' => data_get($workflowData,'state'),
 				'profile_id' => \Auth::user()->id,
-				'created_at' => Carbon::now(),
-				'updated_at' => Carbon::now()
 			]);
 
 			$report->workflow()->save($workflow);
@@ -143,7 +153,7 @@ class MakeReportCardRepository
 			return $report;
 
 		}catch( \Exception $e){
-
+			dd($e->getMessage());
 			DB::rollback();
 		}
 	}

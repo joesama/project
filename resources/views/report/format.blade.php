@@ -120,18 +120,31 @@
 <div class="row bord-hor bord-btm">
 	<div class="col-md-12 text-left text-bold bord-rgt pad-all">
 		@foreach($workflow as $state => $workflow)
-			@if( ( is_null( data_get($workflow,'weekly') ) || is_null( data_get($workflow,'monthly') ) )  && $state == "pm")
+			@if( ( is_null( data_get($workflow,'weekly') ) && is_null( data_get($workflow,'monthly') ) )  && $state == "pm")
 			  @include('joesama/project::report.workflow.panel-form',[
 			      'state' => $state,
 			      'status' => data_get($workflow,'status'),
 			      'profile' => data_get($workflow,'profile'),
 			    ])
 			@elseif( !is_null( data_get($workflow,'weekly') ) || !is_null( data_get($workflow,'monthly') ) )
-			  @include('joesama/project::report.workflow.panel-info',[
-			      'state' => $state,
-			      'status' => data_get($workflow,'status'),
-			      'profile' => data_get($workflow,'profile'),
-			    ])
+
+				@php
+					$flow = data_get($workflow,'weekly',data_get($workflow,'monthly'));
+				@endphp
+				@if(data_get($flow,'state') == $state)
+				  	@include('joesama/project::report.workflow.panel-info',[
+				      'state' => $state,
+				      'status' => data_get($workflow,'status'),
+				      'profile' => data_get($workflow,'profile'),
+				    ])
+				@else
+				  	@include('joesama/project::report.workflow.panel-form',[
+				      'state' => $state,
+				      'status' => data_get($workflow,'status'),
+				      'profile' => data_get($workflow,'profile'),
+				    ])
+				@endif
+
 			@endif
 		@endforeach
 	</div>

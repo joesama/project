@@ -7,6 +7,7 @@ use Joesama\Project\Database\Model\Organization\Profile;
 class ReportWorkflow extends Model
 {
 	protected $table = 'project_report_workflow';
+    protected $guarded = ['id'];
 
     /**
      * Get the workflow report.

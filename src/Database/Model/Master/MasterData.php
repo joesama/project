@@ -19,8 +19,7 @@ class MasterData extends Model
     }
 
     /**
-     * @param  [type]
-     * @return [type]
+     * Query Progress Data List]
      */
     public function scopeProgress($query)
     {
@@ -30,8 +29,7 @@ class MasterData extends Model
     }
 
     /**
-     * @param  [type]
-     * @return [type]
+     * Query Severity Data List
      */
     public function scopeSeverity($query)
     {
@@ -41,13 +39,22 @@ class MasterData extends Model
     }
 
     /**
-     * @param  [type]
-     * @return [type]
+     * Query Incident Data List
      */
     public function scopeIncident($query)
     {
         return $query->whereHas('master',function($subquery){
-        	$subquery->incident();
+            $subquery->incident();
+        });
+    }
+
+    /**
+     * Query Position Data List
+     */
+    public function scopePosition($query)
+    {
+        return $query->whereHas('master',function($subquery){
+        	$subquery->position();
         });
     }
 

@@ -12,10 +12,9 @@ return [
 		'attribute' => 'Project Attributes',
 	],
 	'setup' => [
-		'module' => 'Administration',
+		'module' => 'Setting',
 		'master' => 'Data Management',
 		'data' => 'Data Category',
-		'client' => 'Client Information'
 	],
 	'dashboard' => [
 		'module' => 'Executive Information',
@@ -27,8 +26,9 @@ return [
 		// ]
 	],
 	'corporate' => [
-		'module' => 'Corporate',
-		'profile' => 'Profile',
+		'module' => 'Corporate Management',
+		'profile' => 'Profile  Management',
+		'client' => 'Client Information'
 	],
 	'report' => [
 		'module' => 'Project Report',

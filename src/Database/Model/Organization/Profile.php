@@ -3,6 +3,7 @@ namespace Joesama\Project\Database\Model\Organization;
 
 use Illuminate\Database\Eloquent\Model;
 use Joesama\Entree\Database\Model\User;
+use Joesama\Project\Database\Model\Master\MasterData;
 use Joesama\Project\Database\Model\Project\Project;
 
 class Profile extends Model
@@ -16,6 +17,14 @@ class Profile extends Model
     public function corporate()
     {
         return $this->belongsTo(Corporate::class,'corporate_id','id');
+    }
+
+    /**
+     * Get the position.
+     */
+    public function position()
+    {
+        return $this->belongsTo(MasterData::class,'position_id','id');
     }
 
     /**
@@ -53,7 +62,7 @@ class Profile extends Model
     public function scopeComponent($query)
     {
         return $query->with([
-            'project.role','corporate','user'
+            'project.role','corporate','user','position'
         ]);
     }
 

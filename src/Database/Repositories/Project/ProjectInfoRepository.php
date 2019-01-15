@@ -15,6 +15,7 @@ use Joesama\Project\Database\Model\Project\{
 };
 use DB;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Joesama\Project\Database\Model\Organization\Profile;
 
 /**
  * Data Handling For Create Project Record
@@ -24,6 +25,19 @@ use Illuminate\Pagination\LengthAwarePaginator;
  **/
 class ProjectInfoRepository 
 {
+
+	private $projectModel, 
+			$clientModel, 
+			$taskModel, 
+			$issueModel, 
+			$riskModel, 
+			$incidentModel, 
+			$paymentModel, 
+			$voModel, 
+			$retentionModel, 
+			$ladModel,
+			$stricAccess,
+			$profile;
 
 	public function __construct(
 		Project $project , 
@@ -47,6 +61,8 @@ class ProjectInfoRepository
 		$this->voModel = $vo;
 		$this->retentionModel = $retention;
 		$this->ladModel = $lad;
+		$this->stricAccess = true;
+		$this->profile = Profile::where('user_id',auth()->id())->first();
 	}
 
 	/**
@@ -70,7 +86,19 @@ class ProjectInfoRepository
 	 **/
 	public function projectList(int $corporateId)
 	{
-		return $this->projectModel->sameGroup($corporateId)->component()->paginate();
+
+		$project = $this->projectModel->sameGroup($corporateId);
+
+		if($this->stricAccess){
+			$project->whereHas('manager',function($query){
+				$query->where('profile_id',$this->profile->id);
+			});
+			$project->orWhereHas('admin',function($query){
+				$query->where('profile_id',$this->profile->id);
+			});
+		}
+
+		return $project->component()->paginate();
 	}
 
 	/**
@@ -133,12 +161,18 @@ class ProjectInfoRepository
 	 **/
 	public function listProjectTask(int $corporateId, $projectId = null)
 	{
-		return $this->taskModel->whereHas('project',function($query) use($corporateId, $projectId){
+		$task = $this->taskModel->whereHas('project',function($query) use($corporateId, $projectId){
 			$query->sameGroup($corporateId);
 			$query->when($projectId, function ($query, $projectId) {
                 return $query->where('id', $projectId);
             });
-		})->component()->paginate();
+		});
+
+		if($this->stricAccess){
+			$task->where('profile_id',$this->profile->id);
+		}
+
+		return $task->component()->paginate();
 	}
 
 	/**
@@ -159,12 +193,18 @@ class ProjectInfoRepository
 	 **/
 	public function listProjectIssue(int $corporateId, $projectId = null)
 	{
-		return $this->issueModel->whereHas('project',function($query) use($corporateId, $projectId){
+		$issue = $this->issueModel->whereHas('project',function($query) use($corporateId, $projectId){
 			$query->sameGroup($corporateId);
 			$query->when($projectId, function ($query, $projectId) {
                 return $query->where('id', $projectId);
             });
-		})->component()->paginate();
+		});
+
+		if($this->stricAccess){
+			$issue->where('profile_id',$this->profile->id);
+		}
+
+		return $issue->component()->paginate();
 	}
 
 	/**

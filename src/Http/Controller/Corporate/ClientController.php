@@ -1,5 +1,5 @@
 <?php
-namespace Joesama\Project\Http\Controller\Setup;
+namespace Joesama\Project\Http\Controller\Corporate;
 
 use Illuminate\Http\Request;
 use Joesama\Project\Http\Controller\BaseController;

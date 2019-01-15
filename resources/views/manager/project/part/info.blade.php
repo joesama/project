@@ -22,7 +22,7 @@
                         <table class="table table-bordered table-sm">
                             <tr>
                                 <td class="text-bold bg-primary text-light text-capitalize" style="width: 30%">
-                                    {{ __('joesama/project::project.client.name') }}
+                                    {{ __('joesama/project::form.project.client_id') }}
                                 </td>
                                 <td class="pl-2">
                                     {{ data_get($project,'client.name') }}

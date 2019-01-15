@@ -41,14 +41,18 @@
           @if( ( is_null( data_get($workflow,'weekly') ) || is_null( data_get($workflow,'monthly') ) ) && $isManager->isNotEmpty() )
           <div class="row">
             <div class="col-md-3 pad-hor">
-              <a class="btn btn-dark mar-btm" href="{{handles('joesama/projet::report/weekly/form/'.$project->corporate_id.'/'.$project->id)}}" style="width:190px">
+              @if( is_null( data_get($workflow,'weekly') ) )
+              <a class="btn btn-dark mar-btm" href="{{handles('joesama/projet::report/weekly/form/'.$project->corporate_id.'/'.$project->id)}}" style="width:200px">
                 <i class="psi-file-add icon-fw"></i>
                 {{ __('joesama/project::manager.workflow.weekly') }}
               </a>
-              <a class="btn btn-dark" href="{{handles('joesama/projet::report/monthly/form/'.$project->corporate_id.'/'.$project->id)}}" style="width: 190px">
+              @endif
+              @if( is_null( data_get($workflow,'monthly') ) )
+              <a class="btn btn-dark" href="{{handles('joesama/projet::report/monthly/form/'.$project->corporate_id.'/'.$project->id)}}" style="width: 200px">
                 <i class="psi-file-add icon-fw"></i>
                 {{ __('joesama/project::manager.workflow.monthly') }}
-              </a>            
+              </a>      
+              @endif      
             </div>
           </div>
           @endif

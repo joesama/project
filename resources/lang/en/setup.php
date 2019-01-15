@@ -10,10 +10,5 @@ return [
 		'list' => 'Data List',
 		'form' => 'Data Information',
 		'view' => 'Data Information'
-	],
-	'client' => [
-		'list' => 'Client / Partner List',
-		'form' => 'Client / Partner Information',
-		'view' => 'Client / Partner Information'
-	],
+	]
 ];

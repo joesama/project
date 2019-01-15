@@ -12,8 +12,8 @@ return [
 		'profile_id' => 'Project Manager',
 		'client_id' => 'Project Client',
 		'name' => 'Project Name',
-		'value' => 'Contract No.',
-		'contract'=> 'Total Contract Value',
+		'contract' => 'Contract No.',
+		'value'=> 'Total Contract Value',
 		'scope'=> 'Scope of Contract',
 		'start' => 'Start Date',
 		'end' => 'End Date',
@@ -69,6 +69,7 @@ return [
 	'master_data' => [
 		'master_id' => 'Category',
 		'description' => 'Data Description',
+		'formula' => 'Formula',
 	],
 	'client' => [
 		'name' => 'Client / Partner Name',
@@ -133,6 +134,7 @@ return [
 		'phone' => 'Contact No.',
 		'project_id' => 'Project',
 		'corporate_id' => 'Company Name',
+		'position_id' => 'Position',
 		'user_id' => 'User Id',
 		'role_id' => 'Project Role',
 	]

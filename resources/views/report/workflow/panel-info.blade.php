@@ -10,7 +10,9 @@
             <p class="text-lg text-semibold mar-no text-main">
             	{{ data_get($profile,'name') }}
             </p>
-            <p class="text-muted">Position</p>
+            <p class="text-muted">
+                {{ data_get($profile,'position.description') }}
+            </p>
             <p class="text-md"></p>
         </div>
     </div>

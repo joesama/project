@@ -2,6 +2,7 @@
 namespace Joesama\Project\Http\Processors\Corporate; 
 
 use Illuminate\Http\Request;
+use Joesama\Project\Database\Model\Master\MasterData;
 use Joesama\Project\Database\Model\Organization\Profile;
 use Joesama\Project\Database\Model\Organization\ProfileRole;
 use Joesama\Project\Database\Model\Project\Project;
@@ -62,11 +63,9 @@ class ProfileProcessor
 	public function form(Request $request, int $corporateId)
 	{
 		$form = $this->formBuilder->newModelForm($this->profileObj)
-		// ->option([
-		// 	'project_id' => Project::sameGroup($corporateId)->pluck('name','id')
-		// ])->extras([
-		// 	'project_id' => 'multiselect'
-		// ])
+		->option([
+			'position_id' => MasterData::position()->pluck('description','id')
+		])
 		->required(['*'])
 		->mapping([
 			'corporate_id' => $corporateId

@@ -50,7 +50,7 @@ class ListProcessor
 			    'url' => handles('joesama/project::manager/project/view/'.$corporateId), // URL for action
 			    'icons' => 'psi-magnifi-glass icon', // Icon for action : optional
 			    'key' => 'id'  ],
-			[ 'action' => __('product.item.variant') , // Action Description
+			[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
 			    'url' => handles('joesama/project::manager/project/form/'.$corporateId), // URL for action
 			    'icons' => 'psi-file-edit icon', // Icon for action : optional
 			    'key' => 'id'  ]

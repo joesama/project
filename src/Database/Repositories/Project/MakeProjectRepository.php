@@ -96,11 +96,15 @@ class MakeProjectRepository
 
 				$this->projectModel->hse_id = $hse->id;
 				$this->projectModel->effective_days = $this->effectiveDays($this->projectModel->start,$this->projectModel->end);
+
+				$projectAdmin = Profile::where('user_id',auth()->id())->with('role')->first();
+
+				$this->projectModel->profile()->attach($projectAdmin->id,['role_id' => 1]);
 			}
 
 			$this->projectModel->save();
 
-			$this->projectModel->profile()->attach($projectData->get('profile_id'),['role_id' => 1 ]);
+			$this->projectModel->profile()->attach($projectData->get('profile_id'),['role_id' => 2]);
 
 			DB::commit();
 

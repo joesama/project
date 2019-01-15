@@ -69,6 +69,7 @@ class MakeOrganizationRepository
 	{
 		$inputData = collect($profileData)->intersectByKeys([
 		    'corporate_id' => null,
+		    'position_id' => null,
 			'name' => null,
 			'abbr'=> null,
 			'email'=> null,

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 class Report extends Model
 {
 	protected $table = 'project_report';
+    protected $guarded = ['id'];
 
     /**
      * Get the project.
@@ -20,7 +21,7 @@ class Report extends Model
      */
     public function workflow()
     {
-        return $this->belongsTo(CardWorkflow::class,'workflow_id','id');
+        return $this->hasMany(ReportWorkflow::class,'report_id','id');
     }
 
 }
