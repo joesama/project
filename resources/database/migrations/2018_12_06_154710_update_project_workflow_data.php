@@ -29,8 +29,8 @@ class UpdateProjectWorkflowData extends Migration
         // });
 
         Schema::table('project_report_workflow', function (Blueprint $table) {
+            $table->string('state')->after('user_id')->nullable();
             $table->renameColumn('user_id', 'profile_id');
-            $table->string('state')->after('profile_id')->nullable();
         });
 
         // Schema::table('project_card_workflow', function (Blueprint $table) {
