@@ -1,6 +1,7 @@
 <?php
 namespace Joesama\Project\Database\Model\Project;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Joesama\Project\Database\Model\Master\MasterData;
 
@@ -8,6 +9,7 @@ class Card extends Model
 {
 	protected $table = 'project_card';
     protected $guarded = ['id'];
+    protected $appends = ['generation_date'];
 
     /**
      * Get the project.
@@ -46,4 +48,11 @@ class Card extends Model
     {
         return $query->with(['status','project','workflow']);
     }
+
+
+    public function getGenerationDateAttribute($value)
+    {
+        return Carbon::parse($this->created_at)->format('d-m-Y');
+    }
+    
 }

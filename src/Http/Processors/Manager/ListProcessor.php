@@ -80,7 +80,7 @@ class ListProcessor
 	{
 
 		$columns = [
-		   [ 'field' => 'card_date',
+		   [ 'field' => 'generation_date',
 		   'title' => __('joesama/project::form.report.report_date'),
 		   'style' => 'text-left text-capitalize'],
 		   [ 'field' => 'project.name',
@@ -129,7 +129,7 @@ class ListProcessor
 	{
 
 		$columns = [
-		   [ 'field' => 'report_date',
+		   [ 'field' => 'generation_date',
 		   'title' => __('joesama/project::form.report.report_date'),
 		   'style' => 'text-left text-capitalize'],
 		   [ 'field' => 'project.name',

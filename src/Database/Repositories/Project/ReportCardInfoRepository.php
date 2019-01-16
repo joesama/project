@@ -33,12 +33,15 @@ class ReportCardInfoRepository
 	 */
 	public function monthlyList(int $corporateId, ?int $projectId)
 	{
-		return $this->cardObj->where(function($query){
+		return $this->cardObj->where(function($query) use($projectId){
 
-					$query->whereHas('project',function($query){
+					$query->whereHas('project',function($query) use($projectId){
 						$query->whereHas('manager',function($query){
 							$query->where('profile_id',$this->profile->id);
 						});
+						$query->when($projectId, function ($query, $projectId) {
+			                return $query->where('id', $projectId);
+			            });
 					});
 
 					$query->orWhere('need_action',$this->profile->id);
@@ -56,12 +59,15 @@ class ReportCardInfoRepository
 	 */
 	public function weeklyList(int $corporateId, ?int $projectId)
 	{
-		return $this->reportObj->where(function($query){
+		return $this->reportObj->where(function($query) use($projectId){
 
-					$query->whereHas('project',function($query){
+					$query->whereHas('project',function($query) use($projectId){
 						$query->whereHas('manager',function($query){
 							$query->where('profile_id',$this->profile->id);
 						});
+						$query->when($projectId, function ($query, $projectId) {
+			                return $query->where('id', $projectId);
+			            });
 					});
 
 					$query->orWhere('need_action',$this->profile->id);

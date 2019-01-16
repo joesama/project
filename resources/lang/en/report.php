@@ -2,14 +2,14 @@
 
 return [
 	'weekly' => [
-		'list' => 'Data Category List',
+		'list' => 'Weekly Project Update List',
 		'form' => 'Weekly Project Update',
-		'view' => 'Data Category'
+		'view' => 'Weekly Project Update'
 	],
 	'monthly' => [
-		'list' => 'Data Category List',
+		'list' => 'Monthly Project Update List',
 		'form' => 'Monthly Project Update',
-		'view' => 'Data Category'
+		'view' => 'Monthly Project Update'
 	],
 	'format' => [
 		'dept' => 'Department Name',

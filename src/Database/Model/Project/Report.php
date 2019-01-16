@@ -1,6 +1,7 @@
 <?php
 namespace Joesama\Project\Database\Model\Project;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Joesama\Project\Database\Model\Master\MasterData;
 use Joesama\Project\Database\Model\Organization\Profile;
@@ -9,6 +10,7 @@ class Report extends Model
 {
 	protected $table = 'project_report';
     protected $guarded = ['id'];
+    protected $appends = ['generation_date'];
 
     /**
      * Get the project.
@@ -46,6 +48,11 @@ class Report extends Model
     public function scopeComponent($query)
     {
         return $query->with(['status','project','workflow']);
+    }
+
+    public function getGenerationDateAttribute($value)
+    {
+        return Carbon::parse($this->created_at)->format('d-m-Y');
     }
 
 }
