@@ -1,6 +1,9 @@
 <?php
 
 return [
+	'overdue' => 'Overdue',
+	'complete' => 'Complete',
+	'open' => 'Open',
 	'portfolio'	=> [
 		'master' => 'Group Performance',
 		'group' => 'Subsidiaries Performance',

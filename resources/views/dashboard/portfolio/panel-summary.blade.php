@@ -2,11 +2,11 @@
   <div class="panel">
     <div class="panel-heading bg-primary">
         <div class="panel-control">
-            <button class="btn btn-primary" data-panel="fullscreen">
+ {{--            <button class="btn btn-primary" data-panel="fullscreen">
                 <i class="icon-max psi-maximize-3"></i>
                 <i class="icon-min psi-minimize-3"></i>
-            </button>
-            <button class="btn btn-primary collapsed" data-panel="minmax" data-target="#{{$panelId}}" data-toggle="collapse" aria-expanded="false"><i class="psi-chevron-up"></i></button>
+            </button> --}}
+{{--             <button class="btn btn-primary collapsed" data-panel="minmax" data-target="#{{$panelId}}" data-toggle="collapse" aria-expanded="false"><i class="psi-chevron-up"></i></button> --}}
         </div>
         <h3 class="panel-title">
           @if(isset($nextLevel))
@@ -26,13 +26,13 @@
           @if(isset($logo))
           <img class="bg-light mar-rgt" src="{{ asset(memorize('threef.logo',$logo)) }}" alt="logo" style="max-height: 50px;max-width: 100px">
           @endif
-            <div id="{{$panelId}}-area"></div>
+            <div id="{{$panelId}}-area" style="height: 300px"></div>
           </div>
           <div class="col-md-4">
-            <div class="row mar-btm">
+            <div class="row">
                 <div class="col-lg-12 pad-btm text-center">
                     <div class="text-lg">
-                        <p class="text-2x text-thin">
+                        <p class="text-lg text-thin">
                             <i class="pci-caret-down text-success mar-all"></i>
                             <span class="text-3x text-thin">
                               {{ array_get($summary,'issue.open') }}
@@ -58,7 +58,9 @@
                               $overdue = ($totalTask > 0) ? round(($overdueTask/$totalTask)*100,2) : 0;
                           @endphp
                           <div class="clearfix">
-                              <p class="pull-left mar-no">Overdue</p>
+                              <p class="pull-left mar-no">
+                                {{ __('joesama/project::dashboard.overdue') }}
+                              </p>
                               <p class="pull-right mar-no">{{$overdue}}%</p>
                           </div>
                           <div class="progress progress-sm">
@@ -72,7 +74,9 @@
                               $complete = ($totalTask > 0) ? round(($completeTask/$totalTask)*100,2) : 0;
                           @endphp
                           <div class="clearfix">
-                              <p class="pull-left mar-no">Complete</p>
+                              <p class="pull-left mar-no">
+                                {{ __('joesama/project::dashboard.complete') }}
+                              </p>
                               <p class="pull-right mar-no">{{$complete}}%</p>
                           </div>
                           <div class="progress progress-sm">
@@ -98,7 +102,9 @@
                               $open = ($totalIssue > 0) ? round(($openIssue/$totalIssue )*100,2) : 0;
                           @endphp
                           <div class="clearfix">
-                              <p class="pull-left mar-no">Open</p>
+                              <p class="pull-left mar-no">
+                                {{ __('joesama/project::dashboard.open') }}
+                              </p>
                               <p class="pull-right mar-no">{{$open}}%</p>
                           </div>
                           <div class="progress progress-sm">
@@ -112,7 +118,9 @@
                               $complete = ($totalIssue > 0) ? round(($completeIssue/$totalIssue)*100,2) : 0;
                           @endphp
                           <div class="clearfix">
-                              <p class="pull-left mar-no">Complete</p>
+                              <p class="pull-left mar-no">
+                              {{ __('joesama/project::dashboard.complete') }}
+                              </p>
                               <p class="pull-right mar-no">{{$complete}}%</p>
                           </div>
                           <div class="progress progress-sm">

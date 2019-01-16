@@ -8,16 +8,10 @@
                 </p>
                 <div class="text-lg">
                     <div class="media">
-                        <div class="media-left" style="width: 95%">
-                            <span class="text-2x text-thin text-right">
-                            	{{ data_get($contract,'total.value') }}
-                            </span>
-                        </div>
-                        <div class="media-body" style="width: 5%">
-                            <p class="mar-no text-left">
+                        <span class="text-lg text-thin text-right">
+                        	{{ data_get($contract,'total.value') }}
                             {{ data_get($contract,'total.unit') }}
-                        	</p>
-                        </div>
+                        </span>
                     </div>
                 </div>
             </div>

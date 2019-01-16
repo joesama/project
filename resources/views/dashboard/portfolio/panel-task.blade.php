@@ -6,7 +6,7 @@
             {{ __('joesama/project::dashboard.portfolio.task') }}
         </p>
         <div class="text-lg">
-            <p class="text-2x text-thin">
+            <p class="text-lg text-thin">
                 {{ data_get($task,'overdue') }}
             </p>
         </div>

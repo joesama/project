@@ -20,7 +20,7 @@
     	@include('joesama/project::dashboard.portfolio.panel-overspent',['summary' => true])
     </div>
 </div>
-<div class="row">
+<div class="row" id="group-panel">
 	@foreach($corporate as $subs)
 	    @include('joesama/project::dashboard.portfolio.panel-summary',[
 	    		'title' => data_get($subs,'corporate.name'),
@@ -39,6 +39,11 @@
 <script type="text/javascript">
 $(document).on('nifty.ready', function () {
     $('#group-dashboard').each(function() {
+        $(this).find('.panel').matchHeight({
+            byRow: true
+        });
+    });
+    $('#group-panel').each(function() {
         $(this).find('.panel').matchHeight({
             byRow: true
         });

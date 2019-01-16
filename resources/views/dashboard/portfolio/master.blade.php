@@ -3,7 +3,7 @@
 
 @endpush
 @section('content')
-<div class="row mb-3" id="group-dashboard">
+<div class="row" id="group-dashboard">
     <div class="col-md-2">
     	@include('joesama/project::dashboard.portfolio.panel-project',['summary' => true])
     </div>
