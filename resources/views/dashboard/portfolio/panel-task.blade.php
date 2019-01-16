@@ -1,12 +1,12 @@
 <!--Sparkline pie chart -->
 <div class="panel panel-danger panel-colorful clearfix">
-    <div class="panel-body text-center clearfix">
+    <div class="panel-body text-center clearfix pad-no">
     <div class="col-sm-{{($summary) ? '12' : '4'}} pad-top text-center">
-        <p class="text-sm text-bold text-uppercase">
+        <p class="text-sm text-semibold text-uppercase">
             {{ __('joesama/project::dashboard.portfolio.task') }}
         </p>
         <div class="text-lg">
-            <p class="text-5x text-thin">
+            <p class="text-2x text-thin">
                 {{ data_get($task,'overdue') }}
             </p>
         </div>

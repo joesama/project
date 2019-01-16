@@ -1,8 +1,8 @@
-<div class="col-lg-3">
+<div class="col-lg-4">
     <div class="panel panel-bordered-dark">
         <div class="panel-heading text-center">
             <h3 class="panel-title">
-                {{ __('joesama/project::report.workflow.'.$state) }}
+                {{ __('joesama/project::report.workflow.'.$status) }}
             </h3>
         </div>
         <div class="panel-body text-center">
@@ -13,7 +13,9 @@
             <p class="text-muted">
                 {{ data_get($profile,'position.description') }}
             </p>
-            <p class="text-md"></p>
+            <p class="text-md">
+                {{ data_get($record,'remark') }}
+            </p>
         </div>
     </div>
 </div>

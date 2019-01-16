@@ -139,5 +139,8 @@ return [
 		'position_id' => 'Jawatan',
 		'user_id' => 'ID Pengguna',
 		'role_id' => 'Peranan Projek',
+	],
+	'report' => [
+		'report_date' => 'Tarikh Laporan'
 	]
 ];

@@ -30,10 +30,11 @@ return [
 		'mo' => 'Project Management Office - Group Operations & Strategis Planning '
 	],
 	'workflow' => [
-		'pm' => 'Prepared By',
-		'approver' => 'Approved By',
-		'validate' => 'Validate By',
-		'review' => 'Review By',
+		'new' => 'Prepared By',
+		'approved' => 'Approved By',
+		'validated' => 'Validate By',
+		'reviewed' => 'Review By',
+		'accepted' => 'Accepted By',
 		'name' => 'Name',
 		'mobile' => 'Mobile No.',
 		'position' => 'Position',

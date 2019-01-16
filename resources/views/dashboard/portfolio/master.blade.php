@@ -4,20 +4,20 @@
 @endpush
 @section('content')
 <div class="row mb-3" id="group-dashboard">
-    <div class="col-md-4">
-    	@include('joesama/project::dashboard.portfolio.panel-project',['summary' => false])
+    <div class="col-md-2">
+    	@include('joesama/project::dashboard.portfolio.panel-project',['summary' => true])
     </div>
-    <div class="col-md-4">
-    	@include('joesama/project::dashboard.portfolio.panel-task',['summary' => false])
+    <div class="col-md-2">
+    	@include('joesama/project::dashboard.portfolio.panel-task',['summary' => true])
     </div>
-    <div class="col-md-4">
-    	@include('joesama/project::dashboard.portfolio.panel-issue',['summary' => false])
+    <div class="col-md-2">
+    	@include('joesama/project::dashboard.portfolio.panel-issue',['summary' => true])
     </div>
-    <div class="col-md-6">
-    	@include('joesama/project::dashboard.portfolio.panel-contract',['summary' => false])
+    <div class="col-md-3">
+    	@include('joesama/project::dashboard.portfolio.panel-contract',['summary' => true])
     </div>
-    <div class="col-md-6">
-    	@include('joesama/project::dashboard.portfolio.panel-overspent',['summary' => false])
+    <div class="col-md-3">
+    	@include('joesama/project::dashboard.portfolio.panel-overspent',['summary' => true])
     </div>
 </div>
 <div class="row pad-no">

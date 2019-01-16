@@ -1,15 +1,15 @@
 <div id="demo-panel-network" class="panel clearfix">
     <!--Chart information-->
-    <div class="panel-body text-center clearfix">
+    <div class="panel-body text-center clearfix pad-no">
         <div class="row">
 			<div class="col-sm-{{($summary) ? '12' : '4'}} pad-top">
-                <p class="text-sm text-bold text-uppercase text-danger">
+                <p class="text-sm text-semibold text-uppercase text-danger">
                     {{ __('joesama/project::dashboard.portfolio.overspent') }}
                 </p>
                 <div class="text-lg">
                     <div class="media">
                         <div class="media-left" style="width: 95%">
-                            <span class="text-5x text-thin text-right  text-danger">
+                            <span class="text-2x text-thin text-right  text-danger">
                             	{{ data_get($contract,'total.value') }}
                             </span>
                         </div>

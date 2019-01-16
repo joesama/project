@@ -83,6 +83,10 @@ class ProjectServiceProvider extends ModuleServiceProvider
         $this->publishes([
             $path.'/config/policy.php' => config_path('packages/joesama/project/policy.php'),
         ], 'config');
+
+        $this->publishes([
+            $path.'/views/components/shortcut.blade.php' => resource_path('views/joesama/entree/layouts/menu/shortcut.blade.php'),
+        ], 'views');
     }
 
     /**

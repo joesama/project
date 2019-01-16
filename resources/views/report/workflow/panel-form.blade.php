@@ -1,8 +1,8 @@
-<div class="col-lg-3">
+<div class="col-lg-4">
     <div class="panel panel-bordered-dark">
     	<div class="panel-heading text-center">
     		<h3 class="panel-title">
-                {{ __('joesama/project::report.workflow.'.$state) }}      
+                {{ __('joesama/project::report.workflow.'.$status) }}      
             </h3>
     	</div>
         <div class="panel-body text-center">
@@ -20,6 +20,8 @@
             <input type="hidden" name="end" value="{{ $reportEnd }}">
             <input type="hidden" name="cycle" value="{{ $reportDue }}">
             <input type="hidden" name="state" value="{{ $state }}">
+            <input type="hidden" name="status" value="{{ $status }}">
+            <input type="hidden" name="need_action" value="{{ $need_action }}">
             <input type="hidden" name="type" value="{{ request()->segment(2) }}">
             <textarea id="textarea-input" name="remark" rows="9" class="form-control" placeholder="Your content here.."></textarea>
             <button type="submit" class="btn btn-dark mar-ver pull-right">

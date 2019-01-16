@@ -118,34 +118,48 @@
 	</div>
 </div>
 <div class="row bord-hor bord-btm">
-	<div class="col-md-12 text-left text-bold bord-rgt pad-all">
-		@foreach($workflow as $state => $workflow)
-			@if( ( is_null( data_get($workflow,'weekly') ) && is_null( data_get($workflow,'monthly') ) )  && $state == "pm")
-			  @include('joesama/project::report.workflow.panel-form',[
-			      'state' => $state,
-			      'status' => data_get($workflow,'status'),
-			      'profile' => data_get($workflow,'profile'),
-			    ])
-			@elseif( !is_null( data_get($workflow,'weekly') ) || !is_null( data_get($workflow,'monthly') ) )
-
-				@php
-					$flow = data_get($workflow,'weekly',data_get($workflow,'monthly'));
-				@endphp
-				@if(data_get($flow,'state') == $state)
-				  	@include('joesama/project::report.workflow.panel-info',[
-				      'state' => $state,
-				      'status' => data_get($workflow,'status'),
-				      'profile' => data_get($workflow,'profile'),
-				    ])
-				@else
+	<div class="col-md-12 text-left text-bold bord-rgt pad-all" id="need_action">
+		@php
+			$index = 1;
+			$nextflow = $workflow;
+		@endphp
+		@foreach($workflow as $state => $flow)
+			@php
+				$next = $nextflow->slice($index,1)->first();
+				$profile = data_get($flow,'profile');
+				$flowRecord = data_get($flow,'weekly',data_get($flow,'monthly',NULL));
+			@endphp
+			@if(  is_null( $flowRecord ) && $workflow->keys()->first() == $state)
+				@if( $profile->user_id == auth()->id() )
 				  	@include('joesama/project::report.workflow.panel-form',[
-				      'state' => $state,
-				      'status' => data_get($workflow,'status'),
-				      'profile' => data_get($workflow,'profile'),
+						'state' => $state,
+						'need_action' => data_get($next,'profile.id'),
+						'status' => data_get($flow,'status'),
+						'profile' => $profile,
 				    ])
 				@endif
-
+			@elseif( !is_null( $flowRecord  ) )
+				@if(data_get($flowRecord,'state') == data_get($flow,'status'))
+				  	@include('joesama/project::report.workflow.panel-info',[
+						'state' => $state,
+						'status' => data_get($flow,'status'),
+						'record' => $flowRecord,
+						'profile' => $profile,
+				    ])
+				@endif
+			@else
+				@if( intval($profile->user_id) == intval(auth()->id()) )
+			  	@include('joesama/project::report.workflow.panel-form',[
+					'state' => $state,
+					'need_action' => data_get($next,'profile.id'),
+					'status' => data_get($flow,'status'),
+					'profile' => $profile,
+			    ])
+			    @endif
 			@endif
+			@php
+				$index++;
+			@endphp
 		@endforeach
 	</div>
 </div>

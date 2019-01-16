@@ -25,7 +25,7 @@ class UpdateProfileData extends Migration
         
         Schema::table('project_card', function (Blueprint $table) {
             $table->unsignedInteger('month')->after('creator_id')->nullable();
-            $table->date('report_end')->after('report_date')->nullable();
+            $table->date('card_end')->after('card_date')->nullable();
         });
 
         Schema::table('project_report_workflow', function (Blueprint $table) {

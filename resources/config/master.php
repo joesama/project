@@ -3,7 +3,7 @@
 return [
 	'role' => [
 		'user' => ['Group Admin', 'Subsidiary Admin', 'Staff'],
-		'profile' => ['Admin','Project Manager','Reviewer','Approver','Viewer','BODs']
+		'profile' => ['Admin','Project Manager','Reviewer','Approver','Validator','Viewer','BODs']
 	],
 	'master' => [
 		'progress' => ['0-25','26-50','51-75','76-100'],
@@ -14,6 +14,9 @@ return [
 			'Asisstant Manager', 'Senior Manager',
 			'Asisstant General Manager', 'General Manager', 
 			'Vice President', 'CEO'
+		],
+		'status' => [
+			'New', 'Approved','Validated', 'Reviewed','Accepted',
 		]
 	],
 	'corporate' => [

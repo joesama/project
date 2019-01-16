@@ -26,6 +26,14 @@ class Corporate extends Model
         return $this->belongsTo(Corporate::class,'child_to','id');
     }
 
+   /**
+     * Get the report progress.
+     */
+    public function scopeIsParent($query)
+    {
+        return $this->whereNull('child_to');
+    }
+
     /**
      * Get the address for the corporate.
      */

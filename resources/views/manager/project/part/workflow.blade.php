@@ -14,48 +14,7 @@
     <!--Panel body-->
     <div class="collapse in" id="workflow">
       <div class="panel-body text-center">
-          <div class="row">
-            <div class="col-md-12 text-center">
-              @foreach($workflow as $state => $workflow)
-                @if( ( is_null( data_get($workflow,'weekly') ) || is_null( data_get($workflow,'monthly') ) )  && $state == "pm")
-                  @include('joesama/project::report.workflow.panel-info',[
-                      'state' => $state,
-                      'status' => data_get($workflow,'status'),
-                      'profile' => data_get($workflow,'profile'),
-                    ])
-                @elseif( !is_null( data_get($workflow,'weekly') ) || !is_null( data_get($workflow,'monthly') ) )
-                  @include('joesama/project::report.workflow.panel-info',[
-                      'state' => $state,
-                      'status' => data_get($workflow,'status'),
-                      'profile' => data_get($workflow,'profile'),
-                    ])
-                @endif
-              @endforeach
-            </div>
-          </div>
-          @php
-            $isManager = data_get($profile,'role')->filter(function($role) use($project){
-                return $role->where('id',2)->where('pivot.profile_id',data_get($project,'id'));
-            });
-          @endphp
-          @if( ( is_null( data_get($workflow,'weekly') ) || is_null( data_get($workflow,'monthly') ) ) && $isManager->isNotEmpty() )
-          <div class="row">
-            <div class="col-md-3 pad-hor">
-              @if( is_null( data_get($workflow,'weekly') ) )
-              <a class="btn btn-dark mar-btm" href="{{handles('joesama/projet::report/weekly/form/'.$project->corporate_id.'/'.$project->id)}}" style="width:200px">
-                <i class="psi-file-add icon-fw"></i>
-                {{ __('joesama/project::manager.workflow.weekly') }}
-              </a>
-              @endif
-              @if( is_null( data_get($workflow,'monthly') ) )
-              <a class="btn btn-dark" href="{{handles('joesama/projet::report/monthly/form/'.$project->corporate_id.'/'.$project->id)}}" style="width: 200px">
-                <i class="psi-file-add icon-fw"></i>
-                {{ __('joesama/project::manager.workflow.monthly') }}
-              </a>      
-              @endif      
-            </div>
-          </div>
-          @endif
+          {!! $weeklyReport !!}
       </div>
     </div>
   </div>

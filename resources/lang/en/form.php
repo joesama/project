@@ -139,5 +139,8 @@ return [
 		'position_id' => 'Position',
 		'user_id' => 'User Id',
 		'role_id' => 'Project Role',
+	],
+	'report' => [
+		'report_date' => 'Report Date'
 	]
 ];

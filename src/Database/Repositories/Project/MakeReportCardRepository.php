@@ -3,6 +3,7 @@ namespace Joesama\Project\Database\Repositories\Project;
 
 use Carbon\Carbon;
 use DB;
+use Joesama\Project\Database\Model\Organization\Profile;
 use Joesama\Project\Database\Model\Project\Card;
 use Joesama\Project\Database\Model\Project\CardWorkflow;
 use Joesama\Project\Database\Model\Project\Project;
@@ -27,26 +28,39 @@ class MakeReportCardRepository
 	 **/
 	public function initMonthly(Project $project, $request)
 	{
-
 		DB::beginTransaction();
 
+		$initialFlow = collect(config('joesama/project::workflow.1'))->keys()->first();
+
+		$profile = Profile::where('user_id',auth()->id())->first();
+
 		try{
-dd($request->all());
-			$card = new Card([
-				'project_id' => $project->id,
-				'creator_id' => \Auth::user()->id,
-				'created_at' => Carbon::now(),
-				'updated_at' => Carbon::now()
+
+			$card = Card::firstOrNew([
+				'month' => $request->get('cycle'),
 			]);
-dd($card);
-			// $project->card()->save($card);
+
+			if ( $initialFlow == $request->get('state') ){
+
+				$card->project_id = $project->id;
+				$card->card_date = Carbon::parse($request->get('start'))->format('Y-m-d');
+				$card->card_end = Carbon::parse($request->get('end'))->format('Y-m-d');
+				$card->creator_id = $profile->id;
+			}
+
+			$card->workflow_id = $request->get('state');
+			$card->need_action = $request->get('need_action');
+			$card->save();
 
 			DB::commit();
 
-			return $project;
+			$this->initMonthlyWorkflow($card,$profile->id,$request->input());
+			$this->lockProjectData($project,$request->get('type'));
+
+			return $report;
 
 		}catch( \Exception $e){
-
+			dd($e->getMessage());
 			DB::rollback();
 		}
 	}
@@ -65,6 +79,8 @@ dd($card);
 
 		$initialFlow = collect(config('joesama/project::workflow.1'))->keys()->first();
 
+		$profile = Profile::where('user_id',auth()->id())->first();
+
 		try{
 
 			$report = Report::firstOrNew([
@@ -76,13 +92,17 @@ dd($card);
 				$report->project_id = $project->id;
 				$report->report_date = Carbon::parse($request->get('start'))->format('Y-m-d');
 				$report->report_end = Carbon::parse($request->get('end'))->format('Y-m-d');
-				$report->report_date = Carbon::now()->format('Y-m-d H:i:s');
-				$report->creator_id = \Auth::user()->id;
-				$report->save();
-
-				DB::commit();
-
+				$report->creator_id = $profile->id;
 			}
+
+			$report->workflow_id = $request->get('state');
+			$report->need_action = $request->get('need_action');
+			$report->save();
+
+			DB::commit();
+
+			$this->initWeeklyWorkflow($report,$profile->id,$request->input());
+			$this->lockProjectData($project,$request->get('type'));
 
 			return $report;
 
@@ -93,12 +113,16 @@ dd($card);
 	}
 
 	/**
-	 * Create Project Card Workflow
-	 *
-	 * @return oesama\Project\Database\Model\Project\Card
+	 * Create Monthly Card Workflow
+	 * 
+	 * @param  Report 	$report       Get Report Header
+	 * @param  int 		$profile      Profile Id
+	 * @param  array  	$workflowData Get Form Data
+	 * @return JJoesama\Project\Database\Model\Project\Card
 	 **/
-	public function initProjectWorkflow(
+	public function initMonthlyWorkflow(
 		Card $card,
+		int $profile,
 		array $workflowData
 	){
 
@@ -107,10 +131,9 @@ dd($card);
 		try{
 
 			$workflow = new CardWorkflow([
-				'remark' => data_get($workflowData,'remark'),
-				'profile_id' => \Auth::user()->id,
-				'created_at' => Carbon::now(),
-				'updated_at' => Carbon::now()
+				'remark' => array_get($workflowData,'remark'),
+				'state' => array_get($workflowData,'status'),
+				'profile_id' => $profile,
 			]);
 
 			$card->workflow()->save($workflow);
@@ -127,12 +150,15 @@ dd($card);
 
 	/**
 	 * Create Weekly Workflow
-	 * @param  Report $report       Get Report Header
-	 * @param  array  $workflowData Get Form Data
+	 * 
+	 * @param  Report 	$report       Get Report Header
+	 * @param  int 		$profile      Profile Id
+	 * @param  array  	$workflowData Get Form Data
 	 * @return Joesama\Project\Database\Model\Project\Report
 	 */
 	public function initWeeklyWorkflow(
 		Report $report,
+		int $profile,
 		array $workflowData
 	){
 
@@ -140,14 +166,14 @@ dd($card);
 
 		try{
 
-			$workflow = new ReportWorkflow([
-				'remark' => data_get($workflowData,'remark'),
-				'state' => data_get($workflowData,'state'),
-				'profile_id' => \Auth::user()->id,
+			$reportWork = new ReportWorkflow([
+				'remark' => array_get($workflowData,'remark'),
+				'state' => array_get($workflowData,'status'),
+				'profile_id' => $profile,
 			]);
 
-			$report->workflow()->save($workflow);
-
+			$report->workflow()->save($reportWork);
+			
 			DB::commit();
 
 			return $report;
@@ -156,5 +182,16 @@ dd($card);
 			dd($e->getMessage());
 			DB::rollback();
 		}
+	}
+
+	/**
+	 * Lock Project Data
+	 *
+	 * @param string $type 		Report Type	
+	 * @param Report $project 	Project Data
+	 **/
+	public function lockProjectData(Project $project, string $type)
+	{
+		// will lock all progress
 	}
 } // END class MakeReportCardRepository 

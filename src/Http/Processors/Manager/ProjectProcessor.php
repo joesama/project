@@ -153,6 +153,7 @@ class ProjectProcessor
 		return [
 			'project' => $project,
 			'workflow' => $workflow,
+			'weeklyReport' => $this->listProcessor->weeklyReport($request,$corporateId,1),
 			'taskTable' => $this->listProcessor->task($request,$corporateId),
 			'issueTable' => $this->listProcessor->issue($request,$corporateId),
 			'riskTable' => $this->listProcessor->risk($request,$corporateId),

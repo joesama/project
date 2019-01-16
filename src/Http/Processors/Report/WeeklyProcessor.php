@@ -3,9 +3,8 @@ namespace Joesama\Project\Http\Processors\Report;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Joesama\Project\Database\Model\Organization\Profile;
-use Joesama\Project\Database\Model\Project\ReportWorkflow;
 use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
+use Joesama\Project\Database\Repositories\Project\ReportCardInfoRepository;
 
 /**
  * Client Record 
@@ -15,12 +14,14 @@ use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
  **/
 class WeeklyProcessor 
 {
-	private $project;
+	private $reportCard;
 
 	public function __construct(
-		ProjectInfoRepository $projectInfo
+		ProjectInfoRepository $projectInfo,
+		ReportCardInfoRepository $reportCardInfo
 	){
 		$this->projectInfo = $projectInfo;
+		$this->reportCard = $reportCardInfo;
 	}
 
 
@@ -50,18 +51,7 @@ class WeeklyProcessor
 		$reportStart = Carbon::now()->startOfWeek()->format('d-m-Y');
 		$reportEnd = Carbon::now()->endOfWeek()->format('d-m-Y');
 
-		$workflow = collect(config('joesama/project::workflow.1'))->map(function($role,$state) use($corporateId,$projectId){
-			return [
-				'weekly' => ReportWorkflow::whereHas('report',function($query) use($projectId){
-								$query->where('project_id',$projectId);
-								$query->whereBetween('report_date',[ Carbon::now()->startOfMonth() , Carbon::now()->endOfMonth() ]);
-							})->with('report')->first(),
-				'profile' => Profile::where('corporate_id',$corporateId)->whereHas('role',function($query) use($projectId,$role){
-								$query->where('project_id',$projectId);
-								$query->where('role_id',$role);
-							})->with('role')->first()
-			];
-		});
+		$workflow = $this->reportCard->weeklyWorkflow($corporateId, $projectId);
 
 		return compact('project','reportDue','reportStart','reportEnd','corporateId','projectId','workflow');
 	}
