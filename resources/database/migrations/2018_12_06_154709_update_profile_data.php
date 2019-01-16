@@ -13,9 +13,9 @@ class UpdateProfileData extends Migration
      */
     public function up()
     {
-        Schema::table('profile', function (Blueprint $table) {
-            $table->unsignedInteger('position_id')->after('corporate_id')->nullable();
-        });
+        // Schema::table('profile', function (Blueprint $table) {
+        //     $table->unsignedInteger('position_id')->after('corporate_id')->nullable();
+        // });
         
         Schema::table('project_report', function (Blueprint $table) {
             $table->unsignedInteger('creator_id')->after('workflow_id')->nullable();
