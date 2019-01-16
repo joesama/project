@@ -148,8 +148,8 @@ class ReportCardInfoRepository
 				'status' => $status,
 				'weekly' => ReportWorkflow::whereHas('report',function($query) use($projectId,$dateStart,$dateEnd){
 								$query->where('project_id',$projectId);
-								$query->whereDate('report_date', '<=' ,$dateStart );
-								$query->whereDate('report_end','>=', $dateEnd );
+								$query->whereDate('report_date',$dateStart );
+								$query->whereDate('report_end', $dateEnd );
 							})->where('state',$status)->with('report')->first(),
 				'profile' => $profile
 			];

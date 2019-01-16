@@ -49,15 +49,15 @@ class WeeklyProcessor
 		$project = $this->projectInfo->getProject($projectId);
 		$reportDue = Carbon::now()->weekOfYear;
 		
-		$startOfMonth = Carbon::now()->startOfMonth();
+		$startOfWeek = Carbon::now()->startOfWeek();
 
-		$reportStart = $startOfMonth->format('d-m-Y');
-		$dueStart = $startOfMonth->format('Y-m-d');
+		$reportStart = $startOfWeek->format('d-m-Y');
+		$dueStart = $startOfWeek->format('Y-m-d');
 
-		$endOfMonth = Carbon::now()->endOfMonth();
+		$endOfWeek = Carbon::now()->endOfWeek();
 
-		$reportEnd = $endOfMonth->format('d-m-Y');
-		$dueEnd = $endOfMonth->format('Y-m-d');
+		$reportEnd = $endOfWeek->format('d-m-Y');
+		$dueEnd = $endOfWeek->format('Y-m-d');
 
 		$workflow = $this->reportCard->weeklyWorkflow($corporateId, $projectId, $dueStart, $dueEnd);
 
