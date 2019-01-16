@@ -126,6 +126,8 @@ return [
 				'partner' => ['corporateId','projectId'],
 				'attribute' => ['corporateId','projectId'],
 				'profile' => ['corporateId','masterId?'],
+				'weekly' => ['corporateId','projectId'],
+				'monthly' => ['corporateId','projectId'],
 			],
 			'profile' => [
 				'reassign' => ['masterId','projectId']
