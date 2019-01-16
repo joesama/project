@@ -35,7 +35,7 @@ class WorkflowProcessor
 
 		$type = 'init'.ucfirst($request->get('type'));
 		$workflow = $type.'Workflow';
-
+		
 		$report = $this->makeReport->{$type}($project,$request);
 
 		return redirect(handles('report/'.$request->get('type').'/form/'.$corporateId.'/'.$projectId .'?report='.$report->id));

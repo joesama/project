@@ -29,7 +29,8 @@ class DashboardProcessor
 	{
 
 		return [
-			'tableReport' => $this->listProcessor->weeklyReport($request,$corporateId),
+			'tableWeekly' => $this->listProcessor->weeklyReport($request,$corporateId),
+			'tableMonthly' => $this->listProcessor->monthlyReport($request,$corporateId),
 			'tableProject' => $this->listProcessor->project($request,$corporateId),
 			'tableTask' => $this->listProcessor->task($request,$corporateId),
 			'tableIssue' => $this->listProcessor->issue($request,$corporateId),

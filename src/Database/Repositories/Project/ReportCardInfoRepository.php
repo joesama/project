@@ -5,6 +5,7 @@ use Carbon\Carbon;
 use Joesama\Project\Database\Model\Master\MasterData;
 use Joesama\Project\Database\Model\Organization\Profile;
 use Joesama\Project\Database\Model\Project\Card;
+use Joesama\Project\Database\Model\Project\CardWorkflow;
 use Joesama\Project\Database\Model\Project\Report;
 use Joesama\Project\Database\Model\Project\ReportWorkflow;
 
@@ -24,7 +25,30 @@ class ReportCardInfoRepository
 	}
 
 	/**
-	 * Get Weekly Project List
+	 * Get Monthly Report List
+	 * 
+	 * @param  int    $corporateId Subsidiary Id
+	 * @param  int    $projectId   Project Id
+	 * @return Illuminate\Pagination\LengthAwarePaginator
+	 */
+	public function monthlyList(int $corporateId, ?int $projectId)
+	{
+		return $this->cardObj->where(function($query){
+
+					$query->whereHas('project',function($query){
+						$query->whereHas('manager',function($query){
+							$query->where('profile_id',$this->profile->id);
+						});
+					});
+
+					$query->orWhere('need_action',$this->profile->id);
+
+				})->component()
+				->paginate();
+	}
+
+	/**
+	 * Get Weekly Report List
 	 * 
 	 * @param  int    $corporateId Subsidiary Id
 	 * @param  int    $projectId   Project Id
@@ -41,22 +65,63 @@ class ReportCardInfoRepository
 					});
 
 					$query->orWhere('need_action',$this->profile->id);
-					
+
 				})->component()
 				->paginate();
 	}
 
 
 	/**
-	 * Weekly Report Workflow
+	 * Monthly Report Workflow
 	 * 
-	 * @param  int    $corporateId Corporate Id
-	 * @param  int    $projectId   Project Id
+	 * @param  int    	$corporateId 	Corporate Id
+	 * @param  int    	$projectId   	Project Id
+	 * @param  string   $dateStart   	Report Date Start
+	 * @param  string   $dateEnd   		Report Date End
 	 * @return Collection
 	 */
-	public function weeklyWorkflow(int $corporateId, int $projectId)
+	public function monthlyWorkflow(int $corporateId, int $projectId, string $dateStart, string $dateEnd)
 	{
-		return collect(config('joesama/project::workflow.1'))->map(function($role,$state) use($corporateId,$projectId){
+		return collect(config('joesama/project::workflow.1'))->map(function($role,$state) use($corporateId,$projectId,$dateStart,$dateEnd){
+
+			if(in_array($state,[19,20])){
+				$profile = Profile::whereHas('role',function($query) use($projectId,$role){
+								$query->where('project_id',$projectId);
+								$query->where('role_id',$role);
+							})->with('role')->first();
+			}else{
+				$profile = Profile::whereHas('corporate',function($query){
+								$query->isParent();
+							})->whereHas('role',function($query) use($projectId,$role){
+								$query->where('role_id',$role);
+							})->with('role')->first();
+			}
+			$status = strtolower(MasterData::find($state)->description);
+
+			return [
+				'status' => $status,
+				'monthly' => CardWorkflow::whereHas('card',function($query) use($projectId,$dateStart,$dateEnd){
+								$query->where('project_id',$projectId);
+								$query->whereDate('card_date',$dateStart );
+								$query->whereDate('card_end', $dateEnd );
+							})->where('state',$status)->with('card')->first(),
+				'profile' => $profile
+			];
+		});
+	}
+
+	/**
+	 * Weekly Report Workflow
+	 * 
+	 * @param  int    	$corporateId 	Corporate Id
+	 * @param  int    	$projectId   	Project Id
+	 * @param  string   $dateStart   	Report Date Start
+	 * @param  string   $dateEnd   		Report Date End
+	 * @return Collection
+	 */
+	public function weeklyWorkflow(int $corporateId, int $projectId, string $dateStart, string $dateEnd)
+	{
+		return collect(config('joesama/project::workflow.1'))->map(function($role,$state) use($corporateId,$projectId,$dateStart,$dateEnd){
 
 			if(in_array($state,[19,20])){
 				$profile = Profile::whereHas('role',function($query) use($projectId,$role){
@@ -75,9 +140,10 @@ class ReportCardInfoRepository
 
 			return [
 				'status' => $status,
-				'weekly' => ReportWorkflow::whereHas('report',function($query) use($projectId){
+				'weekly' => ReportWorkflow::whereHas('report',function($query) use($projectId,$dateStart,$dateEnd){
 								$query->where('project_id',$projectId);
-								$query->whereBetween('report_date',[ Carbon::now()->startOfWeek() , Carbon::now()->endOfWeek() ]);
+								$query->whereDate('report_date', '<=' ,$dateStart );
+								$query->whereDate('report_end','>=', $dateEnd );
 							})->where('state',$status)->with('report')->first(),
 				'profile' => $profile
 			];

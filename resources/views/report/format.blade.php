@@ -130,7 +130,7 @@
 				$flowRecord = data_get($flow,'weekly',data_get($flow,'monthly',NULL));
 			@endphp
 			@if(  is_null( $flowRecord ) && $workflow->keys()->first() == $state)
-				@if( $profile->user_id == auth()->id() )
+				@if( intval(data_get($profile,'user_id')) == intval(auth()->id()) )
 				  	@include('joesama/project::report.workflow.panel-form',[
 						'state' => $state,
 						'need_action' => data_get($next,'profile.id'),
@@ -148,7 +148,7 @@
 				    ])
 				@endif
 			@else
-				@if( intval($profile->user_id) == intval(auth()->id()) )
+				@if( intval(data_get($profile,'user_id')) == intval(auth()->id()) )
 			  	@include('joesama/project::report.workflow.panel-form',[
 					'state' => $state,
 					'need_action' => data_get($next,'profile.id'),

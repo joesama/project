@@ -57,7 +57,7 @@ class MakeReportCardRepository
 			$this->initMonthlyWorkflow($card,$profile->id,$request->input());
 			$this->lockProjectData($project,$request->get('type'));
 
-			return $report;
+			return $card;
 
 		}catch( \Exception $e){
 			dd($e->getMessage());
@@ -143,7 +143,7 @@ class MakeReportCardRepository
 			return $card;
 
 		}catch( \Exception $e){
-
+			dd($e->getMessage());
 			DB::rollback();
 		}
 	}

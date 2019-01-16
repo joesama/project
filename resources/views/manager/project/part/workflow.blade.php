@@ -14,7 +14,12 @@
     <!--Panel body-->
     <div class="collapse in" id="workflow">
       <div class="panel-body text-center">
+        <div class="col-md-12">
           {!! $weeklyReport !!}
+        </div>
+        <div class="col-md-12">
+          {!! $monthlyReport !!}
+        </div>
       </div>
     </div>
   </div>

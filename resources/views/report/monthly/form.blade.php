@@ -14,6 +14,14 @@
 </div>
 @endsection
 @push('content.script')
-
+<script type="text/javascript">
+$(document).on('nifty.ready', function () {
+    $('#need_action').each(function() {
+        $(this).find('.panel').matchHeight({
+            byRow: true
+        });
+    });
+});
+</script>
 @endpush
 

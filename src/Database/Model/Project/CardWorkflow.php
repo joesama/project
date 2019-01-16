@@ -7,6 +7,7 @@ use Joesama\Project\Database\Model\Organization\Profile;
 class CardWorkflow extends Model
 {
 	protected $table = 'project_card_workflow';
+    protected $guarded = ['id'];
 
     /**
      * Get the workflow card.

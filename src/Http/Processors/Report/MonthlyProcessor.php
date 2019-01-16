@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Joesama\Project\Database\Model\Organization\Profile;
 use Joesama\Project\Database\Model\Project\CardWorkflow;
 use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
+use Joesama\Project\Database\Repositories\Project\ReportCardInfoRepository;
 
 /**
  * Client Record 
@@ -15,12 +16,14 @@ use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
  **/
 class MonthlyProcessor 
 {
-	private $project;
+	private $project, $reportCard;
 
 	public function __construct(
-		ProjectInfoRepository $projectInfo
+		ProjectInfoRepository $projectInfo,
+		ReportCardInfoRepository $reportCardInfo
 	){
 		$this->projectInfo = $projectInfo;
+		$this->reportCard = $reportCardInfo;
 	}
 
 
@@ -46,22 +49,19 @@ class MonthlyProcessor
 	public function form(Request $request, int $corporateId, int $projectId)
 	{
 		$project = $this->projectInfo->getProject($projectId);
-		$reportDue = Carbon::now()->format('F');
-		$reportStart = Carbon::now()->startOfMonth()->format('d-m-Y');
-		$reportEnd = Carbon::now()->endOfMonth()->format('d-m-Y');
+		$reportDue = Carbon::now()->format('m');
+		
+		$startOfMonth = Carbon::now()->startOfMonth();
 
-		$workflow = collect(config('joesama/project::workflow.1'))->map(function($role,$state) use($corporateId,$projectId){
-			return [
-				'monthly' => CardWorkflow::whereHas('card',function($query) use($projectId){
-								$query->where('project_id',$projectId);
-								$query->whereBetween('card_date',[ Carbon::now()->startOfMonth() , Carbon::now()->endOfMonth() ]);
-							})->with('card')->first(),
-				'profile' => Profile::where('corporate_id',$corporateId)->whereHas('role',function($query) use($projectId,$role){
-								$query->where('project_id',$projectId);
-								$query->where('role_id',$role);
-							})->with('role')->first()
-			];
-		});
+		$reportStart = $startOfMonth->format('d-m-Y');
+		$dueStart = $startOfMonth->format('Y-m-d');
+
+		$endOfMonth = Carbon::now()->endOfMonth();
+
+		$reportEnd = $endOfMonth->format('d-m-Y');
+		$dueEnd = $endOfMonth->format('Y-m-d');
+
+		$workflow = $this->reportCard->monthlyWorkflow($corporateId, $projectId, $dueStart, $dueEnd);
 
 		return compact('project','reportDue','reportStart','reportEnd','corporateId','projectId','workflow');
 	}

@@ -3,6 +3,7 @@ namespace Joesama\Project\Http\Processors\Api;
 
 use Joesama\Project\Database\Repositories\Organization\OrganizationInfoRepository;
 use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
+use Joesama\Project\Database\Repositories\Project\ReportCardInfoRepository;
 use Joesama\Project\Database\Repositories\Setup\MasterDataRepository;
 use Joesama\Project\Http\Services\DataGridGenerator;
 
@@ -14,16 +15,18 @@ use Joesama\Project\Http\Services\DataGridGenerator;
  **/
 class ListProcessor 
 {
-	private $projectObj, $masterDataObj, $organizationObj;
+	private $projectObj, $masterDataObj, $organizationObj, $reportCardObj;
 
 	public function __construct(
 		ProjectInfoRepository $projectInfo,
 		MasterDataRepository $masterData,
-		OrganizationInfoRepository $organizationData
+		OrganizationInfoRepository $organizationData,
+		ReportCardInfoRepository $reportCardObj
 	){
 		$this->projectObj = $projectInfo;
 		$this->masterDataObj = $masterData;
 		$this->organizationObj = $organizationData;
+		$this->reportCardObj = $reportCardObj;
 	}
 
 	/**
@@ -154,5 +157,25 @@ class ListProcessor
 	public function profile($request,$corporateId)
 	{
 		return $this->organizationObj->listProfile($corporateId);
+	}
+
+	/**
+	 * @param  array $request
+	 * @param  int $request,$corporateId
+	 * @return Illuminate\Pagination\LengthAwarePaginator
+	 */
+	public function weekly($request,$corporateId)
+	{
+		return $this->reportCardObj->weeklyList($corporateId,$request->segment(5));
+	}
+
+	/**
+	 * @param  array $request
+	 * @param  int $request,$corporateId
+	 * @return Illuminate\Pagination\LengthAwarePaginator
+	 */
+	public function monthly($request,$corporateId)
+	{
+		return $this->reportCardObj->monthlyList($corporateId,$request->segment(5));
 	}
 } // END class MakeProjectProcessor 

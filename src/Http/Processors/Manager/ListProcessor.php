@@ -70,6 +70,56 @@ class ListProcessor
 				 ->buildOption($action, TRUE)
 				 ->render();
 	}
+
+	/**
+	 * @param  array $request
+	 * @param  int $request,$corporateId
+	 * @return HTML
+	 */
+	public function monthlyReport($request, int $corporateId, ?int $hasAccess = 0)
+	{
+
+		$columns = [
+		   [ 'field' => 'card_date',
+		   'title' => __('joesama/project::form.report.report_date'),
+		   'style' => 'text-left text-capitalize'],
+		   [ 'field' => 'project.name',
+		   'title' => __('joesama/project::project.info.name'),
+		   'style' => 'text-left text-capitalize'],
+		   [ 'field' => 'month',
+		   'title' => 'Month',
+		   'style' => 'text-center text-bold'],
+		   [ 'field' => 'status.description',
+		   'title' => 'Status',
+		   'style' => 'text-center text-bold']
+		];
+
+		$action = [
+			[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
+			    'url' => handles('joesama/project::report/monthly/form/'.$corporateId), // URL for action
+			    'icons' => 'psi-file-edit icon', // Icon for action : optional
+			    'key' => 'id'  ]
+		];
+
+		$datagrid = new DataGridGenerator();
+		
+		$datagrid->buildTable($columns, __('joesama/project::report.monthly.list') )
+				 ->buildDataModel(
+				 	route('api.list.monthly',[$corporateId, $request->segment(5)]), 
+				 	$this->reportCardObj->monthlyList($corporateId, $request->segment(5))
+				 )
+				 ->buildOption($action, TRUE);
+
+		if($hasAccess){
+			$datagrid->buildAddButton(
+				route('report.monthly.form',[$corporateId, $request->segment(5)]),
+				__('joesama/project::report.monthly.form')
+			);
+		}
+
+		return $datagrid->render();
+	}
+
 	/**
 	 * @param  array $request
 	 * @param  int $request,$corporateId
@@ -102,15 +152,18 @@ class ListProcessor
 
 		$datagrid = new DataGridGenerator();
 		
-		$datagrid->buildTable($columns, __('joesama/project::report.weekly.form') )
+		$datagrid->buildTable($columns, __('joesama/project::report.weekly.list') )
 				 ->buildDataModel(
-				 	route('api.list.project',$corporateId), 
+				 	route('api.list.weekly',[$corporateId, $request->segment(5)]), 
 				 	$this->reportCardObj->weeklyList($corporateId, $request->segment(5))
 				 )
 				 ->buildOption($action, TRUE);
 
 		if($hasAccess){
-			$datagrid->buildAddButton(route('report.weekly.form',[$corporateId, $request->segment(5)]));
+			$datagrid->buildAddButton(
+				route('report.weekly.form',[$corporateId, $request->segment(5)]),
+				__('joesama/project::report.weekly.form')
+			);
 		}
 
 		return $datagrid->render();
