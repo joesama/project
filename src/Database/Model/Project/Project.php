@@ -57,7 +57,7 @@ class Project extends Model
      */
     public function profile()
     {
-        return $this->belongsToMany(Profile::class,'project_role','project_id','profile_id');
+        return $this->belongsToMany(Profile::class,'project_role','project_id','profile_id')->withPivot('role_id');
     }
 
     /**
@@ -196,6 +196,14 @@ class Project extends Model
     }
 
     /**
+     * Get the report progress.
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('active',1);
+    }
+
+    /**
      * Get the unassign project to profile.
      */
     public function scopeUnassigned($query,$profileId)
@@ -210,7 +218,7 @@ class Project extends Model
     public function scopeComponent($query)
     {
         return $query->with([
-            'client','profile',
+            'client','profile.role',
             'corporate','partner','attributes',
             'hsecard','manager','incident','claim',
             'payment','retention','lad','vo','issue','role'

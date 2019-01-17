@@ -31,7 +31,7 @@ class Corporate extends Model
      */
     public function scopeIsParent($query)
     {
-        return $this->whereNull('child_to');
+        return $query->whereNull('child_to')->whereNotNull('user_id');
     }
 
     /**

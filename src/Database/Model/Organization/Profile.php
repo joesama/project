@@ -59,6 +59,16 @@ class Profile extends Model
         return $this->where('corporate_id',$corporateId);
     }
 
+    /**
+     * Get the report progress.
+     */
+    public function scopeFromParent($query)
+    {
+        return $this->whereHas('corporate',function($query){
+            $query->isParent();
+        });
+    }
+
     public function scopeComponent($query)
     {
         return $query->with([

@@ -32,9 +32,9 @@ return [
 	'workflow' => [
 		'new' => 'Prepared By',
 		'approved' => 'Approved By',
-		'validated' => 'Validate By',
-		'reviewed' => 'Review By',
-		'accepted' => 'Accepted By',
+		'validated' => '(GOSD) Validate By',
+		'reviewed' => '(GOSD) Review By',
+		'accepted' => '(GOSD) Accepted By',
 		'name' => 'Name',
 		'mobile' => 'Mobile No.',
 		'position' => 'Position',

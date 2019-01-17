@@ -53,10 +53,12 @@
                                 </td>
                             </tr>
                         </table>
+                        @if($project->active)
                         <a class="btn btn-dark btn-xs mar-btm pull-right" href="{{ handles('joesama/project::manager/partner/form/'.request()->segment(4).'/'.request()->segment(5)) }}">
                             <i class="fa fa-plus icon-fw"></i>
                             {{ __('joesama/project::project.client.partner.name') }}
                         </a>
+                        @endif
                         @forelse(data_get($project,'partner') as $index => $partner)
                         <table class="table table-bordered table-sm">
                             <tr>
@@ -123,6 +125,24 @@
                     </div>
                     <div class="col-md-6 text-left">
                         <table class="table table-bordered table-sm">
+                            @foreach($reportWorkflow as $state => $assignee)
+                            <tr>
+                                <td class="text-bold bg-primary text-light text-capitalize" style="width: 30%">
+                                    {{ __('joesama/project::report.workflow.'.$state) }}
+                                </td>
+                                <td class="pl-2">
+                                    {{ ucwords(data_get($assignee,'profile.name')) }}
+                                </td>
+                            </tr>
+                            @endforeach
+                        </table>
+                        @if($project->active)
+                        <a class="btn btn-dark btn-xs mar-btm pull-right" href="{{ handles('joesama/project::manager/attribute/form/'.request()->segment(4).'/'.request()->segment(5)) }}">
+                            <i class="fa fa-plus icon-fw"></i>
+                            {{ __('joesama/project::project.attr') }}
+                        </a>
+                        @endif
+                        <table class="table table-bordered table-sm">
                             <tr>
                                 <td class="text-bold bg-primary text-light text-capitalize" style="width: 30%">
                                     {{ __('joesama/project::project.info.contract.value') }}
@@ -155,14 +175,8 @@
                                     {{ date('d-m-Y' , strtotime(data_get($project,'end'))) }}
                                 </td>
                             </tr>
-                        </table>
-                        <a class="btn btn-dark btn-xs mar-btm pull-right" href="{{ handles('joesama/project::manager/attribute/form/'.request()->segment(4).'/'.request()->segment(5)) }}">
-                            <i class="fa fa-plus icon-fw"></i>
-                            {{ __('joesama/project::project.attr') }}
-                        </a>
-                        <table class="table table-bordered table-sm">
                             <tr>
-                                <td class="text-bold bg-primary text-light text-capitalize" style="width: 30%">
+                                <td class="text-bold bg-primary text-light text-capitalize" >
                                     {{ __('joesama/project::project.info.contract.gp.original') }}
                                 </td>
                                 <td class="pl-2">
@@ -183,14 +197,6 @@
                                 </td>
                                 <td class="pl-2">
                                     RM {{ number_format(data_get($project,'bond'),2) }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-bold bg-primary text-light text-capitalize">
-                                    {{ __('joesama/project::project.info.contract.eot') }}
-                                </td>
-                                <td class="pl-2">
-
                                 </td>
                             </tr>
                             @foreach(data_get($project,'attributes') as $index => $attributes)

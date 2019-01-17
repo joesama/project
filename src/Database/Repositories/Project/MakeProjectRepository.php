@@ -63,7 +63,7 @@ class MakeProjectRepository
 		    'scope' => null,
 		    'start' => null,
 		    'end' => null,
-		    'active' => 1
+		    'active' => 0
 		]);
 
 		DB::beginTransaction();
@@ -95,6 +95,7 @@ class MakeProjectRepository
 
 				$hse->save();
 
+				$this->projectModel->active = 0;
 				$this->projectModel->hse_id = $hse->id;
 				$this->projectModel->effective_days = $this->effectiveDays($this->projectModel->start,$this->projectModel->end);
 
@@ -105,7 +106,16 @@ class MakeProjectRepository
 
 			$this->projectModel->save();
 
-			$this->projectModel->profile()->attach($projectData->get('profile_id'),['role_id' => 2]);
+			$this->projectModel->profile()->attach($projectData->get('manager_id'),['role_id' => 2]);
+			$this->projectModel->profile()->attach($projectData->get('approver_id'),['role_id' => 4]);
+			$this->projectModel->profile()->attach($projectData->get('validator_id'),['role_id' => 5]);
+			$this->projectModel->profile()->attach($projectData->get('reviewer_id'),['role_id' => 3]);
+			$this->projectModel->profile()->attach($projectData->get('acceptance_id'),['role_id' => 4]);
+
+			if(is_null($id)){
+				$approval = new ProjectWorkflowRepository();
+				$approval->registerProject($this->projectModel);
+			}
 
 			DB::commit();
 

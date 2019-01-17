@@ -11,7 +11,11 @@ return [
 		'assign' => 'Tugasan'
 	],
 	'project' => [
-		'profile_id' => 'Pengurus Projek',
+		'manager_id' => 'Pengurus Projek',
+		'approver_id' => 'Laporan Projek Diluluskan',
+		'validator_id' => 'Laporan Projek Disahkan Oleh',
+		'reviewer_id' => 'Laporan Projek Disemak Oleh',
+		'acceptance_id' => 'Laporan Projek Diterima Oleh',
 		'client_id' => 'Klien Projek',
 		'name' => 'Nama Projek',
 		'contract' => 'No. Kontrak',

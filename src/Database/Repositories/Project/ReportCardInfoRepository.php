@@ -2,6 +2,7 @@
 namespace Joesama\Project\Database\Repositories\Project; 
 
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Joesama\Project\Database\Model\Master\MasterData;
 use Joesama\Project\Database\Model\Organization\Profile;
 use Joesama\Project\Database\Model\Project\Card;
@@ -152,6 +153,33 @@ class ReportCardInfoRepository
 								$query->whereDate('report_end', $dateEnd );
 							})->where('state',$status)->with('report')->first(),
 				'profile' => $profile
+			];
+		});
+	}
+
+
+	/**
+	 * List All Profile Involve In Project 
+	 * 
+	 * @param  Collection 	$profile 	Profile
+	 * @param  int 			$projectId 	Project Id
+	 * @return Collection
+	 */
+	public function reportWorkflow(Collection $profile, int $projectId)
+	{
+		return collect(config('joesama/project::workflow.1'))->mapWithKeys(function($role,$state) use($profile,$projectId){
+
+			$status = strtolower(MasterData::find($state)->description);
+
+			$assignee = $profile->where('pivot.role_id',$role)->first();
+
+			$role = collect(data_get($assignee,'role'))->where('pivot.project_id',$projectId)->first();
+
+			return [
+				$status => [ 
+					'profile' => $assignee,
+					'role' => $role
+				]
 			];
 		});
 	}

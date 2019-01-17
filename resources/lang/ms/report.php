@@ -28,5 +28,15 @@ return [
 		'approval' => 'Aliran Kerja',
 		'trail' => 'Perkembangan Laporan',
 		'mo' => 'Pengurusan Projek - Operasi Kumpulan & Perancangan Strategi'
+	],
+	'workflow' => [
+		'new' => 'Disediakan Oleh',
+		'approved' => 'Diluluskan Oleh',
+		'validated' => '(GOSD) Disahkan Oleh',
+		'reviewed' => '(GOSD) Disemak Oleh',
+		'accepted' => '(GOSD) Diterima Oleh',
+		'name' => 'Name',
+		'mobile' => 'Mobile No.',
+		'position' => 'Position',
 	]
 ];

@@ -87,7 +87,7 @@ class ProjectInfoRepository
 	public function projectList(int $corporateId)
 	{
 
-		$project = $this->projectModel->sameGroup($corporateId);
+		$project = $this->projectModel->sameGroup($corporateId)->active();
 
 		if($this->stricAccess){
 			$project->whereHas('manager',function($query){

@@ -14,7 +14,8 @@
     <!--Panel body-->
     <div class="collapse in" id="hse">
       <div class="panel-body">
-            @if(!is_null($hsecard))
+          @if(!is_null($hsecard))
+            @if($project->active)
             <div class="row">
               <div class="col-md-6">
                 <p class="text-bold mar-no">
@@ -33,6 +34,7 @@
                 </a>
               </div>
             </div>
+            @endif
             @foreach(collect($hsecard->toArray())->except(['id','created_at','updated_at','deleted_at']) as $field => $hse)
               @includeIf('joesama/project::manager.project.part.card-panel',[
                   'id' => $field,
@@ -40,7 +42,7 @@
                   'value' => $hse,
                 ])
             @endforeach()
-            @endif
+          @endif
       </div>
     </div>
   </div>

@@ -11,7 +11,11 @@ return [
 		'assign' => 'Assignation'
 	],
 	'project' => [
-		'profile_id' => 'Project Manager',
+		'manager_id' => 'Project Manager',
+		'approver_id' => 'Project Report Approver',
+		'validator_id' => 'Project Report Validator',
+		'reviewer_id' => 'Project Report Reviewer',
+		'acceptance_id' => 'Project Report Acceptance',
 		'client_id' => 'Project Client',
 		'name' => 'Project Name',
 		'contract' => 'Contract No.',

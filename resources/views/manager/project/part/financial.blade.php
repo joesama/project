@@ -14,6 +14,7 @@
     <!--Panel body-->
     <div class="collapse in" id="financial">
       <div class="panel-body">
+        @if($project->active)
         <div class="row">
           <div class="col-md-12 pad-no mar-btm">
             <a class="btn btn-dark pull-right mar-hor" href="{{ handles('joesama/project::manager/financial/list/'.request()->segment(4).'/'.request()->segment(5)) }}">
@@ -34,6 +35,7 @@
             </a>
           </div>
         </div>
+        @endif
         <div class="row mh-byrow">
           <div class="col-md-1"></div>
           <div class="col-md-2 text-right">

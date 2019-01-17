@@ -4,6 +4,7 @@ namespace Joesama\Project\Http\Processors\Manager;
 use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
 use Joesama\Project\Database\Repositories\Project\ReportCardInfoRepository;
 use Joesama\Project\Http\Services\DataGridGenerator;
+use Joesama\Project\Traits\HasAccessAs;
 
 /**
  * Processing All List 
@@ -13,8 +14,16 @@ use Joesama\Project\Http\Services\DataGridGenerator;
  **/
 class ListProcessor 
 {
+	use HasAccessAs;
+
 	private $projectObj, $reportCardObj;
 
+	/**
+	 * Build Class Dependency
+	 * 
+	 * @param ProjectInfoRepository    $projectInfo Repository for project info
+	 * @param ReportCardInfoRepository $reportCard  Repository for report card
+	 */
 	public function __construct (
 		ProjectInfoRepository $projectInfo,
 		ReportCardInfoRepository $reportCard
@@ -53,22 +62,36 @@ class ListProcessor
 			[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
 			    'url' => handles('joesama/project::manager/project/view/'.$corporateId), // URL for action
 			    'icons' => 'psi-magnifi-glass icon', // Icon for action : optional
-			    'key' => 'id'  ],
-			[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
-			    'url' => handles('joesama/project::manager/project/form/'.$corporateId), // URL for action
-			    'icons' => 'psi-file-edit icon', // Icon for action : optional
 			    'key' => 'id'  ]
 		];
 
+		if($this->isProjectManager() || auth()->user()->isAdmin){
+
+			$editAction = [
+				[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
+				    'url' => handles('joesama/project::manager/project/form/'.$corporateId), // URL for action
+				    'icons' => 'psi-file-edit icon', // Icon for action : optional
+				    'key' => 'id'  ]
+			];
+
+			$action = array_merge($action,$editAction);
+
+		}
+
+
 		$datagrid = new DataGridGenerator();
 		
-		return $datagrid->buildTable($columns, __('joesama/project::project.list.project') )
+		$datagrid->buildTable($columns, __('joesama/project::project.list.project') )
 				 ->buildDataModel(
 				 	route('api.list.project',$corporateId), 
 				 	$this->projectObj->projectList($corporateId)
-				 )->buildAddButton(route('manager.project.form',$corporateId))
-				 ->buildOption($action, TRUE)
-				 ->render();
+				 );
+
+		if($this->wasProjectManager() || auth()->user()->isAdmin){
+			$datagrid->buildAddButton(route('manager.project.form',$corporateId));
+		}
+		
+		return $datagrid->buildOption($action, TRUE)->render();
 	}
 
 	/**
@@ -76,7 +99,7 @@ class ListProcessor
 	 * @param  int $request,$corporateId
 	 * @return HTML
 	 */
-	public function monthlyReport($request, int $corporateId, ?int $hasAccess = 0)
+	public function monthlyReport($request, int $corporateId)
 	{
 
 		$columns = [
@@ -110,7 +133,7 @@ class ListProcessor
 				 )
 				 ->buildOption($action, TRUE);
 
-		if($hasAccess){
+		if($this->isProjectManager()){
 			$datagrid->buildAddButton(
 				route('report.monthly.form',[$corporateId, $request->segment(5)]),
 				__('joesama/project::report.monthly.form')
@@ -125,7 +148,7 @@ class ListProcessor
 	 * @param  int $request,$corporateId
 	 * @return HTML
 	 */
-	public function weeklyReport($request, int $corporateId, ?int $hasAccess = 0)
+	public function weeklyReport($request, int $corporateId)
 	{
 
 		$columns = [
@@ -159,7 +182,7 @@ class ListProcessor
 				 )
 				 ->buildOption($action, TRUE);
 
-		if($hasAccess){
+		if ( $this->isProjectManager() ){
 			$datagrid->buildAddButton(
 				route('report.weekly.form',[$corporateId, $request->segment(5)]),
 				__('joesama/project::report.weekly.form')
@@ -170,11 +193,14 @@ class ListProcessor
 	}
 
 	/**
-	 * @param  array $request
-	 * @param  int $request,$corporateId
-	 * @return HTML
+	 * Generate Task Datagrid
+	 * 
+	 * @param  Request      $request     HTTP Request
+	 * @param  int         	$corporateId Corporate Id
+	 * @param  int|integer 	$hasAction   Can Create New Task
+	 * @return view                   
 	 */
-	public function task($request,$corporateId)
+	public function task($request, int $corporateId, ?int $hasAction = 1)
 	{
 
 		$columns = [
@@ -213,7 +239,7 @@ class ListProcessor
 			    'key' => 'id'  ]
 		];
 
-		if($request->segment(5)){
+		if($this->isProjectManager() || auth()->user()->isAdmin){
 			$editAction = [
 				[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
 				    'url' => handles('joesama/project::manager/task/form/'.$corporateId.'/'.$request->segment(5)), // URL for action
@@ -226,21 +252,27 @@ class ListProcessor
 
 		$datagrid = new DataGridGenerator();
 		
-		return $datagrid->buildTable($columns, __('joesama/project::project.list.task') )
+		$datagrid->buildTable($columns, __('joesama/project::project.list.task') )
 				 ->buildDataModel(
 				 	route('api.list.task',[$corporateId, $request->segment(5)]), 
 				 	$this->projectObj->listProjectTask($corporateId, $request->segment(5))
-				 )->buildAddButton(route('manager.task.form',[$corporateId, $request->segment(5)]))
-				 ->buildOption($action, TRUE)
-				 ->render();
+				 );
+		if ( ( $this->isProjectManager() || auth()->user()->isAdmin ) && $hasAction ) {
+			$datagrid->buildAddButton(route('manager.task.form',[$corporateId, $request->segment(5)]));
+		}
+
+		return $datagrid->buildOption($action, TRUE)->render();
 	}
 
 	/**
-	 * @param  array $request
-	 * @param  int $request,$corporateId
-	 * @return HTML
+	 * Generate Issue Datagrid
+	 * 
+	 * @param  Request      $request     HTTP Request
+	 * @param  int         	$corporateId Corporate Id
+	 * @param  int|integer 	$hasAction   Can Create New Issue
+	 * @return view                   
 	 */
-	public function issue($request,$corporateId)
+	public function issue($request, int $corporateId, ?int $hasAction = 1)
 	{
 
 		$columns = [
@@ -270,7 +302,7 @@ class ListProcessor
 			    'key' => 'id'  ]
 		];
 
-		if($request->segment(5)){
+		if($this->isProjectManager() || auth()->user()->isAdmin){
 			$editAction = [
 				[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
 				    'url' => handles('joesama/project::manager/issue/form/'.$corporateId.'/'.$request->segment(5)), // URL for action
@@ -283,21 +315,28 @@ class ListProcessor
 
 		$datagrid = new DataGridGenerator();
 		
-		return $datagrid->buildTable($columns, __('joesama/project::project.list.issue') )
+		$datagrid->buildTable($columns, __('joesama/project::project.list.issue') )
 				 ->buildDataModel(
 				 	route('api.list.issue',[$corporateId, $request->segment(5)]), 
 				 	$this->projectObj->listProjectIssue($corporateId, $request->segment(5))
-				 )->buildAddButton(route('manager.issue.form',[$corporateId, $request->segment(5)]))
-				 ->buildOption($action, TRUE)
-				 ->render();
+				 );
+
+		if ( ( $this->isProjectManager() || auth()->user()->isAdmin ) && $hasAction ) {
+			$datagrid->buildAddButton(route('manager.issue.form',[$corporateId, $request->segment(5)]));
+		}
+
+		return $datagrid->buildOption($action, TRUE)->render();
 	}
 
 	/**
-	 * @param  array $request
-	 * @param  int $request,$corporateId
-	 * @return HTML
+	 * Generate Risk Datagrid
+	 * 
+	 * @param  Request      $request     HTTP Request
+	 * @param  int         	$corporateId Corporate Id
+	 * @param  int|integer 	$hasAction   Can Create New Issue
+	 * @return view                   
 	 */
-	public function risk($request,$corporateId)
+	public function risk($request, int $corporateId, ?int $hasAction = 1)
 	{
 
 		$columns = [
@@ -316,7 +355,7 @@ class ListProcessor
 			    'key' => 'id'  ]
 		];
 
-		if($request->segment(5)){
+		if($this->isProjectManager() || auth()->user()->isAdmin){
 			$editAction = [
 				[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
 				    'url' => handles('joesama/project::manager/risk/form/'.$corporateId.'/'.$request->segment(5)), // URL for action
@@ -329,13 +368,17 @@ class ListProcessor
 
 		$datagrid = new DataGridGenerator();
 		
-		return $datagrid->buildTable($columns, __('joesama/project::project.list.risk') )
+		$datagrid->buildTable($columns, __('joesama/project::project.list.risk') )
 				 ->buildDataModel(
 				 	route('api.list.risk',[$corporateId, $request->segment(5)]), 
 				 	$this->projectObj->listProjectRisk($corporateId, $request->segment(5))
-				 )->buildAddButton(route('manager.risk.form',[$corporateId, $request->segment(5)]))
-				 ->buildOption($action, TRUE)
-				 ->render();
+				 );
+
+		if ( ( $this->isProjectManager() || auth()->user()->isAdmin ) && $hasAction ) {
+			$datagrid->buildAddButton(route('manager.risk.form',[$corporateId, $request->segment(5)]));
+		}
+
+		return $datagrid->buildOption($action, TRUE)->render();
 	}
 
 	/**
@@ -370,13 +413,17 @@ class ListProcessor
 
 		$datagrid = new DataGridGenerator();
 		
-		return $datagrid->buildTable($columns, __('joesama/project::manager.hse.list') )
+		$datagrid->buildTable($columns, __('joesama/project::manager.hse.list') )
 				 ->buildDataModel(
 				 	route('api.list.incident',[$corporateId, $request->segment(5)]), 
 				 	$this->projectObj->listProjectIncident($corporateId, $request->segment(5))
-				 )->buildAddButton(route('manager.hse.form',[$corporateId, $request->segment(5)]))
-				 ->buildOption($action, TRUE)
-				 ->render();
+				 );
+
+		if($this->isProjectManager() || auth()->user()->isAdmin){
+			$datagrid->buildAddButton(route('manager.hse.form',[$corporateId, $request->segment(5)]));
+		}
+
+		return $datagrid->buildOption($action, TRUE)->render();
 	}
 
 	/**
@@ -402,13 +449,17 @@ class ListProcessor
 
 		$datagrid = new DataGridGenerator();
 		
-		return $datagrid->buildTable($columns, __('joesama/project::manager.partner.list') )
+		$datagrid->buildTable($columns, __('joesama/project::manager.partner.list') )
 				 ->buildDataModel(
 				 	route('api.list.partner',[$corporateId, $request->segment(5)]), 
 				 	$this->projectObj->listProjectPartner($corporateId, $request->segment(5))
-				 )->buildAddButton(route('manager.partner.form',[$corporateId, $request->segment(5)]))
-				 ->buildOption($action, TRUE)
-				 ->render();
+				 );
+
+		if($this->isProjectManager() || auth()->user()->isAdmin){
+			$datagrid->buildAddButton(route('manager.partner.form',[$corporateId, $request->segment(5)]));
+		}
+
+		return $datagrid->buildOption($action, TRUE)->render();
 	}
 
 	/**
@@ -439,12 +490,16 @@ class ListProcessor
 
 		$datagrid = new DataGridGenerator();
 		
-		return $datagrid->buildTable($columns, __('joesama/project::manager.attribute.list') )
+		$datagrid->buildTable($columns, __('joesama/project::manager.attribute.list') )
 				 ->buildDataModel(
 				 	route('api.list.attribute',[$corporateId, $projectId]), 
 				 	$this->projectObj->listProjectAttribute($corporateId, $projectId)
-				 )->buildAddButton(route('manager.attribute.form',[$corporateId, $projectId]))
-				 ->buildOption($action, TRUE)
-				 ->render();
+				 );
+
+		if($this->isProjectManager() || auth()->user()->isAdmin){
+			$datagrid->buildAddButton(route('manager.attribute.form',[$corporateId, $projectId]));
+		}
+
+		return $datagrid->buildOption($action, TRUE)->render();
 	}
 } // END class MakeProjectProcessor 
