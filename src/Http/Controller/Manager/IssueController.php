@@ -2,6 +2,7 @@
 namespace Joesama\Project\Http\Controller\Manager;
 
 use Illuminate\Http\Request;
+use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
 use Joesama\Project\Http\Controller\BaseController;
 
 /**

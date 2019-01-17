@@ -2,7 +2,7 @@
 <!--================================-->
 <div id="mainnav-shortcut">
     <ul class="list-unstyled shortcut-wrap">
-        <li class="col-xs-3" data-content="{{ trans('joesama/project::manager.dashboard.overall') }}">
+        <li class="col-xs-3" data-content="{{ trans('joesama/project::menu.manager.dashboard') }}">
             <a class="shortcut-grid" href="{!! handles('joesama/entree::'.config('joesama/entree::entree.landing','home')) !!}">
                 <div class="icon-wrap icon-wrap-sm icon-circle bg-mint">
                 <i class="pli-project "></i>
