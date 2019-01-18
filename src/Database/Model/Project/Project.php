@@ -21,6 +21,14 @@ class Project extends Model
     /**
      * Get the corporate for project.
      */
+    public function approval()
+    {
+        return $this->hasOne(ProjectApproval::class,'project_id','id');
+    }
+
+    /**
+     * Get the corporate for project.
+     */
     public function corporate()
     {
         return $this->belongsTo(Corporate::class,'corporate_id','id');
@@ -225,6 +233,8 @@ class Project extends Model
         ])->with(['task' => function($query){
             $query->component();
         }])->with(['issue' => function($query){
+            $query->component();
+        }])->with(['approval' => function($query){
             $query->component();
         }]);
     }

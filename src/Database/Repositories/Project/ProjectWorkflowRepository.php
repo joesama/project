@@ -1,15 +1,19 @@
 <?php
 namespace Joesama\Project\Database\Repositories\Project; 
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Joesama\Project\Database\Model\Master\MasterData;
 use Joesama\Project\Database\Model\Project\Project;
 use Joesama\Project\Database\Model\Project\ProjectApproval;
 use Joesama\Project\Database\Model\Project\ProjectApprovalWorkflow;
+use Joesama\Project\Traits\HasAccessAs;
 
 
 class ProjectWorkflowRepository 
 {	
+	use HasAccessAs;
 
 	/**
 	 * List of project for corporate
@@ -19,19 +23,16 @@ class ProjectWorkflowRepository
 	 **/
 	public function projectApprovalList(int $corporateId)
 	{
-
-		$project = $this->projectModel->sameGroup($corporateId);
-
-		if($this->stricAccess){
-			$project->whereHas('manager',function($query){
-				$query->where('profile_id',$this->profile->id);
-			});
-			$project->orWhereHas('admin',function($query){
-				$query->where('profile_id',$this->profile->id);
-			});
-		}
-
-		return $project->component()->paginate();
+		return ProjectApproval::where(function($query) {
+					$query->whereHas('project',function($query) {
+						$query->whereHas('manager',function($query){
+							$query->where('profile_id',$this->profile()->id);
+						});
+					});
+					$query->orWhere('need_action',$this->profile()->id);
+				})
+				->component()
+				->paginate();
 	}
 
 
@@ -72,7 +73,45 @@ class ProjectWorkflowRepository
 			$approval->workflow()->save($workflow);
 
 		}catch( \Exception $e){
-			dd($e->getMessage());
+			throw new Exception($e->getMessage(), 1);
+			DB::rollback();
+		}
+	}
+
+	/**
+	 * Register New Project For Approval
+	 * @param  Project $project Project Object
+	 * @param  Request $project Project Object
+	 * @return [type]           [description]
+	 */
+	public function approveProject(Project $project, Request $request)
+	{
+
+		try{
+
+			$project->active = 1;
+			$project->save();
+
+			$approval = ProjectApproval::firstOrNew([
+				'project_id' =>  $project->id
+			]);
+
+			$approval->workflow_id = $request->get('state');
+			$approval->creator_id = $this->profile()->id;
+			$approval->save();
+
+			$workflow = new ProjectApprovalWorkflow([
+				'remark' => $request->get('remark'),
+				'state' => $request->get('state'),
+				'profile_id' => $this->profile()->id,
+			]);
+
+			$approval->workflow()->save($workflow);
+
+			DB::commit();
+
+		}catch( \Exception $e){
+			throw new \Exception($e->getMessage(), 1);
 			DB::rollback();
 		}
 	}
@@ -80,17 +119,25 @@ class ProjectWorkflowRepository
 	/**
 	 * Project Approval Workflow
 	 * 
-	 * @param  int    	$corporateId 	Corporate Id
 	 * @param  int    	$projectId   	Project Id
-	 * @param  string   $dateStart   	Report Date Start
-	 * @param  string   $dateEnd   		Report Date End
+	 * @param       	$approval   	Project Approval Record
 	 * @return Collection
 	 */
-	public function projectWorkflow(int $corporateId, int $projectId)
+	public function projectWorkflow(Collection $profile, $approval)
 	{
-		return collect(config('joesama/project::workflow.0'))->map(function($role,$state) use($corporateId,$projectId){
-			dump($state);
+		return collect(config('joesama/project::workflow.approval'))->map(function($role,$state) use($profile,$approval){
 
+			$status = strtolower(MasterData::find($state)->description);
+
+			$assignee = $profile->where('pivot.role_id',$role)->first();
+
+			$workflow = $approval->workflow;
+
+			return [
+				'status' => $status,
+				'approval' => $workflow->where('state',$status)->first(),
+				'profile' => $assignee
+			];
 		});
 	}
 

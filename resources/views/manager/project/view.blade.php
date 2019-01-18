@@ -35,6 +35,7 @@
             @includeIf('joesama/project::manager.project.part.financial')
 
             @includeWhen($project->active,'joesama/project::manager.project.part.workflow')
+            @includeWhen(!$project->active,'joesama/project::manager.project.part.approval')
             {{-- @includeIf('joesama/project::project.component.progress') --}}
             {{-- @includeIf('joesama/project::project.component.budget') --}}
             {{-- @includeIf('joesama/project::project.component.hse') --}}

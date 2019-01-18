@@ -9,6 +9,7 @@ use Joesama\Project\Database\Model\Project\Client;
 use Joesama\Project\Database\Model\Project\ReportWorkflow;
 use Joesama\Project\Database\Repositories\Project\FinancialRepository;
 use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
+use Joesama\Project\Database\Repositories\Project\ProjectWorkflowRepository;
 use Joesama\Project\Database\Repositories\Project\ReportCardInfoRepository;
 use Joesama\Project\Http\Processors\Manager\HseProcessor;
 use Joesama\Project\Http\Processors\Manager\ListProcessor;
@@ -29,24 +30,27 @@ class ProjectProcessor
 			$hseScoreProcessor, 
 			$financialRepo, 
 			$reportCardRepo, 
+			$projectWorkflowRepo, 
 			$projectInfo, 
 			$formBuilder;
 
 	/**
 	 * Build Class for project processor
 	 * 
-	 * @param ListProcessor         	$listProcessor  List Manager
-	 * @param ProjectInfoRepository 	$projectInfo    Project Manager
-	 * @param FinancialRepository   	$financialRepo  Financial Info
-	 * @param ReportCardInfoRepository  $reportCard  	Financial Info
-	 * @param HseProcessor          	$hseScoreCard   HSE Info
-	 * @param FormGenerator         	$formBuilder    Form builder
+	 * @param ListProcessor         	$listProcessor  	List Manager
+	 * @param ProjectInfoRepository 	$projectInfo    	Project Manager
+	 * @param FinancialRepository   	$financialRepo  	Financial Info
+	 * @param ReportCardInfoRepository  $reportCard  		Financial Info
+	 * @param ProjectWorkflowRepository $projectWorkflow  	Approval Workflow
+	 * @param HseProcessor          	$hseScoreCard   	HSE Info
+	 * @param FormGenerator         	$formBuilder    	Form builder
 	 */
 	public function __construct(
 		ListProcessor $listProcessor,
 		ProjectInfoRepository $projectInfo,
 		FinancialRepository $financialRepo,
 		ReportCardInfoRepository $reportCard,
+		ProjectWorkflowRepository $projectWorkflow,
 		HseProcessor $hseScoreCard,
 		FormGenerator $formBuilder
 	){
@@ -54,6 +58,7 @@ class ProjectProcessor
 		$this->hseScoreProcessor = $hseScoreCard;
 		$this->financialRepo = $financialRepo;
 		$this->reportCardRepo = $reportCard;
+		$this->projectWorkflowRepo = $projectWorkflow;
 		$this->projectInfo = $projectInfo;
 		$this->formBuilder = $formBuilder;
 	}
@@ -160,10 +165,12 @@ class ProjectProcessor
 		);
 
 		$reportWorkflow = $this->reportCardRepo->reportWorkflow($project->profile,$project->id);
+		$approvalWorkflow = $this->projectWorkflowRepo->projectWorkflow($project->profile,$project->approval);
 
 		return [
 			'project' => $project,
 			'reportWorkflow' => $reportWorkflow,
+			'approvalWorkflow' => $approvalWorkflow,
 			'weeklyReport' => $this->listProcessor->weeklyReport($request,$corporateId),
 			'monthlyReport' => $this->listProcessor->monthlyReport($request,$corporateId),
 			'taskTable' => $this->listProcessor->task($request,$corporateId, $project->active),

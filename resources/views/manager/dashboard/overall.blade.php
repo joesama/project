@@ -31,35 +31,10 @@
   <div class="col-md-12">
     <div class="panel">
       <div class="panel-body">
-        {!! $tableProject !!}
+        {!! $tableApproval !!}
       </div>
     </div>
   </div>
-</div>
-<div class="row">
-	<div class="col-md-12">
-		<div class="panel">
-		  <div class="panel-body">
-		  	{!! $tableTask !!}
-		  </div>
-		</div>
-  </div>
-</div>
-<div class="row">
-	<div class="col-md-6">
-		<div class="panel">
-		  <div class="panel-body">
-		  	{!! $tableIssue !!}
-		  </div>
-		</div>
-	</div>
-	<div class="col-md-6">
-		<div class="panel">
-		  <div class="panel-body">
-		  	{!! $tableRisk !!}
-		  </div>
-		</div>
-	</div>
 </div>
 @endsection
 @push('content.script')

@@ -122,7 +122,8 @@ class MakeProjectRepository
 			return $this->projectModel;
 
 		}catch( \Exception $e){
-			dd($e->getMessage());
+			throw new Exception($e->getMessage(), 1);
+
 			DB::rollback();
 		}
 	}
@@ -162,7 +163,8 @@ class MakeProjectRepository
 			return $this->clientModel;
 
 		}catch( \Exception $e){
-
+			throw new Exception($e->getMessage(), 1);
+			
 			DB::rollback();
 		}
 	}

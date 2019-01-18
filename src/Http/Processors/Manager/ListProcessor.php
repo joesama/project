@@ -2,6 +2,7 @@
 namespace Joesama\Project\Http\Processors\Manager; 
 
 use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
+use Joesama\Project\Database\Repositories\Project\ProjectWorkflowRepository;
 use Joesama\Project\Database\Repositories\Project\ReportCardInfoRepository;
 use Joesama\Project\Http\Services\DataGridGenerator;
 use Joesama\Project\Traits\HasAccessAs;
@@ -26,9 +27,11 @@ class ListProcessor
 	 */
 	public function __construct (
 		ProjectInfoRepository $projectInfo,
+		ProjectWorkflowRepository $projectWorkflow,
 		ReportCardInfoRepository $reportCard
 	){
 		$this->projectObj = $projectInfo;
+		$this->approvalObj = $projectWorkflow;
 		$this->reportCardObj = $reportCard;
 	}
 
@@ -92,6 +95,45 @@ class ListProcessor
 		}
 		
 		return $datagrid->buildOption($action, TRUE)->render();
+	}
+
+	/**
+	 * @param  array $request
+	 * @param  int $request,$corporateId
+	 * @return HTML
+	 */
+	public function projectApproval($request, int $corporateId)
+	{
+
+		$columns = [
+		   [ 'field' => 'generation_date',
+		   'title' => __('joesama/project::form.report.report_date'),
+		   'style' => 'text-left text-capitalize'],
+		   [ 'field' => 'project.name',
+		   'title' => __('joesama/project::project.info.name'),
+		   'style' => 'text-left text-capitalize'],
+		   [ 'field' => 'status.description',
+		   'title' => 'Status',
+		   'style' => 'text-center text-bold']
+		];
+
+		$action = [
+			[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
+			    'url' => handles('joesama/project::manager/project/view/'.$corporateId), // URL for action
+			    'icons' => 'psi-file-edit icon', // Icon for action : optional
+			    'key' => 'project_id'  ]
+		];
+
+		$datagrid = new DataGridGenerator();
+		
+		$datagrid->buildTable($columns, __('joesama/project::manager.workflow.approval') )
+				 ->buildDataModel(
+				 	route('api.list.monthly',[$corporateId, $request->segment(5)]), 
+				 	$this->approvalObj->projectApprovalList($corporateId, $request->segment(5))
+				 )
+				 ->buildOption($action, TRUE);
+
+		return $datagrid->render();
 	}
 
 	/**

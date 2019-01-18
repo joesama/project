@@ -40,6 +40,7 @@ return [
 		'view' => "Health & Safety Environment",
 	],
 	'workflow' => [
+		'approval' => "Project Approval",
 		'report' => "Project Report",
 		'monthly' => "Monthly Project Report",
 		'weekly' => "Weekly Project Report",

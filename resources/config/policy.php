@@ -176,6 +176,7 @@ return [
 				'lad' => ['corporateId','projectId','ladId?']
 			],
 			'workflow' => [
+				'approval' => ['corporateId','projectId'],
 				'process' => ['corporateId','projectId']
 			]
 		],

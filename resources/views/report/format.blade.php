@@ -125,6 +125,7 @@
 		@endphp
 		@foreach($workflow as $state => $flow)
 			@php
+				$action = route('api.workflow.process',[$corporateId,$projectId]);
 				$next = $nextflow->slice($index,1)->first();
 				$profile = data_get($flow,'profile');
 				$flowRecord = data_get($flow,'weekly',data_get($flow,'monthly',NULL));

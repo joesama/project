@@ -13,9 +13,9 @@
             <p class="text-muted">
                 {{ data_get($profile,'position.description') }}
             </p>
-            <form method="POST" action="{{ route('api.workflow.process',[$corporateId,$projectId]) }}">
+            <form method="POST" action="{{ $action }}">
             @csrf
-            <input type="hidden" name="project_id" value="{{ request()->segment(5) }}">
+            <input type="hidden" name="project_id" value="{{ $projectId }}">
             <input type="hidden" name="start" value="{{ $reportStart }}">
             <input type="hidden" name="end" value="{{ $reportEnd }}">
             <input type="hidden" name="cycle" value="{{ $reportDue }}">
