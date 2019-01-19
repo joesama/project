@@ -51,7 +51,6 @@ class BaseController extends Controller
 		    return Profile::where('user_id',auth()->id())->with('role')->first();
 		});
 
-		view()->share('profile',$profile);
 	}
 
 } // END class BaseController 

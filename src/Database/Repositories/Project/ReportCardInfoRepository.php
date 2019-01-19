@@ -87,23 +87,25 @@ class ReportCardInfoRepository
 	 * @param  string   $dateEnd   		Report Date End
 	 * @return Collection
 	 */
-	public function monthlyWorkflow(int $corporateId, int $projectId, string $dateStart, string $dateEnd)
+	public function monthlyWorkflow(int $corporateId, int $projectId, string $dateStart, string $dateEnd, $profile)
 	{
-		return collect(config('joesama/project::workflow.1'))->map(function($role,$state) use($corporateId,$projectId,$dateStart,$dateEnd){
+		return collect(config('joesama/project::workflow.1'))->map(function($role,$state) use($corporateId,$projectId,$dateStart,$dateEnd, $profile){
 
-			if(in_array($state,[19,20])){
-				$profile = Profile::whereHas('role',function($query) use($projectId,$role){
-								$query->where('project_id',$projectId);
-								$query->where('role_id',$role);
-							})->with('role')->first();
-			}else{
-				$profile = Profile::whereHas('corporate',function($query){
-								$query->isParent();
-							})->whereHas('role',function($query) use($projectId,$role){
-								$query->where('role_id',$role);
-							})->with('role')->first();
-			}
+			// if(in_array($state,[19,20])){
+			// 	$profile = Profile::whereHas('role',function($query) use($projectId,$role){
+			// 					$query->where('project_id',$projectId);
+			// 					$query->where('role_id',$role);
+			// 				})->with('role')->first();
+			// }else{
+			// 	$profile = Profile::whereHas('corporate',function($query){
+			// 					$query->isParent();
+			// 				})->whereHas('role',function($query) use($projectId,$role){
+			// 					$query->where('role_id',$role);
+			// 				})->with('role')->first();
+			// }
 			$status = strtolower(MasterData::find($state)->description);
+
+			$profile = $profile->where('pivot.role_id',$role)->first();
 
 			return [
 				'status' => $status,
@@ -126,27 +128,30 @@ class ReportCardInfoRepository
 	 * @param  string   $dateEnd   		Report Date End
 	 * @return Collection
 	 */
-	public function weeklyWorkflow(int $corporateId, int $projectId, string $dateStart, string $dateEnd)
+	public function weeklyWorkflow(int $corporateId, int $projectId, string $dateStart, string $dateEnd, $profile)
 	{
-		return collect(config('joesama/project::workflow.1'))->map(function($role,$state) use($corporateId,$projectId,$dateStart,$dateEnd){
+		return collect(config('joesama/project::workflow.1'))->map(function($role,$state) use($corporateId,$projectId,$dateStart,$dateEnd, $profile){
 
-			if(in_array($state,[19,20])){
-				$profile = Profile::whereHas('role',function($query) use($projectId,$role){
-								$query->where('project_id',$projectId);
-								$query->where('role_id',$role);
-							})->with('role')->first();
-			}else{
-				$profile = Profile::whereHas('corporate',function($query){
-								$query->isParent();
-							})->whereHas('role',function($query) use($projectId,$role){
-								$query->where('role_id',$role);
-							})->with('role')->first();
-			}
+			// if(in_array($state,[19,20])){
+			// 	$profile = Profile::whereHas('role',function($query) use($projectId,$role){
+			// 					$query->where('project_id',$projectId);
+			// 					$query->where('role_id',$role);
+			// 				})->with('role')->first();
+			// }else{
+			// 	$profile = Profile::whereHas('corporate',function($query){
+			// 					$query->isParent();
+			// 				})->whereHas('role',function($query) use($projectId,$role){
+			// 					$query->where('role_id',$role);
+			// 				})->with('role')->first();
+			// }
 
 			$status = strtolower(MasterData::find($state)->description);
 
+			$profile = $profile->where('pivot.role_id',$role)->first();
+
 			return [
 				'status' => $status,
+				'step' => $state,
 				'weekly' => ReportWorkflow::whereHas('report',function($query) use($projectId,$dateStart,$dateEnd){
 								$query->where('project_id',$projectId);
 								$query->whereDate('report_date',$dateStart );

@@ -59,7 +59,7 @@ class WeeklyProcessor
 		$reportEnd = $endOfWeek->format('d-m-Y');
 		$dueEnd = $endOfWeek->format('Y-m-d');
 
-		$workflow = $this->reportCard->weeklyWorkflow($corporateId, $projectId, $dueStart, $dueEnd);
+		$workflow = $this->reportCard->weeklyWorkflow($corporateId, $projectId, $dueStart, $dueEnd, $project->profile);
 
 		return compact('project','reportDue','reportStart','reportEnd','corporateId','projectId','workflow');
 	}
