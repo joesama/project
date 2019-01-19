@@ -17,7 +17,8 @@ class CreateProjectReportWorkflowData extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->unsignedInteger('report_id')->nullable();
-            $table->unsignedInteger('user_id')->nullable();
+            $table->unsignedInteger('profile_id')->nullable();
+            $table->string('state')->nullable();
             $table->text('remark')->nullable();
             $table->timestamps();
             $table->softDeletes();

@@ -35,6 +35,7 @@ return [
 		'validated' => '(GOSD) Disahkan Oleh',
 		'reviewed' => '(GOSD) Disemak Oleh',
 		'accepted' => '(GOSD) Diterima Oleh',
+		'updated' => '(GOSD) Diterima Oleh',
 		'name' => 'Name',
 		'mobile' => 'Mobile No.',
 		'position' => 'Position',

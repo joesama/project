@@ -50,6 +50,7 @@ class ProjectWorkflowRepository
 		$pmoCoo = $project->profile->where('corporate_id','!=',$project->corporate_id)->where('pivot.role_id',4)->first();
 
 		$initialFlow = collect(config('joesama/project::workflow.approval'))->keys()->first();
+		$nextAction = collect(config('joesama/project::workflow.approval'))->keys()->slice(1,1)->first();
 
 		try{
 
@@ -59,7 +60,8 @@ class ProjectWorkflowRepository
 
 			$approval->workflow_id = $initialFlow;
 			$approval->creator_id = $projectManager->id;
-			$approval->need_action = $pmoOfficer->id;
+			$approval->need_action = $pmoHead->id;
+			$approval->need_step = $nextAction;
 			$approval->save();
 
 			$workflow = new ProjectApprovalWorkflow([
@@ -89,7 +91,7 @@ class ProjectWorkflowRepository
 
 		try{
 
-			$project->active = 1;
+			$project->active = is_null($request->get('need_step')) ? 1 : 0;
 			$project->save();
 
 			$approval = ProjectApproval::firstOrNew([
@@ -98,11 +100,13 @@ class ProjectWorkflowRepository
 
 			$approval->workflow_id = $request->get('state');
 			$approval->creator_id = $this->profile()->id;
+			$approval->need_action = $request->get('need_action');
+			$approval->need_step = $request->get('need_step');
 			$approval->save();
 
 			$workflow = new ProjectApprovalWorkflow([
 				'remark' => $request->get('remark'),
-				'state' => $request->get('state'),
+				'state' => $request->get('status'),
 				'profile_id' => $this->profile()->id,
 			]);
 
@@ -131,11 +135,12 @@ class ProjectWorkflowRepository
 
 			$assignee = $profile->where('pivot.role_id',$role)->first();
 
-			$workflow = $approval->workflow;
+			$workflow = collect(data_get($approval,'workflow'))->where('state',$status);
 
 			return [
 				'status' => $status,
-				'approval' => $workflow->where('state',$status)->first(),
+				'step' => $state,
+				'approval' => $workflow->first(),
 				'profile' => $assignee
 			];
 		});

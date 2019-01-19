@@ -76,6 +76,30 @@ $(document).on('nifty.ready', function() {
         feedbackIcons: faIcon,
         fields: @json($fields)
     })
+    .find('textarea')
+    .summernote({
+        height: 100,
+		callbacks: {
+			onKeydown: function(e) {
+				validateEditor();
+			},
+			onKeyup: function(e) {
+		      validateEditor();
+		    },
+		    onPaste: function(e) {
+		      validateEditor();
+		    }
+		}
+    });
+
+    function validateEditor() {
+        // Revalidate the content when its value is changed by Summernote
+
+        $('textarea').each(function(element,item) {
+		  $("{{'#'.$formId}}").bootstrapValidator('revalidateField', item.name);
+		});
+        // textArea.
+    };
 
 });
 </script>

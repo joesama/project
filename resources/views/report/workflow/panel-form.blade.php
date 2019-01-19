@@ -22,6 +22,7 @@
             <input type="hidden" name="state" value="{{ $state }}">
             <input type="hidden" name="status" value="{{ $status }}">
             <input type="hidden" name="need_action" value="{{ $need_action }}">
+            <input type="hidden" name="need_step" value="{{ $need_step }}">
             <input type="hidden" name="type" value="{{ request()->segment(2) }}">
             <textarea id="textarea-input" name="remark" rows="9" class="form-control" placeholder="Your content here.."></textarea>
             <button type="submit" class="btn btn-dark mar-ver pull-right">

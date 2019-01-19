@@ -149,7 +149,7 @@
 				    ])
 				@endif
 			@else
-				@if( intval(data_get($profile,'user_id')) == intval(auth()->id()) )
+				@if( intval(data_get($profile,'user_id')) == intval(auth()->id()) && is_null($flowRecord) )
 			  	@include('joesama/project::report.workflow.panel-form',[
 					'state' => $state,
 					'need_action' => data_get($next,'profile.id'),

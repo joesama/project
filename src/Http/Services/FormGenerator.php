@@ -192,7 +192,6 @@ class FormGenerator
 	 */
 	public function renderForm(string $title, string $action , string $method = 'POST')
 	{
-
 		$this->inputFields = $this->recognizeType($this->fields->toArray());
 
 		return view('joesama/project::components.form.main-form',[
@@ -236,6 +235,10 @@ class FormGenerator
 
 					if(in_array($type,['varchar','double','text'])){
 						return 'text';
+					}
+
+					if(in_array($type,['textarea'])){
+						return 'textarea';
 					}
 
 					if(in_array($type,['date'])){

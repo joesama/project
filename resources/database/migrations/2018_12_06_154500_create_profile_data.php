@@ -18,6 +18,7 @@ class CreateProfileData extends Migration
             $table->increments('id');
             $table->unsignedInteger('user_id')->nullable();
             $table->unsignedInteger('corporate_id')->nullable();
+            $table->unsignedInteger('position_id')->nullable();
             $table->string('name')->nullable();
             $table->string('abbr')->nullable();
             $table->string('email')->nullable();

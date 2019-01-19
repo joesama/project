@@ -20,6 +20,8 @@ class CreateIssueData extends Migration
             $table->unsignedInteger('profile_id')->nullable();
             $table->unsignedInteger('progress_id')->nullable();
             $table->string('description')->nullable();
+            $table->float('effective_days', 8, 2)->default(0)->nullable();
+            $table->unsignedInteger('active')->default(1)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -18,7 +18,11 @@ class CreateProjectReportData extends Migration
             $table->increments('id');
             $table->unsignedInteger('project_id')->nullable();
             $table->unsignedInteger('workflow_id')->nullable();
+            $table->unsignedInteger('creator_id')->nullable();
+            $table->unsignedInteger('need_action')->nullable();
+            $table->text('week')->nullable();
             $table->date('report_date')->nullable();
+            $table->date('report_end')->nullable();
             $table->date('verify')->nullable();
             $table->date('approved')->nullable();
             $table->timestamps();

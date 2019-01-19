@@ -13,7 +13,7 @@
 
     <!--Panel body-->
     <div class="collapse in" id="workflow">
-      <div class="panel-body text-center">
+      <div class="panel-body text-center approvalPanel">
     @php
       $index = 1;
       $corporateId = $project->corporate_id;
@@ -49,14 +49,16 @@
             ])
         @endif
       @else
-        @if( intval(data_get($profile,'user_id')) == intval(auth()->id()) )
+        @if( (intval(data_get($profile,'user_id')) == intval(auth()->id())) && (intval(data_get($project,'approval.need_step')) == $state) )
           @include('joesama/project::report.workflow.panel-form',[
           'state' => $state,
           'need_action' => data_get($next,'profile.id'),
+          'need_step' => data_get($next,'step'),
           'status' => data_get($flow,'status'),
           'profile' => $profile,
           ])
           @endif
+        }
       @endif
       @php
         $index++;
@@ -66,3 +68,12 @@
     </div>
   </div>
 </div>
+@push('content.script')
+<script type="text/javascript">
+    $('.approvalPanel').each(function() {
+        $(this).find('.panel').matchHeight({
+            byRow: true
+        });
+    });
+</script>
+@endpush

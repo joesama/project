@@ -21,6 +21,9 @@ class CreateTaskData extends Migration
             $table->string('name')->nullable();
             $table->date('start')->nullable();
             $table->date('end')->nullable();
+            $table->float('actual_progress', 8, 2)->default(0)->nullable();
+            $table->float('planned_progress', 8, 2)->default(100)->nullable();
+            $table->float('effective_days', 8, 2)->default(0)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

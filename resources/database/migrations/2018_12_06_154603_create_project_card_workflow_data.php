@@ -18,6 +18,7 @@ class CreateProjectCardWorkflowData extends Migration
             $table->increments('id');
             $table->integer('card_id')->nullable();
             $table->integer('profile_id')->nullable();
+            $table->string('state')->nullable();
             $table->text('remark')->nullable();
             $table->timestamps();
             $table->softDeletes();

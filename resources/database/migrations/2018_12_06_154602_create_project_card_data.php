@@ -19,7 +19,10 @@ class CreateProjectCardData extends Migration
             $table->unsignedInteger('project_id')->nullable();
             $table->unsignedInteger('workflow_id')->nullable();
             $table->unsignedInteger('creator_id')->nullable();
+            $table->unsignedInteger('need_action')->nullable();
+            $table->text('month')->nullable();
             $table->date('card_date')->nullable();
+            $table->date('card_end')->nullable();
             $table->date('verify')->nullable();
             $table->date('approved')->nullable();
             $table->timestamps();

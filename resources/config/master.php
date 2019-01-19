@@ -6,6 +6,9 @@ return [
 		'profile' => ['Admin','Project Manager','Reviewer','Approver','Validator','Viewer','BODs']
 	],
 	'master' => [
+		'status' => [
+			'New', 'Approved', 'Validated', 'Reviewed', 'Accepted', 'Updated', 'Active'
+		],
 		'progress' => ['0-25','26-50','51-75','76-100'],
 		'severity' => ['low','medium','critical'],
 		'hse' => [	'Lost Time Injuries (LTI)','Unsafe Act / Unsafe Condition',
@@ -13,10 +16,7 @@ return [
 		'position' => [
 			'Asisstant Manager', 'Senior Manager',
 			'Asisstant General Manager', 'General Manager', 
-			'Vice President', 'CEO'
-		],
-		'status' => [
-			'New', 'Approved','Validated', 'Reviewed','Accepted',
+			'Vice President', 'COO', 'CEO'
 		]
 	],
 	'corporate' => [

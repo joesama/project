@@ -18,8 +18,8 @@ class CreateClientData extends Migration
             $table->increments('id');
             $table->string('name')->nullable();
             $table->string('phone')->nullable();
-            $table->string('contact')->nullable();
             $table->string('manager')->nullable();
+            $table->string('contact')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

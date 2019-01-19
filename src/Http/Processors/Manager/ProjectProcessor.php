@@ -102,6 +102,7 @@ class ProjectProcessor
 					'validator_id' => Profile::fromParent()->pluck('name','id'),
 					'reviewer_id' => Profile::fromParent()->pluck('name','id'),
 					'acceptance_id' => Profile::fromParent()->pluck('name','id'),
+					'scope' => 'textarea'
 				])
 				->excludes(['effective_days','planned_progress','acc_progress','actual_progress','actual_payment','planned_payment','current_variance'])
 				->id($request->segment(5))
