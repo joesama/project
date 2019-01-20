@@ -35,6 +35,7 @@
             @include('joesama/project::report.workflow.panel-form',[
             'state' => $state,
             'need_action' => data_get($next,'profile.id'),
+            'need_step' => data_get($next,'step'),
             'status' => data_get($flow,'status'),
             'profile' => $profile,
             ])
