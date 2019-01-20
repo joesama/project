@@ -26,6 +26,28 @@ class ReportCardInfoRepository
 	}
 
 	/**
+	 * Get Monthly Report Information
+	 * 
+	 * @param  int    $reportId Report Id
+	 * @return Joesama\Project\Database\Model\Project\Card
+	 */
+	public function getMonthlyReportInfo(int $reportId)
+	{
+		return Card::where('id',$reportId)->component()->first();
+	}
+
+	/**
+	 * Get Weekly Report Information
+	 * 
+	 * @param  int    $reportId Report Id
+	 * @return Joesama\Project\Database\Model\Project\Report
+	 */
+	public function getWeeklyReportInfo(int $reportId)
+	{
+		return Report::where('id',$reportId)->component()->first();
+	}
+
+	/**
 	 * Get Monthly Report List
 	 * 
 	 * @param  int    $corporateId Subsidiary Id

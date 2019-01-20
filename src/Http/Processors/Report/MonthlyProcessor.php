@@ -48,6 +48,11 @@ class MonthlyProcessor
 	 */
 	public function form(Request $request, int $corporateId, int $projectId)
 	{
+
+		if(is_null($request->segment(6))){
+			$projectId = data_get($this->reportCard->getMonthlyReportInfo($projectId),'project_id');
+		}
+
 		$project = $this->projectInfo->getProject($projectId);
 		$reportDue = Carbon::now()->format('m');
 		

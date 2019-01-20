@@ -12,7 +12,11 @@ trait HasAccessAs{
 	 */
 	public function profile()
 	{
-		return Cache::get('profile-'.auth()->id());
+		$profile = Cache::get('profile-'.auth()->id());
+		
+		view()->share('profile',$profile);
+
+		return $profile;
 	}
 
 	/**
@@ -42,6 +46,8 @@ trait HasAccessAs{
 					->where('id',2)
 					->where('pivot.project_id',request()->segment(5))
 					->count();
+
+		view()->share('isProjectManager',($pm > 0 ) ? TRUE : FALSE);
 
 		return ($pm > 0 ) ? TRUE : FALSE;
 	}

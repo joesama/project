@@ -46,6 +46,10 @@ class WeeklyProcessor
 	 */
 	public function form(Request $request, int $corporateId, int $projectId)
 	{
+		if(is_null($request->segment(6)) && is_null($request->get('report')) ){
+			$projectId = data_get($this->reportCard->getWeeklyReportInfo($projectId),'project_id');
+		}
+
 		$project = $this->projectInfo->getProject($projectId);
 		$reportDue = Carbon::now()->weekOfYear;
 		
