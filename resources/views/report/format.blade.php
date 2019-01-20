@@ -129,12 +129,14 @@
 				$next = $nextflow->slice($index,1)->first();
 				$profile = data_get($flow,'profile');
 				$flowRecord = data_get($flow,'weekly',data_get($flow,'monthly',NULL));
+				$currentReport = data_get($project,'report')->where('project_id',$projectId)->first();
 			@endphp
 			@if(  is_null( $flowRecord ) && $workflow->keys()->first() == $state)
 				@if( intval(data_get($profile,'user_id')) == intval(auth()->id()) )
 				  	@include('joesama/project::report.workflow.panel-form',[
 						'state' => $state,
 						'need_action' => data_get($next,'profile.id'),
+						'need_step' => data_get($next,'step'),
 						'status' => data_get($flow,'status'),
 						'profile' => $profile,
 				    ])
@@ -149,10 +151,11 @@
 				    ])
 				@endif
 			@else
-				@if( intval(data_get($profile,'user_id')) == intval(auth()->id()) && is_null($flowRecord) )
+				@if( ( intval(data_get($profile,'user_id')) == intval(auth()->id()) ) && ( (data_get($currentReport,'need_step')) == intval($state) ) )
 			  	@include('joesama/project::report.workflow.panel-form',[
 					'state' => $state,
 					'need_action' => data_get($next,'profile.id'),
+					'need_step' => data_get($next,'step'),
 					'status' => data_get($flow,'status'),
 					'profile' => $profile,
 			    ])

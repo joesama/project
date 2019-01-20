@@ -1,6 +1,7 @@
 <?php
 namespace Joesama\Project\Database\Repositories\Project; 
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -99,6 +100,12 @@ class ProjectWorkflowRepository
 			]);
 
 			$approval->workflow_id = $request->get('state');
+
+			if($request->get('state') == 2){
+				$approval->approved_by = $this->profile()->id;
+				$approval->approve_date = Carbon::now();
+			}
+
 			$approval->creator_id = $this->profile()->id;
 			$approval->need_action = $request->get('need_action');
 			$approval->need_step = $request->get('need_step');

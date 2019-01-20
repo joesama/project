@@ -14,7 +14,7 @@
                 {!! data_get($profile,'position.description','&nbsp;') !!}
             </p>
             <p class="text-md mar-top" style="vertical-align: text-bottom;">
-                {{ data_get($record,'remark') }}
+                {!! data_get($record,'remark') !!}
             </p>
         </div>
     </div>

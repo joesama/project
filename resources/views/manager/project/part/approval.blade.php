@@ -49,7 +49,7 @@
             ])
         @endif
       @else
-        @if( (intval(data_get($profile,'user_id')) == intval(auth()->id())) && (intval(data_get($project,'approval.need_step')) == $state) )
+        @if( (intval(data_get($profile,'user_id')) == intval(auth()->id())) && ( intval(data_get($project,'approval.need_step')) == intval($state) ) )
           @include('joesama/project::report.workflow.panel-form',[
           'state' => $state,
           'need_action' => data_get($next,'profile.id'),

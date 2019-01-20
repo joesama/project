@@ -236,6 +236,10 @@ class Project extends Model
             $query->component();
         }])->with(['approval' => function($query){
             $query->component();
+        }])->with(['card' => function($query){
+            $query->component();
+        }])->with(['report' => function($query){
+            $query->component();
         }]);
     }
 

@@ -18,6 +18,21 @@
                     </div>
                 </div>
                 <div class="row">
+                    <div class="col-md-12">
+                        <table class="table table-bordered table-sm">
+                            <tr>
+                                <td class="text-bold bg-primary text-light text-capitalize"  style="width: 14.5%">
+                                    {{ __('joesama/project::project.info.contract.scope') }}
+                                </td>
+                                <td class="pl-2">
+                                    {!! data_get($project,'scope') !!}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row">
                     <div class="col-md-6">
                         <table class="table table-bordered table-sm">
                             <tr>
@@ -53,7 +68,7 @@
                                 </td>
                             </tr>
                         </table>
-                        @if($project->active)
+                        @if( ($project->active || !is_null(data_get($project,'approval.approved_by'))) && $isProjectManager )
                         <a class="btn btn-dark btn-xs mar-btm pull-right" href="{{ handles('joesama/project::manager/partner/form/'.request()->segment(4).'/'.request()->segment(5)) }}">
                             <i class="fa fa-plus icon-fw"></i>
                             {{ __('joesama/project::project.client.partner.name') }}
@@ -136,7 +151,7 @@
                             </tr>
                             @endforeach
                         </table>
-                        @if($project->active)
+                         @if( ($project->active || !is_null(data_get($project,'approval.approved_by'))) && $isProjectManager )
                         <a class="btn btn-dark btn-xs mar-btm pull-right" href="{{ handles('joesama/project::manager/attribute/form/'.request()->segment(4).'/'.request()->segment(5)) }}">
                             <i class="fa fa-plus icon-fw"></i>
                             {{ __('joesama/project::project.attr') }}
@@ -149,14 +164,6 @@
                                 </td>
                                 <td class="pl-2">
                                     RM {{ number_format(data_get($project,'value'),2) }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-bold bg-primary text-light text-capitalize">
-                                    {{ __('joesama/project::project.info.contract.scope') }}
-                                </td>
-                                <td class="pl-2">
-                                    {{ data_get($project,'scope') }}
                                 </td>
                             </tr>
                             <tr>
@@ -205,7 +212,7 @@
                                     {{ data_get($attributes,'variable') }}
                                 </td>
                                 <td class="pl-2">
-                                    {{ data_get($attributes,'data') }}
+                                    {!! data_get($attributes,'data') !!}
                                 </td>
                             </tr>
                             @endforeach

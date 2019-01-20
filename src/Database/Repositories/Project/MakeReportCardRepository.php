@@ -50,6 +50,7 @@ class MakeReportCardRepository
 
 			$card->workflow_id = $request->get('state');
 			$card->need_action = $request->get('need_action');
+			$card->need_step = $request->get('need_step');
 			$card->save();
 
 			DB::commit();
@@ -97,6 +98,7 @@ class MakeReportCardRepository
 
 			$report->workflow_id = $request->get('state');
 			$report->need_action = $request->get('need_action');
+			$report->need_step = $request->get('need_step');
 			$report->save();
 
 			DB::commit();
