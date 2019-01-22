@@ -46,11 +46,10 @@ class MonthlyProcessor
 	 * @param  int     $projectId    Project Id
 	 * @return array
 	 */
-	public function form(Request $request, int $corporateId, int $projectId)
+	public function form(Request $request, int $corporateId, $projectId)
 	{
-
-		if(is_null($request->segment(6))){
-			$projectId = data_get($this->reportCard->getMonthlyReportInfo($projectId),'project_id');
+		if( $projectId == 'report' ){
+			$projectId = data_get($this->reportCard->getMonthlyReportInfo($request->segment(6)),'project_id');
 		}
 
 		$project = $this->projectInfo->getProject($projectId);

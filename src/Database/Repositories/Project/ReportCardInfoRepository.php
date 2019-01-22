@@ -131,6 +131,7 @@ class ReportCardInfoRepository
 
 			return [
 				'status' => $status,
+				'step' => $state,
 				'monthly' => CardWorkflow::whereHas('card',function($query) use($projectId,$dateStart,$dateEnd){
 								$query->where('project_id',$projectId);
 								$query->whereDate('card_date',$dateStart );

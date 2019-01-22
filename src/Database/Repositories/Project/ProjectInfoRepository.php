@@ -87,16 +87,18 @@ class ProjectInfoRepository
 	public function projectList(int $corporateId)
 	{
 
-		$project = $this->projectModel->sameGroup($corporateId)->active();
-
-		if($this->stricAccess){
-			$project->whereHas('manager',function($query){
-				$query->where('profile_id',$this->profile->id);
-			});
-			$project->orWhereHas('admin',function($query){
-				$query->where('profile_id',$this->profile->id);
-			});
-		}
+		$project = $this->projectModel->sameGroup($corporateId)->active()
+					->where(function($query){
+						$query->whereHas('manager',function($query){
+							$query->where('profile_id',$this->profile->id);
+						})
+						->orWhereHas('task',function($query){
+							$query->where('profile_id',$this->profile->id);
+						})
+						->orWhereHas('admin',function($query){
+							$query->where('profile_id',$this->profile->id);
+						});
+					});
 
 		return $project->component()->paginate();
 	}
@@ -166,11 +168,15 @@ class ProjectInfoRepository
 			$query->when($projectId, function ($query, $projectId) {
                 return $query->where('id', $projectId);
             });
+		})
+		->where(function($query){
+			$query->whereHas('project',function($query){
+				$query->whereHas('manager',function($query){
+					$query->where('profile_id',$this->profile->id);
+				});
+			})
+			->orWhere('profile_id',$this->profile->id);
 		});
-
-		if($this->stricAccess){
-			$task->where('profile_id',$this->profile->id);
-		}
 
 		return $task->component()->paginate();
 	}
@@ -198,11 +204,14 @@ class ProjectInfoRepository
 			$query->when($projectId, function ($query, $projectId) {
                 return $query->where('id', $projectId);
             });
+		})->where(function($query){
+			$query->whereHas('project',function($query){
+				$query->whereHas('manager',function($query){
+					$query->where('profile_id',$this->profile->id);
+				});
+			})
+			->orWhere('profile_id',$this->profile->id);
 		});
-
-		if($this->stricAccess){
-			$issue->where('profile_id',$this->profile->id);
-		}
 
 		return $issue->component()->paginate();
 	}

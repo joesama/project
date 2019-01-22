@@ -161,7 +161,7 @@ class ListProcessor
 
 		$action = [
 			[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
-			    'url' => handles('joesama/project::report/monthly/form/'.$corporateId), // URL for action
+			    'url' => handles('joesama/project::report/monthly/form/'.$corporateId.'/'.$request->segment(5,'report')), // URL for action
 			    'icons' => 'psi-file-edit icon', // Icon for action : optional
 			    'key' => 'id'  ]
 		];
@@ -210,7 +210,7 @@ class ListProcessor
 
 		$action = [
 			[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
-			    'url' => handles('joesama/project::report/weekly/form/'.$corporateId), // URL for action
+			    'url' => handles('joesama/project::report/weekly/form/'.$corporateId.'/'.$request->segment(5,'report')), // URL for action
 			    'icons' => 'psi-file-edit icon', // Icon for action : optional
 			    'key' => 'id'  ]
 		];
@@ -260,10 +260,10 @@ class ListProcessor
 		   'style' => 'text-center'],
 		   [ 'field' => 'start_date',
 		   'title' => __('joesama/project::form.task.start'),
-		   'style' => 'text-center date hidden'],
+		   'style' => 'text-center date'],
 		   [ 'field' => 'end_date',
 		   'title' => __('joesama/project::form.task.end'),
-		   'style' => 'text-center date hidden']
+		   'style' => 'text-center date']
 		];
 
 		if(is_null($request->segment(5))){
@@ -299,6 +299,7 @@ class ListProcessor
 				 	route('api.list.task',[$corporateId, $request->segment(5)]), 
 				 	$this->projectObj->listProjectTask($corporateId, $request->segment(5))
 				 );
+
 		if ( ( $this->isProjectManager() || auth()->user()->isAdmin ) && $hasAction ) {
 			$datagrid->buildAddButton(route('manager.task.form',[$corporateId, $request->segment(5)]));
 		}

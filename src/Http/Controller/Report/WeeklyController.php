@@ -18,7 +18,7 @@ class WeeklyController extends BaseController
 	 * @param  int     $projectId   Project Id
 	 * @return view                 View
 	 */
-	public function __invoke(Request $request, int $corporateId, int $projectId )
+	public function __invoke(Request $request, int $corporateId, $projectId )
 	{
 		parent::__construct($request);
 		

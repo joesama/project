@@ -4,7 +4,7 @@
     </label>
     <div class="col-md-10">
     	<p class="form-control-static">
-    		{{ $value }}
+    		{!! $value !!}
     	</p>
         <small class="help-block hidden">
         	{{ __('joesama/project::form.'.$formId.'.helpblock.'.$fieldId) }}

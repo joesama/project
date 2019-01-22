@@ -15,10 +15,10 @@ class MonthlyController extends BaseController
 	 * 
 	 * @param  Request $request     HTTP Request
 	 * @param  int     $corporateId Corporate Id
-	 * @param  int     $projectId   Project Id
+	 * @param  	       $projectId   Project Id
 	 * @return view                 View
 	 */
-	public function __invoke(Request $request, int $corporateId, int $projectId )
+	public function __invoke(Request $request, int $corporateId, $projectId )
 	{
 		parent::__construct($request);
 		

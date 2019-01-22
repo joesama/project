@@ -17,9 +17,9 @@ class Master extends Model
     }
 
     /**
-     * Progress Definition
+     * Status Definition
      */
-    public function scopeProgress($query)
+    public function scopeStatus($query)
     {
         return $query->where('id', 1);
     }
@@ -27,9 +27,17 @@ class Master extends Model
     /**
      * Progress Definition
      */
-    public function scopeSeverity($query)
+    public function scopeProgress($query)
     {
         return $query->where('id', 2);
+    }
+
+    /**
+     * Progress Definition
+     */
+    public function scopeSeverity($query)
+    {
+        return $query->where('id', 3);
     }
 
     /**
@@ -37,7 +45,7 @@ class Master extends Model
      */
     public function scopeIncident($query)
     {
-        return $query->where('id', 3);
+        return $query->where('id', 4);
     }
 
     /**
@@ -45,6 +53,6 @@ class Master extends Model
      */
     public function scopePosition($query)
     {
-        return $query->where('id', 4);
+        return $query->where('id', 5);
     }
 }

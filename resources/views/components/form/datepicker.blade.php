@@ -10,3 +10,16 @@
 		</div>
 	</div>
 </div>
+@push('form.script')
+<script type="text/javascript">
+$(document).on('nifty.ready', function() {
+
+	$("{{ '#'.$fieldId }}").datepicker({
+		autoclose:true,
+		format: 'dd/mm/yyyy',
+		startDate: "{{ Carbon\Carbon::parse($default)->format('d/m/Y') }}"
+	});
+
+});
+</script>
+@endpush

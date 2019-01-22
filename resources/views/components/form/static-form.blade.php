@@ -14,7 +14,7 @@
                     <div class="col-md-9">
                     	<p class="form-control-static">
                     		:&nbsp;&nbsp;
-                    		{{ ucwords( data_get( $data, data_get($relation, $field, $field) ) ) }}
+                    		{!! ucwords( data_get( $data, data_get($relation, $field, $field) ) ) !!}
                     	</p>
                     </div>
                 </div>

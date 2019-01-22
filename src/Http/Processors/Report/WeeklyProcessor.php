@@ -44,10 +44,10 @@ class WeeklyProcessor
 	 * @param  int     $projectId    Project Id
 	 * @return array
 	 */
-	public function form(Request $request, int $corporateId, int $projectId)
+	public function form(Request $request, int $corporateId, $projectId)
 	{
-		if(is_null($request->segment(6)) && is_null($request->get('report')) ){
-			$projectId = data_get($this->reportCard->getWeeklyReportInfo($projectId),'project_id');
+		if( $projectId == 'report' ){
+			$projectId = data_get($this->reportCard->getWeeklyReportInfo($request->segment(6)),'project_id');
 		}
 
 		$project = $this->projectInfo->getProject($projectId);

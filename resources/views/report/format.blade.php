@@ -129,7 +129,7 @@
 				$next = $nextflow->slice($index,1)->first();
 				$profile = data_get($flow,'profile');
 				$flowRecord = data_get($flow,'weekly',data_get($flow,'monthly',NULL));
-				$currentReport = data_get($project,'report')->where('project_id',$projectId)->first();
+				$currentReport = (request()->segment(2) == 'weekly') ? data_get($project,'report')->where('project_id',$projectId)->first() : data_get($project,'card')->where('project_id',$projectId)->first() ;
 			@endphp
 			@if(  is_null( $flowRecord ) && $workflow->keys()->first() == $state)
 				@if( intval(data_get($profile,'user_id')) == intval(auth()->id()) )

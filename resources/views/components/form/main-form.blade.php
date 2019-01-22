@@ -17,6 +17,7 @@
 					'mapValue' => array_get($mapping,$fieldId),
 					'optionList' => array_get($option,$fieldId),
 					'value' => data_get($value,$fieldId,array_get($default,$fieldId)),
+					'default' => array_get($default,$fieldId),
 					'readonly' => $readonly->contains($fieldId) ? TRUE : FALSE,
 					'required' => $requiredInclude
 				])
@@ -65,11 +66,6 @@ $(document).on('nifty.ready', function() {
         invalid: 'fa fa-times-circle fa-lg',
         validating: 'fa fa-refresh'
     }
-
-	$('.input-group.date').datepicker({
-		autoclose:true,
-		format: 'dd/mm/yyyy'
-	});
 
     $("{{'#'.$formId}}").bootstrapValidator({
         excluded: [':disabled'],
