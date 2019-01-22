@@ -547,12 +547,12 @@ class MakeProjectRepository
 			$incidentGroup = $incidentRecord->groupBy('incident_id');
 
 			$scoreCard->update([
-				'acc_lti' => collect($incidentGroup->get(8))->sum('incident'), //8
+				'acc_lti' => collect($incidentGroup->get(15))->sum('incident'), //8
 				'zero_lti' => 0, //9
-				'unsafe' => collect($incidentGroup->get(9))->sum('incident'),//9
-				'stop' => collect($incidentGroup->get(10))->sum('incident'),//10
-				'summon' => collect($incidentGroup->get(11))->sum('incident'),//11
-				'complaint' => collect($incidentGroup->get(12))->sum('incident') //12
+				'unsafe' => collect($incidentGroup->get(16))->sum('incident'),//9
+				'stop' => collect($incidentGroup->get(17))->sum('incident'),//10
+				'summon' => collect($incidentGroup->get(18))->sum('incident'),//11
+				'complaint' => collect($incidentGroup->get(19))->sum('incident') //12
 			]);
 
 			DB::commit();

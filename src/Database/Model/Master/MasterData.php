@@ -64,7 +64,17 @@ class MasterData extends Model
     public function scopeStatus($query)
     {
         return $query->whereHas('master',function($subquery){
-        	$subquery->status();
+            $subquery->status();
+        });
+    }
+
+    /**
+     * Query Status Data List
+     */
+    public function scopeActive($query)
+    {
+        return $query->whereHas('master',function($subquery){
+        	$subquery->active();
         });
     }
 

@@ -55,4 +55,12 @@ class Master extends Model
     {
         return $query->where('id', 5);
     }
+
+    /**
+     * Position Definition
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('id', 6);
+    }
 }
