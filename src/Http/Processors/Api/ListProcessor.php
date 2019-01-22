@@ -3,6 +3,7 @@ namespace Joesama\Project\Http\Processors\Api;
 
 use Joesama\Project\Database\Repositories\Organization\OrganizationInfoRepository;
 use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
+use Joesama\Project\Database\Repositories\Project\ProjectWorkflowRepository;
 use Joesama\Project\Database\Repositories\Project\ReportCardInfoRepository;
 use Joesama\Project\Database\Repositories\Setup\MasterDataRepository;
 use Joesama\Project\Http\Services\DataGridGenerator;
@@ -15,18 +16,20 @@ use Joesama\Project\Http\Services\DataGridGenerator;
  **/
 class ListProcessor 
 {
-	private $projectObj, $masterDataObj, $organizationObj, $reportCardObj;
+	private $projectObj, $masterDataObj, $organizationObj, $reportCardObj, $approvalObj;
 
 	public function __construct(
 		ProjectInfoRepository $projectInfo,
 		MasterDataRepository $masterData,
 		OrganizationInfoRepository $organizationData,
+		ProjectWorkflowRepository $projectWorkflow,
 		ReportCardInfoRepository $reportCardObj
 	){
 		$this->projectObj = $projectInfo;
 		$this->masterDataObj = $masterData;
 		$this->organizationObj = $organizationData;
 		$this->reportCardObj = $reportCardObj;
+		$this->approvalObj = $projectWorkflow;
 	}
 
 	/**
@@ -177,5 +180,15 @@ class ListProcessor
 	public function monthly($request,$corporateId)
 	{
 		return $this->reportCardObj->monthlyList($corporateId,$request->segment(5));
+	}
+
+	/**
+	 * @param  array $request
+	 * @param  int $request,$corporateId
+	 * @return Illuminate\Pagination\LengthAwarePaginator
+	 */
+	public function approval($request,$corporateId)
+	{
+		return $this->approvalObj->projectApprovalList($corporateId,$request->segment(5));
 	}
 } // END class MakeProjectProcessor 

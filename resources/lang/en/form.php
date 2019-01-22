@@ -37,7 +37,7 @@ return [
 
 	],
 	'task' => [
-		'profile_id' => "Task's Assignee", 
+		'profile_id' => "Person In Charge", 
 		'project_id' => "Project Name", 
 		'name' => "Task's Name", 
 		'start' => "Start Date", 

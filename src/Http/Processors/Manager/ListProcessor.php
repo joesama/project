@@ -17,7 +17,7 @@ class ListProcessor
 {
 	use HasAccessAs;
 
-	private $projectObj, $reportCardObj;
+	private $projectObj, $approvalObj, $reportCardObj;
 
 	/**
 	 * Build Class Dependency
@@ -128,7 +128,7 @@ class ListProcessor
 		
 		$datagrid->buildTable($columns, __('joesama/project::manager.workflow.approval') )
 				 ->buildDataModel(
-				 	route('api.list.monthly',[$corporateId, $request->segment(5)]), 
+				 	route('api.list.approval',[$corporateId, $request->segment(5)]), 
 				 	$this->approvalObj->projectApprovalList($corporateId, $request->segment(5))
 				 )
 				 ->buildOption($action, TRUE);
