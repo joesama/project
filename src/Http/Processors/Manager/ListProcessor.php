@@ -252,18 +252,18 @@ class ListProcessor
 		   [ 'field' => 'assignee.name',
 		   'title' => 'PIC',
 		   'style' => 'text-left'],
-		   [ 'field' => 'effective_days',
-		   'title' => __('joesama/project::form.task.effective_days'),
-		   'style' => 'text-center'],
-		   [ 'field' => 'progress.progress',
-		   'title' => __('joesama/project::form.task.progress'),
-		   'style' => 'text-center'],
 		   [ 'field' => 'start_date',
 		   'title' => __('joesama/project::form.task.start'),
 		   'style' => 'text-center date'],
 		   [ 'field' => 'end_date',
 		   'title' => __('joesama/project::form.task.end'),
-		   'style' => 'text-center date']
+		   'style' => 'text-center date'],
+		   [ 'field' => 'effective_days',
+		   'title' => __('joesama/project::form.task.effective_days'),
+		   'style' => 'text-center'],
+		   [ 'field' => 'progress.progress',
+		   'title' => __('joesama/project::form.task.progress'),
+		   'style' => 'text-center']
 		];
 
 		if(is_null($request->segment(5))){

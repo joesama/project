@@ -82,6 +82,11 @@
                                 </td>
                                 <td class="pl-2">
                                     {{ data_get($partner,'name') }}
+                                    @if($isProjectManager)
+                                    <a class="btn btn-danger btn-xs pull-right" href="{{ route('api.partner.delete',[$project->corporate_id,$project->id,$partner->id]) }}">
+                                        <i class="fa fa-remove"></i>
+                                    </a>
+                                    @endif
                                 </td>
                             </tr>
                             <tr>
@@ -213,6 +218,11 @@
                                 </td>
                                 <td class="pl-2">
                                     {!! data_get($attributes,'data') !!}
+                                    @if($isProjectManager)
+                                    <a class="btn btn-danger btn-xs pull-right" href="{{ route('api.attribute.delete',[$project->corporate_id,$project->id,$attributes->id]) }}">
+                                        <i class="fa fa-remove"></i>
+                                    </a>
+                                    @endif
                                 </td>
                             </tr>
                             @endforeach

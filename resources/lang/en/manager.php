@@ -15,7 +15,7 @@ return [
 		'view' => "Issue's Information",
 	],
 	'task' => [
-		'list' => "List of Project Tasks",
+		'list' => "Project Schedule",
 		'form' => "Task's Information",
 		'view' => "Task's Information",
 	],

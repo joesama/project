@@ -68,7 +68,7 @@ class MakeProjectRepository
 		]);
 
 		DB::beginTransaction();
-// dd($projectData);
+
 		try{
 			if(!is_null($id)){
 				$this->projectModel = $this->projectModel->find($id);
@@ -343,6 +343,35 @@ class MakeProjectRepository
 	}
 
 	/**
+	 * Remove partner attached to project
+	 * 
+	 * @param  int    $corporateId Corporate Id
+	 * @param  int    $projectId   Project Id
+	 * @param  int    $partnerId   Specific partner id
+	 * @return 
+	 */
+	public function deletePartner(int $corporateId, int $projectId, int $partnerId)
+	{
+
+		DB::beginTransaction();
+
+		try{
+
+			$this->projectModel = $this->projectModel->find($projectId);
+			$this->projectModel->partner()->detach($partnerId);
+
+			DB::commit();
+
+			return $this->projectModel;
+
+		}catch( \Exception $e){
+
+			dd($e->getMessage());
+			DB::rollback();
+		}
+	}
+
+	/**
 	 * Create New Attribute
 	 *
 	 * @return Joesama\Project\Database\Model\Project\Attribute
@@ -371,6 +400,32 @@ class MakeProjectRepository
 			DB::commit();
 
 			return $this->projectModel;
+
+		}catch( \Exception $e){
+
+			dd($e->getMessage());
+			DB::rollback();
+		}
+	}
+
+	/**
+	 * Remove attributes attached to project
+	 * 
+	 * @param  int    $corporateId Corporate Id
+	 * @param  int    $projectId   Project Id
+	 * @param  int    $attributeId   Specific attribute id
+	 * @return 
+	 */
+	public function deleteAttribute(int $corporateId, int $projectId, int $attributeId)
+	{
+
+		DB::beginTransaction();
+
+		try{
+
+			Attribute::where('project_id',$projectId)->where('id',$attributeId)->delete();
+
+			DB::commit();
 
 		}catch( \Exception $e){
 

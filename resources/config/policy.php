@@ -23,7 +23,7 @@ return [
 				'overall' => ['corporateId']
 			],
 			'project' => [
-				'list' => ['corporateId'],
+				'list' => ['corporateId','projectId?'],
 				'form' => ['corporateId','projectId?'],
 				'view' => ['corporateId','projectId']
 			],
@@ -132,6 +132,12 @@ return [
 			],
 			'profile' => [
 				'reassign' => ['masterId','projectId']
+			],
+			'partner' => [
+				'delete' => ['corporateId','projectId','partnerId']
+			],
+			'attribute' => [
+				'delete' => ['corporateId','projectId','attributeId']
 			]
 		],
 		'POST' => [
@@ -180,7 +186,7 @@ return [
 				'approval' => ['corporateId','projectId'],
 				'process' => ['corporateId','projectId']
 			]
-		],
+		]
 	],
 	'dashboard' => [
 		'task' => ['read','write'],

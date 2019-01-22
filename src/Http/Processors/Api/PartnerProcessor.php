@@ -35,5 +35,20 @@ class PartnerProcessor
 		return redirect(handles('manager/project/view/'.$project->corporate_id.'/'.$project->id));
 	}
 
+	/**
+	 * Remove partner data from project
+	 * 
+	 * @param  Request $request
+	 * @param  int $corporateId
+	 * @param  int $projectId
+	 * @return [type]
+	 */
+	public function delete(Request $request,int $corporateId, int $projectId)
+	{
+		$this->makeProject->deletePartner($corporateId,$projectId,$request->segment(6));
+
+		return redirect(handles('manager/project/view/'.$corporateId.'/'.$projectId));
+	}
+
 
 } // END class MakeProjectProcessor 

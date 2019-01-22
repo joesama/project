@@ -15,7 +15,7 @@ return [
 		'view' => "Maklumat Isu",
 	],
 	'task' => [
-		'list' => "Senarai Tugasan",
+		'list' => "Jadual Projek",
 		'form' => "Maklumat Tugasan",
 		'view' => "Maklumat Tugasan",
 	],
