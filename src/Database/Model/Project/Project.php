@@ -245,12 +245,12 @@ class Project extends Model
 
     public function getEndDateAttribute($value)
     {
-        return Carbon::parse($value)->format('d-m-Y');
+        return Carbon::parse($this->attributes['end'])->format('d-m-Y');
     }
 
     public function getStartDateAttribute($value)
     {
-        return Carbon::parse($value)->format('d-m-Y');
+        return Carbon::parse($this->attributes['start'])->format('d-m-Y');
     }
 
     public function getDurationWordAttribute($value)

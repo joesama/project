@@ -87,7 +87,7 @@ class ProjectInfoRepository
 	public function projectList(int $corporateId)
 	{
 
-		$project = $this->projectModel->sameGroup($corporateId)->active()
+		$project = $this->projectModel->active()
 					->where(function($query){
 						$query->whereHas('manager',function($query){
 							$query->where('profile_id',$this->profile->id);
@@ -96,6 +96,9 @@ class ProjectInfoRepository
 							$query->where('profile_id',$this->profile->id);
 						})
 						->orWhereHas('admin',function($query){
+							$query->where('profile_id',$this->profile->id);
+						})
+						->orWhereHas('profile',function($query){
 							$query->where('profile_id',$this->profile->id);
 						});
 					});
@@ -164,7 +167,7 @@ class ProjectInfoRepository
 	public function listProjectTask(int $corporateId, $projectId = null)
 	{
 		$task = $this->taskModel->whereHas('project',function($query) use($corporateId, $projectId){
-			$query->sameGroup($corporateId);
+			// $query->sameGroup($corporateId);
 			$query->when($projectId, function ($query, $projectId) {
                 return $query->where('id', $projectId);
             });
@@ -172,6 +175,9 @@ class ProjectInfoRepository
 		->where(function($query){
 			$query->whereHas('project',function($query){
 				$query->whereHas('manager',function($query){
+					$query->where('profile_id',$this->profile->id);
+				})
+				->orWhereHas('profile',function($query){
 					$query->where('profile_id',$this->profile->id);
 				});
 			})
@@ -200,13 +206,16 @@ class ProjectInfoRepository
 	public function listProjectIssue(int $corporateId, $projectId = null)
 	{
 		$issue = $this->issueModel->whereHas('project',function($query) use($corporateId, $projectId){
-			$query->sameGroup($corporateId);
+			// $query->sameGroup($corporateId);
 			$query->when($projectId, function ($query, $projectId) {
                 return $query->where('id', $projectId);
             });
 		})->where(function($query){
 			$query->whereHas('project',function($query){
 				$query->whereHas('manager',function($query){
+					$query->where('profile_id',$this->profile->id);
+				})
+				->orWhereHas('profile',function($query){
 					$query->where('profile_id',$this->profile->id);
 				});
 			})
@@ -275,7 +284,10 @@ class ProjectInfoRepository
 	public function listProjectRisk(int $corporateId, $projectId = null)
 	{
 		return $this->riskModel->whereHas('project',function($query) use($corporateId, $projectId){
-			$query->sameGroup($corporateId);
+			// $query->sameGroup($corporateId);
+			$query->whereHas('profile',function($query){
+				$query->where('profile_id',$this->profile->id);
+			});
 			$query->when($projectId, function ($query, $projectId) {
                 return $query->where('id', $projectId);
             });
@@ -291,7 +303,10 @@ class ProjectInfoRepository
 	public function listProjectIncident(int $corporateId, $projectId)
 	{
 		return $this->incidentModel->whereHas('project',function($query) use($corporateId, $projectId){
-			$query->sameGroup($corporateId);
+			// $query->sameGroup($corporateId);
+			$query->whereHas('manager',function($query){
+				$query->where('profile_id',$this->profile->id);
+			});
 			$query->when($projectId, function ($query, $projectId) {
                 return $query->where('id', $projectId);
             });
@@ -308,6 +323,9 @@ class ProjectInfoRepository
 	{
 		return $this->paymentModel->whereHas('project',function($query) use($corporateId, $projectId){
 			$query->sameGroup($corporateId);
+			$query->whereHas('manager',function($query){
+				$query->where('profile_id',$this->profile->id);
+			});
 			$query->when($projectId, function ($query, $projectId) {
                 return $query->where('id', $projectId);
             });
@@ -324,6 +342,9 @@ class ProjectInfoRepository
 	{
 		return $this->voModel->whereHas('project',function($query) use($corporateId, $projectId){
 			$query->sameGroup($corporateId);
+			$query->whereHas('manager',function($query){
+				$query->where('profile_id',$this->profile->id);
+			});
 			$query->when($projectId, function ($query, $projectId) {
                 return $query->where('id', $projectId);
             });
@@ -340,6 +361,9 @@ class ProjectInfoRepository
 	{
 		return $this->retentionModel->whereHas('project',function($query) use($corporateId, $projectId){
 			$query->sameGroup($corporateId);
+			$query->whereHas('manager',function($query){
+				$query->where('profile_id',$this->profile->id);
+			});
 			$query->when($projectId, function ($query, $projectId) {
                 return $query->where('id', $projectId);
             });
@@ -356,6 +380,9 @@ class ProjectInfoRepository
 	{
 		return $this->ladModel->whereHas('project',function($query) use($corporateId, $projectId){
 			$query->sameGroup($corporateId);
+			$query->whereHas('manager',function($query){
+				$query->where('profile_id',$this->profile->id);
+			});
 			$query->when($projectId, function ($query, $projectId) {
                 return $query->where('id', $projectId);
             });

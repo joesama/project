@@ -19,6 +19,7 @@ use Joesama\Project\Database\Model\Project\Risk;
 use Joesama\Project\Database\Model\Project\Task;
 use Joesama\Project\Database\Model\Project\TaskProgress;
 use Joesama\Project\Traits\ProjectCalculator;
+use Exception;
 
 /**
  * Data Handling For Create Project Record
@@ -67,7 +68,7 @@ class MakeProjectRepository
 		]);
 
 		DB::beginTransaction();
-
+// dd($projectData);
 		try{
 			if(!is_null($id)){
 				$this->projectModel = $this->projectModel->find($id);
@@ -106,11 +107,14 @@ class MakeProjectRepository
 
 			$this->projectModel->save();
 
-			$this->projectModel->profile()->attach($projectData->get('manager_id'),['role_id' => 2]);
-			$this->projectModel->profile()->attach($projectData->get('approver_id'),['role_id' => 4]);
-			$this->projectModel->profile()->attach($projectData->get('validator_id'),['role_id' => 5]);
-			$this->projectModel->profile()->attach($projectData->get('reviewer_id'),['role_id' => 3]);
-			$this->projectModel->profile()->attach($projectData->get('acceptance_id'),['role_id' => 4]);
+
+			$this->projectModel->profile()->sync([
+				$projectData->get('manager_id') => ['role_id' => 2],
+				$projectData->get('approver_id') => ['role_id' => 4],
+				$projectData->get('validator_id') => ['role_id' => 5],
+				$projectData->get('reviewer_id') => ['role_id' => 3],
+				$projectData->get('acceptance_id') => ['role_id' => 4]
+			]);
 
 			if(is_null($id)){
 				$approval = new ProjectWorkflowRepository();
@@ -121,7 +125,7 @@ class MakeProjectRepository
 
 			return $this->projectModel;
 
-		}catch( \Exception $e){
+		}catch( Exception $e){
 			throw new Exception($e->getMessage(), 1);
 
 			DB::rollback();

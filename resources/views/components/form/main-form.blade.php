@@ -22,9 +22,18 @@
 					'required' => $requiredInclude
 				])
 				@php
-					$validator = ($requiredInclude) ? [ 'notEmpty' => [ 'message' => __('joesama/project::form.is.required') ] ] : null;
+					$validator = collect([]);
+
+					if($requiredInclude){
+						$validator->put('notEmpty' , [ 'message' => __('joesama/project::form.is.required') ] );
+					}
+
+					if($type == 'numeric'){
+						$validator->put('numeric' , [ 'message' => __('joesama/project::form.is.numeric') ] );
+					}
+
 					$fields->put($fieldId,[
-						'validators' => $validator
+						'validators' => $validator->toArray()
 					]);
 				@endphp
 			@endforeach

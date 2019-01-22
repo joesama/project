@@ -4,6 +4,7 @@ return [
 	'submit' => 'Hantar',
 	'is' => [
 		'required' => 'Maklumat Ini Diperlukan',
+		'numeric' => 'Data Dimasukan Perlu Didalam Format Nombor',
 		'choose' => 'Sila Pilih Satu Dari Senarai',
 		'multiple' => 'Anda Boleh Memilih Lebih Dari Satu',
 	],

@@ -4,6 +4,7 @@ return [
 	'submit' => 'Submit',
 	'is' => [
 		'required' => 'Information Is Required',
+		'numeric' => 'Input Data Should Be Numeric',
 		'choose' => 'Please Choose One From The List',
 		'multiple' => 'You Can Choose More Than One',
 	],

@@ -233,8 +233,12 @@ class FormGenerator
 						return 'hidden';
 					}
 
-					if(in_array($type,['varchar','double','text'])){
+					if(in_array($type,['varchar','text'])){
 						return 'text';
+					}
+
+					if(in_array($type,['double','decimal'])){
+						return 'numeric';
 					}
 
 					if(in_array($type,['textarea'])){
