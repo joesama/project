@@ -138,6 +138,15 @@ return [
 			],
 			'attribute' => [
 				'delete' => ['corporateId','projectId','attributeId']
+			],
+			'task' => [
+				'delete' => ['corporateId','projectId','taskId']
+			],
+			'issue' => [
+				'delete' => ['corporateId','projectId','issueId']
+			],
+			'risk' => [
+				'delete' => ['corporateId','projectId','issueId']
 			]
 		],
 		'POST' => [

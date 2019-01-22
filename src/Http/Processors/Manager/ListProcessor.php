@@ -286,6 +286,10 @@ class ListProcessor
 				[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
 				    'url' => handles('joesama/project::manager/task/form/'.$corporateId.'/'.$request->segment(5)), // URL for action
 				    'icons' => 'psi-file-edit icon', // Icon for action : optional
+				    'key' => 'id'  ],
+				[ 'action' => trans('joesama/vuegrid::datagrid.buttons.delete') , // Action Description
+				    'url' => handles('joesama/project::api/task/delete/'.$corporateId.'/'.$request->segment(5)), // URL for action
+				    'icons' => 'fa fa-remove icon', // Icon for action : optional
 				    'key' => 'id'  ]
 			];
 
@@ -350,6 +354,10 @@ class ListProcessor
 				[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
 				    'url' => handles('joesama/project::manager/issue/form/'.$corporateId.'/'.$request->segment(5)), // URL for action
 				    'icons' => 'psi-file-edit icon', // Icon for action : optional
+				    'key' => 'id'  ],
+				[ 'action' => trans('joesama/vuegrid::datagrid.buttons.delete') , // Action Description
+				    'url' => handles('joesama/project::api/issue/delete/'.$corporateId.'/'.$request->segment(5)), // URL for action
+				    'icons' => 'fa fa-remove icon', // Icon for action : optional
 				    'key' => 'id'  ]
 			];
 
@@ -403,6 +411,10 @@ class ListProcessor
 				[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
 				    'url' => handles('joesama/project::manager/risk/form/'.$corporateId.'/'.$request->segment(5)), // URL for action
 				    'icons' => 'psi-file-edit icon', // Icon for action : optional
+				    'key' => 'id'  ],
+				[ 'action' => trans('joesama/vuegrid::datagrid.buttons.delete') , // Action Description
+				    'url' => handles('joesama/project::api/risk/delete/'.$corporateId.'/'.$request->segment(5)), // URL for action
+				    'icons' => 'fa fa-remove icon', // Icon for action : optional
 				    'key' => 'id'  ]
 			];
 

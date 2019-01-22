@@ -224,6 +224,32 @@ class MakeProjectRepository
 	}
 
 	/**
+	 * Remove task attached to project
+	 * 
+	 * @param  int    $corporateId 	Corporate Id
+	 * @param  int    $projectId   	Project Id
+	 * @param  int    $taskId   	Specific task id
+	 * @return 
+	 */
+	public function deleteTask(int $corporateId, int $projectId, int $taskId)
+	{
+
+		DB::beginTransaction();
+
+		try{
+
+			$this->taskModel->find($taskId)->delete();
+
+			DB::commit();
+
+		}catch( \Exception $e){
+
+			dd($e->getMessage());
+			DB::rollback();
+		}
+	}
+
+	/**
 	 * Create New Issue
 	 *
 	 * @return Joesama\Project\Database\Model\Project\Issue
@@ -269,6 +295,32 @@ class MakeProjectRepository
 	}
 
 	/**
+	 * Remove issue attached to project
+	 * 
+	 * @param  int    $corporateId 	Corporate Id
+	 * @param  int    $projectId   	Project Id
+	 * @param  int    $taskId   	Specific task id
+	 * @return 
+	 */
+	public function deleteIssue(int $corporateId, int $projectId, int $taskId)
+	{
+
+		DB::beginTransaction();
+
+		try{
+
+			$this->issueModel->find($taskId)->delete();
+
+			DB::commit();
+
+		}catch( \Exception $e){
+
+			dd($e->getMessage());
+			DB::rollback();
+		}
+	}
+
+	/**
 	 * Create New Risk
 	 *
 	 * @return Joesama\Project\Database\Model\Project\Risk
@@ -304,6 +356,32 @@ class MakeProjectRepository
 			DB::commit();
 
 			return $this->riskModel;
+
+		}catch( \Exception $e){
+
+			dd($e->getMessage());
+			DB::rollback();
+		}
+	}
+
+	/**
+	 * Remove risk attached to project
+	 * 
+	 * @param  int    $corporateId 	Corporate Id
+	 * @param  int    $projectId   	Project Id
+	 * @param  int    $taskId   	Specific task id
+	 * @return 
+	 */
+	public function deleteRisk(int $corporateId, int $projectId, int $riskId)
+	{
+
+		DB::beginTransaction();
+
+		try{
+
+			$this->riskModel->find($riskId)->delete();
+
+			DB::commit();
 
 		}catch( \Exception $e){
 

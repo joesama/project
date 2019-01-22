@@ -4,9 +4,12 @@ namespace Joesama\Project\Database\Model\Project;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Joesama\Project\Database\Model\Organization\Profile;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Task extends Model
 {
+    use SoftDeletes;
+
 	protected $table = 'task';
     protected $guarded = ['id'];
     protected $appends = [];

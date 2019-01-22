@@ -4,9 +4,12 @@ namespace Joesama\Project\Database\Model\Project;
 use Illuminate\Database\Eloquent\Model;
 use Joesama\Project\Database\Model\Master\MasterData;
 use Joesama\Project\Database\Model\Organization\Profile;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Risk extends Model
 {
+    use SoftDeletes;
+    
 	protected $table = 'risk';
     protected $guarded = ['id'];
 
