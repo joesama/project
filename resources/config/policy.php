@@ -97,13 +97,13 @@ return [
 		'report' => [
 			'monthly' => [
 				'list' => ['corporateId','projectId'],
-				'form' => ['corporateId','projectId'],
-				'view' => ['corporateId','projectId']
+				'form' => ['corporateId','projectId','reportId?'],
+				'view' => ['corporateId','projectId','reportId?']
 			],
 			'weekly' => [
 				'list' => ['corporateId','projectId'],
-				'form' => ['corporateId','projectId'],
-				'view' => ['corporateId','projectId']
+				'form' => ['corporateId','projectId','reportId?'],
+				'view' => ['corporateId','projectId','reportId?']
 			],
 			'icon' => 'psi-notepad icon-lg icon-fw'
 		]
