@@ -128,6 +128,7 @@ return [
 				'profile' => ['corporateId','masterId?'],
 				'weekly' => ['corporateId','projectId?'],
 				'monthly' => ['corporateId','projectId?'],
+				'approval' => ['corporateId','projectId?'],
 			],
 			'profile' => [
 				'reassign' => ['masterId','projectId']
