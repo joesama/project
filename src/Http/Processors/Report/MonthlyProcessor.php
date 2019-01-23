@@ -65,8 +65,8 @@ class MonthlyProcessor
 		$reportEnd = $endOfMonth->format('d-m-Y');
 		$dueEnd = $endOfMonth->format('Y-m-d');
 
-		$workflow = $this->reportCard->monthlyWorkflow($corporateId, $projectId, $dueStart, $dueEnd, $project->profile);
-
+		$workflow = $this->reportCard->monthlyWorkflow($corporateId, $dueStart, $dueEnd, $project);
+dd($workflow);
 		return compact('project','reportDue','reportStart','reportEnd','corporateId','projectId','workflow');
 	}
 

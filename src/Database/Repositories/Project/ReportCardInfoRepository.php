@@ -104,28 +104,28 @@ class ReportCardInfoRepository
 	 * Monthly Report Workflow
 	 * 
 	 * @param  int    	$corporateId 	Corporate Id
-	 * @param  int    	$projectId   	Project Id
 	 * @param  string   $dateStart   	Report Date Start
 	 * @param  string   $dateEnd   		Report Date End
+	 * @param  Project  $project   		Project Model
 	 * @return Collection
 	 */
-	public function monthlyWorkflow(int $corporateId, int $projectId, string $dateStart, string $dateEnd, $profile)
+	public function monthlyWorkflow(int $corporateId, string $dateStart, string $dateEnd, $project)
 	{
-		return collect(config('joesama/project::workflow.1'))->map(function($role,$state) use($corporateId,$projectId,$dateStart,$dateEnd, $profile){
+		return collect(config('joesama/project::workflow.1'))->map(function($role,$state) use($corporateId,$dateStart,$dateEnd, $project){
 
 			$status = strtolower(MasterData::find($state)->description);
 
 			if (in_array($state,[1,2])) {
-				$profile = $profile->where('corporate_id',request()->segment(4))->where('pivot.role_id',$role)->first();
+				$profile = $project->profile->where('corporate_id',$project->corporate_id)->where('pivot.role_id',$role)->first();
 			} else {
-				$profile = $profile->where('corporate_id','!=',request()->segment(4))->where('pivot.role_id',$role)->first();
+				$profile = $project->profile->where('corporate_id',1)->where('pivot.role_id',$role)->first();
 			}
 
 			return [
 				'status' => $status,
 				'step' => $state,
-				'monthly' => CardWorkflow::whereHas('card',function($query) use($projectId,$dateStart,$dateEnd){
-								$query->where('project_id',$projectId);
+				'monthly' => CardWorkflow::whereHas('card',function($query) use($project,$dateStart,$dateEnd){
+								$query->where('project_id',$project->id);
 								$query->whereDate('card_date',$dateStart );
 								$query->whereDate('card_end', $dateEnd );
 							})->where('state',$status)->with('card')->first(),
@@ -138,28 +138,28 @@ class ReportCardInfoRepository
 	 * Weekly Report Workflow
 	 * 
 	 * @param  int    	$corporateId 	Corporate Id
-	 * @param  int    	$projectId   	Project Id
 	 * @param  string   $dateStart   	Report Date Start
 	 * @param  string   $dateEnd   		Report Date End
+	 * @param  Project  $project   		Project Model
 	 * @return Collection
 	 */
-	public function weeklyWorkflow(int $corporateId, int $projectId, string $dateStart, string $dateEnd, $profile)
+	public function weeklyWorkflow(int $corporateId, string $dateStart, string $dateEnd, $project)
 	{
-		return collect(config('joesama/project::workflow.1'))->map(function($role,$state) use($corporateId,$projectId,$dateStart,$dateEnd, $profile){
+		return collect(config('joesama/project::workflow.1'))->map(function($role,$state) use($corporateId,$dateStart,$dateEnd, $project){
 
 			$status = strtolower(MasterData::find($state)->description);
 
 			if (in_array($state,[1,2])) {
-				$profile = $profile->where('corporate_id',request()->segment(4))->where('pivot.role_id',$role)->first();
+				$profile = $project->profile->where('corporate_id',$project->corporate_id)->where('pivot.role_id',$role)->first();
 			} else {
-				$profile = $profile->where('corporate_id','!=',request()->segment(4))->where('pivot.role_id',$role)->first();
+				$profile = $project->profile->where('corporate_id',1)->where('pivot.role_id',$role)->first();
 			}
 
 			return [
 				'status' => $status,
 				'step' => $state,
-				'weekly' => ReportWorkflow::whereHas('report',function($query) use($projectId,$dateStart,$dateEnd){
-								$query->where('project_id',$projectId);
+				'weekly' => ReportWorkflow::whereHas('report',function($query) use($project,$dateStart,$dateEnd){
+								$query->where('project_id',$project->id);
 								$query->whereDate('report_date',$dateStart );
 								$query->whereDate('report_end', $dateEnd );
 							})->where('state',$status)->with('report')->first(),
