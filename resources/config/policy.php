@@ -151,6 +151,12 @@ return [
 			],
 			'incident' => [
 				'delete' => ['corporateId','projectId','hseId']
+			],
+			'financial' => [
+				'delete' => ['corporateId','projectId','financialId'],
+				'vodelete' => ['corporateId','projectId','financialId'],
+				'retentiondelete' => ['corporateId','projectId','financialId'],
+				'laddelete' => ['corporateId','projectId','financialId'],
 			]
 		],
 		'POST' => [
