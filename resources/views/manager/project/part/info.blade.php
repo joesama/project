@@ -9,12 +9,12 @@
                         </h4>
                     </div>
                     <div class="col-md-3 text-right" class="vertical">
-                        @if($id > 0)
-                        <p class="text-bold">{{ __('joesama/project::project.date.report') }}</p>
-                        @else
-                        <p class="text-bold">{{ __('joesama/project::project.date.data') }}</p>
+                        @if( ($project->active || !is_null(data_get($project,'approval.approved_by'))) && $isProjectManager )
+                        <a class="btn btn-dark mar-btm pull-right" href="{{ handles('joesama/project::manager/project/form/'.request()->segment(4).'/'.request()->segment(5)) }}">
+                            <i class="psi-file-edit icon-fw"></i>
+                            {{ __('joesama/vuegrid::datagrid.buttons.edit') }}
+                        </a>
                         @endif
-                        <p class="text-muted">{!! $dateReport->format('d-m-Y') !!}</p>
                     </div>
                 </div>
                 <div class="row">

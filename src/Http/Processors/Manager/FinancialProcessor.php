@@ -105,6 +105,10 @@ class FinancialProcessor
 				[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
 				    'url' => handles('joesama/project::manager/financial/payment/'.$corporateId.'/'.$request->segment(5)), // URL for action
 				    'icons' => 'psi-file-edit icon', // Icon for action : optional
+				    'key' => 'id'  ],
+				[ 'delete' => trans('joesama/vuegrid::datagrid.buttons.delete') , // Action Description
+				    'url' => handles('joesama/project::api/financial/delete/'.$corporateId.'/'.$request->segment(5)), // URL for action
+				    'icons' => 'fa fa-remove icon', // Icon for action : optional
 				    'key' => 'id'  ]
 			];
 
@@ -141,6 +145,7 @@ class FinancialProcessor
 					'paid_amount' => null,
 				])
 				->id($request->segment(5))
+				->required(['claim_date','claim_amount'])
 				->renderForm(
 					__('joesama/project::'
 						.$request->segment(1).'.'
@@ -174,6 +179,7 @@ class FinancialProcessor
 					'claim_amount','claim_date'
 				])
 				->id($request->segment(6))
+				->required(['paid_date','paid_amount'])
 				->renderForm(
 					__('joesama/project::'
 						.$request->segment(1).'.'
@@ -212,7 +218,11 @@ class FinancialProcessor
 			[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
 			    'url' => handles('joesama/project::manager/financial/voform/'.$corporateId.'/'.$request->segment(5)), // URL for action
 			    'icons' => 'psi-file-edit icon', // Icon for action : optional
-			    'key' => 'id'  ]
+			    'key' => 'id'  ],
+				[ 'delete' => trans('joesama/vuegrid::datagrid.buttons.delete') , // Action Description
+				    'url' => handles('joesama/project::api/financial/vodelete/'.$corporateId.'/'.$request->segment(5)), // URL for action
+				    'icons' => 'fa fa-remove icon', // Icon for action : optional
+				    'key' => 'id'  ]
 		];
 
 		$datagrid = new DataGridGenerator();
@@ -241,6 +251,7 @@ class FinancialProcessor
 					'report_by' => auth()->id()
 				])
 				->id($request->segment(6))
+				->required(['*'])
 				->renderForm(
 					__('joesama/project::'
 						.$request->segment(1).'.'
@@ -280,7 +291,11 @@ class FinancialProcessor
 			[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
 			    'url' => handles('joesama/project::manager/financial/retentionform/'.$corporateId.'/'.$request->segment(5)), // URL for action
 			    'icons' => 'psi-file-edit icon', // Icon for action : optional
-			    'key' => 'id'  ]
+			    'key' => 'id'  ],
+				[ 'delete' => trans('joesama/vuegrid::datagrid.buttons.delete') , // Action Description
+				    'url' => handles('joesama/project::api/financial/retentiondelete/'.$corporateId.'/'.$request->segment(5)), // URL for action
+				    'icons' => 'fa fa-remove icon', // Icon for action : optional
+				    'key' => 'id'  ]
 		];
 
 		$datagrid = new DataGridGenerator();
@@ -309,6 +324,7 @@ class FinancialProcessor
 					'report_by' => auth()->id()
 				])
 				->id($request->segment(6))
+				->required(['*'])
 				->renderForm(
 					__('joesama/project::'
 						.$request->segment(1).'.'
@@ -347,7 +363,11 @@ class FinancialProcessor
 			[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
 			    'url' => handles('joesama/project::manager/financial/ladform/'.$corporateId.'/'.$request->segment(5)), // URL for action
 			    'icons' => 'psi-file-edit icon', // Icon for action : optional
-			    'key' => 'id'  ]
+			    'key' => 'id'  ],
+				[ 'delete' => trans('joesama/vuegrid::datagrid.buttons.delete') , // Action Description
+				    'url' => handles('joesama/project::api/financial/laddelete/'.$corporateId.'/'.$request->segment(5)), // URL for action
+				    'icons' => 'fa fa-remove icon', // Icon for action : optional
+				    'key' => 'id'  ]
 		];
 
 		$datagrid = new DataGridGenerator();
@@ -376,6 +396,7 @@ class FinancialProcessor
 					'report_by' => auth()->id()
 				])
 				->id($request->segment(6))
+				->required(['*'])
 				->renderForm(
 					__('joesama/project::'
 						.$request->segment(1).'.'

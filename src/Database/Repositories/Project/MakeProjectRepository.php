@@ -680,6 +680,32 @@ class MakeProjectRepository
 	}
 
 	/**
+	 * Remove attributes attached to project
+	 * 
+	 * @param  int    $corporateId 	Corporate Id
+	 * @param  int    $projectId   	Project Id
+	 * @param  int    $claimId   	Specific attribute id
+	 * @return 
+	 */
+	public function deleteClaim(int $corporateId, int $projectId, int $claimId)
+	{
+
+		DB::beginTransaction();
+
+		try{
+
+			ProjectPayment::find($claimId)->delete();
+
+			DB::commit();
+
+		}catch( \Exception $e){
+
+			dd($e->getMessage());
+			DB::rollback();
+		}
+	}
+
+	/**
 	 * Create New VO 
 	 *
 	 * @return Joesama\Project\Database\Model\Project\Project
@@ -723,6 +749,32 @@ class MakeProjectRepository
 			DB::commit();
 
 			return $this->projectModel;
+
+		}catch( \Exception $e){
+
+			dd($e->getMessage());
+			DB::rollback();
+		}
+	}
+
+	/**
+	 * Remove attributes attached to project
+	 * 
+	 * @param  int    $corporateId 	Corporate Id
+	 * @param  int    $projectId   	Project Id
+	 * @param  int    $voId   		Specific attribute id
+	 * @return 
+	 */
+	public function deleteVo(int $corporateId, int $projectId, int $voId)
+	{
+
+		DB::beginTransaction();
+
+		try{
+
+			ProjectVo::find($voId)->delete();
+
+			DB::commit();
 
 		}catch( \Exception $e){
 
@@ -784,6 +836,32 @@ class MakeProjectRepository
 	}
 
 	/**
+	 * Remove attributes attached to project
+	 * 
+	 * @param  int    $corporateId 	Corporate Id
+	 * @param  int    $projectId   	Project Id
+	 * @param  int    $retentionId  Specific attribute id
+	 * @return 
+	 */
+	public function deleteRetention(int $corporateId, int $projectId, int $retentionId)
+	{
+
+		DB::beginTransaction();
+
+		try{
+
+			ProjectRetention::find($retentionId)->delete();
+
+			DB::commit();
+
+		}catch( \Exception $e){
+
+			dd($e->getMessage());
+			DB::rollback();
+		}
+	}
+
+	/**
 	 * Create New LAD 
 	 *
 	 * @return Joesama\Project\Database\Model\Project\Project
@@ -812,7 +890,7 @@ class MakeProjectRepository
 			    'report_by'=> data_get($inputData,'report_by')
 			]);
 
-			$this->projectModel->retention()->save($vo);
+			$this->projectModel->lad()->save($vo);
 
 			}else{
 
@@ -827,6 +905,32 @@ class MakeProjectRepository
 			DB::commit();
 
 			return $this->projectModel;
+
+		}catch( \Exception $e){
+
+			dd($e->getMessage());
+			DB::rollback();
+		}
+	}
+
+	/**
+	 * Remove attributes attached to project
+	 * 
+	 * @param  int    $corporateId 	Corporate Id
+	 * @param  int    $projectId   	Project Id
+	 * @param  int    $ladId   		Specific attribute id
+	 * @return 
+	 */
+	public function deleteLad(int $corporateId, int $projectId, int $ladId)
+	{
+
+		DB::beginTransaction();
+
+		try{
+
+			ProjectLad::find($ladId)->delete();
+
+			DB::commit();
 
 		}catch( \Exception $e){
 
