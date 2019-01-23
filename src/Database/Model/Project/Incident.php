@@ -5,9 +5,12 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Joesama\Project\Database\Model\Master\MasterData;
 use Joesama\Project\Database\Model\Organization\Profile;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Incident extends Model
 {
+    use SoftDeletes;
+    
 	protected $table = 'project_incident';
     protected $guarded = ['id'];
     protected $appends = ['report_date'];

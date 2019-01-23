@@ -9,6 +9,15 @@
 	        <div class="panel-body">
 	        	@include('joesama/project::report.format')
 	        </div>
+			<div class="panel-footer text-right">
+		  		@php
+		  			$projectUrl = 'manager/project/view/'.request()->segment(4).'/'.request()->segment(5);
+		  		@endphp
+		        <a class="btn btn-dark" href="{{ handles($projectUrl) }}">
+		        	<i class="psi-folder-with-document icon-fw"></i>
+		        	{{ __('joesama/project::manager.project.view') }}
+		        </a>
+		    </div>
 	    </div>
 	</div>
 </div>

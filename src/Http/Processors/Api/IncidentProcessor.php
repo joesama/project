@@ -32,8 +32,20 @@ class IncidentProcessor
 	{
 		$this->makeProject->initIncident(collect($request->all()),$projectId);
 
-		return redirect(handles('manager/project/view/'.$corporateId.'/'.$projectId));
+		return redirect(handles('manager/hse/list/'.$corporateId.'/'.$projectId));
 	}
 
+	/**
+	 * Remove issue data from project
+	 * 
+	 * @param  Request $request
+	 * @param  int $corporateId
+	 * @param  int $projectId
+	 * @return [type]
+	 */
+	public function delete(Request $request,int $corporateId, int $projectId)
+	{
+		return $this->makeProject->deleteIncident($corporateId,$projectId,$request->segment(6));
+	}
 
 } // END class MakeProjectProcessor 

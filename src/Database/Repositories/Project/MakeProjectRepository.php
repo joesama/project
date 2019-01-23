@@ -566,8 +566,50 @@ class MakeProjectRepository
 		}
 	}
 
+
 	/**
-	 * Create New Incident Report
+	 * Remove incident attached to project
+	 * 
+	 * @param  int    $corporateId 	Corporate Id
+	 * @param  int    $projectId   	Project Id
+	 * @param  int    $incidentId   	Specific task id
+	 * @return 
+	 */
+	public function deleteIncident(int $corporateId, int $projectId, int $incidentId)
+	{
+
+		DB::beginTransaction();
+
+		try{
+
+			Incident::find($incidentId)->delete();
+
+			$this->projectModel = $this->projectModel->find($projectId);
+
+			$scoreCard = $this->projectModel->hsecard;
+			$incidentRecord = $this->projectModel->incident;
+			$incidentGroup = $incidentRecord->groupBy('incident_id');
+
+			$scoreCard->update([
+				'acc_lti' => collect($incidentGroup->get(15))->sum('incident'), //8
+				'zero_lti' => 0, //9
+				'unsafe' => collect($incidentGroup->get(16))->sum('incident'),//9
+				'stop' => collect($incidentGroup->get(17))->sum('incident'),//10
+				'summon' => collect($incidentGroup->get(18))->sum('incident'),//11
+				'complaint' => collect($incidentGroup->get(19))->sum('incident') //12
+			]);
+			
+			DB::commit();
+
+		}catch( \Exception $e){
+
+			dd($e->getMessage());
+			DB::rollback();
+		}
+	}
+
+	/**
+	 * Create New Claim Report
 	 *
 	 * @return Joesama\Project\Database\Model\Project\Project
 	 **/

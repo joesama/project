@@ -47,6 +47,7 @@ return [
 	],
 	'financial' => [
 		'summary' => 'Financial Tracker',
+		'view' => 'Payment Info',
 		'list' => "Financial Transaction",
 		'claim' => "Project Claim",
 		'payment' => "Project Payment",

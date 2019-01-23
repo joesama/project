@@ -12,7 +12,7 @@ class Task extends Model
 
 	protected $table = 'task';
     protected $guarded = ['id'];
-    protected $appends = [];
+    protected $appends = ['start_date','end_date'];
 
     /**
      * Get the task's project.
@@ -69,4 +69,13 @@ class Task extends Model
         return $query->whereDate('end','<',Carbon::now())->whereColumn('planned_progress', 'actual_progress');
     }
 
+    public function getEndDateAttribute($value)
+    {
+        return Carbon::parse($this->attributes['end'])->format('d-m-Y');
+    }
+
+    public function getStartDateAttribute($value)
+    {
+        return Carbon::parse($this->attributes['start'])->format('d-m-Y');
+    }
 }

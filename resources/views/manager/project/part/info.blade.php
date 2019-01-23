@@ -25,7 +25,7 @@
                                     {{ __('joesama/project::project.info.contract.scope') }}
                                 </td>
                                 <td class="pl-2">
-                                    {!! data_get($project,'scope') !!}
+                                    {!! strip_tags(data_get($project,'scope')) !!}
                                 </td>
                             </tr>
                         </table>

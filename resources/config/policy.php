@@ -58,6 +58,7 @@ return [
 				'no_menu' => TRUE
 			],
 			'financial' => [
+				'view' => ['corporateId','projectId','dataId?'],
 				'list' => ['corporateId','projectId','dataId?'],
 				'vo' => ['corporateId','projectId'],
 				'voform' => ['corporateId','projectId','dataId?'],
@@ -147,6 +148,9 @@ return [
 			],
 			'risk' => [
 				'delete' => ['corporateId','projectId','issueId']
+			],
+			'incident' => [
+				'delete' => ['corporateId','projectId','hseId']
 			]
 		],
 		'POST' => [

@@ -58,7 +58,7 @@ class TaskProcessor
 			]);
 		}else{
 			$form = $form->mapping([
-				'project_id' => $request->segment(5)
+				'project_id' => $request->segment(5),
 			]);
 		}
 
@@ -73,6 +73,7 @@ class TaskProcessor
 		$form = $form->option([
 					'profile_id' => Profile::sameGroup($corporateId)->pluck('name','id')
 				])->default([
+					'task_progress' => data_get($this->modelObj->find($request->segment(6)),'progress.progress',0),
 					'start' => Project::find($request->segment(5))->start,
 					'end' => Project::find($request->segment(5))->start
 				])
@@ -97,7 +98,8 @@ class TaskProcessor
 		$view = $this->viewBuilder->newView($this->modelObj)
 		->relation([
 			'project_id' => 'project.name',
-			'profile_id' => 'assignee.name'
+			'profile_id' => 'assignee.name', 
+			'actual_progress' => 'progress.progress' 
 		])
 		->id($request->segment(6))
 		->renderView(

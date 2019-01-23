@@ -45,6 +45,29 @@ class FinancialProcessor
 	 * @param  int $corporateId
 	 * @return mixed
 	 */
+	public function view(Request $request, int $corporateId)
+	{
+		$view = $this->viewBuilder->newView($this->modelObj)
+		->relation([
+			'project_id' => 'project.name',
+		])
+		->id($request->segment(6))
+		->renderView(
+			__('joesama/project::'.$request->segment(1).'.'
+				.$request->segment(2).'.'
+				.$request->segment(3))
+		);
+
+		return compact('view');
+	}
+
+	/**
+	 * List of payment
+	 * 
+	 * @param  Request $request
+	 * @param  int $corporateId
+	 * @return mixed
+	 */
 	public function list(Request $request, int $corporateId)
 	{
 		$columns = [

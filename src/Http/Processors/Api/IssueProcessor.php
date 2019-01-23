@@ -45,8 +45,6 @@ class IssueProcessor
 	 */
 	public function delete(Request $request,int $corporateId, int $projectId)
 	{
-		$this->makeProject->deleteIssue($corporateId,$projectId,$request->segment(6));
-		
-		return redirect(handles('manager/'.$request->segment(2).'/list/'.$corporateId.'/'.$projectId));
+		return $this->makeProject->deleteIssue($corporateId,$projectId,$request->segment(6));
 	}
 } // END class MakeProjectProcessor 
