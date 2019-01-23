@@ -113,21 +113,13 @@ class ReportCardInfoRepository
 	{
 		return collect(config('joesama/project::workflow.1'))->map(function($role,$state) use($corporateId,$projectId,$dateStart,$dateEnd, $profile){
 
-			// if(in_array($state,[19,20])){
-			// 	$profile = Profile::whereHas('role',function($query) use($projectId,$role){
-			// 					$query->where('project_id',$projectId);
-			// 					$query->where('role_id',$role);
-			// 				})->with('role')->first();
-			// }else{
-			// 	$profile = Profile::whereHas('corporate',function($query){
-			// 					$query->isParent();
-			// 				})->whereHas('role',function($query) use($projectId,$role){
-			// 					$query->where('role_id',$role);
-			// 				})->with('role')->first();
-			// }
 			$status = strtolower(MasterData::find($state)->description);
 
-			$profile = $profile->where('pivot.role_id',$role)->first();
+			if (in_array($state,[1,2])) {
+				$profile = $profile->where('corporate_id',request()->segment(4))->where('pivot.role_id',$role)->first();
+			} else {
+				$profile = $profile->where('corporate_id','!=',request()->segment(4))->where('pivot.role_id',$role)->first();
+			}
 
 			return [
 				'status' => $status,
@@ -155,22 +147,13 @@ class ReportCardInfoRepository
 	{
 		return collect(config('joesama/project::workflow.1'))->map(function($role,$state) use($corporateId,$projectId,$dateStart,$dateEnd, $profile){
 
-			// if(in_array($state,[19,20])){
-			// 	$profile = Profile::whereHas('role',function($query) use($projectId,$role){
-			// 					$query->where('project_id',$projectId);
-			// 					$query->where('role_id',$role);
-			// 				})->with('role')->first();
-			// }else{
-			// 	$profile = Profile::whereHas('corporate',function($query){
-			// 					$query->isParent();
-			// 				})->whereHas('role',function($query) use($projectId,$role){
-			// 					$query->where('role_id',$role);
-			// 				})->with('role')->first();
-			// }
-
 			$status = strtolower(MasterData::find($state)->description);
 
-			$profile = $profile->where('pivot.role_id',$role)->first();
+			if (in_array($state,[1,2])) {
+				$profile = $profile->where('corporate_id',request()->segment(4))->where('pivot.role_id',$role)->first();
+			} else {
+				$profile = $profile->where('corporate_id','!=',request()->segment(4))->where('pivot.role_id',$role)->first();
+			}
 
 			return [
 				'status' => $status,
@@ -199,8 +182,12 @@ class ReportCardInfoRepository
 
 			$status = strtolower(MasterData::find($state)->description);
 
-			$assignee = $profile->where('pivot.role_id',$role)->first();
-
+			if (in_array($state,[1,2])) {
+				$assignee = $profile->where('corporate_id',request()->segment(4))->where('pivot.role_id',$role)->first();
+			} else {
+				$assignee = $profile->where('corporate_id','!=',request()->segment(4))->where('pivot.role_id',$role)->first();
+			}
+			
 			$role = collect(data_get($assignee,'role'))->where('pivot.project_id',$projectId)->first();
 
 			return [
