@@ -3,7 +3,6 @@ namespace Joesama\Project\Http\Controller\Manager;
 
 use Illuminate\Http\Request;
 use Joesama\Project\Http\Controller\BaseController;
-use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
 
 /**
  * Task Controller

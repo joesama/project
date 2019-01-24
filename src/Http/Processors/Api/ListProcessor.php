@@ -2,6 +2,7 @@
 namespace Joesama\Project\Http\Processors\Api; 
 
 use Joesama\Project\Database\Repositories\Organization\OrganizationInfoRepository;
+use Joesama\Project\Database\Repositories\Project\MilestoneRepository;
 use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
 use Joesama\Project\Database\Repositories\Project\ProjectWorkflowRepository;
 use Joesama\Project\Database\Repositories\Project\ReportCardInfoRepository;
@@ -16,20 +17,22 @@ use Joesama\Project\Http\Services\DataGridGenerator;
  **/
 class ListProcessor 
 {
-	private $projectObj, $masterDataObj, $organizationObj, $reportCardObj, $approvalObj;
+	private $projectObj, $masterDataObj, $organizationObj, $reportCardObj, $approvalObj, $milestoneObj;
 
 	public function __construct(
 		ProjectInfoRepository $projectInfo,
 		MasterDataRepository $masterData,
 		OrganizationInfoRepository $organizationData,
 		ProjectWorkflowRepository $projectWorkflow,
-		ReportCardInfoRepository $reportCardObj
+		ReportCardInfoRepository $reportCardObj,
+		MilestoneRepository $milestoneObj
 	){
 		$this->projectObj = $projectInfo;
 		$this->masterDataObj = $masterData;
 		$this->organizationObj = $organizationData;
 		$this->reportCardObj = $reportCardObj;
 		$this->approvalObj = $projectWorkflow;
+		$this->milestoneObj = $milestoneObj;
 	}
 
 	/**
@@ -190,5 +193,25 @@ class ListProcessor
 	public function approval($request,$corporateId)
 	{
 		return $this->approvalObj->projectApprovalList($corporateId,$request->segment(5));
+	}
+
+	/**
+	 * @param  array $request
+	 * @param  int $request,$corporateId
+	 * @return Illuminate\Pagination\LengthAwarePaginator
+	 */
+	public function finance($request,$corporateId)
+	{
+		return $this->milestoneObj->financeList($corporateId,$request->segment(5));
+	}
+
+	/**
+	 * @param  array $request
+	 * @param  int $request,$corporateId
+	 * @return Illuminate\Pagination\LengthAwarePaginator
+	 */
+	public function physical($request,$corporateId)
+	{
+		return $this->milestoneObj->physicalList($corporateId,$request->segment(5));
 	}
 } // END class MakeProjectProcessor 

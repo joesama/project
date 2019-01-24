@@ -55,5 +55,15 @@ return [
 		'retentionform' => "Maklumat Pengekalan",
 		'lad' => "LAD Projek",
 		'ladform' => "Maklumat LAD",
+	],
+	'curve' => [
+		'physical' => 'Physical S-Curve',
+		'financial' => 'Financial S-Curve'
+	],
+	'physical' => [
+		'milestone' => 'Progress Milestone',
+	],
+	'financial' => [
+		'milestone' => 'Financial Milestone'
 	]
 ];

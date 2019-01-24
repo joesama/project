@@ -147,5 +147,13 @@ return [
 	],
 	'report' => [
 		'report_date' => 'Tarikh Laporan'
+	],
+	'project_milestone_physical' => [
+		'label' => 'Milestone Label',
+		'group' => 'Milestone Group'
+	],
+	'project_milestone_finance' => [
+		'label' => 'Milestone Label',
+		'group' => 'Milestone Group'
 	]
 ];

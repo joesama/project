@@ -15,9 +15,9 @@
     <div class="collapse in" id="physicalCurve">
       <div class="panel-body">
         <div class="row mar-btm">
-            <a class="btn btn-dark pull-right" href="{{ handles('joesama/project::manager/financial/retention/'.request()->segment(4).'/'.request()->segment(5)) }}">
+            <a class="btn btn-dark pull-right" href="{{ handles('joesama/project::manager/physical/list/'.request()->segment(4).'/'.request()->segment(5)) }}">
               <i class="psi-numbering-list icon-fw"></i>
-              {{ __('joesama/project::manager.milestone.physical')  }}
+              {{ __('joesama/project::manager.physical.milestone')  }}
             </a>
         </div>
         <div id="physicalSpline"></div>

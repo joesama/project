@@ -71,6 +71,16 @@ return [
 				'payment' => ['corporateId','projectId','dataId?'],
 				'no_menu' => TRUE
 			],
+			'physical' => [
+				'list' => ['corporateId','projectId'],
+				'milestone' => ['corporateId','projectId','milestoneId?'],
+				'no_menu' => TRUE
+			],
+			'finance' => [
+				'list' => ['corporateId','projectId'],
+				'milestone' => ['corporateId','projectId','milestoneId?'],
+				'no_menu' => TRUE
+			],
 			'icon' => 'psi-folder-archive icon-lg icon-fw'
 		],
 		'dashboard' => [
@@ -130,6 +140,8 @@ return [
 				'weekly' => ['corporateId','projectId?'],
 				'monthly' => ['corporateId','projectId?'],
 				'approval' => ['corporateId','projectId?'],
+				'physical' => ['corporateId','projectId'],
+				'finance' => ['corporateId','projectId']
 			],
 			'profile' => [
 				'reassign' => ['masterId','projectId']
@@ -157,7 +169,13 @@ return [
 				'vodelete' => ['corporateId','projectId','financialId'],
 				'retentiondelete' => ['corporateId','projectId','financialId'],
 				'laddelete' => ['corporateId','projectId','financialId'],
-			]
+			],
+			'physical' => [
+				'delete' => ['corporateId','projectId','milestoneId']
+			],
+			'finance' => [
+				'delete' => ['corporateId','projectId','milestoneId']
+			],
 		],
 		'POST' => [
 			'project' => [
@@ -204,7 +222,13 @@ return [
 			'workflow' => [
 				'approval' => ['corporateId','projectId'],
 				'process' => ['corporateId','projectId']
-			]
+			],
+			'physical' => [
+				'save' => ['corporateId','projectId','milestoneId?']
+			],
+			'finance' => [
+				'save' => ['corporateId','projectId','milestoneId?']
+			],
 		]
 	],
 	'dashboard' => [

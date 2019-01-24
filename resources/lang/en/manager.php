@@ -62,8 +62,12 @@ return [
 		'physical' => 'Physical S-Curve',
 		'financial' => 'Financial S-Curve'
 	],
-	'milestone' => [
-		'physical' => 'Progress Milestone',
-		'financial' => 'Financial Milestone'
+	'physical' => [
+		'list' => 'List of Progress Milestone',
+		'milestone' => 'Progress Milestone',
+	],
+	'finance' => [
+		'list' => 'List of Financial Milestone',
+		'milestone' => 'Financial Milestone'
 	]
 ];

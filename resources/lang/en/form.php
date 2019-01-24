@@ -147,5 +147,15 @@ return [
 	],
 	'report' => [
 		'report_date' => 'Report Date'
+	],
+	'project_milestone_physical' => [
+		'label' => 'Milestone Label',
+		'weightage' => 'Progress Weightage (%)',
+		'group' => 'Milestone Group'
+	],
+	'project_milestone_finance' => [
+		'label' => 'Milestone Label',
+		'weightage' => 'Payment Weightage (RM)',
+		'group' => 'Milestone Group'
 	]
 ];

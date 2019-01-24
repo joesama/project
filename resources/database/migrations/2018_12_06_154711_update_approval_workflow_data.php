@@ -14,15 +14,15 @@ class UpdateApprovalWorkflowData extends Migration
     public function up()
     {
         Schema::table('project_approval', function (Blueprint $table) {
-            // $table->unsignedInteger('need_step')->after('need_action')->nullable();
+            $table->unsignedInteger('need_step')->after('need_action')->nullable();
         });
 
         Schema::table('project_report', function (Blueprint $table) {
-            // $table->unsignedInteger('need_step')->after('need_action')->nullable();
+            $table->unsignedInteger('need_step')->after('need_action')->nullable();
         });
 
         Schema::table('project_card', function (Blueprint $table) {
-            // $table->unsignedInteger('need_step')->after('need_action')->nullable();
+            $table->unsignedInteger('need_step')->after('need_action')->nullable();
         });
     }
 

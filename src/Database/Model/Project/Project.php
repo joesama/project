@@ -181,6 +181,22 @@ class Project extends Model
     }
 
     /**
+     * Get the project progress milestone
+     */
+    public function physical()
+    {
+        return $this->hasMany(PhysicalMilestone::class,'project_id','id');
+    }
+
+    /**
+     * Get the project payment milestone
+     */
+    public function finance()
+    {
+        return $this->hasMany(FinanceMilestone::class,'project_id','id');
+    }
+
+    /**
      * Get the report progress.
      */
     public function scopeOnTrack($query)
@@ -229,7 +245,8 @@ class Project extends Model
             'client','profile.role',
             'corporate','partner','attributes',
             'hsecard','manager','incident','claim',
-            'payment','retention','lad','vo','issue','role'
+            'payment','retention','lad','vo','issue','role',
+            'physical','finance'
         ])->with(['task' => function($query){
             $query->component();
         }])->with(['issue' => function($query){

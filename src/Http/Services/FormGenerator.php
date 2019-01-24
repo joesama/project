@@ -249,6 +249,10 @@ class FormGenerator
 						return 'datepicker';
 					}
 
+					if(in_array($type,['tag'])){
+						return 'tag';
+					}
+
 					if(in_array($key,collect($this->optionlist)->keys()->toArray())){
 
 						$extraKey = $this->extras->get($key);

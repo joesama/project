@@ -10,6 +10,8 @@ return [
 		'risk' => 'Risk',
 		'partner' => 'Project Partner',
 		'attribute' => 'Project Attributes',
+		'physical' => 'Project Progress',
+		'finance' => 'Financial Progress',
 	],
 	'setup' => [
 		'module' => 'Setting',

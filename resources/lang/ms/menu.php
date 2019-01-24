@@ -10,6 +10,8 @@ return [
 		'risk' => 'Risiko',
 		'partner' => 'Rakan Kongsi Projek',
 		'attribute' => 'Atribut Projek',
+		'physical' => 'Project Progress',
+		'finance' => 'Financial Progress',
 	],
 	'setup' => [
 		'module' => 'Administrasi',
