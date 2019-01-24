@@ -1,12 +1,6 @@
 @extends('joesama/entree::layouts.content')
 @push('content.style')
-<style type="text/css">
-    .btn-action{
-        padding: 0px 4px;
-        float: right;
-        color: white;
-    }
-</style>
+<link href="https://naver.github.io/billboard.js/release/latest/dist/billboard.min.css" rel="stylesheet">
 @endpush
 @section('content')
 
@@ -16,6 +10,8 @@
         <?php $id = request()->segment(4); ?>
 
             @includeIf('joesama/project::manager.project.part.info')
+            @includeIf('joesama/project::manager.project.part.physical-curve')
+            @includeIf('joesama/project::manager.project.part.financial-curve')
             @foreach($policies as $policyId => $policy)
                 @php
                     $currentView = 'joesama/project::manager.project.part.'.$policyId
@@ -31,20 +27,16 @@
                         'tableId' => $policyId
                     ])
             @endforeach
-            @includeIf('joesama/project::manager.project.part.hse')
             @includeIf('joesama/project::manager.project.part.financial')
-
+            @includeIf('joesama/project::manager.project.part.hse')
             @includeWhen($project->active,'joesama/project::manager.project.part.workflow')
             @includeWhen(!$project->active,'joesama/project::manager.project.part.approval')
-            {{-- @includeIf('joesama/project::project.component.progress') --}}
-            {{-- @includeIf('joesama/project::project.component.budget') --}}
-            {{-- @includeIf('joesama/project::project.component.hse') --}}
-            {{-- @includeIf('joesama/project::project.component.owner') --}}
 
     </div>
 </div>
 @endsection
-@push('content.script')
+@prepend('content.script')
+<script src="https://naver.github.io/billboard.js/release/latest/dist/billboard.pkgd.min.js"></script>
 <script type="text/javascript">
     $('.mh-byrow').each(function() {
         $(this).find('.panel').matchHeight({
@@ -53,4 +45,5 @@
     });
 </script>
 @stack('datagrid')
-@endpush
+@endprepend
+

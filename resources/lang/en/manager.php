@@ -57,5 +57,13 @@ return [
 		'retentionform' => "Retention Information",
 		'lad' => "Project LAD",
 		'ladform' => "LAD Information",
+	],
+	'curve' => [
+		'physical' => 'Physical S-Curve',
+		'financial' => 'Financial S-Curve'
+	],
+	'milestone' => [
+		'physical' => 'Progress Milestone',
+		'financial' => 'Financial Milestone'
 	]
 ];
