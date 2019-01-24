@@ -187,7 +187,7 @@ class ProjectProcessor
 			data_get($project,'lad')
 		);
 
-		$reportWorkflow = $this->reportCardRepo->reportWorkflow($project->profile,$project->id);
+		$reportWorkflow = $this->reportCardRepo->reportWorkflow($project,$project->id);
 		$approvalWorkflow = $this->projectWorkflowRepo->projectWorkflow($project->profile,$project->approval);
 
 		return [

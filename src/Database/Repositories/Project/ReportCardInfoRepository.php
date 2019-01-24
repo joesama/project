@@ -176,23 +176,23 @@ class ReportCardInfoRepository
 	 * @param  int 			$projectId 	Project Id
 	 * @return Collection
 	 */
-	public function reportWorkflow(Collection $profile, int $projectId)
+	public function reportWorkflow($project, int $projectId)
 	{
-		return collect(config('joesama/project::workflow.1'))->mapWithKeys(function($role,$state) use($profile,$projectId){
+		return collect(config('joesama/project::workflow.1'))->mapWithKeys(function($role,$state) use($project,$projectId){
 
 			$status = strtolower(MasterData::find($state)->description);
 
 			if (in_array($state,[1,2])) {
-				$assignee = $profile->where('corporate_id',request()->segment(4))->where('pivot.role_id',$role)->first();
+				$profile = $project->profile->where('corporate_id',$project->corporate_id)->where('pivot.role_id',$role)->first();
 			} else {
-				$assignee = $profile->where('corporate_id','!=',request()->segment(4))->where('pivot.role_id',$role)->first();
+				$profile = $project->profile->where('corporate_id',1)->where('pivot.role_id',$role)->first();
 			}
 			
-			$role = collect(data_get($assignee,'role'))->where('pivot.project_id',$projectId)->first();
+			$role = collect(data_get($profile,'role'))->where('pivot.project_id',$projectId)->first();
 
 			return [
 				$status => [ 
-					'profile' => $assignee,
+					'profile' => $profile,
 					'role' => $role
 				]
 			];
