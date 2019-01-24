@@ -18,7 +18,7 @@ class CreateProjectMilestonePhysical extends Migration
             $table->increments('id');
             $table->unsignedInteger('project_id')->nullable();
             $table->string('label')->nullable();
-            $table->unsignedDouble('weightage', 8, 2)->nullable();
+            $table->double('weightage', 8, 2)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
