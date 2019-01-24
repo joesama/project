@@ -5,6 +5,7 @@ return [
 	'is' => [
 		'required' => 'Maklumat Ini Diperlukan',
 		'numeric' => 'Data Dimasukan Perlu Didalam Format Nombor',
+		'maxnumber' => 'Data Dimasukan Tidak Boleh Melebihi 99999999999999',
 		'choose' => 'Sila Pilih Satu Dari Senarai',
 		'multiple' => 'Anda Boleh Memilih Lebih Dari Satu',
 	],
@@ -35,6 +36,7 @@ return [
 		'planned_payment' => 'Bayaran Dirancang',
 		'effective_days' => 'Hari Kuat Kuasa',
 		'current_variance' => 'Varian Terkini',
+		'duration' => 'Durasi Projek',
 
 	],
 	'task' => [

@@ -5,6 +5,7 @@ return [
 	'is' => [
 		'required' => 'Information Is Required',
 		'numeric' => 'Input Data Should Be Numeric',
+		'maxnumber' => 'Input Data Should Not Exceed 99999999999999',
 		'choose' => 'Please Choose One From The List',
 		'multiple' => 'You Can Choose More Than One',
 	],
@@ -35,6 +36,7 @@ return [
 		'planned_payment' => 'Planned Payment',
 		'effective_days' => 'Effective Days',
 		'current_variance' => 'Current Variance',
+		'duration' => 'Project Duration',
 
 	],
 	'task' => [

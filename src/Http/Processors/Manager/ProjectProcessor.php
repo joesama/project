@@ -97,12 +97,13 @@ class ProjectProcessor
 					'corporate_id' => $corporateId
 				])
 				->extras([
+					'duration' => 'range',
 					'manager_id' => Profile::sameGroup($corporateId)->pluck('name','id'),
 					'approver_id' => Profile::sameGroup($corporateId)->pluck('name','id'),
 					'validator_id' => Profile::fromParent()->pluck('name','id'),
 					'reviewer_id' => Profile::fromParent()->pluck('name','id'),
 					'acceptance_id' => Profile::fromParent()->pluck('name','id'),
-					'scope' => 'textarea'
+					'scope' => 'textarea',
 				])
 				->default([
 					'manager_id' 	=> 	data_get(Profile::sameGroup($corporateId)->whereHas('role',function($query) use($request){
@@ -126,7 +127,7 @@ class ProjectProcessor
 											$query->where('role_id',4);
 										})->first(),'id'),
 				])
-				->excludes(['effective_days','planned_progress','acc_progress','actual_progress','actual_payment','planned_payment','current_variance'])
+				->excludes(['start','end','effective_days','planned_progress','acc_progress','actual_progress','actual_payment','planned_payment','current_variance'])
 				->id($request->segment(5))
 				->required(['*'])
 				->renderForm(

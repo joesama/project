@@ -10,14 +10,17 @@
 		</div>
 	</div>
 </div>
+@php
+	$startDate = (is_null($default)) ? Carbon\Carbon::now()->subYears(2)->format('d/m/Y') : Carbon\Carbon::parse($default)->format('d/m/Y');
+@endphp
 @push('form.script')
 <script type="text/javascript">
 $(document).on('nifty.ready', function() {
-
+	$("{{ '#'.$fieldId }}").mask('99/99/9999');
 	$("{{ '#'.$fieldId }}").datepicker({
 		autoclose:true,
 		format: 'dd/mm/yyyy',
-		startDate: "{{ Carbon\Carbon::parse($default)->format('d/m/Y') }}"
+		startDate: "{{ $startDate }}"
 	});
 
 });

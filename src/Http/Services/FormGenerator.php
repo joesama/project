@@ -249,6 +249,10 @@ class FormGenerator
 						return 'datepicker';
 					}
 
+					if(in_array($type,['range'])){
+						return 'range-datepicker';
+					}
+
 					if(in_array($type,['tag'])){
 						return 'tag';
 					}
@@ -266,7 +270,7 @@ class FormGenerator
 
 				}else{
 
-					if(in_array($type,['varchar','double','text','date'])){
+					if(in_array($type,['varchar','double','decimal','text','date'])){
 						return 'static';
 					}
 
