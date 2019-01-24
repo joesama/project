@@ -25,16 +25,21 @@
     </div>
   </div>
 </div>
+@php
+  $physical = data_get($project,'physical');
+  $physicalChart = $physical->pluck('weightage')->prepend('Planned');
+  $physicalCat = $physical->pluck('label')->map(function($item){
+                  return strtoupper($item);
+                });
+@endphp
 @push('content.script')
 <script type="text/javascript">
   
   var chart = bb.generate({
   data: {
     columns: [
-      ["planned", 0, 0, 50, 90, 90, 100],
-      ["actual", 0, 9, 50, 85, 90, 90],
-      ["planned1", 0, 0, 0, 0, 0, 10, 50, 90, 90, 100],
-      ["actual1", 0, 0, 0, 0, 0, 0, 50, 90, 90, 90]
+      @json($physicalChart),
+      ["actual", 0, 0, 0, 0, 0, 0],
     ],
     type: "spline"
   },
@@ -42,17 +47,7 @@
     x: {
       label: "Milestone",
       type: "category",
-      categories: [
-        "Milestone 1",
-        "Milestone 2",
-        "Milestone 3",
-        "Milestone 4",
-        "Milestone 5",
-        "Milestone 6",
-        "Milestone 7",
-        "Milestone 8",
-        "Milestone 9",
-      ]
+      categories: @json($physicalCat)
     },
     y: {
       label: "% Progress"

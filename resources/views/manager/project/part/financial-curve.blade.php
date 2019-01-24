@@ -25,20 +25,29 @@
     </div>
   </div>
 </div>
+@php
+  $financial = data_get($project,'finance');
+  $chart = $financial->pluck('weightage')->prepend('Planned');
+  $categories = $financial->pluck('label')->map(function($item){
+                  return strtoupper($item);
+                });
+@endphp
 @push('content.script')
 <script type="text/javascript">
   
   var chart = bb.generate({
   data: {
     columns: [
-      ["planned", 0, 10, 50, 90, 100],
-      ["actual", 0,9,50,85,100]
+      @json($chart),
+      ["actual", 0,0,0,0,0]
     ],
     type: "spline"
   },
   axis: {
     x: {
-      label: "Milestone"
+      label: "Milestone",
+      type: "category",
+      categories: @json($categories)
     },
     y: {
       label: "Amount Claim"
