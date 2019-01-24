@@ -5,7 +5,7 @@ return [
 		'module' => 'Project Management',
 		'dashboard' => 'My Task',
 		'project' => 'Project',
-		'task' => 'Task',
+		'task' => 'Project Schedule',
 		'issue' => 'Issue',
 		'risk' => 'Risk',
 		'partner' => 'Project Partner',

@@ -3,9 +3,9 @@
     <div class="col-md-10">
 		<div id="date-{{ $fieldId }}">
 		    <div class="input-daterange input-group  text-semibold">
-		        <input type="text" class="form-control form-validation"  {{ ($required) ? 'required="TRUE"':'' }} {{ ($readonly) ? 'disabled':'' }} name="start"  id="start"  value="{{ Carbon\Carbon::parse(old('start',$value))->format('d/m/Y') }}" >
+		        <input type="text" class="form-control form-validation"  {{ ($required) ? 'required="TRUE"':'' }} {{ ($readonly) ? 'disabled':'' }} name="start"  id="start"  value="{{ Carbon\Carbon::parse(old('start',$start))->format('d/m/Y') }}" >
 		        <span class="input-group-addon"><i class="psi-triangle-arrow-right"></i></span>
-		        <input type="text" class="form-control form-validation"  {{ ($required) ? 'required="TRUE"':'' }} {{ ($readonly) ? 'disabled':'' }} name="end"  id="end"  value="{{ Carbon\Carbon::parse(old('end',$value))->format('d/m/Y') }}" >
+		        <input type="text" class="form-control form-validation"  {{ ($required) ? 'required="TRUE"':'' }} {{ ($readonly) ? 'disabled':'' }} name="end"  id="end"  value="{{ Carbon\Carbon::parse(old('end',$end))->format('d/m/Y') }}" >
 		    </div>
 		</div>
 	</div>

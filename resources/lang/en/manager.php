@@ -16,8 +16,8 @@ return [
 	],
 	'task' => [
 		'list' => "Project Schedule",
-		'form' => "Task's Information",
-		'view' => "Task's Information",
+		'form' => "Schedule's Information",
+		'view' => "Schedule's Information",
 	],
 	'risk' => [
 		'list' => "List of Project Risks",
