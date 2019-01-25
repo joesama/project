@@ -245,9 +245,11 @@ class Project extends Model
             'client','profile.role',
             'corporate','partner','attributes',
             'hsecard','manager','incident','claim',
-            'payment','retention','lad','vo','issue','role',
+            'retention','lad','vo','issue','role',
             'physical','finance'
-        ])->with(['task' => function($query){
+        ])->with(['payment' => function($query){
+            $query->component();
+        }])->with(['task' => function($query){
             $query->component();
         }])->with(['issue' => function($query){
             $query->component();

@@ -190,7 +190,7 @@ class FinancialRepository
 	{
 		return collect([
 	        'monthTrans' => collect($transData->get(Carbon::now()->format('Y'))
-	                    ->get(Carbon::now()->format('m')))
+	                    ->get(intval(Carbon::now()->format('m'))))
 	                    ->sum($amount),
 	        'ytd' => collect($transData->get(Carbon::now()->format('Y'))->flatten(1))->sum($amount),
 	        'ttd' => collect($transData->flatten(2))->sum($amount),

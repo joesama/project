@@ -135,17 +135,23 @@ class FinancialProcessor
 	 */
 	public function claim(Request $request, int $corporateId)
 	{
+		$project = $this->projectObj->getProject($request->segment(5));
+
 		$form = $this->formBuilder
 				->newModelForm($this->modelObj)
 				->mapping([
-					'project_id' => $request->segment(5),
-					'claim_report_by' => auth()->id(),
-					'paid_report_by' => null,
-					'paid_date' => null,
-					'paid_amount' => null,
+					'project_id' 		=> 	$request->segment(5),
+					'claim_report_by' 	=> 	auth()->id(),
+					'paid_report_by' 	=> 	null,
+					'paid_date' 		=> 	null,
+					'paid_amount' 		=> 	null,
+				])->extras([
+					'milestone' 		=> 	collect( data_get($project,'finance')
+											->pluck('label','id')
+											->map(function($item){ return ucfirst($item); }) )
 				])
 				->id($request->segment(5))
-				->required(['claim_date','claim_amount'])
+				->required(['claim_date','claim_amount','milestone'])
 				->renderForm(
 					__('joesama/project::'
 						.$request->segment(1).'.'

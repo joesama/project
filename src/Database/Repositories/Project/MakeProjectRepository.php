@@ -636,6 +636,8 @@ class MakeProjectRepository
 
 			$this->projectModel->payment()->save($claim);
 
+			$claim->milestone()->sync($claimData->get("milestone"),['created_at' => Carbon::now()]);
+
 			DB::commit();
 
 			return $this->projectModel;

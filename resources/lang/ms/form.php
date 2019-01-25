@@ -49,7 +49,8 @@ return [
 		'task_progress' => "% Perkembangan", 
 		'actual_progress' => "Perkembangan Sebenar", 
 		'planned_progress' => "Perkembangan Dirancang", 
-		'effective_days' => "Jangka Masa (Hari)", 
+		'effective_days' => "Jangka Masa (Hari)",  
+		'milestone' => "Milestone", 
 	],
 	'issue' => [
 		'profile_id' => "Kakitangan Bertanggungjawab", 
@@ -109,7 +110,8 @@ return [
 		'claim_report_by' => 'Laporan Tuntutan Oleh',
 		'paid_report_by' => 'Laporan Bayaran Oleh',
 		'claim_amount' => 'Amaun Tuntutan',
-		'paid_amount' => 'Amaun Bayaran',
+		'paid_amount' => 'Amaun Bayaran', 
+		'milestone' => "Milestone", 
 	],
 	'project_vo' => [
 		'date' => 'Tarikh VO',

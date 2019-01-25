@@ -27,10 +27,20 @@
 </div>
 @php
   $financial = data_get($project,'finance');
-  $chart = $financial->pluck('weightage')->prepend('Planned');
+  $chart = $financial->pluck('weightage')->map(function($item){ return floatval($item); })->prepend('Planned');
   $categories = $financial->pluck('label')->map(function($item){
                   return strtoupper($item);
                 });
+  $claim = data_get($project,'payment');
+  $transact = $financial->mapWithKeys(function($milestone) use($claim){
+    return [ 
+      $milestone->id => $claim->filter(function($claimant) use($milestone){
+                          return data_get($claimant,'milestone.0.id') == $milestone->id;
+                        })->sum('paid_amount')
+    ];
+  });
+  $transact = $transact->prepend('Actual');
+
 @endphp
 @push('content.script')
 <script type="text/javascript">
@@ -39,7 +49,7 @@
   data: {
     columns: [
       @json($chart),
-      ["actual", 0,0,0,0,0]
+      @json($transact)
     ],
     type: "spline"
   },

@@ -4,6 +4,7 @@ namespace Joesama\Project\Database\Model\Project;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Joesama\Project\Database\Model\Organization\Profile;
+use Joesama\Project\Database\Model\Project\FinanceMilestone;
 
 class ProjectPayment extends Model
 {
@@ -34,6 +35,14 @@ class ProjectPayment extends Model
         return $this->belongsTo(Profile::class,'paid_report_by','user_id');
     }
 
+    /**
+     * Get the payment milestone.
+     */
+    public function milestone()
+    {
+        return $this->belongsToMany(FinanceMilestone::class,'milestone_payment','payment_id','milestone_id');
+    }
+
     public function getClaimDateAttribute($value)
     {
         return (is_null($value)) ? $value : Carbon::parse($value)->format('d-m-Y');
@@ -46,7 +55,7 @@ class ProjectPayment extends Model
 
     public function scopeComponent($query)
     {
-        return $query->with(['creporter','preporter','project']);
+        return $query->with(['creporter','preporter','project','milestone']);
     }
 
 

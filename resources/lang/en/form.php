@@ -50,6 +50,7 @@ return [
 		'actual_progress' => "Actual Progress", 
 		'planned_progress' => "Planned Progress", 
 		'effective_days' => "Duration In Days", 
+		'milestone' => "Milestone", 
 	],
 	'issue' => [
 		'profile_id' => "Person In Charge", 
@@ -109,7 +110,8 @@ return [
 		'claim_report_by' => 'Claim Report By',
 		'paid_report_by' => 'Payment Report By',
 		'claim_amount' => 'Claim Amount',
-		'paid_amount' => 'Payment Amount',
+		'paid_amount' => 'Payment Amount', 
+		'milestone' => "Milestone", 
 	],
 	'project_vo' => [
 		'date' => 'Date VO',
