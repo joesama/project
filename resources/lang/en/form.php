@@ -49,7 +49,7 @@ return [
 		'progress' => "Progress", 
 		'task_progress' => "% Progress", 
 		'actual_progress' => "Actual Progress", 
-		'planned_progress' => "Progress Weightage", 
+		'planned_progress' => "Weightage", 
 		'effective_days' => "Duration In Days", 
 		'group' => "Milestone", 
 	],
