@@ -288,7 +288,9 @@ class FinancialRepository
 			
 			$sum = collect([]);
 			$paid = collect([]);
-			$claim = $item->mapWithKeys(function ($item, $key) use($sum,$paid){
+			$claim = $item->sortBy(function ($claim, $key) {
+			    return Carbon::parse($claim['claim_date']);
+			})->mapWithKeys(function ($item, $key) use($sum,$paid){
 				$sum->push($item['claim_amount']);
 				$paid->put(Carbon::parse($item['claim_date'])->format('d-m-Y'),0);
 			    return [ Carbon::parse($item['claim_date'])->format('d-m-Y') => $sum->sum()];
