@@ -11,22 +11,18 @@
 @section('content')
 <div class="row mb-3">
     <div class="col-md-12">
-    <div class="panel">
-      <div class="panel-body">
-      	<div class="table-responsive">
-        	{!! $tableWeekly !!}
-    	</div>
-      </div>
-    </div>
+	    <div class="panel">
+	      	<div class="panel-body">
+	        	{!! $tableWeekly !!}
+	      	</div>
+	    </div>
     </div>
 </div>
 <div class="row mb-3">
     <div class="col-md-12">
 		<div class="panel">
 		  <div class="panel-body">
-		  	<div class="table-responsive">
 		  		{!! $tableMonthly !!}
-		  	</div>
 		  </div>
 		</div>
     </div>
@@ -35,9 +31,7 @@
   <div class="col-md-12">
     <div class="panel">
       <div class="panel-body">
-      	<div class="table-responsive">
         	{!! $tableApproval !!}
-    	</div>
       </div>
     </div>
   </div>

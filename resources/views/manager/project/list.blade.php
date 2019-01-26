@@ -6,11 +6,9 @@
 <div class="row mb-3">
     <div class="col-md-12">
 		<div class="panel">
-		  <div class="panel-body">
-		  	<div class="table-responsive">
+			<div class="panel-body">
 				{!! $table !!}
 			</div>
-		  </div>
 		</div>
     </div>
 </div>

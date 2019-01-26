@@ -14,9 +14,7 @@
     <!--Panel body-->
     <div class="collapse in" id="{{$tableId}}">
       <div class="panel-body">
-        <div class="table-responsive">
           {!! $table !!}
-        </div>
       </div>
     </div>
   </div>
