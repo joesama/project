@@ -14,7 +14,9 @@
     <!--Panel body-->
     <div class="collapse in" id="{{$tableId}}">
       <div class="panel-body">
-            {!! $table !!}
+            <div class="table-responsive">
+              {!! $table !!}
+            </div>
             @php
               $task = data_get($project,'task');
             @endphp
