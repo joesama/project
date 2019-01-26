@@ -13,7 +13,9 @@
     <div class="col-md-12">
     <div class="panel">
       <div class="panel-body">
-        {!! $tableWeekly !!}
+      	<div class="table-responsive pad-hor">
+        	{!! $tableWeekly !!}
+    	</div>
       </div>
     </div>
     </div>
@@ -22,7 +24,9 @@
     <div class="col-md-12">
 		<div class="panel">
 		  <div class="panel-body">
-		  	{!! $tableMonthly !!}
+		  	<div class="table-responsive pad-hor">
+		  		{!! $tableMonthly !!}
+		  	</div>
 		  </div>
 		</div>
     </div>
@@ -31,7 +35,9 @@
   <div class="col-md-12">
     <div class="panel">
       <div class="panel-body">
-        {!! $tableApproval !!}
+      	<div class="table-responsive pad-hor">
+        	{!! $tableApproval !!}
+    	</div>
       </div>
     </div>
   </div>

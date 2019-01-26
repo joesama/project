@@ -11,7 +11,7 @@
     <div class="col-md-12">
 		<div class="panel">
 			<div class="panel-body">
-				{<div class="table-responsive">
+				<div class="table-responsive pad-hor">
 					{!! $table !!}
 				</div>
 			</div>

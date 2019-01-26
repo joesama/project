@@ -169,6 +169,7 @@ return [
 				'vodelete' => ['corporateId','projectId','financialId'],
 				'retentiondelete' => ['corporateId','projectId','financialId'],
 				'laddelete' => ['corporateId','projectId','financialId'],
+				'scurve' => ['corporateId','projectId']
 			],
 			'physical' => [
 				'delete' => ['corporateId','projectId','milestoneId']
