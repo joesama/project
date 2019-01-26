@@ -20,7 +20,7 @@
   </div>
 </div>
 @php
-  $taskCategories = collect($projectSchedule->first())->get('categories')->splice(1);
+  $taskCategories = collect(collect($projectSchedule->first())->get('categories'))->splice(1);
   $taskLabel = $projectSchedule->mapWithKeys(function($item, $key){
       return [$key => $key.' VARIANCE : '.number_format($item->get('variance'),2)];
   })->implode(',');
