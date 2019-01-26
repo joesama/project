@@ -14,12 +14,14 @@
     <!--Panel body-->
     <div class="collapse in" id="physicalCurve">
       <div class="panel-body">
+        @if( ($project->active || !is_null(data_get($project,'approval.approved_by'))) && $isProjectManager )
         <div class="row mar-btm">
             <a class="btn btn-dark pull-right" href="{{ handles('joesama/project::manager/physical/list/'.request()->segment(4).'/'.request()->segment(5)) }}">
               <i class="psi-numbering-list icon-fw"></i>
               {{ __('joesama/project::manager.physical.milestone')  }}
             </a>
         </div>
+        @endif
         <div id="physicalSpline"></div>
       </div>
     </div>
