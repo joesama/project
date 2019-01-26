@@ -45,6 +45,7 @@ return [
 		'name' => "Task's Name", 
 		'start' => "Start Date", 
 		'end' => "End Date", 
+		'duration' => "Duration", 
 		'progress' => "Progress", 
 		'task_progress' => "% Progress", 
 		'actual_progress' => "Actual Progress", 

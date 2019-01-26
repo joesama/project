@@ -185,6 +185,7 @@ class MakeProjectRepository
 		    'name' => null,
 		    'project_id' => null,
 		    'profile_id' => null,
+		    'planned_progress' => 0,
 		    'start'=> null,
 		    'end' => null
 		]);
@@ -205,6 +206,9 @@ class MakeProjectRepository
 					$this->taskModel->{$field} = $record;
 				}
 			});
+
+
+			$this->taskModel->actual_progress = ($this->taskModel->planned_progress/100)*$taskData->get('task_progress');
 			$this->taskModel->effective_days = $this->effectiveDays($this->taskModel->start,$this->taskModel->end);
 			$this->taskModel->save();
 

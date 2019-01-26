@@ -1,6 +1,7 @@
 <?php
 namespace Joesama\Project\Http\Processors\Manager; 
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Joesama\Project\Database\Model\Organization\Profile;
 use Joesama\Project\Database\Model\Project\Project;
@@ -75,18 +76,26 @@ class TaskProcessor
 			$tags = ($tagCollection->isNotEmpty()) ? $tagCollection->pluck('label')->implode(',') : $tags;
 		}
 
+		$project = Project::with('task')->find($request->segment(5));
+		$lastUseDate = ($project->task->isEmpty()) ? $project->start : $project->task->last()->end;
+
 		$form = $form->option([
 					'profile_id' => Profile::sameGroup($corporateId)->pluck('name','id')
 				])->default([
 					'task_progress' => data_get($this->modelObj->find($request->segment(6)),'progress.progress',0),
-					'start' => Project::find($request->segment(5))->start,
-					'end' => Project::find($request->segment(5))->start
-				])->extras([
-					'group' => 'tag'
-				])->default([
+					'start' => Carbon::parse($lastUseDate)->addDay(),
+					'end' => Carbon::parse($lastUseDate)->addDay(2),
 					'group' => $tags,
-				])
-				->excludes(['effective_days','actual_progress'])
+				])->extras([
+					'group' => 'tag',
+					'duration' => 'range'
+				]);
+
+		if(!is_null($request->segment(6))){
+			$form->readonly(['planned_progress']);	
+		}
+
+		$form = $form->excludes(['effective_days','actual_progress','start','end'])
 				->id($request->segment(6))
 				->required(['*'])
 				->renderForm(
