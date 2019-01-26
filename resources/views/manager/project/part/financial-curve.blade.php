@@ -20,7 +20,7 @@
   </div>
 </div>
 @php
-  $categories = $paymentSchedule->first()->get('categories')->splice(1);
+  $categories = collect($paymentSchedule->first())->get('categories')->splice(1);
   $label = $paymentSchedule->mapWithKeys(function($item, $key){
       return [$key => $key.' VARIANCE : '.number_format($item->get('variance'),2)];
   })->implode(',');
