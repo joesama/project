@@ -4,6 +4,7 @@ namespace Joesama\Project\Database\Repositories\Project;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Collection;
+use Joesama\Project\Database\Model\Project\TagMilestone;
 
 class FinancialRepository 
 {
@@ -269,5 +270,63 @@ class FinancialRepository
 
 	}
 
+	/**
+	 * Schedule Payment
+	 * 
+	 * @param  Collection $payment  All Payment Schedule For Project
+	 * @return Collection 
+	 */
+	public function schedulePayment(int $projectId)
+	{
+
+		$trasaction = collect([]);
+		$payment = TagMilestone::has('payment')->with(['payment' => function($query) use($projectId){
+			$query->where('project_id',$projectId);
+		}])->get()->mapWithKeys(function($item){
+			return [$item['label'] => $item['payment']];
+		})->each(function($item,$key) use($trasaction){
+			
+			$sum = collect([]);
+			$paid = collect([]);
+			$claim = $item->mapWithKeys(function ($item, $key) use($sum,$paid){
+				$sum->push($item['claim_amount']);
+				$paid->put(Carbon::parse($item['claim_date'])->format('d-m-Y'),0);
+			    return [ Carbon::parse($item['claim_date'])->format('d-m-Y') => $sum->sum()];
+			});
+
+
+			$paidsum = collect([]);
+			$paid->each(function ($val, $date) use($item,$paidsum,$paid){
+				$amount = $item->where('paid_date',Carbon::parse($date)->format('Y-m-d'))->sum('paid_amount');
+				$paidsum->push($amount);
+				$paid->put($date,$paidsum->sum());
+			});
+
+			$actualVariance = $paid->filter(function($alt,$key){
+				return Carbon::parse($key) < Carbon::now();
+			});
+
+			$planVariance = $claim->filter(function($alt,$key){
+				return Carbon::parse($key) < Carbon::now();
+			});
+
+			$variance = $actualVariance->sum() - $planVariance->sum();
+
+			$claim->prepend('Planned');
+			$paid->prepend('Actual');
+
+			$latest = $planVariance->keys()->last();
+
+			$trasaction->put($key,collect([
+				'claim' => $claim->values(),
+				'paid' => $paid->values(),
+				'categories' => $claim->keys(),
+				'variance' => $variance,
+				'latest' => $latest,
+			]));
+		});
+
+		return $trasaction;
+	}
 
 } // END class FinancialRepository 

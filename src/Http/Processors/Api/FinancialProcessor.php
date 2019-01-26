@@ -2,6 +2,7 @@
 namespace Joesama\Project\Http\Processors\Api; 
 
 use Illuminate\Http\Request;
+use Joesama\Project\Database\Repositories\Project\FinancialRepository;
 use Joesama\Project\Database\Repositories\Project\MakeProjectRepository;
 use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
 
@@ -16,9 +17,11 @@ class FinancialProcessor
 
 	public function __construct(
 		ProjectInfoRepository $projectInfo,
-		MakeProjectRepository $makeProject
+		MakeProjectRepository $makeProject,
+		FinancialRepository $financeObj
 	){
 		$this->projectObj = $projectInfo;
+		$this->financeObj = $financeObj;
 		$this->makeProject = $makeProject;
 	}
 
@@ -58,7 +61,7 @@ class FinancialProcessor
 	{
 		$payment = $this->makeProject->updateClaim(collect($request->all()),$request->segment(6));
 
-		return redirect(handles('manager/project/view/'.$corporateId.'/'.$payment->project_id));
+		return redirect(handles('manager/'.$request->segment(2).'/list/'.$corporateId.'/'.$projectId));
 	}
 
 	/**
@@ -139,5 +142,17 @@ class FinancialProcessor
 		return $this->makeProject->deleteLad($corporateId,$projectId,$request->segment(6));
 	}
 
+	/**
+	 * Remove lad data from project
+	 * 
+	 * @param  Request $request
+	 * @param  int $corporateId
+	 * @param  int $projectId
+	 * @return [type]
+	 */
+	public function scurve(Request $request,int $corporateId, int $projectId)
+	{
+		return $this->financeObj->schedulePayment($corporateId,$projectId);
+	}
 
 } // END class MakeProjectProcessor 

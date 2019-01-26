@@ -15,17 +15,17 @@ class TagMilestone extends Model
     /**
      * Get all of the posts that are assigned this tag.
      */
-    public function physical()
+    public function task()
     {
-        return $this->morphedByMany(PhysicalMilestone::class, 'taggable');
+        return $this->morphedByMany(Task::class, 'taggable');
     }
 
     /**
      * Get all of the videos that are assigned this tag.
      */
-    public function finance()
+    public function payment()
     {
-        return $this->morphedByMany(FinanceMilestone::class, 'taggable');
+        return $this->morphedByMany(ProjectPayment::class, 'taggable');
     }
 
 }

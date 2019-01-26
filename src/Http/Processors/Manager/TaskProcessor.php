@@ -52,6 +52,8 @@ class TaskProcessor
 	{
 		$form = $this->formBuilder->newModelForm($this->modelObj);
 
+		$tags = 'main';
+
 		if(is_null($request->segment(5))){
 			$form->extras([
 				'project_id' => Project::sameGroup($corporateId)->pluck('name','id')
@@ -68,6 +70,9 @@ class TaskProcessor
 			]);
 
 			$form->readonly(['end','start']);
+
+			$tagCollection = $this->modelObj->find($request->segment(6))->tags;
+			$tags = ($tagCollection->isNotEmpty()) ? $tagCollection->pluck('label')->implode(',') : $tags;
 		}
 
 		$form = $form->option([
@@ -76,8 +81,12 @@ class TaskProcessor
 					'task_progress' => data_get($this->modelObj->find($request->segment(6)),'progress.progress',0),
 					'start' => Project::find($request->segment(5))->start,
 					'end' => Project::find($request->segment(5))->start
+				])->extras([
+					'group' => 'tag'
+				])->default([
+					'group' => $tags,
 				])
-				->excludes(['effective_days','planned_progress','actual_progress'])
+				->excludes(['effective_days','actual_progress'])
 				->id($request->segment(6))
 				->required(['*'])
 				->renderForm(

@@ -46,8 +46,8 @@ return [
 	],
 	'financial' => [
 		'summary' => 'Jejak Kewangan',
-		'list' => "Transaksi",
-		'claim' => "Tuntutan Projek",
+		'list' => "Jadual Pembayaran Projek",
+		'claim' => "Jadual Pembayaran",
 		'payment' => "Bayaran Projek",
 		'vo' => "VO Projek",
 		'voform' => "Maklumat VO",

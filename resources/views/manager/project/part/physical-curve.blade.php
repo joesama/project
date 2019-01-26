@@ -14,42 +14,41 @@
     <!--Panel body-->
     <div class="collapse in" id="physicalCurve">
       <div class="panel-body">
-        @if( ($project->active || !is_null(data_get($project,'approval.approved_by'))) && $isProjectManager )
-        <div class="row mar-btm">
-            <a class="btn btn-dark pull-right" href="{{ handles('joesama/project::manager/physical/list/'.request()->segment(4).'/'.request()->segment(5)) }}">
-              <i class="psi-numbering-list icon-fw"></i>
-              {{ __('joesama/project::manager.physical.milestone')  }}
-            </a>
-        </div>
-        @endif
         <div id="physicalSpline"></div>
       </div>
     </div>
   </div>
 </div>
 @php
-  $physical = data_get($project,'physical');
-  $physicalChart = $physical->pluck('weightage')->prepend('Planned');
-  $physicalCat = $physical->pluck('label')->map(function($item){
-                  return strtoupper($item);
-                });
+  $taskCategories = $projectSchedule->first()->get('categories')->splice(1);
+  $taskLabel = $projectSchedule->mapWithKeys(function($item, $key){
+      return [$key => $key.' VARIANCE : '.number_format($item->get('variance'),2)];
+  })->implode(',');
+  $taskLine = $projectSchedule->mapWithKeys(function($item, $key){
+      return [$key => $item->get('latest')];
+  })->first();
 @endphp
 @push('content.script')
 <script type="text/javascript">
   
-  var chart = bb.generate({
+  var chartPhy = bb.generate({
   data: {
     columns: [
-      @json($physicalChart),
-      ["actual", 0, 0, 0, 0, 0, 0],
+    @foreach($projectSchedule->except('count') as $payables)
+      @foreach($payables->except(['categories','variance','latest']) as $chart)
+
+        @json($chart),
+
+      @endforeach
+    @endforeach
     ],
     type: "spline"
   },
   axis: {
     x: {
-      label: "Milestone",
+      label: "{{ $taskLabel }}",
       type: "category",
-      categories: @json($physicalCat)
+      categories: @json($taskCategories)
     },
     y: {
       label: "% Progress"
@@ -57,6 +56,10 @@
   },
   bindto: "#physicalSpline"
 });
+
+chartPhy.xgrids.add(
+  {value: "24-01-2019" , text: "Current Progress"}
+);
 
 </script>
 @endpush

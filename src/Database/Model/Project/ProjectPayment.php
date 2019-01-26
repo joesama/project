@@ -5,6 +5,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Joesama\Project\Database\Model\Organization\Profile;
 use Joesama\Project\Database\Model\Project\FinanceMilestone;
+use Joesama\Project\Database\Model\Project\TagMilestone;
 
 class ProjectPayment extends Model
 {
@@ -36,11 +37,11 @@ class ProjectPayment extends Model
     }
 
     /**
-     * Get the payment milestone.
+     * Get all of the tags for the milstone.
      */
-    public function milestone()
+    public function tags()
     {
-        return $this->belongsToMany(FinanceMilestone::class,'milestone_payment','payment_id','milestone_id');
+        return $this->morphToMany(TagMilestone::class, 'taggable');
     }
 
     public function getClaimDateAttribute($value)
@@ -55,7 +56,7 @@ class ProjectPayment extends Model
 
     public function scopeComponent($query)
     {
-        return $query->with(['creporter','preporter','project','milestone']);
+        return $query->with(['creporter','preporter','project','tags']);
     }
 
 

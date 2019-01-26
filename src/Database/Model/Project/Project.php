@@ -248,8 +248,10 @@ class Project extends Model
             'retention','lad','vo','issue','role',
             'physical','finance'
         ])->with(['payment' => function($query){
+            $query->orderBy('claim_date');
             $query->component();
         }])->with(['task' => function($query){
+            $query->orderBy('end');
             $query->component();
         }])->with(['issue' => function($query){
             $query->component();

@@ -193,6 +193,8 @@ class ProjectProcessor
 
 		return [
 			'project' => $project,
+			'paymentSchedule' =>  $this->financialRepo->schedulePayment($project->id),
+			'projectSchedule' =>  $this->reportCardRepo->scheduleTask($project->id),
 			'reportWorkflow' => $reportWorkflow,
 			'approvalWorkflow' => $approvalWorkflow,
 			'weeklyReport' => $this->listProcessor->weeklyReport($request,$corporateId),

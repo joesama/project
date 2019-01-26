@@ -48,9 +48,9 @@ return [
 	'financial' => [
 		'summary' => 'Financial Tracker',
 		'view' => 'Payment Info',
-		'list' => "Financial Transaction",
-		'claim' => "Project Claim",
-		'payment' => "Project Payment",
+		'list' => "Project Payment Schedule",
+		'claim' => "Payment Schedule",
+		'payment' => "Payment Invoice",
 		'vo' => "Project VO",
 		'voform' => "VO Information",
 		'retention' => "Project Retention",

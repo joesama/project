@@ -137,6 +137,8 @@ class FinancialProcessor
 	{
 		$project = $this->projectObj->getProject($request->segment(5));
 
+		$tags = ($request->segment(6)) ? $this->modelObj->find($request->segment(6))->tags->pluck('label')->implode(',') : 'main';
+
 		$form = $this->formBuilder
 				->newModelForm($this->modelObj)
 				->mapping([
@@ -145,13 +147,14 @@ class FinancialProcessor
 					'paid_report_by' 	=> 	null,
 					'paid_date' 		=> 	null,
 					'paid_amount' 		=> 	null,
+					'reference' 		=> 	null,
 				])->extras([
-					'milestone' 		=> 	collect( data_get($project,'finance')
-											->pluck('label','id')
-											->map(function($item){ return ucfirst($item); }) )
+					'group' => 'tag'
+				])->default([
+					'group' => $tags,
 				])
 				->id($request->segment(5))
-				->required(['claim_date','claim_amount','milestone'])
+				->required(['claim_date','claim_amount','group'])
 				->renderForm(
 					__('joesama/project::'
 						.$request->segment(1).'.'
@@ -175,6 +178,13 @@ class FinancialProcessor
 	 */
 	public function payment(Request $request, int $corporateId)
 	{
+		$tags = 'main';
+
+		if($request->segment(6)){
+			$tagCollection = $this->modelObj->find($request->segment(6))->tags;
+			$tags = ($tagCollection->isNotEmpty()) ? $tagCollection->pluck('label')->implode(',') : $tags;
+		}
+
 		$form = $this->formBuilder
 				->newModelForm($this->modelObj)
 				->mapping([
@@ -182,7 +192,11 @@ class FinancialProcessor
 					'paid_report_by' => auth()->id(),
 				])
 				->readonly([
-					'claim_amount','claim_date'
+					'claim_amount','claim_date','group'
+				])->extras([
+					'group' => 'tag'
+				])->default([
+					'group' => $tags,
 				])
 				->id($request->segment(6))
 				->required(['paid_date','paid_amount'])

@@ -3,6 +3,7 @@ namespace Joesama\Project\Database\Repositories\Project;
 
 use Carbon\Carbon;
 use DB;
+use Exception;
 use Illuminate\Support\Collection;
 use Joesama\Project\Database\Model\Organization\Profile;
 use Joesama\Project\Database\Model\Project\Attribute;
@@ -16,10 +17,10 @@ use Joesama\Project\Database\Model\Project\ProjectPayment;
 use Joesama\Project\Database\Model\Project\ProjectRetention;
 use Joesama\Project\Database\Model\Project\ProjectVo;
 use Joesama\Project\Database\Model\Project\Risk;
+use Joesama\Project\Database\Model\Project\TagMilestone;
 use Joesama\Project\Database\Model\Project\Task;
 use Joesama\Project\Database\Model\Project\TaskProgress;
 use Joesama\Project\Traits\ProjectCalculator;
-use Exception;
 
 /**
  * Data Handling For Create Project Record
@@ -211,6 +212,11 @@ class MakeProjectRepository
 				'progress' => ($taskData->get('task_progress') > 100) ? 100 : $taskData->get('task_progress',0)
 			]));
 
+			$tag = TagMilestone::firstOrNew(['label' => strtoupper($taskData->get('group'))]);
+
+			$this->taskModel->tags()->detach();
+
+			$this->taskModel->tags()->save($tag);
 
 			DB::commit();
 
@@ -636,7 +642,10 @@ class MakeProjectRepository
 
 			$this->projectModel->payment()->save($claim);
 
-			$claim->milestone()->sync($claimData->get("milestone"),['created_at' => Carbon::now()]);
+			$tag = TagMilestone::firstOrNew(['label' => strtoupper($claimData->get('group'))]);
+
+			$claim->tags()->detach();
+			$claim->tags()->save($tag);
 
 			DB::commit();
 
@@ -659,6 +668,8 @@ class MakeProjectRepository
 		$inputData = collect($claimData)->intersectByKeys([
 		    'paid_date'=> null,
 		    'paid_amount'=> null,
+		    'paid_report_by'=> null,
+		    'reference'=> null,
 		]);
 
 		DB::beginTransaction();
@@ -668,7 +679,14 @@ class MakeProjectRepository
 			$payment = ProjectPayment::find($id);
 			$payment->paid_date = Carbon::createFromFormat('d/m/Y',data_get($inputData,'paid_date'))->toDateTimeString();
 			$payment->paid_amount = data_get($inputData,'paid_amount');
+			$payment->paid_report_by = data_get($inputData,'paid_report_by');
+			$payment->reference = data_get($inputData,'reference');
 			$payment->save();
+
+			$tag = TagMilestone::firstOrNew(['label' => strtoupper($claimData->get('group'))]);
+
+			$payment->tags()->detach();
+			$payment->tags()->save($tag);
 
 			DB::commit();
 

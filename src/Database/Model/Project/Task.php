@@ -3,8 +3,9 @@ namespace Joesama\Project\Database\Model\Project;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-use Joesama\Project\Database\Model\Organization\Profile;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Joesama\Project\Database\Model\Organization\Profile;
+use Joesama\Project\Database\Model\Project\TagMilestone;
 
 class Task extends Model
 {
@@ -46,9 +47,17 @@ class Task extends Model
         return  $this->hasMany(TaskProgress::class,'task_id');
     }
 
+    /**
+     * Get all of the tags for the milstone.
+     */
+    public function tags()
+    {
+        return $this->morphToMany(TagMilestone::class, 'taggable');
+    }
+
     public function scopeComponent($query)
     {
-        return $query->with(['assignee','progress','project']);
+        return $query->with(['assignee','progress','project','tags']);
     }
 
     /**

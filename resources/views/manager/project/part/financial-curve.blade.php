@@ -14,50 +14,39 @@
     <!--Panel body-->
     <div class="collapse in" id="physicalCurve">
       <div class="panel-body">
-        @if( ($project->active || !is_null(data_get($project,'approval.approved_by'))) && $isProjectManager )
-        <div class="row mar-btm">
-            <a class="btn btn-dark pull-right" href="{{ handles('joesama/project::manager/finance/list/'.request()->segment(4).'/'.request()->segment(5)) }}">
-              <i class="psi-numbering-list icon-fw"></i>
-              {{ __('joesama/project::manager.finance.milestone')  }}
-            </a>
-        </div>
-        @endif
         <div id="financialSpline"></div>
       </div>
     </div>
   </div>
 </div>
 @php
-  $financial = data_get($project,'finance');
-  $chart = $financial->pluck('weightage')->map(function($item){ return floatval($item); })->prepend('Planned');
-  $categories = $financial->pluck('label')->map(function($item){
-                  return strtoupper($item);
-                });
-  $claim = data_get($project,'payment');
-  $transact = $financial->mapWithKeys(function($milestone) use($claim){
-    return [ 
-      $milestone->id => $claim->filter(function($claimant) use($milestone){
-                          return data_get($claimant,'milestone.0.id') == $milestone->id;
-                        })->sum('paid_amount')
-    ];
-  });
-  $transact = $transact->prepend('Actual');
-
+  $categories = $paymentSchedule->first()->get('categories')->splice(1);
+  $label = $paymentSchedule->mapWithKeys(function($item, $key){
+      return [$key => $key.' VARIANCE : '.number_format($item->get('variance'),2)];
+  })->implode(',');
+  $line = $paymentSchedule->mapWithKeys(function($item, $key){
+      return [$key => $item->get('latest')];
+  })->first();
 @endphp
 @push('content.script')
 <script type="text/javascript">
   
-  var chart = bb.generate({
+var chart = bb.generate({
   data: {
     columns: [
-      @json($chart),
-      @json($transact)
+    @foreach($paymentSchedule->except('count') as $payables)
+      @foreach($payables->except(['categories','variance','latest']) as $chart)
+
+        @json($chart),
+
+      @endforeach
+    @endforeach
     ],
     type: "spline"
   },
   axis: {
     x: {
-      label: "Milestone",
+      label: "{{ $label }}",
       type: "category",
       categories: @json($categories)
     },
@@ -67,6 +56,10 @@
   },
   bindto: "#financialSpline"
 });
+
+chart.xgrids.add(
+  {value: "{{$line}}" , text: "Current"}
+);
 
 </script>
 @endpush
