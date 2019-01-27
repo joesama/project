@@ -135,6 +135,7 @@
 				@if( intval(data_get($profile,'user_id')) == intval(auth()->id()) )
 				  	@include('joesama/project::report.workflow.panel-form',[
 						'state' => $state,
+						'back_action' => FALSE,
 						'need_action' => data_get($next,'profile.id'),
 						'need_step' => data_get($next,'step'),
 						'status' => data_get($flow,'status'),
@@ -154,6 +155,7 @@
 				@if( ( intval(data_get($profile,'user_id')) == intval(auth()->id()) ) && ( (data_get($currentReport,'need_step')) == intval($state) ) )
 			  	@include('joesama/project::report.workflow.panel-form',[
 					'state' => $state,
+					'back_action' => FALSE,
 					'need_action' => data_get($next,'profile.id'),
 					'need_step' => data_get($next,'step'),
 					'status' => data_get($flow,'status'),

@@ -1,6 +1,7 @@
 <?php
 
 return [
+	'current' => 'Current Progress',
 	'weekly' => [
 		'list' => 'Weekly Project Update List',
 		'form' => 'Weekly Project Update',

@@ -58,7 +58,7 @@
 });
 
 chartPhy.xgrids.add(
-  {value: "24-01-2019" , text: "Current Progress"}
+  {value: "24-01-2019" , text: "{{ __('joesama/project::report.current') }}"}
 );
 
 </script>

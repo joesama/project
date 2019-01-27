@@ -58,7 +58,7 @@ var chart = bb.generate({
 });
 
 chart.xgrids.add(
-  {value: "{{$line}}" , text: "Current"}
+  {value: "{{$line}}" , text: "{{ __('joesama/project::report.current') }}"}
 );
 
 </script>

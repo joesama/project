@@ -2,12 +2,16 @@
 namespace Joesama\Project\Database\Model\Organization;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 use Joesama\Entree\Database\Model\User;
+use Joesama\Entree\Http\Notifications\EntreeMailer;
 use Joesama\Project\Database\Model\Master\MasterData;
 use Joesama\Project\Database\Model\Project\Project;
 
 class Profile extends Model
 {
+    use Notifiable;
+
 	protected $table = 'profile';
     protected $guarded = ['id'];
 
@@ -79,6 +83,77 @@ class Profile extends Model
     public function scopeIsProjectManager($query,$projectId)
     {
         return $query->role()->where('project_id',$projectId)->where('role_id',2);
+    }
+
+    public function getFullnameAttribute($value)
+    {
+        return $this->name;
+    }
+
+    /**
+     * Send the profile notification for action.
+     * 
+     * @param  string $type Type Of Report
+     * @return [type]       [description]
+     */
+    public function sendActionNotification($project, $report, string $type)
+    {
+        $message = collect([]);
+        $message->put('level', 'warning');
+        $message->put('title', trans('joesama/project::mailer.report.title.'.$type));
+        $message->put('content', collect([
+            title_case(trans('joesama/project::mailer.report.subject')),
+            trans('joesama/project::mailer.report.project', ['project' => ucwords($project->name) ]),
+            trans('joesama/project::mailer.report.report', [
+                'type' => strtoupper($type) ,
+                'report' => strtoupper(data_get($report,'week',data_get($report,'month')))
+            ]),
+        ]));
+
+        $message->put('footer', collect([
+            title_case(trans('joesama/entree::mail.validated.form')),
+        ]));
+
+        $message->put('action', collect([
+            memorize('threef.' .\App::getLocale(). '.name', config('app.name')) 
+            => 
+            handles('joesama/entree::report/'.$type.'/form/'.$project->corporate_id.'/'.$project->id.'/'.$report->id)
+        ]));
+
+        $this->notify(new EntreeMailer($message));
+    }
+
+    /**
+     * Send the profile notification for success.
+     * 
+     * @param  string $type Type Of Report
+     * @return [type]       [description]
+     */
+    public function sendAcceptedNotification($project, $report, string $type)
+    {
+        $message = collect([]);
+        $message->put('level', 'success');
+        $message->put('title', trans('joesama/project::mailer.report.title.'.$type));
+        $message->put('content', collect([
+            title_case(trans('joesama/project::mailer.report.success')),
+            trans('joesama/project::mailer.report.project', ['project' => ucwords($project->name) ]),
+            trans('joesama/project::mailer.report.report', [
+                'type' => strtoupper($type) ,
+                'report' => strtoupper(data_get($report,'week',data_get($report,'month')))
+            ]),
+        ]));
+
+        $message->put('footer', collect([
+            title_case(trans('joesama/entree::mail.validated.form')),
+        ]));
+
+        $message->put('action', collect([
+            memorize('threef.' .\App::getLocale(). '.name', config('app.name')) 
+            => 
+            handles('joesama/entree::report/'.$type.'/form/'.$project->corporate_id.'/'.$project->id.'/'.$report->id)
+        ]));
+
+        $this->notify(new EntreeMailer($message));
     }
 
 }

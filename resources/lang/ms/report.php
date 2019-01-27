@@ -1,6 +1,7 @@
 <?php
 
 return [
+	'current' => 'Progres Semasa',
 	'weekly' => [
 		'list' => 'Senarai Laporan Mingguan',
 		'form' => 'Laporan Mingguan Projek',

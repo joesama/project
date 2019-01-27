@@ -5,6 +5,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
 use Joesama\Project\Database\Repositories\Project\ReportCardInfoRepository;
+use Joesama\Project\Traits\HasAccessAs;
 
 /**
  * Client Record 
@@ -14,6 +15,8 @@ use Joesama\Project\Database\Repositories\Project\ReportCardInfoRepository;
  **/
 class WeeklyProcessor 
 {
+	use HasAccessAs;
+	
 	private $reportCard;
 
 	public function __construct(
@@ -46,19 +49,23 @@ class WeeklyProcessor
 	 */
 	public function form(Request $request, int $corporateId, $projectId)
 	{
-		if( $projectId == 'report' ){
-			$projectId = data_get($this->reportCard->getWeeklyReportInfo($request->segment(6)),'project_id');
+		$report = FALSE;
+
+		if( $projectId == 'report' || !is_null($request->segment(6)) ){
+
+			$report = $this->reportCard->getWeeklyReportInfo($request->segment(6));
+			$projectId = data_get($report,'project_id');
 		}
 
 		$project = $this->projectInfo->getProject($projectId);
 		$reportDue = Carbon::now()->weekOfYear;
 		
-		$startOfWeek = Carbon::now()->startOfWeek();
+		$startOfWeek = ($report) ? Carbon::parse($report->report_date) : Carbon::now()->startOfWeek();
 
 		$reportStart = $startOfWeek->format('d-m-Y');
 		$dueStart = $startOfWeek->format('Y-m-d');
 
-		$endOfWeek = Carbon::now()->endOfWeek();
+		$endOfWeek = ($report) ? Carbon::parse($report->report_end) : Carbon::now()->endOfWeek();
 
 		$reportEnd = $endOfWeek->format('d-m-Y');
 		$dueEnd = $endOfWeek->format('Y-m-d');

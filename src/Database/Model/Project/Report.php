@@ -44,6 +44,14 @@ class Report extends Model
         return $this->belongsTo(Profile::class,'creator_id','id');
     }
 
+    /**
+     * Get the report status.
+     */
+    public function nextby()
+    {
+        return $this->belongsTo(Profile::class,'need_action','id');
+    }
+
 
     public function scopeComponent($query)
     {

@@ -1,6 +1,7 @@
 <?php
 namespace Joesama\Project\Database\Repositories\Project; 
 
+use App\Jobs\Joesama\Project\Jobs\MailForAction;
 use Carbon\Carbon;
 use DB;
 use Joesama\Project\Database\Model\Organization\Profile;
@@ -101,10 +102,19 @@ class MakeReportCardRepository
 			$report->need_step = $request->get('need_step');
 			$report->save();
 
+			if ( $initialFlow == $request->get('state') ){
+				$this->lockProjectData($project,$report,$request->get('type'));
+			}
+
+			if(!is_null($report->nextby)){
+				$report->nextby->sendActionNotification($project,$report,$request->get('type'));
+			}else{
+				$report->creator->sendAcceptedNotification($project,$report,$request->get('type'));
+			}
+
 			DB::commit();
 
 			$this->initWeeklyWorkflow($report,$profile->id,$request->input());
-			$this->lockProjectData($project,$request->get('type'));
 
 			return $report;
 
@@ -192,8 +202,35 @@ class MakeReportCardRepository
 	 * @param string $type 		Report Type	
 	 * @param Report $project 	Project Data
 	 **/
-	public function lockProjectData(Project $project, string $type)
+	public function lockProjectData(Project $project, $report, string $type)
 	{
-		// will lock all progress
+
+		$tasks = $project->task->where('end','<=',$report->report_end);
+
+		$tasks->each(function($task) use($type,$report){
+
+			$progress = $task->allProgress;
+			$progress = ($type == 'weekly') ? $progress->where('report_id',null) :  $progress->where('card_id',null);
+
+			$progress->each(function($prog) use($type,$report){
+				
+				if ($type == 'weekly') {
+					$prog->report_id = $report->id;
+				}
+
+				if ($type == 'monthly') {
+					$prog->card_id = $report->id;
+				}
+
+				$prog->save();
+			});
+
+			if($progress->isNotEmpty()){
+				$task->actual_progress = $progress->last()->progress/100*$task->planned_progress;
+				$task->save();
+			}
+			
+
+		});
 	}
 } // END class MakeReportCardRepository 
