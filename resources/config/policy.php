@@ -222,7 +222,7 @@ return [
 			],
 			'workflow' => [
 				'approval' => ['corporateId','projectId'],
-				'process' => ['corporateId','projectId']
+				'process' => ['corporateId','projectId','reportId?']
 			],
 			'physical' => [
 				'save' => ['corporateId','projectId','milestoneId?']
