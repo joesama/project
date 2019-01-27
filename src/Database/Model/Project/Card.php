@@ -4,6 +4,7 @@ namespace Joesama\Project\Database\Model\Project;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Joesama\Project\Database\Model\Master\MasterData;
+use Joesama\Project\Database\Model\Organization\Profile;
 
 class Card extends Model
 {
@@ -43,6 +44,13 @@ class Card extends Model
         return $this->belongsTo(Profile::class,'creator_id','id');
     }
 
+    /**
+     * Get the report status.
+     */
+    public function nextby()
+    {
+        return $this->belongsTo(Profile::class,'need_action','id');
+    }
 
     public function scopeComponent($query)
     {

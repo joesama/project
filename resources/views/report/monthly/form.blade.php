@@ -11,7 +11,7 @@
 	        </div>
 			<div class="panel-footer text-right">
 		  		@php
-		  			$projectUrl = 'manager/project/view/'.request()->segment(4).'/'.request()->segment(5);
+		  			$projectUrl = 'manager/project/view/'.$project->corporate_id.'/'.$project->id;
 		  		@endphp
 		        <a class="btn btn-dark" href="{{ handles($projectUrl) }}">
 		        	<i class="psi-folder-with-document icon-fw"></i>

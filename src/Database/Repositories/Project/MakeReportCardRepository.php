@@ -54,10 +54,19 @@ class MakeReportCardRepository
 			$card->need_step = $request->get('need_step');
 			$card->save();
 
+			if ( $initialFlow == $request->get('state') ){
+				$this->lockProjectData($project,$card,$request->get('type'));
+			}
+
+			if(!is_null($card->nextby)){
+				$card->nextby->sendActionNotification($project,$card,$request->get('type'));
+			}else{
+				$card->creator->sendAcceptedNotification($project,$card,$request->get('type'));
+			}
+
 			DB::commit();
 
 			$this->initMonthlyWorkflow($card,$profile->id,$request->input());
-			$this->lockProjectData($project,$request->get('type'));
 
 			return $card;
 

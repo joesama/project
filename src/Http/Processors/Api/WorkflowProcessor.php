@@ -56,7 +56,7 @@ class WorkflowProcessor
 		
 		$report = $this->makeReport->{$type}($project,$request);
 
-		return redirect(handles('report/'.$request->get('type').'/form/'.$corporateId.'/'.$projectId .'?report='.$report->id));
+		return redirect(handles('report/'.$request->get('type').'/form/'.$corporateId.'/'.$projectId .'/'.$report->id));
 	}
 
 
