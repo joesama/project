@@ -65,18 +65,26 @@ class ProjectWorkflowRepository
 			$approval->need_step = $nextAction;
 			$approval->save();
 
+			$state = strtolower(MasterData::find($initialFlow)->description);
+
 			$workflow = new ProjectApprovalWorkflow([
 				'remark' => $project->scope,
-				'state' => strtolower(MasterData::find($initialFlow)->description),
+				'state' => $state ,
 				'profile_id' => $projectManager->id,
 			]);
 
-			DB::commit();
-
 			$approval->workflow()->save($workflow);
 
+			if(!is_null($approval->nextby)){
+				$approval->nextby->sendActionNotification($project,$approval,$state );
+			}else{
+				$approval->creator->sendAcceptedNotification($project,$approval,$state );
+			}
+
+			DB::commit();
+
 		}catch( \Exception $e){
-			throw new Exception($e->getMessage(), 1);
+			throw new \Exception($e->getMessage(), 1);
 			DB::rollback();
 		}
 	}
@@ -118,6 +126,12 @@ class ProjectWorkflowRepository
 			]);
 
 			$approval->workflow()->save($workflow);
+
+			if(!is_null($approval->nextby)){
+				$approval->nextby->sendActionNotification($project,$approval,$request->get('status'));
+			}else{
+				$approval->creator->sendAcceptedNotification($project,$approval,$request->get('status'));
+			}
 
 			DB::commit();
 

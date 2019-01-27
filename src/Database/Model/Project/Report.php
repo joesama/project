@@ -52,7 +52,6 @@ class Report extends Model
         return $this->belongsTo(Profile::class,'need_action','id');
     }
 
-
     public function scopeComponent($query)
     {
         return $query->with(['status','project','workflow']);

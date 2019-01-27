@@ -100,24 +100,39 @@ class Profile extends Model
     {
         $message = collect([]);
         $message->put('level', 'warning');
-        $message->put('title', trans('joesama/project::mailer.report.title.'.$type));
-        $message->put('content', collect([
-            title_case(trans('joesama/project::mailer.report.subject')),
-            trans('joesama/project::mailer.report.project', ['project' => ucwords($project->name) ]),
-            trans('joesama/project::mailer.report.report', [
-                'type' => strtoupper($type) ,
-                'report' => strtoupper(data_get($report,'week',data_get($report,'month')))
-            ]),
-        ]));
+        $message->put('title', trans('joesama/project::mailer.title.'.$type));
+        
+        if(!in_array( $type, array_map('strtolower',['weekly','monthly']) ) ) {
+            $message->put('content', collect([
+                title_case(trans('joesama/project::mailer.project.'.$type)),
+                trans('joesama/project::mailer.report.project', ['project' => ucwords($project->name) ]),
+            ]));
+
+            $message->put('action', collect([
+                memorize('threef.' .\App::getLocale(). '.name', config('app.name')) 
+                => 
+                handles('joesama/entree::manager/project/view/'.$project->corporate_id.'/'.$project->id)
+            ]));
+
+        }else{
+            $message->put('content', collect([
+                title_case(trans('joesama/project::mailer.report.success')),
+                trans('joesama/project::mailer.report.project', ['project' => ucwords($project->name) ]),
+                trans('joesama/project::mailer.report.report', [
+                    'type' => strtoupper($type) ,
+                    'report' => strtoupper(data_get($report,'week',data_get($report,'month')))
+                ]),
+            ]));
+
+            $message->put('action', collect([
+                memorize('threef.' .\App::getLocale(). '.name', config('app.name')) 
+                => 
+                handles('joesama/entree::report/'.$type.'/form/'.$project->corporate_id.'/'.$project->id.'/'.$report->id)
+            ]));
+        }
 
         $message->put('footer', collect([
             title_case(trans('joesama/entree::mail.validated.form')),
-        ]));
-
-        $message->put('action', collect([
-            memorize('threef.' .\App::getLocale(). '.name', config('app.name')) 
-            => 
-            handles('joesama/entree::report/'.$type.'/form/'.$project->corporate_id.'/'.$project->id.'/'.$report->id)
         ]));
 
         $this->notify(new EntreeMailer($message));
@@ -133,24 +148,39 @@ class Profile extends Model
     {
         $message = collect([]);
         $message->put('level', 'success');
-        $message->put('title', trans('joesama/project::mailer.report.title.'.$type));
-        $message->put('content', collect([
-            title_case(trans('joesama/project::mailer.report.success')),
-            trans('joesama/project::mailer.report.project', ['project' => ucwords($project->name) ]),
-            trans('joesama/project::mailer.report.report', [
-                'type' => strtoupper($type) ,
-                'report' => strtoupper(data_get($report,'week',data_get($report,'month')))
-            ]),
-        ]));
+        $message->put('title', trans('joesama/project::mailer.title.'.$type));
+
+        if(!in_array( $type, array_map('strtolower',['weekly','monthly']) ) ){
+            $message->put('content', collect([
+                title_case(trans('joesama/project::mailer.project.'.$type)),
+                trans('joesama/project::mailer.report.project', ['project' => ucwords($project->name) ]),
+            ]));
+
+            $message->put('action', collect([
+                memorize('threef.' .\App::getLocale(). '.name', config('app.name')) 
+                => 
+                handles('joesama/entree::manager/project/view/'.$project->corporate_id.'/'.$project->id)
+            ]));
+
+        }else{
+            $message->put('content', collect([
+                title_case(trans('joesama/project::mailer.report.success')),
+                trans('joesama/project::mailer.report.project', ['project' => ucwords($project->name) ]),
+                trans('joesama/project::mailer.report.report', [
+                    'type' => strtoupper($type) ,
+                    'report' => strtoupper(data_get($report,'week',data_get($report,'month')))
+                ]),
+            ]));
+
+            $message->put('action', collect([
+                memorize('threef.' .\App::getLocale(). '.name', config('app.name')) 
+                => 
+                handles('joesama/entree::report/'.$type.'/form/'.$project->corporate_id.'/'.$project->id.'/'.$report->id)
+            ]));
+        }
 
         $message->put('footer', collect([
             title_case(trans('joesama/entree::mail.validated.form')),
-        ]));
-
-        $message->put('action', collect([
-            memorize('threef.' .\App::getLocale(). '.name', config('app.name')) 
-            => 
-            handles('joesama/entree::report/'.$type.'/form/'.$project->corporate_id.'/'.$project->id.'/'.$report->id)
         ]));
 
         $this->notify(new EntreeMailer($message));
