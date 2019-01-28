@@ -6,8 +6,6 @@
 
 <div class="row">
     <div class="col-12">
-        <?php $dateReport = Carbon\Carbon::create(2018,11,18) ?>
-        <?php $id = request()->segment(4); ?>
 
             @includeIf('joesama/project::manager.project.part.info')
             @includeIf('joesama/project::manager.project.part.physical-curve')
@@ -29,8 +27,9 @@
             @endforeach
             @includeIf('joesama/project::manager.project.part.financial')
             @includeIf('joesama/project::manager.project.part.hse')
-            @includeWhen($project->active,'joesama/project::manager.project.part.workflow')
+            @includeWhen($project->active && is_null($isReport) ,'joesama/project::manager.project.part.workflow')
             @includeWhen(!$project->active,'joesama/project::manager.project.part.approval')
+            @includeWhen($isReport,'joesama/project::manager.project.part.monthlyReport')
 
     </div>
 </div>

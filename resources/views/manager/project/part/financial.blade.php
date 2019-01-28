@@ -14,7 +14,8 @@
     <!--Panel body-->
     <div class="collapse in" id="financial">
       <div class="panel-body">
-         @if( ($project->active || !is_null(data_get($project,'approval.approved_by'))) && $isProjectManager )        <div class="row">
+         @if( ($project->active || !is_null(data_get($project,'approval.approved_by'))) && $isProjectManager && is_null($isReport))        
+         <div class="row">
           <div class="col-md-12 pad-no mar-btm">
             <a class="btn btn-dark pull-right mar-hor" href="{{ handles('joesama/project::manager/financial/list/'.request()->segment(4).'/'.request()->segment(5)) }}">
               <i class="psi-numbering-list icon-fw"></i>

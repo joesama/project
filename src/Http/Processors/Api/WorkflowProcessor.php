@@ -51,12 +51,18 @@ class WorkflowProcessor
 	{
 		$project = $this->projectObj->getProject($projectId);
 
-		$type = 'init'.ucfirst($request->get('type'));
+		$transtype = ($request->get('type') == 'project') ? 'monthly' : $request->get('type');
+
+		$type = 'init'.ucfirst($transtype);
 		$workflow = $type.'Workflow';
 		
 		$report = $this->makeReport->{$type}($project,$request);
 
-		return redirect(handles('report/'.$request->get('type').'/form/'.$corporateId.'/'.$projectId .'/'.$report->id));
+		if($transtype == 'monthly'){
+			return redirect(handles('manager/project/view/'.$corporateId.'/'.$projectId .'/'.$report->id));
+		}else{
+			return redirect(handles('report/'.$request->get('type').'/form/'.$corporateId.'/'.$projectId .'/'.$report->id));
+		}
 	}
 
 

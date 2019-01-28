@@ -102,16 +102,22 @@ class Profile extends Model
         $message->put('level', 'warning');
         $message->put('title', trans('joesama/project::mailer.title.'.$type));
         
-        if(!in_array( $type, array_map('strtolower',['weekly','monthly']) ) ) {
+        if(!in_array( $type, array_map('strtolower',['weekly']) ) ) {
             $message->put('content', collect([
                 title_case(trans('joesama/project::mailer.project.'.$type)),
                 trans('joesama/project::mailer.report.project', ['project' => ucwords($project->name) ]),
             ]));
 
+            if($type == 'monthly'){
+                $param = $project->corporate_id.'/'.$project->id.'/'.$report->id;
+            }else{
+                $param = $project->corporate_id.'/'.$project->id;
+            }
+
             $message->put('action', collect([
                 memorize('threef.' .\App::getLocale(). '.name', config('app.name')) 
                 => 
-                handles('joesama/entree::manager/project/view/'.$project->corporate_id.'/'.$project->id)
+                handles('joesama/entree::manager/project/view/'.$param)
             ]));
 
         }else{
@@ -150,16 +156,22 @@ class Profile extends Model
         $message->put('level', 'success');
         $message->put('title', trans('joesama/project::mailer.title.'.$type));
 
-        if(!in_array( $type, array_map('strtolower',['weekly','monthly']) ) ){
+        if(!in_array( $type, array_map('strtolower',['weekly']) ) ){
             $message->put('content', collect([
                 title_case(trans('joesama/project::mailer.project.'.$type)),
                 trans('joesama/project::mailer.report.project', ['project' => ucwords($project->name) ]),
             ]));
 
+            if($type == 'monthly'){
+                $param = $project->corporate_id.'/'.$project->id.'/'.$report->id;
+            }else{
+                $param = $project->corporate_id.'/'.$project->id;
+            }
+
             $message->put('action', collect([
                 memorize('threef.' .\App::getLocale(). '.name', config('app.name')) 
                 => 
-                handles('joesama/entree::manager/project/view/'.$project->corporate_id.'/'.$project->id)
+                handles('joesama/entree::manager/project/view/'.$param)
             ]));
 
         }else{

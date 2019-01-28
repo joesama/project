@@ -2,18 +2,36 @@
     <div class="panel">
         <div class="panel-body">
             <div class="col-md-12" style="padding: 0px 5px">
-                <div class="row">
+                <div class="row mar-btm">
                     <div class="col-md-9">
-                        <h4 class="text-bold text-justify">{{ data_get($project,'name') }}
-                        <br><small class="text-thin text-muted">{{ data_get($project,'contract') }}</small>
-                        </h4>
+
                     </div>
                     <div class="col-md-3 text-right" class="vertical">
-                        @if( ($project->active || !is_null(data_get($project,'approval.approved_by'))) && $isProjectManager )
+                        @if( ($project->active || !is_null(data_get($project,'approval.approved_by'))) && $isProjectManager && is_null($isReport))
                         <a class="btn btn-dark mar-btm pull-right" href="{{ handles('joesama/project::manager/project/form/'.request()->segment(4).'/'.request()->segment(5)) }}">
                             <i class="psi-file-edit icon-fw"></i>
                             {{ __('joesama/vuegrid::datagrid.buttons.edit') }}
                         </a>
+                        @elseif($isReport)
+                            <div class="col-md-12 text-center"> 
+                                <div class="row bord-all">
+                                    <div class="col-md-12 text-bold text-center" style="padding: 3px">
+                                        {{ strtoupper( __('joesama/project::report.format.monthly') ) }}
+                                        {{ strtoupper( $reportDue ) }}
+                                    </div>
+                                </div>
+                                <div class="row text-thin text-center">
+                                    <div class="col-md-4 text-bold bord-hor bord-btm"  style="padding: 3px">
+                                        {{ $reportStart }}
+                                    </div>
+                                    <div class="col-md-4 bord-rgt bord-btm"  style="padding: 3px">
+                                        {{ __('joesama/project::report.format.through') }}
+                                    </div>
+                                    <div class="col-md-4 text-bold bord-rgt bord-btm"  style="padding: 3px">
+                                        {{ $reportEnd }}
+                                    </div>
+                                </div>
+                            </div>
                         @endif
                     </div>
                 </div>
@@ -21,7 +39,23 @@
                     <div class="col-md-12">
                         <table class="table table-bordered table-sm">
                             <tr>
-                                <td class="text-bold bg-primary text-light text-capitalize"  style="width: 14.5%">
+                                <td class="text-bold bg-primary text-light text-capitalize"  style="width: 15%">
+                                    {{ __('joesama/project::project.info.name') }}
+                                </td>
+                                <td class="pl-2">
+                                    {{ data_get($project,'name') }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-bold bg-primary text-light text-capitalize"  style="width: 15%">
+                                    {{ __('joesama/project::project.info.contract.no') }}
+                                </td>
+                                <td class="pl-2">
+                                    {{ data_get($project,'contract') }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-bold bg-primary text-light text-capitalize"  style="width: 15%">
                                     {{ __('joesama/project::project.info.contract.scope') }}
                                 </td>
                                 <td class="pl-2">
@@ -68,7 +102,7 @@
                                 </td>
                             </tr>
                         </table>
-                        @if( ($project->active || !is_null(data_get($project,'approval.approved_by'))) && $isProjectManager )
+                        @if( ($project->active || !is_null(data_get($project,'approval.approved_by'))) && $isProjectManager && is_null($isReport))
                         <a class="btn btn-dark btn-xs mar-btm pull-right" href="{{ handles('joesama/project::manager/partner/form/'.request()->segment(4).'/'.request()->segment(5)) }}">
                             <i class="fa fa-plus icon-fw"></i>
                             {{ __('joesama/project::project.client.partner.name') }}
@@ -82,7 +116,7 @@
                                 </td>
                                 <td class="pl-2">
                                     {{ data_get($partner,'name') }}
-                                    @if($isProjectManager)
+                                    @if($isProjectManager && is_null($isReport))
                                     <a class="btn btn-danger btn-xs pull-right" href="{{ route('api.partner.delete',[$project->corporate_id,$project->id,$partner->id]) }}">
                                         <i class="fa fa-remove"></i>
                                     </a>
@@ -156,7 +190,7 @@
                             </tr>
                             @endforeach
                         </table>
-                         @if( ($project->active || !is_null(data_get($project,'approval.approved_by'))) && $isProjectManager )
+                         @if( ($project->active || !is_null(data_get($project,'approval.approved_by'))) && $isProjectManager && is_null($isReport))
                         <a class="btn btn-dark btn-xs mar-btm pull-right" href="{{ handles('joesama/project::manager/attribute/form/'.request()->segment(4).'/'.request()->segment(5)) }}">
                             <i class="fa fa-plus icon-fw"></i>
                             {{ __('joesama/project::project.attr') }}

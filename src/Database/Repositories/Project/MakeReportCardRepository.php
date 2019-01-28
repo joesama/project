@@ -37,12 +37,16 @@ class MakeReportCardRepository
 
 		try{
 
-			$card = Card::firstOrNew([
-				'month' => $request->get('cycle'),
-			]);
+			$card = Card::where('month',$request->get('cycle'))
+					->where('project_id',$project->id)
+					->first();
+
+			$card = is_null($card) ? new Card : $card;
+
 
 			if ( $initialFlow == $request->get('state') ){
 
+				$card->month = $request->get('cycle');
 				$card->project_id = $project->id;
 				$card->card_date = Carbon::parse($request->get('start'))->format('Y-m-d');
 				$card->card_end = Carbon::parse($request->get('end'))->format('Y-m-d');
@@ -94,12 +98,15 @@ class MakeReportCardRepository
 
 		try{
 
-			$report = Report::firstOrNew([
-				'week' => $request->get('cycle'),
-			]);
+			$report = Report::where('week',$request->get('cycle'))
+					->where('project_id',$project->id)
+					->first();
+
+			$report = is_null($report) ? new Report : $report;
 
 			if ( $initialFlow == $request->get('state') ){
 
+				$report->week = $request->get('cycle');
 				$report->project_id = $project->id;
 				$report->report_date = Carbon::parse($request->get('start'))->format('Y-m-d');
 				$report->report_end = Carbon::parse($request->get('end'))->format('Y-m-d');

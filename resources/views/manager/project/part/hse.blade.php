@@ -15,7 +15,7 @@
     <div class="collapse in" id="hse">
       <div class="panel-body">
           @if(!is_null($hsecard))
-             @if( ($project->active || !is_null(data_get($project,'approval.approved_by'))) && $isProjectManager )
+             @if( ($project->active || !is_null(data_get($project,'approval.approved_by'))) && $isProjectManager && is_null($isReport))
             <div class="row">
               <div class="col-md-6">
                 <p class="text-bold mar-no">
