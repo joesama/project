@@ -25,7 +25,7 @@ return [
 			'project' => [
 				'list' => ['corporateId','projectId?'],
 				'form' => ['corporateId','projectId?'],
-				'view' => ['corporateId','projectId']
+				'view' => ['corporateId','projectId','reportId?']
 			],
 			'task' => [
 				'list' => ['corporateId','projectId?'],
