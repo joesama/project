@@ -15,58 +15,44 @@
     <div class="collapse in" id="workflow">
       <div class="panel-body text-center approvalPanel">
     @php
-      $index = 1;
+
       $corporateId = $project->corporate_id;
       $projectId = $project->id;
       $reportStart = '';
       $reportEnd = '';
       $reportDue = '';
       $action = route('api.workflow.approval',[$corporateId,$projectId]);
-      $nextflow = $approvalWorkflow;
+      $firstStep = $approvalWorkflow->pluck('step')->first();
+      $sliceIndex = $approvalWorkflow->pluck('step')->search(data_get($project,'approval.need_step'));
+      $next = $approvalWorkflow->slice($sliceIndex+1,1)->first();
+      $back = $approvalWorkflow->first();
+      $currentAction = $approvalWorkflow->where('profile.user_id',auth()->id())
+                      // ->where("approval",null)
+                      ->where("step",data_get($project,'approval.need_step'))
+                      ->first();
+      $allTrails = data_get($project,'approval.workflow');
+      $profileRole = data_get($currentAction,'profile.pivot.role_id');
     @endphp
-    @foreach($approvalWorkflow as $state => $flow)
-      @php
-        $next = $nextflow->slice($index,1)->first();
-        $profile = data_get($flow,'profile');
-        $flowRecord = data_get($flow,'approval');
-      @endphp
-      @if(  is_null( $flowRecord ) && $approvalWorkflow->keys()->first() == $state)
-        @if( intval(data_get($profile,'user_id')) == intval(auth()->id()) )
-            @include('joesama/project::report.workflow.panel-form',[
-            'state' => $state,
-            'back_action' => FALSE,
-            'need_action' => data_get($next,'profile.id'),
-            'need_step' => data_get($next,'step'),
-            'status' => data_get($flow,'status'),
-            'profile' => $profile,
-            ])
-        @endif
-      @elseif( !is_null( $flowRecord  ) )
-        @if(data_get($flowRecord,'state') == data_get($flow,'status'))
-            @include('joesama/project::report.workflow.panel-info',[
-            'state' => $state,
-            'status' => data_get($flow,'status'),
-            'record' => $flowRecord,
-            'profile' => $profile,
-            ])
-        @endif
-      @else
-        @if( (intval(data_get($profile,'user_id')) == intval(auth()->id())) && ( intval(data_get($project,'approval.need_step')) == intval($state) ) )
+        @foreach($allTrails as $trail)
+          @include('joesama/project::report.workflow.panel-info',[
+            'status' => data_get($trail,'state'),
+            'record' => $trail,
+            'profile' => data_get($trail,'profile'),
+          ])
+        @endforeach
+        @if( $currentAction )
           @include('joesama/project::report.workflow.panel-form',[
-          'state' => $state,
-          'back_action' => FALSE,
+          'back_state' => data_get($back,'step'),
+          'state' => data_get($currentAction,'step'),
           'need_action' => data_get($next,'profile.id'),
           'need_step' => data_get($next,'step'),
-          'status' => data_get($flow,'status'),
-          'profile' => $profile,
+          'status' => data_get($currentAction,'status'),
+          'profile' => data_get($currentAction,'profile'),
+          'back_action' => ($firstStep != data_get($project,'approval.need_step') && $profileRole != 2) ? data_get($back,'profile.id') : FALSE,
+          'back_step' => data_get($back,'step'),
+          'back_status' => data_get($back,'status'),
           ])
-          @endif
-        }
-      @endif
-      @php
-        $index++;
-      @endphp
-    @endforeach
+        @endif
       </div>
     </div>
   </div>

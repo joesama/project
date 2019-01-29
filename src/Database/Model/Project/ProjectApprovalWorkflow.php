@@ -33,4 +33,10 @@ class ProjectApprovalWorkflow extends Model
         return $this->belongsTo(Profile::class,'need_action','id');
     }
 
+    public function scopeComponent($query)
+    {
+        return $query->with(['profile' => function($query){
+                        $query->component();
+                    }]);
+    }
 }

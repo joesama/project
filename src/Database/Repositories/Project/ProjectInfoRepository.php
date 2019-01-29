@@ -73,7 +73,7 @@ class ProjectInfoRepository
 	 * 
 	 * @return Joesama\Project\Database\Model\Project\Project
 	 */
-	public function getProject(int $projectId, ?int $reportId)
+	public function getProject(int $projectId, ?int $reportId = null)
 	{
 		return $this->projectModel
 		->component($reportId)

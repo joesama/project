@@ -54,7 +54,10 @@ class ProjectApproval extends Model
 
     public function scopeComponent($query)
     {
-        return $query->with(['status','project','workflow']);
+        return $query->with(['status','project'])
+                    ->with(['workflow' => function($query){
+                        $query->component();
+                    }]);
     }
 
 
