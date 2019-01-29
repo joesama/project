@@ -222,6 +222,7 @@ class MakeReportCardRepository
 	{
 
 		$tasks = $project->task->where('end','<=',$report->report_end);
+		$payment = $project->payment->where('claim_date','<=',$report->report_end);
 
 		$tasks->each(function($task) use($type,$report){
 
@@ -247,6 +248,18 @@ class MakeReportCardRepository
 			}
 			
 
+		});
+
+		$payment->each(function($claim) use($type,$report){
+			if ($type == 'weekly') {
+				$claim->report_id = $report->id;
+			}
+
+			if ($type == 'monthly') {
+				$claim->card_id = $report->id;
+			}
+
+			$claim->save();
 		});
 	}
 } // END class MakeReportCardRepository 

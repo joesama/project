@@ -68,13 +68,15 @@ class ProjectInfoRepository
 	/**
 	 * Retrieve Project Record
 	 *
-	 * @param int $projectId - id for specific project
+	 * @param 	int 	$projectId 	id for specific project
+	 * @param  	int    	$reportId  	Report Id
+	 * 
 	 * @return Joesama\Project\Database\Model\Project\Project
-	 **/
-	public function getProject(int $projectId)
+	 */
+	public function getProject(int $projectId, ?int $reportId)
 	{
 		return $this->projectModel
-		->component()
+		->component($reportId)
 		->find($projectId);
 	}
 

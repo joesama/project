@@ -233,37 +233,29 @@ class FinancialRepository
 
 		if (strtotime($start) !== false && strtotime($end) !== false) {
 
-			$period = CarbonPeriod::start(Carbon::parse($start)->format('Y-m-d'))
-			          ->end(Carbon::parse($end)->format('Y-m-d'))
-			          ->setRecurrences(3)
-			          ->years();
 
-			foreach ($period as $key => $date) {
+			$end = (strtotime($end) == strtotime($start)) ? Carbon::parse()->addMonth()->format('Y-m-d') : $end;
 
-			    if($key != 0){
+			$yearDiff = Carbon::parse($start)->diffInMonths(Carbon::parse($end));
 
-			    	$months = CarbonPeriod::start($date->startOfYear());
+			$period = CarbonPeriod::since($start)
+			          ->until($end)
+			          ->months($yearDiff)
+			          ->month();
 
-			    }else{
-			    	$months = CarbonPeriod::start($date);
-			    }
+			$groupByYear = collect($period->toArray())->groupBy(function ($date, $key) {
+			    return Carbon::parse($date)->year;
+			});
 
-			   	$endMonth = $date->endOfYear();
-
-		        $months->end($endMonth)
-		          ->setRecurrences(12)
-		          ->month();
+			$groupByYear->each(function($item,$key) use($transaction){
 
 				$monthTrans = collect([]);
+				$item->each(function($subitem,$index) use($monthTrans){
+					$monthTrans->put(intval($subitem->format('m')),0);
+				});
 
-				foreach ($months as $key => $dates) {
-
-					$monthTrans->put(intval($dates->format('m')),0);
-				}
-
-				$transaction->put($date->format('Y'),$monthTrans);
-
-			}
+				$transaction->put($key,$monthTrans);
+			});
 		}
 
 		return $transaction;

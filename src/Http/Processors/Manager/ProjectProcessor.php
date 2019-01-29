@@ -156,7 +156,7 @@ class ProjectProcessor
 			$report = NULL;
 		}
 
-		$project = $this->projectInfo->getProject($projectId);
+		$project = $this->projectInfo->getProject($projectId,$reportId);
 
 		$projectStart = ($report) ? data_get($report,'card_date') : data_get($project,'start');
 		$projectEnd = ($report) ? data_get($report,'card_end') :data_get($project,'end');
@@ -210,7 +210,7 @@ class ProjectProcessor
 		$reportWorkflow 	= $this->reportCardRepo->reportWorkflow($project,$project->id);
 		$monthlyWorkflow 	= $this->reportCardRepo->monthlyWorkflow($corporateId, $dueStart, $dueEnd, $project);
 		$approvalWorkflow 	= $this->projectWorkflowRepo->projectWorkflow($project->profile,$project->approval);
-// dd($monthlyWorkflow);
+
 		return [
 			'reportDue' =>  $reportDue,
 			'reportStart' =>  $reportStart,

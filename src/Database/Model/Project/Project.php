@@ -239,7 +239,7 @@ class Project extends Model
             });
     }
 
-    public function scopeComponent($query)
+    public function scopeComponent($query, $reportId = null)
     {
         return $query->with([
             'client','profile.role',
@@ -247,19 +247,19 @@ class Project extends Model
             'hsecard','manager','incident','claim',
             'retention','lad','vo','issue','role',
             'physical','finance'
-        ])->with(['payment' => function($query){
+        ])->with(['payment' => function($query) use($reportId){
             $query->orderBy('claim_date');
-            $query->component();
-        }])->with(['task' => function($query){
+            $query->component($reportId);
+        }])->with(['task' => function($query) {
             $query->orderBy('end');
             $query->component();
         }])->with(['issue' => function($query){
             $query->component();
         }])->with(['approval' => function($query){
             $query->component();
-        }])->with(['card' => function($query){
+        }])->with(['card' => function($query) {
             $query->component();
-        }])->with(['report' => function($query){
+        }])->with(['report' => function($query) {
             $query->component();
         }]);
     }

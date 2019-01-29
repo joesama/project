@@ -58,7 +58,7 @@ class WeeklyProcessor
 		}
 
 		$project = $this->projectInfo->getProject($projectId);
-		$reportDue = Carbon::now()->weekOfYear - Carbon::parse($project->start)->->weekOfYear;
+		$reportDue = Carbon::now()->weekOfYear - Carbon::parse($project->start)->weekOfYear;
 		
 		$startOfWeek = ($report) ? Carbon::parse($report->report_date) : Carbon::now()->startOfWeek();
 
