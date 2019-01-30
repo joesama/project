@@ -50,7 +50,7 @@
           'profile' => data_get($currentAction,'profile'),
           'back_action' => ($firstStep != data_get($project,'approval.need_step') && $profileRole != 2) ? data_get($back,'profile.id') : FALSE,
           'back_step' => data_get($back,'step'),
-          'back_status' => data_get($back,'status'),
+          'back_status' => 'ammend',
           ])
         @endif
       </div>

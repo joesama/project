@@ -24,7 +24,7 @@
             <input type="hidden" name="need_action" value="{{ $need_action }}">
             <input type="hidden" name="need_step" value="{{ $need_step }}">
             <input type="hidden" name="type" value="{{ request()->segment(2) }}">
-            <textarea id="textarea-input" name="remark" rows="9" class="form-control" placeholder="Your content here.."></textarea>
+            <textarea id="textarea-input" name="remark" rows="9" onkeyup="copyremark()" class="form-control" placeholder="Your content here.."></textarea>
             <button type="submit" class="btn btn-dark mar-ver pull-right">
             	<i class="psi-yes text-success icon-fw"></i>
             	Submit
@@ -42,6 +42,7 @@
             <input type="hidden" name="need_action" value="{{ $back_action }}">
             <input type="hidden" name="need_step" value="{{ $back_step }}">
             <input type="hidden" name="type" value="{{ request()->segment(2) }}">
+            <input type="hidden" id="backremark" name="remark" value="{{ request()->segment(2) }}">
             <button type="submit" class="btn btn-danger mar-ver pull-left">
                 <i class="psi-pen icon-fw"></i>
                 Ammend
@@ -51,3 +52,8 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    function copyremark(){
+        document.getElementById('backremark').value = document.getElementById('textarea-input').value;
+    }
+</script>

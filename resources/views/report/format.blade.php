@@ -120,52 +120,46 @@
 <div class="row bord-hor bord-btm">
 	<div class="col-md-12 text-left text-bold bord-rgt pad-all" id="need_action">
 		@php
-			$index = 1;
-			$nextflow = $workflow;
-		@endphp
-		@foreach($workflow as $state => $flow)
-			@php
-				$action = route('api.workflow.process',[$corporateId,$projectId]);
-				$next = $nextflow->slice($index,1)->first();
-				$profile = data_get($flow,'profile');
-				$flowRecord = data_get($flow,'weekly',data_get($flow,'monthly',NULL));
-				$currentReport = (request()->segment(2) == 'weekly') ? data_get($project,'report')->where('project_id',$projectId)->first() : data_get($project,'card')->where('project_id',$projectId)->first() ;
-			@endphp
-			@if(  is_null( $flowRecord ) && $workflow->keys()->first() == $state)
-				@if( intval(data_get($profile,'user_id')) == intval(auth()->id()) )
-				  	@include('joesama/project::report.workflow.panel-form',[
-						'state' => $state,
-						'back_action' => FALSE,
-						'need_action' => data_get($next,'profile.id'),
-						'need_step' => data_get($next,'step'),
-						'status' => data_get($flow,'status'),
-						'profile' => $profile,
-				    ])
-				@endif
-			@elseif( !is_null( $flowRecord  ) )
-				@if(data_get($flowRecord,'state') == data_get($flow,'status'))
-				  	@include('joesama/project::report.workflow.panel-info',[
-						'state' => $state,
-						'status' => data_get($flow,'status'),
-						'record' => $flowRecord,
-						'profile' => $profile,
-				    ])
-				@endif
-			@else
-				@if( ( intval(data_get($profile,'user_id')) == intval(auth()->id()) ) && ( (data_get($currentReport,'need_step')) == intval($state) ) )
-			  	@include('joesama/project::report.workflow.panel-form',[
-					'state' => $state,
-					'back_action' => FALSE,
-					'need_action' => data_get($next,'profile.id'),
-					'need_step' => data_get($next,'step'),
-					'status' => data_get($flow,'status'),
-					'profile' => $profile,
-			    ])
-			    @endif
-			@endif
-			@php
-				$index++;
-			@endphp
-		@endforeach
+			$type = (request()->segment(2) == 'weekly') ? 'report' : 'card';
+
+			$record = collect(data_get($project,$type))->where('id',request()->segment(6))->first();
+
+			$firstStep = $workflow->pluck('step')->first();
+
+			$currentAction = $workflow->where('profile.user_id',auth()->id())
+			              ->where("step", (!is_null($record)) ? data_get($record,'need_step') : $firstStep )
+			              ->first();
+
+			$action = route('api.workflow.process',[$corporateId,$projectId]);
+			$sliceIndex = $workflow->pluck('step')->search(data_get($record,'need_step'));
+			$next = $workflow->slice($sliceIndex+1,1)->first();
+			$back = $workflow->first();
+
+			$allTrails = data_get($record,'workflow');
+			$profileRole = data_get($currentAction,'profile.pivot.role_id');
+
+	    @endphp
+	    @if(!is_null($allTrails))
+	        @foreach($allTrails as $trail)
+	          @include('joesama/project::report.workflow.panel-info',[
+	            'status' => data_get($trail,'state'),
+	            'record' => $trail,
+	            'profile' => data_get($trail,'profile'),
+	          ])
+	        @endforeach
+        @endif
+	    @if( $currentAction )
+			@include('joesama/project::report.workflow.panel-form',[
+			'back_state' => data_get($back,'step'),
+			'state' => data_get($currentAction,'step'),
+			'need_action' => data_get($next,'profile.id'),
+			'need_step' => data_get($next,'step'),
+			'status' => data_get($currentAction,'status'),
+			'profile' => data_get($currentAction,'profile'),
+			'back_action' => ($firstStep != data_get($record,'need_step') && $profileRole != 2) ? data_get($back,'profile.id') : FALSE,
+			'back_step' => data_get($back,'step'),
+			'back_status' => 'ammend',
+			])
+        @endif
 	</div>
 </div>

@@ -32,6 +32,7 @@ return [
 	],
 	'workflow' => [
 		'new' => 'Prepared By',
+		'ammend' => 'Request Ammendment',
 		'approved' => 'Approved By',
 		'validated' => '(GOSD) Validate By',
 		'reviewed' => '(GOSD) Review By',

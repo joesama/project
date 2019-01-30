@@ -233,8 +233,7 @@ class FinancialRepository
 
 		if (strtotime($start) !== false && strtotime($end) !== false) {
 
-
-			$end = (strtotime($end) == strtotime($start)) ? Carbon::parse()->addMonth()->format('Y-m-d') : $end;
+			$end = (Carbon::parse($end)->month == Carbon::parse($start)->month ) ? Carbon::parse()->addMonth()->format('Y-m-d') : $end;
 
 			$yearDiff = Carbon::parse($start)->diffInMonths(Carbon::parse($end));
 
