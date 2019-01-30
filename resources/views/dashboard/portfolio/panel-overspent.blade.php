@@ -9,7 +9,7 @@
                 <div class="text-lg">
                     <div class="media">
                         <span class="text-lg text-thin text-right  text-danger">
-                        	{{ data_get($contract,'total.value') }}
+                        	{{  0 }}
                             {{ data_get($contract,'total.unit') }}
                         </span>
                     </div>
