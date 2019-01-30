@@ -35,7 +35,7 @@
                         <p class="text-lg text-thin">
                             <i class="pci-caret-down text-success mar-all"></i>
                             <span class="text-3x text-thin">
-                              {{ array_get($summary,'issue.open') }}
+                              {{ $gp }}
                             </span>
                         </p>
                     </div>
@@ -138,160 +138,15 @@
     </div>
   </div>
 </div>
+@php
 
+@endphp
 @push('content.script')
 <script type="text/javascript">
+
     var chart = Morris.Area({
         element: '{{$panelId}}-area',
-        data: [{
-            period: 'January 16',
-            dl: 77,
-            up: 25
-            }, {
-            period: 'February 16',
-            dl: 127,
-            up: 58
-            }, {
-            period: 'March 16',
-            dl: 115,
-            up: 46
-            }, {
-            period: 'April 16',
-            dl: 239,
-            up: 57
-            }, {
-            period: 'May 16',
-            dl: 46,
-            up: 75
-            }, {
-            period: 'June 16',
-            dl: 97,
-            up: 57
-            }, {
-            period: 'July 16',
-            dl: 105,
-            up: 70
-            }, {
-            period: 'August 16',
-            dl: 115,
-            up: 106
-            }, {
-            period: 'September 16',
-            dl: 239,
-            up: 187
-            }, {
-            period: 'October 16',
-            dl: 97,
-            up: 57
-            }, {
-            period: 'November 16',
-            dl: 189,
-            up: 70
-            }, {
-            period: 'December 16',
-            dl: 65,
-            up: 30
-            }, {
-            period: 'January 17',
-            dl: 35,
-            up: 90
-            }, {
-            period: 'February 17',
-            dl: 127,
-            up: 58
-            }, {
-            period: 'March 17',
-            dl: 115,
-            up: 46
-            }, {
-            period: 'April 17',
-            dl: 239,
-            up: 57
-            }, {
-            period: 'May 17',
-            dl: 46,
-            up: 75
-            }, {
-            period: 'June 17',
-            dl: 97,
-            up: 57
-            }, {
-            period: 'July 17',
-            dl: 105,
-            up: 70
-            }, {
-            period: 'August 17',
-            dl: 115,
-            up: 106
-            }, {
-            period: 'September 17',
-            dl: 239,
-            up: 187
-            }, {
-            period: 'October 17',
-            dl: 97,
-            up: 57
-            }, {
-            period: 'November 17',
-            dl: 189,
-            up: 70
-            }, {
-            period: 'December 17',
-            dl: 65,
-            up: 30
-            }, {
-            period: 'January 18',
-            dl: 35,
-            up: 90
-            }, {
-            period: 'February 18',
-            dl: 127,
-            up: 58
-            }, {
-            period: 'March 18',
-            dl: 115,
-            up: 46
-            }, {
-            period: 'April 18',
-            dl: 239,
-            up: 57
-            }, {
-            period: 'May 18',
-            dl: 46,
-            up: 75
-            }, {
-            period: 'June 18',
-            dl: 97,
-            up: 57
-            }, {
-            period: 'July 18',
-            dl: 105,
-            up: 70
-            }, {
-            period: 'August 18',
-            dl: 115,
-            up: 106
-            }, {
-            period: 'September 18',
-            dl: 239,
-            up: 187
-            }, {
-            period: 'October 18',
-            dl: 97,
-            up: 57
-            }, {
-            period: 'November 18',
-            dl: 189,
-            up: 70
-            }, {
-            period: 'December 18',
-            dl: 65,
-            up: 30
-            }, {
-            period: 'January 19',
-            dl: 35,
-            up: 90
-            }],
+        data: @json($payment),
         gridEnabled: true,
         gridLineColor: 'rgba(0,0,0,.1)',
         gridTextColor: '#8f9ea6',
@@ -299,8 +154,8 @@
         behaveLikeLine: true,
         smooth: true,
         xkey: 'period',
-        ykeys: ['dl', 'up'],
-        labels: ['Actual', 'Planned'],
+        ykeys: ['planned','actual'],
+        labels: ['Planned','Actual'],
         lineColors: ['#b5bfc5', '#78c855'],
         pointSize: 0,
         pointStrokeColors : ['#045d97'],

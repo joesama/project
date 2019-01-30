@@ -3,6 +3,7 @@ namespace Joesama\Project\Http\Processors\Dashboard;
 
 use Illuminate\Http\Request;
 use Joesama\Project\Database\Repositories\Dashboard\MasterRepository;
+use Joesama\Project\Traits\HasAccessAs;
 
 /**
  * Processing All List 
@@ -12,6 +13,7 @@ use Joesama\Project\Database\Repositories\Dashboard\MasterRepository;
  **/
 class PortfolioProcessor 
 {
+	use HasAccessAs;
 
 	public function __construct(
 		MasterRepository $masterPortfolio
@@ -51,6 +53,11 @@ class PortfolioProcessor
 		$corporate = $this->masterRepo->subsidiaries();
 
 		$corporateData = collect([]);
+
+		if($this->profile()->corporate_id != 1){
+			$corporate = $corporate->where('id',$this->profile()->corporate_id);
+		}
+
 		$corporate->each(function($subs)use($corporateData){
 
 			$corporateData->push(collect([
@@ -63,12 +70,30 @@ class PortfolioProcessor
 			]));
 		});
 
+		$financial = $this->masterRepo->projectCosting();
+
+		$lastPayment = $financial->last();
+		$gp = data_get($lastPayment,'actual') - data_get($lastPayment,'planned');
+
+		if ($gp < 1000000000) {
+		    // Anything less than a billion
+		    $unit = 'M';
+		    $format = round($gp / 1000000,2);
+		} else {
+		    $unit = 'B';
+		    $format = round($gp / 1000000000,2);
+		}
+
+		$gp = $format.$unit;
+
 		return [
 			'project' => $this->masterRepo->projectSummary(),
 			'contract' => $this->masterRepo->projectContract(),
 			'task' => $this->masterRepo->projectTask(),
 			'issue' => $this->masterRepo->projectIssue(),
+			'payment' => $financial,
 			'corporate' => $corporateData,
+			'gp' => $gp
 
 		];
 	}
