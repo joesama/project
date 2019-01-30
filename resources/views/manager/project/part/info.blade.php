@@ -7,7 +7,7 @@
 
                     </div>
                     <div class="col-md-3 text-right" class="vertical">
-                        @if( ($project->active || !is_null(data_get($project,'approval.approved_by'))) && $isProjectManager && is_null($isReport))
+                        @if( (($project->active || !is_null(data_get($project,'approval.approved_by')))  && is_null($isReport)) || $isProjectManager )
                         <a class="btn btn-dark mar-btm pull-right" href="{{ handles('joesama/project::manager/project/form/'.request()->segment(4).'/'.request()->segment(5)) }}">
                             <i class="psi-file-edit icon-fw"></i>
                             {{ __('joesama/vuegrid::datagrid.buttons.edit') }}
