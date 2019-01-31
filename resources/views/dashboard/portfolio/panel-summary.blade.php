@@ -1,13 +1,6 @@
 <div class="{{ isset($width) ? 'col-md-6' : 'col-md-12' }}">
   <div class="panel">
     <div class="panel-heading bg-primary">
-        <div class="panel-control">
- {{--            <button class="btn btn-primary" data-panel="fullscreen">
-                <i class="icon-max psi-maximize-3"></i>
-                <i class="icon-min psi-minimize-3"></i>
-            </button> --}}
-{{--             <button class="btn btn-primary collapsed" data-panel="minmax" data-target="#{{$panelId}}" data-toggle="collapse" aria-expanded="false"><i class="psi-chevron-up"></i></button> --}}
-        </div>
         <h3 class="panel-title">
           @if(isset($nextLevel))
           <a class="add-tooltip text-semibold" data-toggle="tooltip" data-container="body" data-placement="right" data-original-title="{{ $title }} {{ (isset($nextTitle)) ? $nextTitle : '' }}" href="{{ $nextLevel }}">
@@ -32,10 +25,16 @@
             <div class="row">
                 <div class="col-lg-12 pad-btm text-center">
                     <div class="text-lg">
-                        <p class="text-lg text-thin">
-                            <i class="pci-caret-down text-success mar-all"></i>
+                        <p class="text text-thin">
+                          @if(array_get($summary,'gpDiff') > 1)
+                            <i class="pci-caret-up text-success mar-all"></i>
+                          @elseif(array_get($summary,'gpDiff') == 0)
+                            <i class="pci-minus text-muted mar-all"></i>
+                          @else
+                            <i class="pci-caret-down text-danger mar-all"></i>
+                          @endif
                             <span class="text-3x text-thin">
-                              {{ $gp }}
+                              {{ array_get($summary,'gp') }}
                             </span>
                         </p>
                     </div>
@@ -139,7 +138,7 @@
   </div>
 </div>
 @php
-
+  $payment = array_get($summary,'payment');
 @endphp
 @push('content.script')
 <script type="text/javascript">

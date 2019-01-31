@@ -29,6 +29,30 @@ class PortfolioProcessor
 	 */
 	public function master(Request $request,int $corporateId)
 	{
+
+		$this->profile();
+
+		$financial = $this->masterRepo->projectCosting();
+
+		$lastPayment = $financial->last();
+
+		$beforePayment =  $financial->slice($financial->count() - 2,1)->first();
+
+		$gp = data_get($lastPayment,'actual') - data_get($lastPayment,'planned');
+
+		$beforeQp = data_get($beforePayment,'actual') - data_get($beforePayment,'planned');
+
+		if ($gp < 1000000000) {
+		    // Anything less than a billion
+		    $unit = 'M';
+		    $format = round($gp / 1000000,2);
+		} else {
+		    $unit = 'B';
+		    $format = round($gp / 1000000000,2);
+		}
+
+		$gp = $format.$unit;
+
 		return [
 			'corporateId' => $corporateId,
 			'project' => $this->masterRepo->projectSummary(),
@@ -38,6 +62,9 @@ class PortfolioProcessor
 			'summary' => [
 				'task' => $this->masterRepo->projectTask(),
 				'issue' => $this->masterRepo->projectIssue(),
+				'payment' => $financial,
+				'gp' => $gp,
+				'gpDiff' => floatval($gp) - floatval($beforeQp)
 			]
 		];
 	}
@@ -60,41 +87,46 @@ class PortfolioProcessor
 
 		$corporate->each(function($subs)use($corporateData){
 
+			$financial = $this->masterRepo->projectCosting($subs->id);
+
+			$lastPayment = $financial->last();
+
+			$beforePayment =  $financial->slice($financial->count() - 2,1)->first();
+
+			$gp = data_get($lastPayment,'actual') - data_get($lastPayment,'planned');
+
+			$beforeQp = data_get($beforePayment,'actual') - data_get($beforePayment,'planned');
+
+			if ($gp < 1000000000) {
+			    // Anything less than a billion
+			    $unit = 'M';
+			    $format = round($gp / 1000000,2);
+			} else {
+			    $unit = 'B';
+			    $format = round($gp / 1000000000,2);
+			}
+
+			$gp = $format.$unit;
+
 			$corporateData->push(collect([
 				'corporate' => $subs,
 				'summary' => [
 					'task' => $this->masterRepo->projectTask($subs->id),
 					'issue' => $this->masterRepo->projectIssue($subs->id),
 					'progress' => $this->masterRepo->projectProgress($subs->id),
+					'payment' => $financial,
+					'gp' => $gp,
+					'gpDiff' => floatval($gp) - floatval($beforeQp),
 				]
 			]));
 		});
 
-		$financial = $this->masterRepo->projectCosting();
-
-		$lastPayment = $financial->last();
-		$gp = data_get($lastPayment,'actual') - data_get($lastPayment,'planned');
-
-		if ($gp < 1000000000) {
-		    // Anything less than a billion
-		    $unit = 'M';
-		    $format = round($gp / 1000000,2);
-		} else {
-		    $unit = 'B';
-		    $format = round($gp / 1000000000,2);
-		}
-
-		$gp = $format.$unit;
-
 		return [
-			'project' => $this->masterRepo->projectSummary(),
-			'contract' => $this->masterRepo->projectContract(),
-			'task' => $this->masterRepo->projectTask(),
-			'issue' => $this->masterRepo->projectIssue(),
-			'payment' => $financial,
-			'corporate' => $corporateData,
-			'gp' => $gp
-
+			'project' => $this->masterRepo->projectSummary( data_get( $this->profile(),'corporate_id' ) ),
+			'contract' => $this->masterRepo->projectContract( data_get( $this->profile(),'corporate_id' ) ),
+			'task' => $this->masterRepo->projectTask( data_get( $this->profile(),'corporate_id' ) ),
+			'issue' => $this->masterRepo->projectIssue( data_get( $this->profile(),'corporate_id' ) ),
+			'corporate' => $corporateData
 		];
 	}
 

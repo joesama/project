@@ -43,8 +43,6 @@ class BaseController extends Controller
 			$this->component, 60, function () {
 		    return collect(config('joesama/project::policy.web.'.$this->component));
 		});
-
-		Cache::forget('profile-'.auth()->id());
 		
 		$profile = Cache::remember(
 			'profile-'.auth()->id(), 60, function () {
