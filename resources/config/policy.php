@@ -24,6 +24,7 @@ return [
 			],
 			'project' => [
 				'list' => ['corporateId','projectId?'],
+				'approval' => ['corporateId','projectId?'],
 				'form' => ['corporateId','projectId?'],
 				'view' => ['corporateId','projectId','reportId?']
 			],
@@ -229,6 +230,9 @@ return [
 			],
 			'finance' => [
 				'save' => ['corporateId','projectId','milestoneId?']
+			],
+			'upload' => [
+				'save' => ['corporateId','projectId?']
 			],
 		]
 	],

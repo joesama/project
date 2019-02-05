@@ -35,8 +35,8 @@
         </li>
         <li class="col-xs-3" data-content="{{ trans('joesama/project::manager.project.approval') }}">
             <a class="shortcut-grid" href="{!! handles('joesama/project::manager/project/approval/'.request()->segment(4)) !!}">
-                <div class="icon-wrap icon-wrap-sm icon-circle bg-mint">
-                <i class="pli-calendar"></i>
+                <div class="icon-wrap icon-wrap-sm icon-circle bg-purple">
+                <i class="psi-calendar-4"></i>
                 </div>
             </a>
         </li>
