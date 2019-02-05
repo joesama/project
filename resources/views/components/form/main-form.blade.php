@@ -33,7 +33,7 @@
 					if($type == 'numeric'){
 						$validator->put('numeric' , [ 'message' => __('joesama/project::form.is.numeric') ] );
 						$validator->put('lessThan' , [ 'inclusive' => true, 
-														'value' =>  99999999999999 ,
+														'value' =>  999999999999 ,
 														'message' => __('joesama/project::form.is.maxnumber') 
 													] );
 					}
@@ -99,6 +99,23 @@ $(document).on('nifty.ready', function() {
 		    },
 		    onPaste: function(e) {
 		      validateEditor();
+		    },
+		    onImageUpload: function(files) {
+
+		    	var editor = this.id;
+
+
+		    	data = new FormData(); 
+		    	data.append("upload", files[0]);
+		    	data.append("client", $('#client_id :selected').val());
+
+				axios.post('/api/upload/save/{{request()->segment(4)}}{{"/".request()->segment(5)}}', data)
+				.then(function (response) {
+					$('#' + editor).summernote('insertImage', response.data);
+				})
+				.catch(function (error) {
+				console.log(error);
+				});
 		    }
 		}
     });

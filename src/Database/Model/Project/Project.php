@@ -222,9 +222,27 @@ class Project extends Model
     /**
      * Get the report progress.
      */
+    public function scopeWasApproved($query)
+    {
+        return $query->whereHas('approval',function($query){
+            $query->whereNotNull('approved_by');
+        });
+    }
+
+    /**
+     * Get the report progress.
+     */
     public function scopeActive($query)
     {
-        return $query->where('active',1);
+        return $query->wasApproved()->where('active',1);
+    }
+
+    /**
+     * Get the report progress.
+     */
+    public function scopeNotActive($query)
+    {
+        return $query->wasApproved()->where('active',0);
     }
 
     /**

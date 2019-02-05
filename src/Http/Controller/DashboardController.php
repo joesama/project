@@ -24,7 +24,11 @@ class DashboardController
 
 		$profile = Profile::where('user_id',auth()->id())->first();
 
-		return redirect(handles('joesama/project::manager/dashboard/overall/'. $profile->corporate_id));
+		if($profile->corporate_id == 1){
+			return redirect(handles('joesama/project::dashboard/portfolio/master/'. $profile->corporate_id));
+		}else{
+			return redirect(handles('joesama/project::dashboard/portfolio/group/'. $profile->corporate_id));
+		}
 	}
 
 	/**

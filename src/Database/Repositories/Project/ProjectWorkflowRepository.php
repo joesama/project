@@ -32,6 +32,7 @@ class ProjectWorkflowRepository
 					});
 					$query->orWhere('need_action',$this->profile()->id);
 				})
+				->orderBy('updated_at','desc')
 				->component()
 				->paginate();
 	}

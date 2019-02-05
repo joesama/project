@@ -61,6 +61,7 @@ class ProjectProcessor
 		$this->projectWorkflowRepo = $projectWorkflow;
 		$this->projectInfo = $projectInfo;
 		$this->formBuilder = $formBuilder;
+		$this->profile();
 	}
 
 
@@ -74,6 +75,20 @@ class ProjectProcessor
 	public function list(Request $request, int $corporateId)
 	{
 		$table = $this->listProcessor->project($request,$corporateId);
+		
+		return compact('table');
+	}
+
+	/**
+	 * Project Approval data listing
+	 * 
+	 * @param  Request $request
+	 * @param  int $corporateId
+	 * @return mixed
+	 */
+	public function approval(Request $request, int $corporateId)
+	{
+		$table = $this->listProcessor->projectApproval($request,$corporateId);
 		
 		return compact('table');
 	}

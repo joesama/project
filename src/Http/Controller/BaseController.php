@@ -44,6 +44,10 @@ class BaseController extends Controller
 		    return collect(config('joesama/project::policy.web.'.$this->component));
 		});
 		
+		if(is_null(Cache::get('profile-'.auth()->id()))){
+			Cache::forget('profile-'.auth()->id());
+		}
+
 		$profile = Cache::remember(
 			'profile-'.auth()->id(), 60, function () {
 		    return Profile::where('user_id',auth()->id())->with('role')->first();

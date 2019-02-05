@@ -50,7 +50,7 @@ class ProfileProcessor
 	 */
 	public function list(Request $request, int $corporateId)
 	{
-		$table = $this->listProcessor->profile($request,$corporateId);
+		$table = $this->listProcessor->profileList($request,$corporateId);
 		
 		return compact('table');
 	}

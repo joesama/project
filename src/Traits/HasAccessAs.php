@@ -13,7 +13,7 @@ trait HasAccessAs{
 	public function profile()
 	{
 		$profile = Cache::get('profile-'.auth()->id());
-		
+
 		view()->share('profile',$profile);
 
 		return $profile;

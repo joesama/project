@@ -107,10 +107,13 @@ class ListProcessor
 
 		$columns = [
 		   [ 'field' => 'generation_date',
-		   'title' => __('joesama/project::form.report.report_date'),
+		   'title' => __('joesama/project::form.report.submit_date'),
 		   'style' => 'text-left text-capitalize'],
 		   [ 'field' => 'project.name',
 		   'title' => __('joesama/project::project.info.name'),
+		   'style' => 'text-left text-capitalize'],
+		   [ 'field' => 'approval.aging_action',
+		   'title' => __('joesama/project::form.report.aging'),
 		   'style' => 'text-left text-capitalize'],
 		   [ 'field' => 'status.description',
 		   'title' => 'Status',

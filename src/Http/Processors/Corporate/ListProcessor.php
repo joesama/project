@@ -4,6 +4,7 @@ namespace Joesama\Project\Http\Processors\Corporate;
 use Joesama\Project\Database\Repositories\Organization\OrganizationInfoRepository;
 use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
 use Joesama\Project\Http\Services\DataGridGenerator;
+use Joesama\Project\Traits\HasAccessAs;
 
 /**
  * Processing All List 
@@ -13,6 +14,8 @@ use Joesama\Project\Http\Services\DataGridGenerator;
  **/
 class ListProcessor 
 {
+	use HasAccessAs;
+
 	private $organization, $project;
 
 	/**
@@ -27,6 +30,7 @@ class ListProcessor
 	{
 		$this->organization = $organization;
 		$this->project = $projectInfo;
+		$this->profile();
 	}
 
 	/**
@@ -34,7 +38,7 @@ class ListProcessor
 	 * @param  int $request,$corporateId
 	 * @return HTML
 	 */
-	public function profile($request,$corporateId)
+	public function profileList($request,$corporateId)
 	{
 
 		$columns = [
@@ -112,13 +116,17 @@ class ListProcessor
 
 		$datagrid = new DataGridGenerator();
 		
-		return $datagrid->buildTable($columns, __('joesama/project::corporate.client.list') )
+		$datagrid->buildTable($columns, __('joesama/project::corporate.client.list') )
 				 ->buildDataModel(
 				 	route('api.list.client',$corporateId), 
 				 	$this->project->clientAll()
-				 )->buildAddButton(route('corporate.client.form',[$corporateId,$request->segment(5)]))
-				 ->buildOption($action, TRUE)
-				 ->render();
+				 );
+
+		if($this->wasProjectManager() || auth()->user()->isAdmin){
+			$datagrid->buildAddButton(route('corporate.client.form',[$corporateId,$request->segment(5)]));
+		}
+				 
+		return  $datagrid->buildOption($action, TRUE)->render();
 	}
 
 } // END class MakeProjectProcessor 

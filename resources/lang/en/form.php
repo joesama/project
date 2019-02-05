@@ -10,7 +10,9 @@ return [
 		'multiple' => 'You Can Choose More Than One',
 	],
 	'action' => [
-		'assign' => 'Assignation'
+		'assign' => 'Assignation',
+		'approve' => 'Approve',
+		'reject' => 'Reject',
 	],
 	'project' => [
 		'manager_id' => 'Project Manager',
@@ -37,6 +39,7 @@ return [
 		'effective_days' => 'Effective Days',
 		'current_variance' => 'Current Variance',
 		'duration' => 'Project Duration',
+		'job_code' => 'Project Job Code',
 
 	],
 	'task' => [
@@ -154,7 +157,9 @@ return [
 		'role_id' => 'Project Role',
 	],
 	'report' => [
-		'report_date' => 'Report Date'
+		'report_date' => 'Report Date',
+		'submit_date' => 'Submit Date',
+		'aging' => 'Aging (In Days)',
 	],
 	'project_milestone_physical' => [
 		'label' => 'Milestone Label',

@@ -19,6 +19,7 @@ class PortfolioProcessor
 		MasterRepository $masterPortfolio
 	){
 		$this->masterRepo = $masterPortfolio;
+		$this->profile();
 	}
 
 	/**
@@ -29,8 +30,6 @@ class PortfolioProcessor
 	 */
 	public function master(Request $request,int $corporateId)
 	{
-
-		$this->profile();
 
 		$financial = $this->masterRepo->projectCosting();
 

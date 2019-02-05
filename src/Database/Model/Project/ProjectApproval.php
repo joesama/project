@@ -10,7 +10,7 @@ class ProjectApproval extends Model
 {
 	protected $table = 'project_approval';
     protected $guarded = ['id'];
-    protected $appends = ['generation_date'];
+    protected $appends = ['generation_date','aging_action'];
 
     /**
      * Get the project.
@@ -60,10 +60,14 @@ class ProjectApproval extends Model
                     }]);
     }
 
-
     public function getGenerationDateAttribute($value)
     {
         return Carbon::parse($this->created_at)->format('d-m-Y');
+    }
+
+    public function getAgingActionAttribute($value)
+    {
+        return Carbon::parse($this->updated_at)->diffInDays(Carbon::now());
     }
     
 }

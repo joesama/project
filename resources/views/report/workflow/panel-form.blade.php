@@ -27,7 +27,7 @@
             <textarea id="textarea-input" name="remark" rows="9" onkeyup="copyremark()" class="form-control" placeholder="Your content here.."></textarea>
             <button type="submit" class="btn btn-dark mar-ver pull-right">
             	<i class="psi-yes text-success icon-fw"></i>
-            	Submit
+            	{{ __('joesama/project::form.action.approve') }} 
             </button>
             </form>
             @if($back_action)
@@ -45,7 +45,7 @@
             <input type="hidden" id="backremark" name="remark" value="{{ request()->segment(2) }}">
             <button type="submit" class="btn btn-danger mar-ver pull-left">
                 <i class="psi-pen icon-fw"></i>
-                Ammend
+                {{ __('joesama/project::form.action.reject') }} 
             </button>
             </form>
             @endif

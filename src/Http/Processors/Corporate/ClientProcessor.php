@@ -6,6 +6,7 @@ use Joesama\Project\Database\Model\Project\Client;
 use Joesama\Project\Http\Processors\Corporate\ListProcessor;
 use Joesama\Project\Http\Services\FormGenerator;
 use Joesama\Project\Http\Services\ViewGenerator;
+use Joesama\Project\Traits\HasAccessAs;
 
 /**
  * Client Record 
@@ -15,6 +16,7 @@ use Joesama\Project\Http\Services\ViewGenerator;
  **/
 class ClientProcessor 
 {
+	use HasAccessAs;
 
 	public function __construct(
 		ListProcessor $listProcessor,

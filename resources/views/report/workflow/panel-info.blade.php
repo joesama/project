@@ -13,6 +13,9 @@
             <p class="text-muted mar-top">
                 {!! data_get($profile,'position.description','&nbsp;') !!}
             </p>
+            <p class="text-muted mar-top">
+                {!! \Carbon\Carbon::parse(data_get($record,'created_at'))->format('d-m-Y H:i:s') !!}
+            </p>
             <p class="text-md mar-top" style="vertical-align: text-bottom;">
                 {!! data_get($record,'remark') !!}
             </p>

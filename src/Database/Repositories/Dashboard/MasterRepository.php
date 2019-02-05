@@ -24,11 +24,11 @@ class MasterRepository
 		return collect([
 			'active' => Project::when($corporateId, function ($query, $corporateId) {
 			            return $query->sameGroup($corporateId);
-			        })->where('active',1)->count(),
+			        })->active()->count(),
 
 			'closed' => Project::when($corporateId, function ($query, $corporateId) {
 				            return $query->sameGroup($corporateId);
-				        })->where('active',0)->count(),
+				        })->notActive()->count(),
 
 			'ontrack' => Project::when($corporateId, function ($query, $corporateId) {
 				            return $query->sameGroup($corporateId);
@@ -40,7 +40,7 @@ class MasterRepository
 
 			'total' => Project::when($corporateId, function ($query, $corporateId) {
 				            return $query->sameGroup($corporateId);
-				        })->count()
+				        })->wasApproved()->count()
 		]);
 
 	}
@@ -52,7 +52,7 @@ class MasterRepository
 	 */
 	public function projectContract(int $corporateId = null)
 	{
-		$sumValue = Project::when($corporateId, function ($query, $corporateId) {
+		$sumValue = Project::active()->when($corporateId, function ($query, $corporateId) {
             return $query->sameGroup($corporateId);
         })->sum('value');
 
@@ -65,7 +65,7 @@ class MasterRepository
 		    $format = round($sumValue / 1000000000,2);
 		}
 
-		$chart = Project::when($corporateId, function ($query, $corporateId) {
+		$chart = Project::active()->when($corporateId, function ($query, $corporateId) {
 	            return $query->sameGroup($corporateId);
 	        })->pluck('value','id')->map(function($item,$key){
 	        	return [ $key,(is_null($item) ? 0 : $item)] ;

@@ -39,6 +39,7 @@ class PhysicalProcessor
 		$this->milestoneRepository = $milestoneRepository;
 		$this->formBuilder = $formBuilder;
 		$this->viewBuilder = $viewBuilder;
+		$this->profile();
 	}
 
 	/**

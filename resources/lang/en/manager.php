@@ -6,6 +6,7 @@ return [
 	],
 	'project' => [
 		'list' => "List of Project",
+		'approval' => "List of Project Approval",
 		'form' => "Project's Form",
 		'view' => "Project's Information",
 	],

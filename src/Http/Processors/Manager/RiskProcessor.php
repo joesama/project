@@ -8,6 +8,7 @@ use Joesama\Project\Database\Model\Project\Risk;
 use Joesama\Project\Http\Processors\Manager\ListProcessor;
 use Joesama\Project\Http\Services\FormGenerator;
 use Joesama\Project\Http\Services\ViewGenerator;
+use Joesama\Project\Traits\HasAccessAs;
 
 /**
  * Risk Record 
@@ -17,7 +18,8 @@ use Joesama\Project\Http\Services\ViewGenerator;
  **/
 class RiskProcessor 
 {
-
+	use HasAccessAs;
+	
 	public function __construct(
 		ListProcessor $listProcessor,
 		FormGenerator $formBuilder,
@@ -28,6 +30,7 @@ class RiskProcessor
 		$this->formBuilder = $formBuilder;
 		$this->viewBuilder = $viewBuilder;
 		$this->modelObj = $risk;
+		$this->profile();
 	}
 
 
