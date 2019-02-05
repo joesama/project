@@ -112,9 +112,9 @@ class ListProcessor
 		   [ 'field' => 'project.name',
 		   'title' => __('joesama/project::project.info.name'),
 		   'style' => 'text-left text-capitalize'],
-		   [ 'field' => 'approval.aging_action',
+		   [ 'field' => 'aging_action',
 		   'title' => __('joesama/project::form.report.aging'),
-		   'style' => 'text-left text-capitalize'],
+		   'style' => 'text-center text-capitalize'],
 		   [ 'field' => 'status.description',
 		   'title' => 'Status',
 		   'style' => 'text-center text-bold']
