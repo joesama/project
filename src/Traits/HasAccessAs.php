@@ -2,6 +2,7 @@
 namespace Joesama\Project\Traits;
 
 use Illuminate\Support\Facades\Cache;
+use Joesama\Project\Database\Model\Organization\Profile;
 
 trait HasAccessAs{
 	
@@ -13,6 +14,13 @@ trait HasAccessAs{
 	public function profile()
 	{
 		$profile = Cache::get('profile-'.auth()->id());
+
+		if(is_null($profile)){
+		$profile = Cache::remember(
+				'profile-'.auth()->id(), 60, function () {
+			    return Profile::where('user_id',auth()->id())->with('role')->first();
+			});
+		}
 
 		view()->share('profile',$profile);
 

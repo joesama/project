@@ -11,7 +11,7 @@ return [
 	],
 	'action' => [
 		'assign' => 'Assignation',
-		'approve' => 'Approve',
+		'approve' => 'Submit',
 		'reject' => 'Reject',
 	],
 	'project' => [

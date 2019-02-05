@@ -60,6 +60,7 @@ class MakeProjectRepository
 		    'value' => null,
 		    'contract' => null,
 		    'gp_propose' => null,
+		    'job_code' => null,
 		    'gp_latest' => null,
 		    'bond' => null,
 		    'scope' => null,
