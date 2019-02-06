@@ -33,6 +33,7 @@ class ListProcessor
 		$this->projectObj = $projectInfo;
 		$this->approvalObj = $projectWorkflow;
 		$this->reportCardObj = $reportCard;
+		$this->profile();
 	}
 
 	/**

@@ -9,6 +9,7 @@ use Joesama\Project\Database\Model\Project\Project;
 use Joesama\Project\Http\Processors\Manager\ListProcessor;
 use Joesama\Project\Http\Services\FormGenerator;
 use Joesama\Project\Http\Services\ViewGenerator;
+use Joesama\Project\Traits\HasAccessAs;
 
 /**
  * Project Record 
@@ -18,6 +19,7 @@ use Joesama\Project\Http\Services\ViewGenerator;
  **/
 class IssueProcessor 
 {
+	use HasAccessAs;
 
 	public function __construct(
 		ListProcessor $listProcessor,
@@ -29,6 +31,7 @@ class IssueProcessor
 		$this->formBuilder = $formBuilder;
 		$this->viewBuilder = $viewBuilder;
 		$this->modelObj = $issue;
+		$this->profile();
 	}
 
 

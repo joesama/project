@@ -25,6 +25,7 @@ class WeeklyProcessor
 	){
 		$this->projectInfo = $projectInfo;
 		$this->reportCard = $reportCardInfo;
+		$this->profile();
 	}
 
 

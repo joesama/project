@@ -10,6 +10,7 @@ use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
 use Joesama\Project\Http\Services\DataGridGenerator;
 use Joesama\Project\Http\Services\FormGenerator;
 use Joesama\Project\Http\Services\ViewGenerator;
+use Joesama\Project\Traits\HasAccessAs;
 
 /**
  * Project Record 
@@ -19,6 +20,7 @@ use Joesama\Project\Http\Services\ViewGenerator;
  **/
 class FinancialProcessor 
 {
+	use HasAccessAs;
 
 	public function __construct(
 		ListProcessor $listProcessor,
@@ -38,6 +40,7 @@ class FinancialProcessor
 		$this->retentionObj = $retention;
 		$this->ladObj = $lad;
 		$this->projectObj = $projectInfo;
+		$this->profile();
 	}
 
 	/**

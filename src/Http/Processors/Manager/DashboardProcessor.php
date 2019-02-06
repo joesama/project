@@ -2,6 +2,7 @@
 namespace Joesama\Project\Http\Processors\Manager; 
 
 use Joesama\Project\Http\Processors\Manager\ListProcessor;
+use Joesama\Project\Traits\HasAccessAs;
 
 /**
  * Project Record 
@@ -11,11 +12,13 @@ use Joesama\Project\Http\Processors\Manager\ListProcessor;
  **/
 class DashboardProcessor 
 {
+	use HasAccessAs;
 
 	public function __construct(
 		ListProcessor $listProcessor
 	){
 		$this->listProcessor = $listProcessor;
+		$this->profile();
 	}
 
 

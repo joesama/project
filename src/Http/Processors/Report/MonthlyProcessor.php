@@ -7,6 +7,7 @@ use Joesama\Project\Database\Model\Organization\Profile;
 use Joesama\Project\Database\Model\Project\CardWorkflow;
 use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
 use Joesama\Project\Database\Repositories\Project\ReportCardInfoRepository;
+use Joesama\Project\Traits\HasAccessAs;
 
 /**
  * Client Record 
@@ -16,6 +17,8 @@ use Joesama\Project\Database\Repositories\Project\ReportCardInfoRepository;
  **/
 class MonthlyProcessor 
 {
+	use HasAccessAs;
+	
 	private $project, $reportCard;
 
 	public function __construct(
@@ -24,6 +27,7 @@ class MonthlyProcessor
 	){
 		$this->projectInfo = $projectInfo;
 		$this->reportCard = $reportCardInfo;
+		$this->profile();
 	}
 
 

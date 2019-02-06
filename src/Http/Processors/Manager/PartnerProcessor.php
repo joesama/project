@@ -7,6 +7,7 @@ use Joesama\Project\Database\Model\Project\Project;
 use Joesama\Project\Http\Processors\Manager\ListProcessor;
 use Joesama\Project\Http\Services\FormGenerator;
 use Joesama\Project\Http\Services\ViewGenerator;
+use Joesama\Project\Traits\HasAccessAs;
 
 /**
  * Risk Record 
@@ -16,6 +17,7 @@ use Joesama\Project\Http\Services\ViewGenerator;
  **/
 class PartnerProcessor 
 {
+	use HasAccessAs;
 
 	public function __construct(
 		ListProcessor $listProcessor,
@@ -27,6 +29,7 @@ class PartnerProcessor
 		$this->formBuilder = $formBuilder;
 		$this->viewBuilder = $viewBuilder;
 		$this->modelObj = $project;
+		$this->profile();
 	}
 
 
