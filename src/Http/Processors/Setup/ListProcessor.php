@@ -4,6 +4,7 @@ namespace Joesama\Project\Http\Processors\Setup;
 use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
 use Joesama\Project\Database\Repositories\Setup\MasterDataRepository;
 use Joesama\Project\Http\Services\DataGridGenerator;
+use Joesama\Project\Traits\HasAccessAs;
 
 /**
  * Processing All List 
@@ -13,6 +14,7 @@ use Joesama\Project\Http\Services\DataGridGenerator;
  **/
 class ListProcessor 
 {
+	use HasAccessAs;
 
 	public function __construct(
 		MasterDataRepository $masterData,
@@ -20,6 +22,7 @@ class ListProcessor
 	){
 		$this->masterDataObj = $masterData;
 		$this->projectObj = $project;
+		$this->profile();
 	}
 
 	/**

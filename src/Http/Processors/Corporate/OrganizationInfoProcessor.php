@@ -3,6 +3,7 @@ namespace Joesama\Project\Http\Processors\Organization;
 
 
 use Joesama\Project\Database\Repositories\Organization\OrganizationInfoRepository;
+use Joesama\Project\Traits\HasAccessAs;
 
 /**
  * Retrieve Organization Record 
@@ -12,10 +13,12 @@ use Joesama\Project\Database\Repositories\Organization\OrganizationInfoRepositor
  **/
 class OrganizationInfoProcessor 
 {
-
+	use HasAccessAs;
+	
 	public function __construct(OrganizationInfoRepository $organization)
 	{
 		$this->organizationObj = $organization;
+		$this->profile();
 	}
 
 	/**

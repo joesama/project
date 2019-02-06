@@ -32,7 +32,7 @@ return [
 	],
 	'workflow' => [
 		'new' => 'Prepared By',
-		'ammend' => 'Rejected By',
+		'rejected' => 'Rejected By',
 		'approved' => 'Approved By',
 		'validated' => '(GOSD) Validate By',
 		'reviewed' => '(GOSD) Review By',

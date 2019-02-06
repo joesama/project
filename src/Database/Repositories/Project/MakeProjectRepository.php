@@ -186,7 +186,6 @@ class MakeProjectRepository
 		    'name' => null,
 		    'project_id' => null,
 		    'profile_id' => null,
-		    'planned_progress' => 0,
 		    'start'=> null,
 		    'end' => null
 		]);
@@ -208,9 +207,16 @@ class MakeProjectRepository
 				}
 			});
 
+			$totalDay = Project::find($this->taskModel->project_id)->effective_days;
+
+			$effectiveDay = $this->effectiveDays($this->taskModel->start,$this->taskModel->end);
+
+			$this->taskModel->planned_progress = round( $effectiveDay/$totalDay * 100, 2 );
 
 			$this->taskModel->actual_progress = ($this->taskModel->planned_progress/100)*$taskData->get('task_progress');
-			$this->taskModel->effective_days = $this->effectiveDays($this->taskModel->start,$this->taskModel->end);
+
+			$this->taskModel->effective_days = $effectiveDay;
+
 			$this->taskModel->save();
 
 			$this->taskModel->progress()->save(new TaskProgress([

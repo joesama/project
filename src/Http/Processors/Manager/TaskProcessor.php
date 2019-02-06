@@ -76,10 +76,12 @@ class TaskProcessor
 			$form->readonly(['end','start']);
 
 			$tagCollection = $this->modelObj->find($request->segment(6))->tags;
+
 			$tags = ($tagCollection->isNotEmpty()) ? $tagCollection->pluck('label')->implode(',') : $tags;
 		}
 
 		$project = Project::with('task')->find($request->segment(5));
+
 		$lastUseDate = ($project->task->isEmpty()) ? $project->start : $project->task->last()->end;
 
 		$form = $form->option([
@@ -87,18 +89,19 @@ class TaskProcessor
 				])->default([
 					'task_progress' => data_get($this->modelObj->find($request->segment(6)),'progress.progress',0),
 					'start' => Carbon::parse($lastUseDate)->addDay(),
-					'end' => Carbon::parse($lastUseDate)->addDay(2),
+					'end' => Carbon::parse($project->end),
 					'group' => $tags,
+					'profile_id' => $this->profile()->id
 				])->extras([
 					'group' => 'tag',
 					'duration' => 'range'
 				]);
 
 		if(!is_null($request->segment(6))){
-			$form->readonly(['planned_progress']);	
+			$form->readonly(['planned_progress','duration']);	
 		}
 
-		$form = $form->excludes(['effective_days','actual_progress','start','end'])
+		$form = $form->excludes(['effective_days','planned_progress','actual_progress','start','end'])
 				->id($request->segment(6))
 				->required(['*'])
 				->renderForm(

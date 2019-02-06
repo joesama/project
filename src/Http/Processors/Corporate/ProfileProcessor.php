@@ -10,6 +10,7 @@ use Joesama\Project\Database\Repositories\Organization\OrganizationInfoRepositor
 use Joesama\Project\Http\Processors\Corporate\ListProcessor;
 use Joesama\Project\Http\Services\FormGenerator;
 use Joesama\Project\Http\Services\ViewGenerator;
+use Joesama\Project\Traits\HasAccessAs;
 
 /**
  * Make New Organization Record 
@@ -19,6 +20,8 @@ use Joesama\Project\Http\Services\ViewGenerator;
  **/
 class ProfileProcessor 
 {
+	use HasAccessAs;
+	
 	private $listProcessor, $profileObj, $formBuilder, $viewBuilder;
 
 	/**
@@ -41,6 +44,7 @@ class ProfileProcessor
 		$this->formBuilder = $formGenerator;
 		$this->viewBuilder = $viewGenerator;
 		$this->organizationInfo = $organizationInfo;
+		$this->profile();
 	}
 
 	/**

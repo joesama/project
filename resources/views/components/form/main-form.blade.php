@@ -33,7 +33,7 @@
 					if($type == 'numeric'){
 						$validator->put('numeric' , [ 'message' => __('joesama/project::form.is.numeric') ] );
 						$validator->put('lessThan' , [ 'inclusive' => true, 
-														'value' =>  999999999999 ,
+														'value' =>  999999999999,
 														'message' => __('joesama/project::form.is.maxnumber') 
 													] );
 					}

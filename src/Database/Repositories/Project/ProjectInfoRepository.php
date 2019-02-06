@@ -76,8 +76,8 @@ class ProjectInfoRepository
 	public function getProject(int $projectId, ?int $reportId = null)
 	{
 		return $this->projectModel
-		->component($reportId)
-		->find($projectId);
+				->component($reportId)
+				->find($projectId);
 	}
 
 	/**
@@ -90,6 +90,7 @@ class ProjectInfoRepository
 	{
 
 		$project = $this->projectModel->active()
+					->orderBy('updated_at','desc')
 					->where(function($query){
 						$query->whereHas('manager',function($query){
 							$query->where('profile_id',$this->profile->id);

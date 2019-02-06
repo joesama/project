@@ -116,9 +116,9 @@ class ListProcessor
 		   [ 'field' => 'aging_action',
 		   'title' => __('joesama/project::form.report.aging'),
 		   'style' => 'text-center text-capitalize'],
-		   [ 'field' => 'status.description',
+		   [ 'field' => 'state',
 		   'title' => 'Status',
-		   'style' => 'text-center text-bold']
+		   'style' => 'text-center text-bold text-capitalize']
 		];
 
 		$action = [

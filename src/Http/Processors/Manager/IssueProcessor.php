@@ -69,6 +69,8 @@ class IssueProcessor
 		$form = $form->option([
 					'profile_id' => Profile::sameGroup($corporateId)->pluck('name','id'),
 					'progress_id' => MasterData::progress()->pluck('description','id')
+				])->extras([
+					'description' => 'textarea'
 				])
 				->excludes(['effective_days'])
 				->required(['*'])

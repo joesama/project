@@ -7,6 +7,7 @@ use Joesama\Project\Database\Model\Master\MasterData;
 use Joesama\Project\Http\Processors\Setup\ListProcessor;
 use Joesama\Project\Http\Services\FormGenerator;
 use Joesama\Project\Http\Services\ViewGenerator;
+use Joesama\Project\Traits\HasAccessAs;
 
 /**
  * Master Record 
@@ -16,6 +17,7 @@ use Joesama\Project\Http\Services\ViewGenerator;
  **/
 class DataProcessor 
 {
+	use HasAccessAs;
 
 	public function __construct(
 		ListProcessor $listProcessor,
@@ -27,6 +29,7 @@ class DataProcessor
 		$this->formBuilder = $formBuilder;
 		$this->viewBuilder = $viewBuilder;
 		$this->modelObj = $masterData;
+		$this->profile();
 	}
 
 

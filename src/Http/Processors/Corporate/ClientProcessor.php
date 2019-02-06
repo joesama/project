@@ -28,6 +28,7 @@ class ClientProcessor
 		$this->formBuilder = $formBuilder;
 		$this->viewBuilder = $viewBuilder;
 		$this->modelObj = $client;
+		$this->profile();
 	}
 
 

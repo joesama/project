@@ -54,7 +54,7 @@ class ProjectPayment extends Model
         return (is_null($value)) ? $value : Carbon::parse($value)->format('d-m-Y');
     }
 
-    public function scopeComponent($query,$reportId)
+    public function scopeComponent($query,$reportId = null)
     {
         $query->when($reportId, function ($query, $reportId) {
             return $query->where('card_id', $reportId);

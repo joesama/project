@@ -98,7 +98,6 @@ class ProjectWorkflowRepository
 	 */
 	public function approveProject(Project $project, Request $request)
 	{
-
 		try{
 
 			$project->active = is_null($request->get('need_step')) ? 1 : 0;
@@ -110,7 +109,7 @@ class ProjectWorkflowRepository
 
 			$approval->workflow_id = $request->get('state');
 
-			if($request->get('state') == 2){
+			if($request->get('state') == 5){
 				$approval->approved_by = $this->profile()->id;
 				$approval->approve_date = Carbon::now();
 			}
@@ -118,6 +117,7 @@ class ProjectWorkflowRepository
 			$approval->creator_id = $this->profile()->id;
 			$approval->need_action = $request->get('need_action');
 			$approval->need_step = $request->get('need_step');
+			$approval->state = $request->get('status');
 			$approval->save();
 
 			$workflow = new ProjectApprovalWorkflow([
