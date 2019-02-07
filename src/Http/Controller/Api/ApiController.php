@@ -15,6 +15,7 @@ class ApiController extends BaseController
 	public function __invoke(Request $request, $corporateId)
 	{
 		$page = strstr($this->page,'-',true);
+		$page = ($page == false) ?  $this->page : $page;
 
 		return app($this->processor)->$page($request,$corporateId,$request->segment(5));
 	}
