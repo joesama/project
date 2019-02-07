@@ -6,7 +6,7 @@ return [
 	],
 	'project' => [
 		'list' => "List of Project",
-		'approval' => "List of Project Approval",
+		'approval' => "Project Approval History",
 		'form' => "Project's Form",
 		'view' => "Project's Information",
 	],
@@ -42,6 +42,9 @@ return [
 	],
 	'workflow' => [
 		'approval' => "Project Approval",
+		'approval-' => "Project Approval",
+		'approval-project' => "Project Approval History",
+		'approval-dashboard' => "Project Approval Task",
 		'report' => "Project Report",
 		'monthly' => "Monthly Project Report",
 		'weekly' => "Weekly Project Report",

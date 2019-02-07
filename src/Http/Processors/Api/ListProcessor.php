@@ -192,7 +192,7 @@ class ListProcessor
 	 */
 	public function approval($request,$corporateId)
 	{
-		return $this->approvalObj->projectApprovalList($corporateId,$request->segment(5));
+		return $this->approvalObj->projectApprovalList($request,$corporateId);
 	}
 
 	/**

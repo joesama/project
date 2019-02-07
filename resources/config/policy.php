@@ -140,7 +140,8 @@ return [
 				'profile' => ['corporateId','masterId?'],
 				'weekly' => ['corporateId','projectId?'],
 				'monthly' => ['corporateId','projectId?'],
-				'approval' => ['corporateId','projectId?'],
+				'approval-project' => ['corporateId','projectId?'],
+				'approval-dashboard' => ['corporateId','projectId?'],
 				'physical' => ['corporateId','projectId'],
 				'finance' => ['corporateId','projectId']
 			],

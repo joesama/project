@@ -130,10 +130,10 @@ class ListProcessor
 
 		$datagrid = new DataGridGenerator();
 		
-		$datagrid->buildTable($columns, __('joesama/project::manager.workflow.approval') )
+		$datagrid->buildTable($columns, __('joesama/project::manager.workflow.approval-'.$request->segment(2)) )
 				 ->buildDataModel(
-				 	route('api.list.approval',[$corporateId, $request->segment(5)]), 
-				 	$this->approvalObj->projectApprovalList($corporateId, $request->segment(5))
+				 	route('api.list.approval-'.$request->segment(2),[$corporateId]), 
+				 	$this->approvalObj->projectApprovalList($request,$corporateId)
 				 )
 				 ->buildOption($action, TRUE);
 

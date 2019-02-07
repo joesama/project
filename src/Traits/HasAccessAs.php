@@ -13,14 +13,14 @@ trait HasAccessAs{
 	 */
 	public function profile()
 	{
-		$profile = Cache::get('profile-'.auth()->id());
-
-		if(is_null($profile)){
-		$profile = Cache::remember(
-				'profile-'.auth()->id(), 60, function () {
-			    return Profile::where('user_id',auth()->id())->with('role')->first();
-			});
+		if( !session()->has('profile-'.auth()->id()) ){
+			session()->put(
+	            'profile-'.auth()->id() , Profile::where('user_id',auth()->id())
+	                                        ->with('role')->first()
+	        );
 		}
+
+		$profile = session('profile-'.auth()->id());
 
 		view()->share('profile',$profile);
 

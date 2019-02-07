@@ -56,6 +56,14 @@
                             </tr>
                             <tr>
                                 <td class="text-bold bg-primary text-light text-capitalize"  style="width: 15%">
+                                    {{ __('joesama/project::form.project.job_code') }}
+                                </td>
+                                <td class="pl-2">
+                                    {{ data_get($project,'job_code') }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-bold bg-primary text-light text-capitalize"  style="width: 15%">
                                     {{ __('joesama/project::project.info.contract.scope') }}
                                 </td>
                                 <td class="pl-2">

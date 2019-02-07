@@ -32,6 +32,7 @@ return [
 	],
 	'workflow' => [
 		'new' => 'Disediakan Oleh',
+		'rejected' => 'Ditolak Oleh',
 		'approved' => 'Diluluskan Oleh',
 		'validated' => '(GOSD) Disahkan Oleh',
 		'reviewed' => '(GOSD) Disemak Oleh',

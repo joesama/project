@@ -22,12 +22,19 @@ class ProjectWorkflowRepository
 	 * @param int $corporateId - id for specific corporate
 	 * @return Illuminate\Pagination\LengthAwarePaginator
 	 **/
-	public function projectApprovalList(int $corporateId)
+	public function projectApprovalList($request, int $corporateId)
 	{
-		return ProjectApproval::where(function($query) {
-					$query->whereHas('project',function($query) {
-						$query->whereHas('manager',function($query){
-							$query->where('profile_id',$this->profile()->id);
+		$isHistory = ($request->segment(2) == 'project' || $request->segment(3) == 'approval-project') ? true : false;
+
+		return ProjectApproval::where(function($query) use($isHistory){
+					$query->when($isHistory, function ($query, $isHistory) { 
+						return $query->whereHas('project',function($query){
+							$query->whereHas('manager',function($query){
+								$query->where('profile_id',$this->profile()->id);
+							});
+							$query->orWhereHas('profile',function($query){
+								$query->where('profile_id',$this->profile()->id);
+							});
 						});
 					});
 					$query->orWhere('need_action',$this->profile()->id);
@@ -60,13 +67,14 @@ class ProjectWorkflowRepository
 				'project_id' =>  $project->id
 			]);
 
+			$state = strtolower(MasterData::find($initialFlow)->description);
+
 			$approval->workflow_id = $initialFlow;
 			$approval->creator_id = $projectManager->id;
 			$approval->need_action = $pmoHead->id;
 			$approval->need_step = $nextAction;
+			$approval->state = $state;
 			$approval->save();
-
-			$state = strtolower(MasterData::find($initialFlow)->description);
 
 			$workflow = new ProjectApprovalWorkflow([
 				'remark' => $project->scope,
