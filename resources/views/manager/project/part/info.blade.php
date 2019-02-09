@@ -7,7 +7,7 @@
 
                     </div>
                     <div class="col-md-3 text-right" class="vertical">
-                        @if( data_get($project,'approval.state') == 'rejected' && $isProjectManager )
+                        @if( strtolower(data_get($project,'approval.state')) == 'rejected' && $isProjectManager )
                         <a class="btn btn-dark mar-btm pull-right" href="{{ handles('joesama/project::manager/project/form/'.request()->segment(4).'/'.request()->segment(5)) }}">
                             <i class="psi-file-edit icon-fw"></i>
                             {{ __('joesama/vuegrid::datagrid.buttons.edit') }}
