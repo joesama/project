@@ -2,9 +2,10 @@
 namespace Joesama\Project\Database\Model\Project;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Joesama\Project\Database\Model\Master\MasterData;
 use Joesama\Project\Database\Model\Organization\Profile;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Joesama\Project\Database\Model\Project\ProgressNote;
 
 class Issue extends Model
 {
@@ -30,16 +31,24 @@ class Issue extends Model
     }
 
     /**
-     * Get the task's progress.
+     * Get the issue's progress.
      */
     public function progress()
     {
         return  $this->belongsTo(MasterData::class,'progress_id');
     }
 
+    /**
+     * Get the issue's indicator.
+     */
+    public function indicator()
+    {
+        return  $this->belongsTo(MasterData::class,'indicator_id');
+    }
+
     public function scopeComponent($query)
     {
-        return $query->with(['assignee','progress','project']);
+        return $query->with(['assignee','progress','project','indicator']);
     }
 
    /**
@@ -58,6 +67,14 @@ class Issue extends Model
     public function scopeOpen($query)
     {
         return $query->where('active',1);
+    }
+
+    /**
+     * Get all of the issue's notes.
+     */
+    public function notes()
+    {
+        return $this->morphMany(ProgressNote::class, 'note');
     }
 
 }

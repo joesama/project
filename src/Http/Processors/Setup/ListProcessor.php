@@ -54,8 +54,8 @@ class ListProcessor
 		
 		return $datagrid->buildTable($columns, __('joesama/project::setup.master.list') )
 				 ->buildDataModel(
-				 	route('api.list.master',$corporateId), 
-				 	$this->masterDataObj->listMaster($corporateId)
+				 	route('api.list.master',$corporateId,$request->segment(5)), 
+				 	$this->masterDataObj->listMaster($corporateId,$request->segment(5))
 				 )->buildAddButton(route('setup.master.form',$corporateId))
 				 ->buildOption($action, TRUE)
 				 ->render();
@@ -90,7 +90,7 @@ class ListProcessor
 		
 		return $datagrid->buildTable($columns, __('joesama/project::setup.data.list') )
 				 ->buildDataModel(
-				 	route('api.list.data',$corporateId), 
+				 	route('api.list.data',[$corporateId,$request->segment(5)]), 
 				 	$this->masterDataObj->listData($corporateId,$request->segment(5))
 				 )->buildAddButton(route('setup.data.form',[$corporateId,$request->segment(5)]))
 				 ->buildOption($action, TRUE)

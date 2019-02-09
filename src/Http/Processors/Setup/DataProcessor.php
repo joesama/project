@@ -32,7 +32,6 @@ class DataProcessor
 		$this->profile();
 	}
 
-
 	/**
 	 * @param  Request $request
 	 * @param  int $corporateId
@@ -52,29 +51,34 @@ class DataProcessor
 	 */
 	public function form(Request $request, int $corporateId)
 	{
-		$form = $this->formBuilder->newModelForm($this->modelObj)
+		$form = $this->formBuilder
+				->newModelForm($this->modelObj)
 				->option([
 					'master_id' => Master::pluck('description','id')
+				])->default([
+					'master_id' => $request->segment(5),
 				])
 				->id($request->segment(6))
 				->required(['*'])
+				->notRequired(['formula'])
 				->renderForm(
 					__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),
-					route('api.data.save',[$corporateId, $request->segment(5)])
+					route('api.data.save',[$corporateId, $request->segment(5), $request->segment(6)])
 				);
 
 		return compact('form');
 	}
 
 	/**
-	 * @param  Request $request
+	 * @param  Request $requestd
 	 * @param  int $corporateId
 	 * @return mixed
 	 */
 	public function view(Request $request, int $corporateId)
 	{
-		$view = $this->viewBuilder->newView($this->modelObj)
-				->id($request->segment(5))
+		$view = $this->viewBuilder
+				->newView($this->modelObj)
+				->id($request->segment(6))
 				->relation([
 					'master_id' => 'master.description',
 				])

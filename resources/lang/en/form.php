@@ -60,6 +60,7 @@ return [
 		'profile_id' => "Person In Charge", 
 		'project_id' => "Project Name", 
 		'progress_id' => "Status", 
+		'indicator_id' => "Indicator", 
 		'label' => "Issue",
 		'description' => "Description",
 		'active' => "Active",
@@ -84,7 +85,7 @@ return [
 	'master_data' => [
 		'master_id' => 'Category',
 		'description' => 'Data Description',
-		'formula' => 'Formula',
+		'formula' => 'Formula / Colour',
 	],
 	'client' => [
 		'name' => 'Client / Partner Name',

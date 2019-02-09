@@ -5,6 +5,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Joesama\Project\Database\Model\Organization\Profile;
+use Joesama\Project\Database\Model\Project\ProgressNote;
 use Joesama\Project\Database\Model\Project\TagMilestone;
 
 class Task extends Model
@@ -86,5 +87,13 @@ class Task extends Model
     public function getStartDateAttribute($value)
     {
         return Carbon::parse($this->attributes['start'])->format('d-m-Y');
+    }
+
+    /**
+     * Get all of the task's notes.
+     */
+    public function notes()
+    {
+        return $this->morphMany(ProgressNote::class, 'note');
     }
 }

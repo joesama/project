@@ -89,7 +89,7 @@ class TaskProcessor
 				])->default([
 					'task_progress' => data_get($this->modelObj->find($request->segment(6)),'progress.progress',0),
 					'start' => Carbon::parse($lastUseDate)->addDay(),
-					'end' => Carbon::parse($project->end),
+					'end' => ($lastUseDate == $project->end) ? Carbon::parse($project->end)->addDays(2) : Carbon::parse($project->end),
 					'group' => $tags,
 					'profile_id' => $this->profile()->id
 				])->extras([
@@ -101,7 +101,7 @@ class TaskProcessor
 			$form->readonly(['planned_progress','duration']);	
 		}
 
-		$form = $form->excludes(['effective_days','planned_progress','actual_progress','start','end'])
+		$form = $form->excludes(['effective_days','actual_progress','start','end'])
 				->id($request->segment(6))
 				->required(['*'])
 				->renderForm(

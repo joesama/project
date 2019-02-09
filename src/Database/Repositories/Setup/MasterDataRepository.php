@@ -89,6 +89,7 @@ class MasterDataRepository
 	{
 		$inputData = collect($masterData)->intersectByKeys([
 		    'master_id' => null,
+		    'formula' => null,
 		    'description' => null
 		]);
 

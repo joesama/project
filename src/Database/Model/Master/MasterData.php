@@ -69,12 +69,22 @@ class MasterData extends Model
     }
 
     /**
-     * Query Status Data List
+     * Query Active Data List
      */
     public function scopeActive($query)
     {
         return $query->whereHas('master',function($subquery){
-        	$subquery->active();
+            $subquery->active();
+        });
+    }
+
+    /**
+     * Query Issue Indicator Data List
+     */
+    public function scopeIndicator($query)
+    {
+        return $query->whereHas('master',function($subquery){
+        	$subquery->indicator();
         });
     }
 

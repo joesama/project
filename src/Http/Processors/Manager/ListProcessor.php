@@ -330,7 +330,7 @@ class ListProcessor
 	{
 
 		$columns = [
-		   [ 'field' => 'description',
+		   [ 'field' => 'label',
 		   'title' => __('joesama/project::project.issues.name'),
 		   'style' => 'text-xs-left text-capitalize'],
 		   [ 'field' => 'assignee.name',

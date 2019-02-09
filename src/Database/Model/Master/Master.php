@@ -57,10 +57,18 @@ class Master extends Model
     }
 
     /**
-     * Position Definition
+     * Active Definition
      */
     public function scopeActive($query)
     {
         return $query->where('id', 6);
+    }
+
+    /**
+     * Indicator Definition
+     */
+    public function scopeIndicator($query)
+    {
+        return $query->where('id', 7);
     }
 }

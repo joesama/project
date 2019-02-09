@@ -18,7 +18,8 @@ return [
 			'Asisstant General Manager', 'General Manager', 
 			'Vice President', 'COO', 'CEO'
 		],
-		'active' => ['open','closed','resolve'],
+		'active' => ['open','closed','resolved'],
+		'indicator' => ['hijau','kuning','merah'],
 	],
 	'corporate' => [
 		'KUB Malaysia' => [

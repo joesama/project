@@ -30,7 +30,7 @@ class IncidentProcessor
 	 */
 	public function save(Request $request,int $corporateId, int $projectId)
 	{
-		$this->makeProject->initIncident(collect($request->all()),$projectId);
+		$this->makeProject->initIncident(collect($request->all()),$request->segment(6));
 
 		return redirect(handles('manager/hse/list/'.$corporateId.'/'.$projectId));
 	}

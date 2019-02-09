@@ -211,7 +211,7 @@ class MakeProjectRepository
 
 			$effectiveDay = $this->effectiveDays($this->taskModel->start,$this->taskModel->end);
 
-			$this->taskModel->planned_progress = round( $effectiveDay/$totalDay * 100, 2 );
+			$this->taskModel->planned_progress = !is_null($taskData->get('planned_progress')) ?  $taskData->get('planned_progress') : round( $effectiveDay/$totalDay * 100, 2 );
 
 			$this->taskModel->actual_progress = ($this->taskModel->planned_progress/100)*$taskData->get('task_progress');
 
@@ -278,6 +278,8 @@ class MakeProjectRepository
 		    'project_id' => null,
 		    'profile_id' => null,
 		    'progress_id'=> null,
+		    'indicator_id'=> null,
+		    'label'=> null,
 		    'description' => null
 		]);
 
@@ -549,18 +551,32 @@ class MakeProjectRepository
 
 			$this->projectModel = $this->projectModel->find(data_get($inputData,'project_id'));
 
-			$incident = new Incident([
-			    'incident_id'=> data_get($inputData,'incident_id'),
-			    'incident'=> data_get($inputData,'incident'),
-			    'report_by'=> data_get($inputData,'report_by')
-			]);
+			if(!is_null($id)){
+				$incident = Incident::find($id);
 
-			$this->projectModel->incident()->save($incident);
+				$incident->incident_id = data_get($inputData,'incident_id');
+
+				$incident->incident = data_get($inputData,'incident');
+
+				$incident->report_by = data_get($inputData,'report_by');
+
+				$incident->save();
+			}else{
+				$incident = new Incident([
+				    'incident_id'=> data_get($inputData,'incident_id'),
+				    'incident'=> data_get($inputData,'incident'),
+				    'report_by'=> data_get($inputData,'report_by')
+				]);
+
+				$this->projectModel->incident()->save($incident);
+			}
 
 			$currentIncident = data_get($inputData,'incident_id');
 
 			$scoreCard = $this->projectModel->hsecard;
+
 			$incidentRecord = $this->projectModel->incident;
+
 			$incidentGroup = $incidentRecord->groupBy('incident_id');
 
 			$scoreCard->update([

@@ -40,7 +40,7 @@ class MasterRepository
 
 			'total' => Project::when($corporateId, function ($query, $corporateId) {
 				            return $query->sameGroup($corporateId);
-				        })->wasApproved()->count()
+				        })->active()->count()
 		]);
 
 	}

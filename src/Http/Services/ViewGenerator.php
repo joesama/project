@@ -10,7 +10,12 @@ use Illuminate\Database\Eloquent\Model;
  **/
 class ViewGenerator 
 {
-	private $model, $modelId, $viewId, $fields, $relationship = [];
+	private $model, 
+			$modelId, 
+			$viewId, 
+			$fields, 
+			$relationship = [], 
+			$exclude = [];
 
 	/**
 	 * Generate Model Attributes
@@ -20,6 +25,7 @@ class ViewGenerator
 		$this->model = $model->newQuery();
 		$this->viewId = $model->getTable();
 		$this->relationship = collect([]);
+		$this->exclude = collect([]);
 		$tableAttributes =  $model->fromQuery("SHOW FIELDS FROM ".$this->viewId);
 		$this->fields = collect($tableAttributes->pluck('Field','Field'))->except(['id','created_at','updated_at','deleted_at']);
 
@@ -46,6 +52,19 @@ class ViewGenerator
 	{
 		$this->modelId = $id;
 
+		return $this;
+	}
+
+	/**
+	 * @param  array $excludes [field name]
+	 * @return void
+	 */
+	public function excludes(array $excludes)
+	{
+		$this->exclude = $this->exclude->merge($excludes);
+		
+		$this->fields = $this->fields->diff($this->exclude);
+		
 		return $this;
 	}
 

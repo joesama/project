@@ -26,7 +26,7 @@ class DataProcessor
 	 */
 	public function save(Request $request,int $corporateId)
 	{
-		$master = $this->masterRepo->initData(collect($request->all()),$request->segment(5));
+		$master = $this->masterRepo->initData(collect($request->all()),$request->segment(6));
 
 		return redirect(handles('setup/master/view/'.$corporateId.'/'.$request->segment(5)));
 	}

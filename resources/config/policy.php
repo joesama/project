@@ -54,7 +54,7 @@ return [
 				'no_menu' => TRUE
 			],
 			'hse' => [
-				'form' => ['corporateId','projectId'],
+				'form' => ['corporateId','projectId','dataId?'],
 				'list' => ['corporateId','projectId'],
 				'no_menu' => TRUE
 			],
@@ -209,7 +209,7 @@ return [
 				'save' => ['corporateId','masterId?']
 			],
 			'incident' => [
-				'save' => ['corporateId','masterId?']
+				'save' => ['corporateId','projectId','incidentId?']
 			],
 			'profile' => [
 				'save' => ['corporateId','masterId?'],

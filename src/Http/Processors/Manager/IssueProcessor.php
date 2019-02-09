@@ -68,9 +68,13 @@ class IssueProcessor
 
 		$form = $form->option([
 					'profile_id' => Profile::sameGroup($corporateId)->pluck('name','id'),
-					'progress_id' => MasterData::progress()->pluck('description','id')
+					'progress_id' => MasterData::progress()->pluck('description','id'),
+					'indicator_id' => MasterData::indicator()->pluck('description','id')
 				])->extras([
 					'description' => 'textarea'
+				])->default([
+					'indicator_id' => MasterData::indicator()->first()->id,
+					'profile_id' => $this->profile()->id,
 				])
 				->excludes(['effective_days'])
 				->required(['*'])
@@ -95,6 +99,9 @@ class IssueProcessor
 			'project_id' => 'project.name',
 			'profile_id' => 'assignee.name',
 			'progress_id' => 'progress.description',
+			'indicator_id' => 'indicator.description',
+		])->excludes([
+			'effective_days'
 		])
 		->id($request->segment(6))
 		->renderView(

@@ -55,6 +55,7 @@ class FinancialProcessor
 			'project_id' => 'project.name',
 		])
 		->id($request->segment(6))
+		->excludes(['report_id','card_id'])
 		->renderView(
 			__('joesama/project::'.$request->segment(1).'.'
 				.$request->segment(2).'.'
