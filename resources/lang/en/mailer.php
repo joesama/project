@@ -20,5 +20,6 @@ return [
 		'accepted' => 'Project Acceptance Notification',
 		'updated' => 'Project Information Update Notification',
 		'new' => 'Project Update Notification',
+		'rejected' => 'Project Approval Notification',
 	],
 ];
