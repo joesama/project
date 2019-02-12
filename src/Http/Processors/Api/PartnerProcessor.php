@@ -32,7 +32,14 @@ class PartnerProcessor
 	{
 		$project = $this->makeProject->initPartner(collect($request->all()),$request->segment(5));
 
-		return redirect(handles('manager/project/view/'.$project->corporate_id.'/'.$project->id));
+		return redirect_with_message(
+			handles('manager/project/view/'.$project->corporate_id.'/'.$project->id,
+			trans('joesama/entree::respond.data.success', [
+				'form' => trans('joesama/project::manager.partner.view')
+			]),
+            'success')
+		);
+
 	}
 
 	/**

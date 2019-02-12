@@ -139,6 +139,13 @@
 </div>
 @php
   $payment = array_get($summary,'payment');
+  if($payment->isEmpty()){
+    $payment->push([
+      'period' => \Carbon\Carbon::now()->format('d-m-Y'),
+      'planned' => 0,
+      'actual' => 0
+    ]);
+  }
 @endphp
 @push('content.script')
 <script type="text/javascript">

@@ -28,7 +28,13 @@ class MasterProcessor
 	{
 		$master = $this->masterRepo->initMaster(collect($request->all()),$request->segment(5));
 
-		return redirect(handles('setup/'.$request->segment(2).'/list/'.$corporateId));
+		return redirect_with_message(
+			handles('setup/'.$request->segment(2).'/list/'.$corporateId),
+			trans('joesama/entree::respond.data.success', [
+				'form' => trans('joesama/project::setup.'.$request->segment(2).'.form')
+			]),
+            'success'
+		);
 	}
 
 

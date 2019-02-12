@@ -32,7 +32,12 @@ class IncidentProcessor
 	{
 		$this->makeProject->initIncident(collect($request->all()),$request->segment(6));
 
-		return redirect(handles('manager/hse/list/'.$corporateId.'/'.$projectId));
+		return redirect_with_message(handles('manager/hse/list/'.$corporateId.'/'.$projectId),
+			trans('joesama/entree::respond.data.success', [
+				'form' => trans('joesama/project::manager.hse.form')
+			]),
+            'success'
+		);
 	}
 
 	/**

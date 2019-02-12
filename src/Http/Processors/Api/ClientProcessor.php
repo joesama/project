@@ -32,7 +32,13 @@ class ClientProcessor
 	{
 		$task = $this->makeProject->initClient(collect($request->all()),$clientId);
 
-		return redirect(handles('corporate/'.$request->segment(2).'/list/'.$corporateId));
+		return redirect_with_message(
+			handles('corporate/'.$request->segment(2).'/list/'.$corporateId),
+			trans('joesama/entree::respond.data.success', [
+				'form' => trans('joesama/project::corporate.'.$request->segment(2).'.form')
+			]),
+            'success'
+		);
 	}
 
 

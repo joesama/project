@@ -82,7 +82,7 @@
 		{{ $id + 1 }}
 	</div>
 	<div class="col-md-9 text-left text-thin pad-all">
-		{{ ucwords(data_get($issue,'description')) }}
+		{{ ucwords(data_get($issue,'label')) }}
 	</div>
 	<div class="col-md-2 pull-right text-center text-thin bord-hor pad-all">
 		{{ ucwords(data_get($issue,'progress.description')) }}

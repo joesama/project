@@ -109,7 +109,6 @@ class MakeProjectRepository
 
 			$this->projectModel->save();
 
-
 			$this->projectModel->profile()->sync([
 				$projectData->get('manager_id') => ['role_id' => 2],
 				$projectData->get('approver_id') => ['role_id' => 4],

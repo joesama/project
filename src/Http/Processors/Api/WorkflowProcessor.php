@@ -38,7 +38,13 @@ class WorkflowProcessor
 		
 		$report = $this->projectApproval->approveProject($project,$request);
 
-		return redirect(handles('manager/project/view/'.$corporateId.'/'.$projectId));
+		return redirect_with_message(
+			handles('manager/project/view/'.$corporateId.'/'.$projectId),
+			trans('joesama/entree::respond.data.success', [
+				'form' => trans('joesama/project::manager.'.$request->segment(2).'.approval')
+			]),
+            'success'
+		);
 	}
 
 	/**
@@ -58,10 +64,22 @@ class WorkflowProcessor
 		
 		$report = $this->makeReport->{$type}($project,$request);
 
+		$message = 	trans('joesama/entree::respond.data.success', [
+						'form' => trans('joesama/project::report.'.$transtype.'.view')
+					]);
+
 		if($transtype == 'monthly'){
-			return redirect(handles('manager/project/view/'.$corporateId.'/'.$projectId .'/'.$report->id));
+			return redirect_with_message(
+				handles('manager/project/view/'.$corporateId.'/'.$projectId .'/'.$report->id),
+				$message,
+	            'success'
+			);
 		}else{
-			return redirect(handles('report/'.$request->get('type').'/form/'.$corporateId.'/'.$projectId .'/'.$report->id));
+			return redirect_with_message(
+				handles('report/'.$transtype.'/form/'.$corporateId.'/'.$projectId .'/'.$report->id),
+				$message,
+	            'success'
+			);
 		}
 	}
 

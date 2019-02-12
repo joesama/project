@@ -28,7 +28,13 @@ class DataProcessor
 	{
 		$master = $this->masterRepo->initData(collect($request->all()),$request->segment(6));
 
-		return redirect(handles('setup/master/view/'.$corporateId.'/'.$request->segment(5)));
+		return redirect_with_message(
+			handles('setup/master/view/'.$corporateId.'/'.$request->segment(5)),
+			trans('joesama/entree::respond.data.success', [
+				'form' => trans('joesama/project::setup.'.$request->segment(2).'.form')
+			]),
+            'success'
+		);
 	}
 
 

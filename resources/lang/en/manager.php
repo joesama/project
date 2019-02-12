@@ -5,6 +5,7 @@ return [
 		'overall' => 'Project Task'
 	],
 	'project' => [
+		'project' => "Project",
 		'list' => "List of Project",
 		'approval' => "Project Approval History",
 		'form' => "Project's Form",

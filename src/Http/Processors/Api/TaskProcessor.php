@@ -32,7 +32,13 @@ class TaskProcessor
 	{
 		$task = $this->makeProject->initTask(collect($request->all()),$request->segment(6));
 
-		return redirect(handles('manager/'.$request->segment(2).'/list/'.$corporateId.'/'.$task->project_id));
+		return redirect_with_message(
+			handles('manager/'.$request->segment(2).'/list/'.$corporateId.'/'.$task->project_id),
+			trans('joesama/entree::respond.data.success', [
+				'form' => trans('joesama/project::manager.'.$request->segment(2).'.view')
+			]),
+            'success'
+		);
 	}
 
 	/**

@@ -40,7 +40,13 @@ class ProfileProcessor
 
 		$profile = $this->makeorganization->initProfile(collect($request->all()),$profileId);
 
-		return redirect(handles('joesama/project::corporate/profile/list/'.$corporateId));
+		return redirect_with_message(
+			handles('joesama/project::corporate/profile/list/'.$corporateId),
+			trans('joesama/entree::respond.data.success', [
+				'form' => trans('joesama/project::corporate.profile.form')
+			]),
+            'success'
+		);
 	}
 
 	/**
@@ -55,7 +61,13 @@ class ProfileProcessor
 	{
 		$profile = $this->makeorganization->assignProfile(collect($request->all()),$profileId);
 
-		return redirect(handles('joesama/project::corporate/profile/assign/'.$corporateId.'/'.$profile->id));
+		return redirect_with_message(
+			handles('joesama/project::corporate/profile/assign/'.$corporateId.'/'.$profile->id),
+			trans('joesama/entree::respond.data.success', [
+				'form' => trans('joesama/project::corporate.profile.assign')
+			]),
+            'success'
+		);
 	}
 
 	/**
@@ -70,7 +82,13 @@ class ProfileProcessor
 	{
 		$profile = $this->makeorganization->reassignProfile($profileId,$projectId);
 
-		return redirect(handles('joesama/project::corporate/profile/assign/'.$profile->corporate_id.'/'.$profileId));
+		return redirect_with_message(
+			handles('joesama/project::corporate/profile/assign/'.$profile->corporate_id.'/'.$profileId),
+			trans('joesama/entree::respond.data.success', [
+				'form' => trans('joesama/project::corporate.profile.assign')
+			]),
+            'success'
+		);
 	}
 
 

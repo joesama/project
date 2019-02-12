@@ -32,7 +32,13 @@ class IssueProcessor
 	{
 		$issue = $this->makeProject->initIssue(collect($request->all()),$request->segment(6));
 
-		return redirect(handles('manager/'.$request->segment(2).'/list/'.$corporateId.'/'.$issue->project_id));
+		return redirect_with_message(
+			handles('manager/'.$request->segment(2).'/list/'.$corporateId.'/'.$issue->project_id),
+			trans('joesama/entree::respond.data.success', [
+				'form' => trans('joesama/project::manager.'.$request->segment(2).'.form')
+			]),
+            'success'
+		);
 	}
 
 	/**

@@ -35,7 +35,13 @@ class FinancialProcessor
 	{
 		$project = $this->makeProject->initClaim(collect($request->all()),$request->segment(6));
 
-		return redirect(handles('manager/'.$request->segment(2).'/list/'.$corporateId.'/'.$project->id));
+		return redirect_with_message(
+			handles('manager/'.$request->segment(2).'/list/'.$corporateId.'/'.$project->id),
+			trans('joesama/entree::respond.data.success', [
+				'form' => trans('joesama/project::manager.'.$request->segment(2).'.form')
+			]),
+            'success'
+		);
 	}
 
 	/**
@@ -61,7 +67,13 @@ class FinancialProcessor
 	{
 		$payment = $this->makeProject->updateClaim(collect($request->all()),$request->segment(6));
 
-		return redirect(handles('manager/'.$request->segment(2).'/list/'.$corporateId.'/'.$projectId));
+		return redirect_with_message(
+			handles('manager/'.$request->segment(2).'/list/'.$corporateId.'/'.$projectId),
+			trans('joesama/entree::respond.data.success', [
+				'form' => trans('joesama/project::manager.'.$request->segment(2).'.form')
+			]),
+            'success'
+		);
 	}
 
 	/**
@@ -74,7 +86,12 @@ class FinancialProcessor
 	{
 		$project = $this->makeProject->initVo(collect($request->all()),$request->segment(6));
 
-		return redirect(handles('manager/financial/vo/'.$corporateId.'/'.$project->id));
+		return redirect_with_message(handles('manager/financial/vo/'.$corporateId.'/'.$project->id),
+			trans('joesama/entree::respond.data.success', [
+				'form' => trans('joesama/project::manager.financial.voform')
+			]),
+            'success'
+		);
 	}
 
 	/**
@@ -100,7 +117,13 @@ class FinancialProcessor
 	{
 		$project = $this->makeProject->initRetention(collect($request->all()),$request->segment(6));
 
-		return redirect(handles('manager/financial/retention/'.$corporateId.'/'.$project->id));
+		return redirect_with_message(
+			handles('manager/financial/retention/'.$corporateId.'/'.$project->id),
+			trans('joesama/entree::respond.data.success', [
+				'form' => trans('joesama/project::manager.financial.retentionform')
+			]),
+            'success'
+		);
 	}
 
 	/**
@@ -126,7 +149,13 @@ class FinancialProcessor
 	{
 		$project = $this->makeProject->initLad(collect($request->all()),$request->segment(6));
 
-		return redirect(handles('manager/financial/lad/'.$corporateId.'/'.$project->id));
+		return redirect_with_message(
+			handles('manager/financial/lad/'.$corporateId.'/'.$project->id),
+			trans('joesama/entree::respond.data.success', [
+				'form' => trans('joesama/project::manager.financial.ladform')
+			]),
+            'success'
+		);
 	}
 
 	/**

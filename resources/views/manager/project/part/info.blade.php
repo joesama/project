@@ -4,7 +4,6 @@
             <div class="col-md-12" style="padding: 0px 5px">
                 <div class="row mar-btm">
                     <div class="col-md-9">
-
                     </div>
                     <div class="col-md-3 text-right" class="vertical">
                         @if( strtolower(data_get($project,'approval.state')) == 'rejected' && $isProjectManager )
