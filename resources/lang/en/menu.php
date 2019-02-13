@@ -29,6 +29,7 @@ return [
 	],
 	'corporate' => [
 		'module' => 'Corporate Management',
+		'notification' => 'Email Notification List',
 		'profile' => 'Profile  Management',
 		'client' => 'Client Information'
 	],

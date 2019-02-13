@@ -12,4 +12,8 @@ return [
 		'form' => 'Client / Partner Information',
 		'view' => 'Client / Partner Information'
 	],
+	'notification' => [
+		'list' => 'Email Notifications',
+		'view' => 'Email Notifications'
+	],
 ];

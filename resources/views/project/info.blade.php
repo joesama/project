@@ -33,6 +33,4 @@
 @endsection
 @push('content.script')
 
-
-</script>
 @endpush

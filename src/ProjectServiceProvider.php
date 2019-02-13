@@ -51,6 +51,15 @@ class ProjectServiceProvider extends ModuleServiceProvider
     ];
 
     /**
+     * The subscriber classes to register.
+     *
+     * @var array
+     */
+    protected $subscribe = [
+        'Joesama\Project\Events\Subscriber\UserEventSubscriber',
+    ];
+
+    /**
      * The application's or extension's route middleware.
      *
      * @var array
@@ -86,6 +95,10 @@ class ProjectServiceProvider extends ModuleServiceProvider
 
         $this->publishes([
             $path.'/views/components/shortcut.blade.php' => resource_path('views/joesama/entree/layouts/menu/shortcut.blade.php'),
+        ], 'views');
+
+        $this->publishes([
+            $path.'/views/components/mailing.blade.php' => resource_path('views/joesama/entree/layouts/themes/mailing.blade.php'),
         ], 'views');
     }
 

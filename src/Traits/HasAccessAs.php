@@ -16,7 +16,27 @@ trait HasAccessAs{
 		if( !session()->has('profile-'.auth()->id()) ){
 			session()->put(
 	            'profile-'.auth()->id() , Profile::where('user_id',auth()->id())
-	                                        ->with('role')->first()
+	                                        ->with(['mails','role'])->first()
+	        );
+		}
+
+		$profile = session('profile-'.auth()->id());
+
+		view()->share('profile',$profile);
+
+		return $profile;
+	}
+
+	/**
+	 * Get Current User Profile
+	 * @return Profile
+	 */
+	public function profileRefresh()
+	{
+		if( session()->has('profile-'.auth()->id()) ){
+			session()->put(
+	            'profile-'.auth()->id() , Profile::where('user_id',auth()->id())
+	                                        ->with(['mails','role'])->first()
 	        );
 		}
 

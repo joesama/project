@@ -3,6 +3,7 @@ namespace Joesama\Project\Database\Model\Organization;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use Joesama\Entree\Database\Model\Logs\NotificationLog;
 use Joesama\Entree\Database\Model\User;
 use Joesama\Entree\Http\Notifications\EntreeMailer;
 use Joesama\Project\Database\Model\Master\MasterData;
@@ -76,7 +77,7 @@ class Profile extends Model
     public function scopeComponent($query)
     {
         return $query->with([
-            'project.role','corporate','user','position'
+            'project.role','corporate','user','position','mails'
         ]);
     }
 
@@ -88,6 +89,14 @@ class Profile extends Model
     public function getFullnameAttribute($value)
     {
         return $this->name;
+    }
+
+    /**
+     * Get all of the user's mail.
+     */
+    public function mails()
+    {
+        return $this->morphMany(NotificationLog::class, 'notifiable');
     }
 
     /**

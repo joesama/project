@@ -11,6 +11,8 @@ return [
 		'approved' => 'Your Project Has Been Approved',
 		'accepted' => 'Your Project Has Been Accepted',
 		'updated' => 'Project Information Has Been Updated',
+		'rejected' => 'Project Approval Has Been Rejected',
+		'new' => 'Project Approval Has Been Submitted',
 		'title' => 'Project Approval Notification',
 	],
 	'title' => [
