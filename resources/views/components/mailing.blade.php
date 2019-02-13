@@ -1,18 +1,20 @@
 <!--Notification dropdown-->
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 <li class="dropdown">
+    @php
+        $mailis = $profile->mails->where('read',null)->take(10)->sortByDesc('created_at')
+    @endphp
     <a href="#" data-toggle="dropdown" class="dropdown-toggle">
         <i class="pli-mail icon-lg"></i>
+        @if($mailis->count() > 0)
         <span class="badge badge-header badge-danger"></span>
+        @endif
     </a>
     <!--Notification dropdown menu-->
     <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
         <div class="nano scrollable">
             <div class="nano-content">
                 <ul class="head-list">
-                    @php
-                        $mailis = $profile->mails->where('read',null)->take(10)->sortByDesc('created_at')
-                    @endphp
                     @foreach($mailis as $email)
                     <li>
                         <a class="media" href="{{ handles('joesama/project::corporate/notification/view/'.$profile->corporate_id.'/'.$email->id) }}">
