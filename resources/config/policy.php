@@ -104,6 +104,10 @@ return [
 				'form' => ['corporateId','masterId?'],
 				'view' => ['corporateId','masterId']
 			],
+			'notification' => [
+				'list' => ['corporateId'],
+				'view' => ['corporateId','masterId']
+			],
 			'icon' => 'psi-business-man-woman icon-lg icon-fw'
 		],
 		'report' => [
