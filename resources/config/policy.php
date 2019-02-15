@@ -112,12 +112,12 @@ return [
 		],
 		'report' => [
 			'monthly' => [
-				'list' => ['corporateId','projectId'],
+				'list' => ['corporateId','projectId?'],
 				'form' => ['corporateId','projectId','reportId?'],
 				'view' => ['corporateId','projectId','reportId?']
 			],
 			'weekly' => [
-				'list' => ['corporateId','projectId'],
+				'list' => ['corporateId','projectId?'],
 				'form' => ['corporateId','projectId','reportId?'],
 				'view' => ['corporateId','projectId','reportId?']
 			],

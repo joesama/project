@@ -3,14 +3,14 @@
 return [
 	'current' => 'Current Progress',
 	'weekly' => [
-		'list' => 'Weekly Project Update List',
-		'form' => 'Weekly Project Update',
-		'view' => 'Weekly Project Update'
+		'list' => 'Weekly Project Report List',
+		'form' => 'Weekly Project Report',
+		'view' => 'Weekly Project Report'
 	],
 	'monthly' => [
-		'list' => 'Monthly Project Update List',
-		'form' => 'Monthly Project Update',
-		'view' => 'Monthly Project Update'
+		'list' => 'Monthly Project Report List',
+		'form' => 'Monthly Project Report',
+		'view' => 'Monthly Project Report'
 	],
 	'format' => [
 		'dept' => 'Department Name',

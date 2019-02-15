@@ -57,17 +57,19 @@ class ReportCardInfoRepository
 	 */
 	public function monthlyList(int $corporateId, ?int $projectId)
 	{
-		return $this->cardObj->where(function($query) use($projectId){
+		$isHistory = (request()->segment(1) == 'report' && request()->segment(3) == 'list') ? true : false;
 
-					$query->whereHas('project',function($query) use($projectId){
-						$query->whereHas('manager',function($query){
-							$query->where('profile_id',$this->profile->id);
+		return $this->cardObj->where(function($query) use($projectId, $isHistory){
+					$query->when($isHistory, function ($query, $projectId) { 
+						$query->whereHas('project',function($query) use($projectId){
+							$query->whereHas('manager',function($query){
+								$query->where('profile_id',$this->profile->id);
+							});
+							$query->when($projectId, function ($query, $projectId) {
+				                return $query->where('id', $projectId);
+				            });
 						});
-						$query->when($projectId, function ($query, $projectId) {
-			                return $query->where('id', $projectId);
-			            });
 					});
-
 					$query->orWhere('need_action',$this->profile->id);
 
 				})->component()
@@ -83,17 +85,19 @@ class ReportCardInfoRepository
 	 */
 	public function weeklyList(int $corporateId, ?int $projectId)
 	{
-		return $this->reportObj->where(function($query) use($projectId){
+		$isHistory = (request()->segment(1) == 'report' && request()->segment(3) == 'list') ? true : false;
 
-					$query->whereHas('project',function($query) use($projectId){
-						$query->whereHas('manager',function($query){
-							$query->where('profile_id',$this->profile->id);
+		return $this->reportObj->where(function($query) use($projectId, $isHistory){
+					$query->when($isHistory, function ($query, $projectId) { 
+						$query->whereHas('project',function($query) use($projectId){
+							$query->whereHas('manager',function($query){
+								$query->where('profile_id',$this->profile->id);
+							});
+							$query->when($projectId, function ($query, $projectId) {
+				                return $query->where('id', $projectId);
+				            });
 						});
-						$query->when($projectId, function ($query, $projectId) {
-			                return $query->where('id', $projectId);
-			            });
 					});
-
 					$query->orWhere('need_action',$this->profile->id);
 
 				})->component()

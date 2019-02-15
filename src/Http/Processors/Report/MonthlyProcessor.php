@@ -7,6 +7,7 @@ use Joesama\Project\Database\Model\Organization\Profile;
 use Joesama\Project\Database\Model\Project\CardWorkflow;
 use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
 use Joesama\Project\Database\Repositories\Project\ReportCardInfoRepository;
+use Joesama\Project\Http\Processors\Manager\ListProcessor;
 use Joesama\Project\Traits\HasAccessAs;
 
 /**
@@ -38,8 +39,9 @@ class MonthlyProcessor
 	 */
 	public function list(Request $request, int $corporateId)
 	{
-		
-		return [];
+		$table = app(ListProcessor::class)->monthlyReport($request, $corporateId);
+
+		return compact('table');
 	}
 
 	/**

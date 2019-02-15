@@ -5,6 +5,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
 use Joesama\Project\Database\Repositories\Project\ReportCardInfoRepository;
+use Joesama\Project\Http\Processors\Manager\ListProcessor;
 use Joesama\Project\Traits\HasAccessAs;
 
 /**
@@ -36,8 +37,9 @@ class WeeklyProcessor
 	 */
 	public function list(Request $request, int $corporateId)
 	{
-		
-		return [];
+		$table = app(ListProcessor::class)->weeklyReport($request, $corporateId);
+
+		return compact('table');
 	}
 
 	/**
