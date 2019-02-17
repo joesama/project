@@ -13,6 +13,7 @@ return [
 		'assign' => 'Assignation',
 		'approve' => 'Submit',
 		'reject' => 'Reject',
+                'close' => 'Close',
 	],
 	'project' => [
 		'manager_id' => 'Project Manager',

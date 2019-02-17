@@ -164,7 +164,7 @@ class ProjectProcessor
 	{
 		$projectId = $request->segment(5);
 		$reportId = $request->segment(6);
-
+                
 		if($reportId){
 			$report = app(ReportCardInfoRepository::class)->getMonthlyReportInfo($reportId);
 		}else{

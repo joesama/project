@@ -20,11 +20,17 @@
             <input type="hidden" name="end" value="{{ $reportEnd }}">
             <input type="hidden" name="cycle" value="{{ $reportDue }}">
             <input type="hidden" name="state" value="{{ $state }}">
-            <input type="hidden" name="status" value="{{ $status }}">
-            <input type="hidden" name="need_action" value="{{ $need_action }}">
-            <input type="hidden" name="need_step" value="{{ $need_step }}">
+            <input type="hidden" name="status" id="status" value="{{ $status }}">
+            <input type="hidden" name="need_action" id="need_action" value="{{ $need_action }}">
+            <input type="hidden" name="need_step" id="need_step" value="{{ $need_step }}">
             <input type="hidden" name="type" value="{{ request()->segment(2) }}">
             <textarea id="textarea-input" name="remark" rows="9" onkeyup="copyremark()" class="form-control" placeholder="Your content here.."></textarea>
+            @if($last_status == 'rejected')
+            <button type="submit" onclick="closeproject()" class="btn btn-dark mar-ver pull-left">
+            	<i class="ion-asterisk text-danger icon-fw"></i>
+            	{{ __('joesama/project::form.action.close') }}
+            </button>
+            @endif
             <button type="submit" class="btn btn-dark mar-ver pull-right">
             	<i class="psi-yes text-success icon-fw"></i>
             	{{ __('joesama/project::form.action.approve') }} 
@@ -55,5 +61,13 @@
 <script type="text/javascript">
     function copyremark(){
         document.getElementById('backremark').value = document.getElementById('textarea-input').value;
+    }
+    function closeproject(){
+        event.preventDefault();
+        $('#status').val('closed');
+        $('#need_action').val(null);
+        $('#need_step').val(0);
+        $('form').submit();
+        
     }
 </script>

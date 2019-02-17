@@ -41,5 +41,6 @@ return [
 		'name' => 'Name',
 		'mobile' => 'Mobile No.',
 		'position' => 'Position',
+                'closed' => 'Closed By',
 	]
 ];
