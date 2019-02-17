@@ -349,7 +349,8 @@ class MakeProjectRepository
 		    'name' => null,
 		    'project_id' => null,
 		    'severity_id'=> null,
-		    'description' => null
+		    'description' => null,
+                    'status_id'=> null,
 		]);
 
 		DB::beginTransaction();

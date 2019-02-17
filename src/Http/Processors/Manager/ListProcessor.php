@@ -403,7 +403,10 @@ class ListProcessor
 		   'style' => 'text-xs-left text-capitalize'],
 		   [ 'field' => 'severity.description',
 		   'title' => __('joesama/project::project.risk.severity'),
-		   'style' => 'text-xs-center col-xs-2']
+		   'style' => 'text-xs-center col-xs-2'],
+//                   [ 'field' => 'status.description',
+//                   'title' => __('joesama/project::project.risk.status'),
+//                   'style' => 'text-xs-center col-xs-2']
 		];
 
 		$action = [

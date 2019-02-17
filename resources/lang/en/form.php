@@ -70,7 +70,8 @@ return [
 		'profile_id' => "Person In Charge", 
 		'project_id' => "Project Name", 
 		'description' => "Risk Description", 
-		'severity_id' => "Status", 
+		'severity_id' => "Severity", 
+		'status_id' => "Status", 
 	],
 	'project_attribute' => [
 		'variable' => "Variable", 

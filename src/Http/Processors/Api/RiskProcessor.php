@@ -31,7 +31,7 @@ class RiskProcessor
 	public function save(Request $request,int $corporateId, int $projectId = null)
 	{
 		$risk = $this->makeProject->initRisk(collect($request->all()),$request->segment(6));
-
+                
 		return redirect_with_message(
 			handles('manager/'.$request->segment(2).'/list/'.$corporateId.'/'.$risk->project_id),
 			trans('joesama/entree::respond.data.success', [

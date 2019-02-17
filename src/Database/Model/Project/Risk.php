@@ -36,6 +36,14 @@ class Risk extends Model
     {
         return  $this->belongsTo(MasterData::class,'severity_id');
     }
+    
+    /**
+     * Get the task's progress.
+     */
+    public function status()
+    {
+        return $this->belongsTo(MasterData::class,'status_id');
+    }
 
     public function scopeComponent($query)
     {

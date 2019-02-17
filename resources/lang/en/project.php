@@ -70,9 +70,9 @@ return [
 	],
 	'risk' => [
 		'name' => 'Risk',
-		'status' => 'Status',
 		'dateline' => 'Dateline',
 		'severity' => 'Severity',
+                'status' => 'Status',
 	],
 	'progress' => [
 		'name' => 'Progress',
