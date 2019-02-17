@@ -19,7 +19,7 @@ $(document).on('nifty.ready', function () {
 
     Morris.Bar({
         element: 'demo-morris-bar',
-        data: @json($costing),
+        data: @json($costingName),
         xkey: 'project',
         ykeys: ['planned', 'actual'],
         labels: ['Planned', 'Actual'],
