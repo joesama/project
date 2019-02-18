@@ -96,8 +96,9 @@ class TaskProcessor
 					'profile_id' => $this->profile()->id
 				])->extras([
 					'group' => 'tag',
-					'duration' => 'range'
-				]);
+					'duration' => 'range',
+                                        'days'=>'text',
+				])->readonly(['days']);
 
 		if(!is_null($request->segment(6))){
 			$form->readonly(['planned_progress','duration']);	

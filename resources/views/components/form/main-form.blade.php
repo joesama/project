@@ -43,16 +43,6 @@
 					]);
 				@endphp
 			@endforeach
-                        @if(request()->segment(1) == 'manager' && !is_null(request()->segment(5)))
-                            <div class="form-group has-feedback">
-                                    <label class="col-md-2 control-label text-semibold" for="days">
-                                        {{ __('joesama/project::form.task.effective_days') }}
-                                    </label>
-                                <div class="col-md-10">
-                                    <input type="text" readonly name="days" value="" id="days" class="form-control form-validation">
-                                </div>
-                            </div>
-                        @endif
 		</div>
 		<div class="panel-footer text-right">
 	  		@php
