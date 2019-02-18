@@ -5,6 +5,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Joesama\Project\Database\Model\Organization\Profile;
+use Joesama\Project\Database\Model\Master\MasterData;
 use Joesama\Project\Database\Model\Project\ProgressNote;
 use Joesama\Project\Database\Model\Project\TagMilestone;
 
@@ -30,6 +31,14 @@ class Task extends Model
     public function assignee()
     {
         return $this->belongsTo(Profile::class,'profile_id','id');
+    }
+    
+    /**
+     * Get the task's progress.
+     */
+    public function taskstat()
+    {
+        return $this->belongsTo(MasterData::class,'status_id','id');
     }
 
     /**

@@ -51,6 +51,7 @@ return [
 		'planned_progress' => "Perkembangan Dirancang", 
 		'effective_days' => "Jangka Masa (Hari)",  
 		'group' => "Milestone", 
+                'status_id' => "Status"
 	],
 	'issue' => [
 		'profile_id' => "Kakitangan Bertanggungjawab", 

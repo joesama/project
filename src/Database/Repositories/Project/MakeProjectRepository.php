@@ -186,7 +186,8 @@ class MakeProjectRepository
 		    'project_id' => null,
 		    'profile_id' => null,
 		    'start'=> null,
-		    'end' => null
+		    'end' => null,
+                    'status_id' => null,
 		]);
 
 		DB::beginTransaction();

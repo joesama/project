@@ -77,6 +77,16 @@ class MasterData extends Model
             $subquery->active();
         });
     }
+    
+    /**
+     * Query Active Data List
+     */
+    public function scopeTask($query)
+    {
+        return $query->whereHas('master',function($subquery){
+            $subquery->task();
+        });
+    }
 
     /**
      * Query Issue Indicator Data List

@@ -43,6 +43,16 @@
 					]);
 				@endphp
 			@endforeach
+                        @if(request()->segment(1) == 'manager' && !is_null(request()->segment(5)))
+                            <div class="form-group has-feedback">
+                                    <label class="col-md-2 control-label text-semibold" for="days">
+                                        {{ __('joesama/project::form.task.effective_days') }}
+                                    </label>
+                                <div class="col-md-10">
+                                    <input type="text" readonly name="days" value="" id="days" class="form-control form-validation">
+                                </div>
+                            </div>
+                        @endif
 		</div>
 		<div class="panel-footer text-right">
 	  		@php
@@ -73,6 +83,36 @@
 </form>
 
 @push('form.script')
+@if(request()->segment(1) == 'manager' && !is_null(request()->segment(5)))
+<script type="text/javascript">
+    $('#start').change(function(){
+        countdays();
+    });
+    $('#end').change(function(){
+        countdays();
+    });
+    $(document).on('nifty.ready', function() {
+        countdays();
+    });
+    function parseDate(str) {
+        var mdy = str.split('/');
+        return new Date(mdy[2], mdy[1]-1, mdy[0]);
+    }
+
+    function datediff(first, second) {
+        // Take the difference between the dates and divide by milliseconds per day.
+        // Round to nearest whole number to deal with DST.
+        return Math.round((second-first)/(1000*60*60*24));
+    }
+    
+    function countdays(){
+        var start = $('#start').val();
+        var end = $('#end').val();
+        var days = datediff(parseDate(start), parseDate(end)) + 1;
+        $('#days').val(days);
+    }
+</script>
+@endif
 <script type="text/javascript">
 $(document).on('nifty.ready', function() {
 

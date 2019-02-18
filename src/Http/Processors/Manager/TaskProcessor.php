@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Joesama\Project\Database\Model\Organization\Profile;
 use Joesama\Project\Database\Model\Project\Project;
 use Joesama\Project\Database\Model\Project\Task;
+use Joesama\Project\Database\Model\Master\MasterData;
 use Joesama\Project\Http\Processors\Manager\ListProcessor;
 use Joesama\Project\Http\Services\FormGenerator;
 use Joesama\Project\Http\Services\ViewGenerator;
@@ -83,9 +84,10 @@ class TaskProcessor
 		$project = Project::with('task')->find($request->segment(5));
 
 		$lastUseDate = ($project->task->isEmpty()) ? $project->start : $project->task->last()->end;
-
+                
 		$form = $form->option([
-					'profile_id' => Profile::sameGroup($corporateId)->pluck('name','id')
+					'profile_id' => Profile::sameGroup($corporateId)->pluck('name','id'),
+                                        'status_id' => MasterData::task()->pluck('description','id')
 				])->default([
 					'task_progress' => data_get($this->modelObj->find($request->segment(6)),'progress.progress',0),
 					'start' => Carbon::parse($lastUseDate)->addDay(),
@@ -101,7 +103,7 @@ class TaskProcessor
 			$form->readonly(['planned_progress','duration']);	
 		}
 
-		$form = $form->excludes(['effective_days','actual_progress','start','end'])
+		$form = $form->excludes(['planned_progress','effective_days','actual_progress','start','end'])
 				->id($request->segment(6))
 				->required(['*'])
 				->renderForm(
