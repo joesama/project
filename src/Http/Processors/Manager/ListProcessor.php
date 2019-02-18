@@ -265,9 +265,9 @@ class ListProcessor
 		   [ 'field' => 'effective_days',
 		   'title' => __('joesama/project::form.task.effective_days'),
 		   'style' => 'text-center'],
-		   [ 'field' => 'planned_progress',
-		   'title' => __('joesama/project::form.task.planned_progress'),
-		   'style' => 'text-center text-capitalize'],
+//		   [ 'field' => 'taskstat.description',
+//		   'title' => __('joesama/project::form.task.status_id'),
+//		   'style' => 'text-center text-capitalize'],
 		   [ 'field' => 'progress.progress',
 		   'title' => __('joesama/project::form.task.progress'),
 		   'style' => 'text-center']
