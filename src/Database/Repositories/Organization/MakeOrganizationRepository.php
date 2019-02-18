@@ -87,8 +87,13 @@ class MakeOrganizationRepository
 			}
 
 			$inputData->each(function($record,$field){
+
 				$this->profileModel->{$field} = $record;
 			});
+
+			$isPm = $profileData->get('is_pm',null);
+
+			$this->profileModel->is_pm = ($isPm == 'on') ? 1 : $isPm;
 
 			if(is_null($profileID)){
 

@@ -21,6 +21,7 @@ return [
 		'validator_id' => 'Project Report Validator',
 		'reviewer_id' => 'Project Report Reviewer',
 		'acceptance_id' => 'Project Report Acceptance',
+		'commentor_id' => 'Project Report Commentator',
 		'client_id' => 'Project Client',
 		'name' => 'Project Name',
 		'contract' => 'Contract No.',
@@ -159,6 +160,7 @@ return [
 		'position_id' => 'Position',
 		'user_id' => 'User Id',
 		'role_id' => 'Project Role',
+		'is_pm' => 'Project Manager',
 	],
 	'report' => [
 		'report_date' => 'Report Date',
