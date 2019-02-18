@@ -23,6 +23,7 @@ class FormGenerator
 			$exclude = [],
 			$defaultValue = [], 
 			$requiredField = [],
+			$sortFields = [],
 			$notRequiredField = [];
 
 	/**
@@ -39,6 +40,7 @@ class FormGenerator
 	 * $this->requiredField - all field that required
 	 * $this->notRequiredField - all field that not required
 	 * $this->defaultValue - default value for specific
+	 * $this->sortFields - sort fields according this
 	 **/
 	public function newModelForm(Model $model)
 	{
@@ -52,6 +54,7 @@ class FormGenerator
 		$this->readonlyList = collect([]);
 		$this->requiredField = collect([]);
 		$this->notRequiredField = collect([]);
+		$this->sortFields = collect([]);
 
 		$table =  $model->fromQuery("SHOW FIELDS FROM ".$this->formId);
 
@@ -78,6 +81,17 @@ class FormGenerator
 	public function staticForm()
 	{
 		$this->static = TRUE;
+
+		return $this;
+	}
+
+	/**
+	 * @param  array $optionList
+	 * @return [type]
+	 */
+	public function sortedFields(array $sortedFields)
+	{
+		$this->sortFields = $this->sortFields->merge($sortedFields);
 
 		return $this;
 	}
@@ -216,7 +230,7 @@ class FormGenerator
 	 */
 	protected function recognizeType(array $fields)
 	{
-		return collect($fields)->map(function($field, $key){
+		$fieldsList = collect($fields)->map(function($field, $key){
 
 			$pos = strripos($field, '(');
 
@@ -285,6 +299,15 @@ class FormGenerator
 			}
 
 		});
+
+		$sortFields = collect([]);
+
+		$this->sortFields->each(function($field) use($fieldsList,$sortFields){
+			$sortFields->put($field, $fieldsList->get($field));
+		});
+
+		return $sortFields->merge($fieldsList->except($this->sortFields));
+
 	}
 
 } // END class FormGenerator 

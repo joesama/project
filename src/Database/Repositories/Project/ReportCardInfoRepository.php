@@ -60,11 +60,15 @@ class ReportCardInfoRepository
 		$isHistory = (request()->segment(1) == 'report' && request()->segment(3) == 'list') ? true : false;
 
 		return $this->cardObj->where(function($query) use($projectId, $isHistory){
-					$query->when($isHistory, function ($query, $projectId) { 
+					$query->when($isHistory, function ($query, $isHistory)  use($projectId){ 
 						$query->whereHas('project',function($query) use($projectId){
 							$query->whereHas('manager',function($query){
 								$query->where('profile_id',$this->profile->id);
+							})
+							->orWhereHas('profile',function($query){
+								$query->where('profile_id',$this->profile->id);
 							});
+
 							$query->when($projectId, function ($query, $projectId) {
 				                return $query->where('id', $projectId);
 				            });
@@ -88,12 +92,17 @@ class ReportCardInfoRepository
 		$isHistory = (request()->segment(1) == 'report' && request()->segment(3) == 'list') ? true : false;
 
 		return $this->reportObj->where(function($query) use($projectId, $isHistory){
-					$query->when($isHistory, function ($query, $projectId) { 
+					$query->when($isHistory, function ($query, $isHistory) use($projectId){ 
 						$query->whereHas('project',function($query) use($projectId){
 							$query->whereHas('manager',function($query){
 								$query->where('profile_id',$this->profile->id);
+							})
+							->orWhereHas('profile',function($query){
+								$query->where('profile_id',$this->profile->id);
 							});
+							
 							$query->when($projectId, function ($query, $projectId) {
+
 				                return $query->where('id', $projectId);
 				            });
 						});

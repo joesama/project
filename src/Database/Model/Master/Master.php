@@ -63,6 +63,14 @@ class Master extends Model
     {
         return $query->where('id', 6);
     }
+    
+    /**
+     * Task Definition
+     */
+    public function scopeTask($query)
+    {
+        return $query->where('id', 8);
+    }
 
     /**
      * Indicator Definition

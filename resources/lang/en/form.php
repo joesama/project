@@ -57,6 +57,8 @@ return [
 		'planned_progress' => "% Planned", 
 		'effective_days' => "Duration In Days", 
 		'group' => "Milestone", 
+                'status_id' => "Status",
+                'days' => "Duration Days"
 	],
 	'issue' => [
 		'profile_id' => "Person In Charge", 

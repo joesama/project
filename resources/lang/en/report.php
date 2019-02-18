@@ -2,6 +2,7 @@
 
 return [
 	'current' => 'Current Progress',
+	'print' => 'Download Report',
 	'weekly' => [
 		'list' => 'Weekly Project Report List',
 		'form' => 'Weekly Project Report',
@@ -21,6 +22,7 @@ return [
 		'title' => 'Project Title',
 		'update' => 'Status Update',
 		'complete' => 'Completion',
+		'status' => 'Status',
 		'issue' => 'Issues',
 		'plan' => [
 			'weekly' => 'Plan For Next Week',

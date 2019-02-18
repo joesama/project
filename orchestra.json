@@ -5,6 +5,7 @@
 	"url": "",
 	"version": "1.0",
 	"provides": [
-		"Joesama\\Project\\ProjectServiceProvider"
+		"Joesama\\Project\\ProjectServiceProvider",
+        "Barryvdh\\DomPDF\\ServiceProvider"
 	]
 }

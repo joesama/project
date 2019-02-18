@@ -187,7 +187,8 @@ class MakeProjectRepository
 		    'project_id' => null,
 		    'profile_id' => null,
 		    'start'=> null,
-		    'end' => null
+		    'end' => null,
+                    'status_id' => null,
 		]);
 
 		DB::beginTransaction();
@@ -208,9 +209,11 @@ class MakeProjectRepository
 			});
 
 			$totalDay = Project::find($this->taskModel->project_id)->effective_days;
-
-			$effectiveDay = $this->effectiveDays($this->taskModel->start,$this->taskModel->end);
-
+                        
+                        // As of #71 first day is counted & weekend is included
+//			$effectiveDay = $this->effectiveDays($this->taskModel->start,$this->taskModel->end);
+                        $effectiveDay = $taskData->get('days');
+                        
 			$this->taskModel->planned_progress = !is_null($taskData->get('planned_progress')) ?  $taskData->get('planned_progress') : round( $effectiveDay/$totalDay * 100, 2 );
 
 			$this->taskModel->actual_progress = ($this->taskModel->planned_progress/100)*$taskData->get('task_progress');
