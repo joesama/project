@@ -257,6 +257,10 @@ class FormGenerator
 						return 'tag';
 					}
 
+					if(in_array($type,['checkbox'])){
+						return 'checkbox';
+					}
+
 					if(in_array($key,collect($this->optionlist)->keys()->toArray())){
 
 						$extraKey = $this->extras->get($key);

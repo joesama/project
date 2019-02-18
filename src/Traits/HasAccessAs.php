@@ -75,9 +75,9 @@ trait HasAccessAs{
 					->where('pivot.project_id',request()->segment(5))
 					->count();
 
-		view()->share('isProjectManager',($pm > 0 ) ? TRUE : FALSE);
+		view()->share('isProjectManager',($pm > 0 || $this->profile()->is_pm ) ? TRUE : FALSE);
 
-		return ($pm > 0 ) ? TRUE : FALSE;
+		return ($pm > 0 || $this->profile()->is_pm ) ? TRUE : FALSE;
 	}
 
 }
