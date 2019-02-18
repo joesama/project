@@ -91,7 +91,7 @@ class ListProcessor
 				 	$this->projectObj->projectList($corporateId)
 				 );
 
-		if($this->isProjectManager() || auth()->user()->isAdmin){
+		if($this->wasProjectManager() || auth()->user()->isAdmin){
 			$datagrid->buildAddButton(route('manager.project.form',$corporateId));
 		}
 		

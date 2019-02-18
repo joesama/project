@@ -62,7 +62,7 @@ trait HasAccessAs{
 	 */
 	public function wasProjectManager()
 	{
-		return (data_get($this->profile(),'role')->where('id',2)->count() > 0 ) ? TRUE : FALSE;
+		return (data_get($this->profile(),'role')->where('id',2)->count() > 0 || $this->profile()->is_pm ) ? TRUE : FALSE;
 	}
 
 	/**
