@@ -18,7 +18,7 @@ class PortfolioController extends BaseController
 		set_meta('title',__($this->domain.'.'.$this->page));
 
 		$page = $this->page;
-
+                
 		return view(
 			$this->view ,
 			app($this->processor)->$page($request,$corporateId)

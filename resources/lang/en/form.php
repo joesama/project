@@ -13,6 +13,7 @@ return [
 		'assign' => 'Assignation',
 		'approve' => 'Submit',
 		'reject' => 'Reject',
+                'close' => 'Close',
 	],
 	'project' => [
 		'manager_id' => 'Project Manager',
@@ -20,6 +21,7 @@ return [
 		'validator_id' => 'Project Report Validator',
 		'reviewer_id' => 'Project Report Reviewer',
 		'acceptance_id' => 'Project Report Acceptance',
+		'commentor_id' => 'Project Report Commentator',
 		'client_id' => 'Project Client',
 		'name' => 'Project Name',
 		'contract' => 'Contract No.',
@@ -70,7 +72,8 @@ return [
 		'profile_id' => "Person In Charge", 
 		'project_id' => "Project Name", 
 		'description' => "Risk Description", 
-		'severity_id' => "Status", 
+		'severity_id' => "Severity", 
+		'status_id' => "Status", 
 	],
 	'project_attribute' => [
 		'variable' => "Variable", 
@@ -157,6 +160,7 @@ return [
 		'position_id' => 'Position',
 		'user_id' => 'User Id',
 		'role_id' => 'Project Role',
+		'is_pm' => 'Project Manager',
 	],
 	'report' => [
 		'report_date' => 'Report Date',

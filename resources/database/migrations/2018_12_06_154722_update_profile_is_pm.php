@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateNotificationLog extends Migration
+class UpdateProfileIsPm extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,8 @@ class UpdateNotificationLog extends Migration
      */
     public function up()
     {
-        Schema::table('notification_log', function (Blueprint $table) {
-            if (Schema::hasColumn('notification_log', 'notifiable')) {
-                $table->renameColumn('notifiable','notifiable_type');
-            }
+        Schema::table('profile', function (Blueprint $table) {
+            $table->unsignedInteger('is_pm')->after('position_id')->nullable();
         });
     }
 

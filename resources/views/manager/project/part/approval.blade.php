@@ -15,12 +15,13 @@
     <div class="collapse in" id="workflow">
       <div class="panel-body text-center approvalPanel">
     @php
-
+        
       $corporateId = $project->corporate_id;
       $projectId = $project->id;
       $reportStart = '';
       $reportEnd = '';
       $reportDue = '';
+      $last_status = '';
       $action = route('api.workflow.approval',[$corporateId,$projectId]);
       $firstStep = $approvalWorkflow->pluck('step')->first();
       $sliceIndex = $approvalWorkflow->pluck('step')->search(data_get($project,'approval.need_step'));
@@ -39,6 +40,9 @@
             'record' => $trail,
             'profile' => data_get($trail,'profile'),
           ])
+          @php
+          $last_status = data_get($trail,'state');
+          @endphp
         @endforeach
         @if( $currentAction )
           @include('joesama/project::report.workflow.panel-form',[
@@ -47,6 +51,7 @@
           'need_action' => data_get($next,'profile.id'),
           'need_step' => data_get($next,'step'),
           'status' => data_get($currentAction,'status'),
+          'last_status' => $last_status,
           'profile' => data_get($currentAction,'profile'),
           'back_action' => ($firstStep != data_get($project,'approval.need_step') && $profileRole != 2) ? data_get($back,'profile.id') : FALSE,
           'back_step' => data_get($back,'step'),

@@ -236,6 +236,63 @@ class MasterRepository
 
 		return $planned->values();
 	}
+        
+        /**
+	 * Retrieve Project Costing
+	 * @param  int|null $corporateId
+	 * @return Collection
+	 */
+	public function projectCostingByName(int $corporateId = null)
+	{
+		$planned = collect([]);
+		$actual = collect([]);
+
+		Project::when($corporateId, function ($query, $corporateId) {
+            return $query->sameGroup($corporateId);
+        })->where('active',1)->orderBy('created_at')->get()->map(function($project){
+
+        	$claim = collect(data_get($project,'payment'))->mapWithKeys(function ($item) {
+			    return [$item['claim_date'] => $item['claim_amount']];
+			});
+
+        	$paid = collect(data_get($project,'payment'))->mapWithKeys(function ($item) {
+			    return [$item['claim_date'] => $item->sum('paid_amount')];
+			});
+
+        	return collect([
+        		'project' => str_limit(data_get($project,'name'),20,'...'),
+        		'planned' => $claim,
+        		'actual' => $paid
+        	]);
+        })->each(function($payment) use($planned,$actual){
+                $project_name = data_get($payment,'project');
+        	data_get($payment,'planned')->each(function($value,$date) use ($planned,$project_name){
+
+        		$previous = collect($planned->get($project_name))->get('planned');
+
+        		$planned->put($project_name, [
+        			'project' => $project_name,
+        			'planned' => $previous + $value,
+        			'actual' => 0,
+        		]);
+        	});
+
+        	data_get($payment,'actual')->each(function($value,$date) use ($planned,$project_name){
+
+        		$previous = collect($planned->get($project_name))->get('actual');
+        		$plannedVal = collect($planned->get($project_name))->get('planned');
+
+        		$planned->put($project_name, [
+        			'project' => $project_name,
+        			'planned' => $plannedVal,
+        			'actual' => $previous + $value,
+        		]);
+
+        	});
+        });
+
+		return $planned->values();
+	}
 
 	/**
 	 * Retrieve Project Costing
@@ -244,18 +301,64 @@ class MasterRepository
 	 */
 	public function projectVariance(int $corporateId = null)
 	{
-		$costing = collect([]);
+//		$costing = collect([]);
+//
+//		Project::when($corporateId, function ($query, $corporateId) {
+//            return $query->sameGroup($corporateId);
+//        })->where('active',1)->orderBy('created_at')->get()->each(function($project) use($costing){
+//        	$costing->push([
+//        		'project' => str_limit(data_get($project,'name'),20,'...'),
+//        		'variance' => data_get($project,'variance')
+//        	]);
+//        	});
+//
+//		return $costing;
+            
+                $planned = collect([]);
+		$actual = collect([]);
 
 		Project::when($corporateId, function ($query, $corporateId) {
             return $query->sameGroup($corporateId);
-        })->where('active',1)->orderBy('created_at')->get()->each(function($project) use($costing){
-        	$costing->push([
-        		'project' => str_limit(data_get($project,'name'),20,'...'),
-        		'variance' => data_get($project,'variance')
-        	]);
-        });
+        })->where('active',1)->orderBy('created_at')->get()->map(function($project){
 
-		return $costing;
+        	$claim = collect(data_get($project,'payment'))->mapWithKeys(function ($item) {
+			    return [$item['claim_date'] => $item['claim_amount']];
+			});
+
+        	$paid = collect(data_get($project,'payment'))->mapWithKeys(function ($item) {
+			    return [$item['claim_date'] => $item->sum('paid_amount')];
+			});
+
+        	return collect([
+        		'project' => str_limit(data_get($project,'name'),20,'...'),
+        		'planned' => $claim,
+        		'actual' => $paid
+        	]);
+        })->each(function($payment) use($planned,$actual){
+                $project_name = data_get($payment,'project');
+        	data_get($payment,'planned')->each(function($value,$date) use ($planned,$project_name){
+
+        		$previous = collect($planned->get($project_name))->get('planned');
+
+        		$planned->put($project_name, [
+        			'project' => $project_name,
+        			'planned' => $previous + $value,
+        		]);
+        	});
+
+        	data_get($payment,'actual')->each(function($value,$date) use ($planned,$project_name){
+
+        		$previous = collect($planned->get($project_name))->get('actual');
+        		$plannedVal = collect($planned->get($project_name))->get('planned');
+
+        		$planned->put($project_name, [
+        			'project' => $project_name,
+        			'variance' => ($previous + $value) - $plannedVal,
+        		]);
+
+        	});
+        });
+		return $planned->values();
 	}
 
 	/**

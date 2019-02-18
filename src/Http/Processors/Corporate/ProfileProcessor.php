@@ -71,8 +71,12 @@ class ProfileProcessor
 					'position_id' => MasterData::position()->pluck('description','id')
 				])
 				->required(['*'])
+				->notRequired(['is_pm'])
 				->mapping([
 					'corporate_id' => $corporateId
+				])
+				->extras([
+					'is_pm' => 'checkbox'
 				])
 				->id($request->segment(5))
 				->renderForm(

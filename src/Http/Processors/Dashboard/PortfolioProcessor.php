@@ -144,6 +144,7 @@ class PortfolioProcessor
 			'task' => $this->masterRepo->projectTask($corporateId),
 			'issue' => $this->masterRepo->projectIssue($corporateId),
 			'costing' => $this->masterRepo->projectCosting($corporateId),
+			'costingName' => $this->masterRepo->projectCostingByName($corporateId),
 			'variance' => $this->masterRepo->projectVariance($corporateId),
 			'health' => $this->masterRepo->projectHealth($corporateId),
 			'pertask' => $this->masterRepo->perProjectTask($corporateId),

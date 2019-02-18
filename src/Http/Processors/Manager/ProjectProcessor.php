@@ -118,6 +118,7 @@ class ProjectProcessor
 					'validator_id' => Profile::fromParent()->pluck('name','id'),
 					'reviewer_id' => Profile::fromParent()->pluck('name','id'),
 					'acceptance_id' => Profile::fromParent()->pluck('name','id'),
+					'commentor_id' => Profile::fromParent()->pluck('name','id'),
 					'scope' => 'textarea',
 				])
 				->default([
@@ -140,6 +141,10 @@ class ProjectProcessor
 					'acceptance_id' => 	data_get(Profile::fromParent()->whereHas('role',function($query) use($request){
 											$query->where('project_id',$request->segment(5));
 											$query->where('role_id',4);
+										})->first(),'id'),
+					'commentor_id' => 	data_get(Profile::fromParent()->whereHas('role',function($query) use($request){
+											$query->where('project_id',$request->segment(5));
+											$query->where('role_id',7);
 										})->first(),'id'),
 				])
 				->excludes(['start','end','effective_days','planned_progress','acc_progress','actual_progress','actual_payment','planned_payment','current_variance'])
@@ -164,7 +169,7 @@ class ProjectProcessor
 	{
 		$projectId = $request->segment(5);
 		$reportId = $request->segment(6);
-
+                
 		if($reportId){
 			$report = app(ReportCardInfoRepository::class)->getMonthlyReportInfo($reportId);
 		}else{

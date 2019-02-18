@@ -37,9 +37,11 @@ return [
 		'validated' => '(GOSD) Validate By',
 		'reviewed' => '(GOSD) Review By',
 		'accepted' => '(GOSD) Accepted By',
+		'active' => '(GOSD) Comment By',
 		'updated' => 'Updated By',
 		'name' => 'Name',
 		'mobile' => 'Mobile No.',
 		'position' => 'Position',
+                'closed' => 'Closed By',
 	]
 ];

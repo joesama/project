@@ -114,7 +114,8 @@ class MakeProjectRepository
 				$projectData->get('approver_id') => ['role_id' => 4],
 				$projectData->get('validator_id') => ['role_id' => 5],
 				$projectData->get('reviewer_id') => ['role_id' => 3],
-				$projectData->get('acceptance_id') => ['role_id' => 4]
+				$projectData->get('acceptance_id') => ['role_id' => 4],
+				$projectData->get('commentor_id') => ['role_id' => 7]
 			]);
 
 			if(is_null($id)){
@@ -349,7 +350,8 @@ class MakeProjectRepository
 		    'name' => null,
 		    'project_id' => null,
 		    'severity_id'=> null,
-		    'description' => null
+		    'description' => null,
+                    'status_id'=> null,
 		]);
 
 		DB::beginTransaction();
