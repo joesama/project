@@ -20,12 +20,14 @@
         ]
     },
     "require": {
-        "php": ">=5.6.4"
+        "php": ">=5.6.4",
+        "barryvdh/laravel-dompdf": "^0.8.3",
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Joesama\\Project\\ProjectServiceProvider"
+                "Joesama\\Project\\ProjectServiceProvider",
+                "Barryvdh\\DomPDF\\ServiceProvider"
             ]
         }
     },

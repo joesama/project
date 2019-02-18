@@ -12,7 +12,14 @@
 			<div class="panel-footer text-right">
 		  		@php
 		  			$projectUrl = 'manager/project/view/'.$project->corporate_id.'/'.$project->id;
+		  			$printUrl = 'report/weekly/form/'.$corporateId.'/'.$projectId.'/'.$reportId.'?print=true';
 		  		@endphp
+		        @if($printed)
+		        <a class="btn btn-info" href="{{ handles($printUrl) }}">
+		        	<i class="psi-printer icon-fw"></i>
+		        	{{ __('joesama/project::report.print') }}
+		        </a>
+		        @endif
 		        <a class="btn btn-dark" href="{{ handles($projectUrl) }}">
 		        	<i class="psi-folder-with-document icon-fw"></i>
 		        	{{ __('joesama/project::manager.project.view') }}

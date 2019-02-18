@@ -1,6 +1,6 @@
-<div class="col-lg-3">
-    <div class="panel panel-bordered panel-mint">
-        <div class="panel-heading text-center">
+<div class="col-lg-3 col-xs-3 mar-btm" style="page-break-inside: avoid;">
+    <div class="panel panel-bordered panel-mint" >
+        <div class="panel-heading text-center" >
             <h3 class="panel-title text-bold">
                 {{ __('joesama/project::report.workflow.'.$status) }}
             </h3>

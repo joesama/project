@@ -25,7 +25,7 @@
             <input type="hidden" name="need_step" id="need_step" value="{{ $need_step }}">
             <input type="hidden" name="type" value="{{ request()->segment(2) }}">
             <textarea id="textarea-input" name="remark" rows="9" onkeyup="copyremark()" class="form-control" placeholder="Your content here.."></textarea>
-            @if($last_status == 'rejected')
+            @if($status == 'rejected')
             <button type="submit" onclick="closeproject()" class="btn btn-dark mar-ver pull-left">
             	<i class="ion-asterisk text-danger icon-fw"></i>
             	{{ __('joesama/project::form.action.close') }}

@@ -1,96 +1,103 @@
 <div class="row bord-all">
-	<div class="col-md-2 bord-rgt">
-		<img class="pad-no" width="100%" height="100%" src="{{ asset('packages/joesama/project/img/kub.png') }}">
+	<div class="col-md-2 col-xs-2 bord-rgt text-center ">
+		<img class="pad-no img-lg" src="{{ asset('packages/joesama/project/img/kub.png') }}">
 	</div>
-	<div class="col-md-10 text-center text-bold text-3x text-dark pad-all"> 
+	<div class="col-md-10 col-xs-10 text-center text-bold text-3x text-dark pad-all"> 
 			{{ __('joesama/project::report.'.request()->segment(2).'.form') }}
 	</div>
 </div>
-<div class="row bord-hor bord-btm text-dark">
-	<div class="col-md-2 text-center text-bold bord-rgt pad-all">
+<div class="row bord-hor bord-btm text-dark" style="page-break-after: auto;">
+	<div class="col-md-2 col-xs-2 text-center text-bold bord-rgt pad-all">
 		{{ strtoupper( __('joesama/project::report.format.dept') ) }}
 	</div>
-	<div class="col-md-5 text-center text-semibold bord-rgt pad-all"> 
+	<div class="col-md-5 col-xs-5 text-center text-semibold bord-rgt pad-all"> 
 		{{ __('joesama/project::report.format.mo') }}
 	</div>
-	<div class="col-md-5 text-center"> 
+	<div class="col-md-5 col-xs-5 text-center"> 
 		<div class="row bord-btm">
-			<div class="col-md-12 text-bold text-center" style="padding: 3px">
+			<div class="col-md-12  col-xs-12 text-bold text-center" style="padding: 3px">
 				{{ strtoupper( __('joesama/project::report.format.'.request()->segment(2)) ) }}
 				{{ strtoupper( $reportDue ) }}
 			</div>
 		</div>
 		<div class="row text-thin text-center">
-			<div class="col-md-4 text-bold bord-rgt"  style="padding: 3px">
+			<div class="col-md-4  col-xs-4  text-bold bord-rgt"  style="padding: 3px">
 				{{ $reportStart }}
 			</div>
-			<div class="col-md-4 bord-rgt"  style="padding: 3px">
+			<div class="col-md-4 col-xs-4 bord-rgt"  style="padding: 3px">
 				{{ __('joesama/project::report.format.through') }}
 			</div>
-			<div class="col-md-4 text-bold"  style="padding: 3px">
+			<div class="col-md-4 col-xs-4  text-bold"  style="padding: 3px">
 				{{ $reportEnd }}
 			</div>
 		</div>
 	</div>
 </div>
-<div class="row bord-hor bord-btm bg-primary">
-	<div class="col-md-2 text-left text-bold bord-rgt pad-all">
+<div class="row bord-hor bord-btm bg-primary" style="page-break-after: auto;">
+	<div class="col-md-2 col-xs-2 text-left text-bold bord-rgt pad-all">
 		{{ strtoupper( __('joesama/project::report.format.company') ) }}
 	</div>
-	<div class="col-md-10 text-left text-bold pad-all">
-		{{ data_get($project,'corporate.name') }}
+	<div class="col-md-10 col-xs-10 text-left text-bold pad-all">
+		{{ ucwords( data_get($project,'corporate.name') ) }}
 	</div>
 </div>
-<div class="row bord-hor bord-btm bg-primary">
-	<div class="col-md-2 text-left text-bold bord-rgt pad-all">
+<div class="row bord-hor bord-btm bg-primary" style="page-break-after: auto;">
+	<div class="col-md-2 col-xs-2 text-left text-bold bord-rgt pad-all">
 		{{ strtoupper( __('joesama/project::report.format.title') ) }}
 	</div>
-	<div class="col-md-10 text-left text-bold pad-all">
-		{{ data_get($project,'name') }}
+	<div class="col-md-10 col-xs-10 text-left text-bold pad-all">
+		{{ ucwords( data_get($project,'name') ) }}
 	</div>
 </div>
-<div class="row bord-hor bord-btm text-dark">
-	<div class="col-md-10 text-left text-bold pad-all text-uppercase">
+<div class="row bord-hor bord-btm text-dark" style="page-break-after: auto;">
+	<div class="col-md-11 col-xs-9  text-left text-bold pad-all text-uppercase">
 		{{  __('joesama/project::report.format.update') }}
 	</div>
-	<div class="col-md-2 text-center text-bold bord-hor pad-all  text-uppercase">
+	<div class="col-md-1 col-xs-3 text-center text-bold bord-lft pad-all  text-uppercase">
 		{{ __('joesama/project::report.format.complete') }}
 	</div>
 </div>
 @foreach(data_get($project,'task') as $id => $task)
-<div class="row bord-hor bord-btm text-dark">
-	<div style="width: 40px" class="col-md-1 text-center text-bold bord-rgt pad-all">
-		{{ $id + 1 }}
-	</div>
-	<div class="col-md-9 text-left text-thin pad-all">
+<div class="row bord-hor bord-btm text-dark" style="page-break-after: auto;">
+	<div class="col-md-11  col-xs-9 text-left text-thin pad-all">
+		{{ $id + 1 }}.&nbsp;
 		{{ ucwords(data_get($task,'name')) }}
+		@if($printed)
+		<br>
+		<span class="text-muted">
+			&nbsp;&nbsp;{{ ucwords(strip_tags(data_get($task,'description'))) }}
+		</span>
+		@endif
 	</div>
-	<div class="col-md-2 pull-right text-center text-thin bord-hor pad-all">
+	<div class="col-md-1 col-xs-2  pull-right text-center text-thin bord-lft pad-all">
 		{{ data_get($task,'progress.progress') }}
 	</div>
 </div>
 @endforeach
-<div class="row bord-hor bord-btm text-dark">
-	<div class="col-md-10 text-left text-bold pad-all text-uppercase">
+<div class="row bord-hor bord-btm text-dark" style="page-break-after: auto;">
+	<div class="col-md-10  col-xs-10 text-left text-bold pad-all text-uppercase">
 		{{ __('joesama/project::report.format.issue') }}
 	</div>
 </div>
 @foreach(data_get($project,'issue') as $id => $issue)
-
-<div class="row bord-hor bord-btm text-dark">
-	<div style="width: 40px" class="col-md-1 text-center text-bold bord-rgt pad-all">
-		{{ $id + 1 }}
+<div class="row bord-hor bord-btm text-dark" style="page-break-after: auto;">
+	<div class="col-md-11 col-xs-9 text-left text-thin pad-all">
+		{{ $id + 1 }}.&nbsp;
+		{{ ucwords(data_get($issue,'label')) }}<br>
+		@if($printed)
+		<br>
+		<span class="text-muted">
+			&nbsp;&nbsp;{{ ucwords(strip_tags(data_get($issue,'description'))) }}
+		</span>
+		@endif
 	</div>
-	<div class="col-md-9 text-left text-thin pad-all">
-		{{ ucwords(data_get($issue,'label')) }}
-	</div>
-	<div class="col-md-2 pull-right text-center text-thin bord-hor pad-all">
+	<div class="col-md-1 col-xs-2 pull-right text-center text-thin bord-lft pad-all">
 		{{ ucwords(data_get($issue,'progress.description')) }}
 	</div>
 </div>
 @endforeach
-<div class="row bord-hor bord-btm text-dark">
-	<div class="col-md-10 text-left text-bold pad-all text-uppercase">
+<div class="row bord-hor bord-btm text-dark" style="page-break-after: auto;">
+	<div class="col-md-10 col-sm-10 text-left text-bold pad-all text-uppercase">
 		{{ __('joesama/project::report.format.plan.'.request()->segment(2)) }}
 	</div>
 </div>
@@ -100,25 +107,29 @@
 	});
 @endphp
 @foreach($pendingTask as $id => $pending)
-<div class="row bord-hor bord-btm text-dark">
-	<div style="width: 40px" class="col-md-1 text-center text-bold bord-rgt pad-all">
-		{{ $id + 1 }}
-	</div>
-	<div class="col-md-9 text-left text-thin pad-all">
+<div class="row bord-hor bord-btm text-dark" style="page-break-after: auto;">
+	<div class="col-md-11 col-xs-9 text-left text-thin pad-all">
+		{{ $id + 1 }}.&nbsp;
 		{{ ucwords(data_get($pending,'name')) }}
+		@if($printed)
+		<br>
+		<span class="text-muted">
+			&nbsp;&nbsp;{{ ucwords(strip_tags(data_get($pending,'description'))) }}
+		</span>
+		@endif
 	</div>
-	<div class="col-md-2 pull-right text-center text-thin bord-hor pad-all">
+	<div class="col-md-1 col-xs-2 pull-right text-center text-thin bord-lft pad-all">
 		{{ data_get($pending,'progress.progress') }}
 	</div>
 </div>
 @endforeach
-<div class="row bord-hor bord-btm bg-primary">
-	<div class="col-md-12 text-left text-bold bord-rgt pad-all">
+<div class="row bord-hor bord-btm bg-primary" style="page-break-after: auto;">
+	<div class="col-md-12 col-xs-12 text-left text-bold bord-rgt pad-all">
 		{{ strtoupper( __('joesama/project::report.format.approval') ) }}
 	</div>
 </div>
-<div class="row bord-hor bord-btm">
-	<div class="col-md-12 text-left text-bold bord-rgt pad-all" id="need_action">
+<div class="row bord-hor bord-btm" style="page-break-after: auto;page-break-inside: avoid;">
+	<div class="col-md-12 col-xs-12 text-left text-bold bord-rgt pad-all" id="need_action">
 		@php
 			$type = (request()->segment(2) == 'weekly') ? 'report' : 'card';
 
