@@ -87,7 +87,7 @@ class WeeklyProcessor
 
 		$reportInit = $projectDate->isLastWeek() || $projectDate->lessThan(Carbon::now()->isLastWeek()) ? 1 : 0;
 
-		$printed = data_get($report,'workflow')->where('state','accepted')->count();
+		$printed = collect(data_get($report,'workflow'))->where('state','accepted')->count();
 
 		$reportId = data_get($workflow->first(),'weekly.report_id');
 
