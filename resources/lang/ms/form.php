@@ -112,7 +112,7 @@ return [
 		'paid_report_by' => 'Laporan Bayaran Oleh',
 		'claim_amount' => 'Amaun Tuntutan',
 		'paid_amount' => 'Amaun Bayaran', 
-		'group' => "Milestone", 
+		'group' => "Receiver", 
 	],
 	'project_vo' => [
 		'date' => 'Tarikh VO',

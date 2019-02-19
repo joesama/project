@@ -123,7 +123,7 @@ return [
 		'paid_report_by' => 'Invoice By',
 		'claim_amount' => 'Schedule Amount',
 		'paid_amount' => 'Invoice Amount', 
-		'group' => "Milestone", 
+		'group' => "Receiver", 
 		'reference' => 'Payment Reference',
 	],
 	'project_vo' => [
