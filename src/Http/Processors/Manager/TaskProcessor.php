@@ -84,20 +84,24 @@ class TaskProcessor
 		$project = Project::with('task')->find($request->segment(5));
 
 		$lastUseDate = ($project->task->isEmpty()) ? $project->start : $project->task->last()->end;
+
+		$newStartDate = Carbon::parse($lastUseDate)->addDay();
+
+		$newEndDate = ($newStartDate < $project->end) ? Carbon::parse($newStartDate)->addDays(2) : Carbon::parse($project->end);
                 
 		$form = $form->option([
 					'profile_id' => Profile::sameGroup($corporateId)->pluck('name','id'),
-                                        'status_id' => MasterData::task()->pluck('description','id')
+					'status_id' => MasterData::task()->pluck('description','id')
 				])->default([
 					'task_progress' => data_get($this->modelObj->find($request->segment(6)),'progress.progress',0),
-					'start' => Carbon::parse($lastUseDate)->addDay(),
-					'end' => ($lastUseDate == $project->end) ? Carbon::parse($project->end)->addDays(2) : Carbon::parse($project->end),
+					'start' => $newStartDate,
+					'end' => $newEndDate,
 					'group' => $tags,
 					'profile_id' => $this->profile()->id
 				])->extras([
 					'group' => 'tag',
 					'duration' => 'range',
-                                        'days'=>'text',
+                    'days'=>'text',
 				])->readonly(['days']);
 
 		if(!is_null($request->segment(6))){
