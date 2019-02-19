@@ -383,6 +383,13 @@ class MasterRepository
 
         });
 
+        if($task->isEmpty()){
+        	$task->push([
+        		'label' => 'N/A',
+        		'value' => 0,
+        	]);
+        }
+
         return $task;
 	}
 
@@ -407,6 +414,13 @@ class MasterRepository
         	]);
 
         });
+
+        if($issue->isEmpty()){
+        	$issue->push([
+        		'label' => 'N/A',
+        		'value' => 0,
+        	]);
+        }
 
         return $issue;
 	}

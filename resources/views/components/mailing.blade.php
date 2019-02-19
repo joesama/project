@@ -2,6 +2,14 @@
 <!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 <li class="dropdown">
     @php
+    if(!session()->has('profile-'.auth()->id())){
+        $profile = session([
+            'profile-'.auth()->id() =>  Joesama\Project\Database\Model\Organization\Profile::where('user_id',auth()->id())
+                                        ->with(['mails','role'])->first()
+        ]);
+    }else{
+        $profile = session('profile-'.auth()->id());
+    }
         $mailis = $profile->mails->where('read',null)->take(10)->sortByDesc('created_at')
     @endphp
     <a href="#" data-toggle="dropdown" class="dropdown-toggle">
