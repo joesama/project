@@ -102,7 +102,7 @@ class TaskProcessor
 				])->extras([
 					'description' => 'textarea',
 					'duration' => 'range',
-                                        'days'=>'text',
+					'days'=>'text',
 				])->readonly(['days']);
 
 		if(!is_null($request->segment(6))){
