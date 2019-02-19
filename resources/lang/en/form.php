@@ -58,7 +58,9 @@ return [
 		'effective_days' => "Duration In Days", 
 		'group' => "Milestone", 
                 'status_id' => "Status",
-                'days' => "Duration Days"
+                'indicator_id' => "Indicator",
+                'days' => "Duration Days",
+                'description' => "Description",
 	],
 	'issue' => [
 		'profile_id' => "Person In Charge", 

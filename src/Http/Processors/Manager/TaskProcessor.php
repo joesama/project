@@ -91,7 +91,8 @@ class TaskProcessor
                 
 		$form = $form->option([
 					'profile_id' => Profile::sameGroup($corporateId)->pluck('name','id'),
-					'status_id' => MasterData::task()->pluck('description','id')
+					'status_id' => MasterData::task()->pluck('description','id'),
+					'indicator_id' => MasterData::indicator()->pluck('description','id')
 				])->default([
 					'task_progress' => data_get($this->modelObj->find($request->segment(6)),'progress.progress',0),
 					'start' => $newStartDate,
@@ -99,9 +100,9 @@ class TaskProcessor
 					'group' => $tags,
 					'profile_id' => $this->profile()->id
 				])->extras([
-					'group' => 'tag',
+					'description' => 'textarea',
 					'duration' => 'range',
-                    'days'=>'text',
+                                        'days'=>'text',
 				])->readonly(['days']);
 
 		if(!is_null($request->segment(6))){
@@ -111,6 +112,7 @@ class TaskProcessor
 		$form = $form->excludes(['planned_progress','effective_days','actual_progress','start','end'])
 				->id($request->segment(6))
 				->required(['*'])
+                                ->notRequired(['description'])
 				->renderForm(
 					__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),
 					route('api.task.save',[$corporateId, $request->segment(5), $request->segment(6)])

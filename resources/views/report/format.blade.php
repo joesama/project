@@ -50,27 +50,41 @@
 	</div>
 </div>
 <div class="row bord-hor bord-btm text-dark" style="page-break-after: auto;">
-	<div class="col-md-11 col-xs-9  text-left text-bold pad-all text-uppercase">
+	<div class="col-md-10 col-xs-9  text-left text-bold pad-all text-uppercase">
 		{{  __('joesama/project::report.format.update') }}
 	</div>
 	<div class="col-md-1 col-xs-3 text-center text-bold bord-lft pad-all  text-uppercase">
 		{{ __('joesama/project::report.format.complete') }}
 	</div>
+	<div class="col-md-1 col-xs-3 text-center text-bold bord-lft pad-all  text-uppercase">
+		{{ __('joesama/project::report.format.indicator') }}
+	</div>
 </div>
 @foreach(data_get($project,'task') as $id => $task)
 <div class="row bord-hor bord-btm text-dark" style="page-break-after: auto;">
-	<div class="col-md-11  col-xs-9 text-left text-thin pad-all">
+	<div class="col-md-10  col-xs-9 text-left text-thin pad-all">
 		{{ $id + 1 }}.&nbsp;
 		{{ ucwords(data_get($task,'name')) }}
-		@if($printed)
 		<br>
 		<span class="text-muted">
 			&nbsp;&nbsp;{{ ucwords(strip_tags(data_get($task,'description'))) }}
 		</span>
-		@endif
 	</div>
-	<div class="col-md-1 col-xs-2  pull-right text-center text-thin bord-lft pad-all">
+	<div class="col-md-1 col-xs-2 text-center text-thin bord-lft pad-all">
 		{{ data_get($task,'progress.progress') }}
+	</div>
+	<div class="col-md-1 col-xs-2 text-center text-thin bord-lft pad-all">
+		@php
+                    $color = data_get($task,'indicator.description');
+                    if(strtoupper($color) == strtoupper('merah') || strtoupper($color) == strtoupper('red')){
+                        $bgcolor = '#cc0000';
+                    }elseif(strtoupper($color) == strtoupper('kuning') || strtoupper($color) == strtoupper('yellow')){
+                        $bgcolor = '#ffff00';
+                    }else{
+                        $bgcolor = '#00ff33';
+                    }
+                @endphp
+                <span style="height: 25px;width: 25px;background-color: {{$bgcolor}};border-radius: 50%;display:inline-block;"></span>
 	</div>
 </div>
 @endforeach
@@ -81,18 +95,29 @@
 </div>
 @foreach(data_get($project,'issue') as $id => $issue)
 <div class="row bord-hor bord-btm text-dark" style="page-break-after: auto;">
-	<div class="col-md-11 col-xs-9 text-left text-thin pad-all">
+	<div class="col-md-10 col-xs-9 text-left text-thin pad-all">
 		{{ $id + 1 }}.&nbsp;
 		{{ ucwords(data_get($issue,'label')) }}<br>
-		@if($printed)
 		<br>
 		<span class="text-muted">
 			&nbsp;&nbsp;{{ ucwords(strip_tags(data_get($issue,'description'))) }}
 		</span>
-		@endif
 	</div>
-	<div class="col-md-1 col-xs-2 pull-right text-center text-thin bord-lft pad-all">
+	<div class="col-md-1 col-xs-2 text-center text-thin bord-lft pad-all">
 		{{ ucwords(data_get($issue,'progress.description')) }}
+	</div>
+	<div class="col-md-1 col-xs-2 text-center text-thin bord-lft pad-all">
+                @php
+                    $color = data_get($issue,'indicator.description');
+                    if(strtoupper($color) == strtoupper('merah') || strtoupper($color) == strtoupper('red')){
+                        $bgcolor = '#cc0000';
+                    }elseif(strtoupper($color) == strtoupper('kuning') || strtoupper($color) == strtoupper('yellow')){
+                        $bgcolor = '#ffff00';
+                    }else{
+                        $bgcolor = '#00ff33';
+                    }
+                @endphp
+                <span style="height: 25px;width: 25px;background-color: {{$bgcolor}};border-radius: 50%;display:inline-block;"></span>
 	</div>
 </div>
 @endforeach
@@ -108,7 +133,7 @@
 @endphp
 @foreach($pendingTask as $id => $pending)
 <div class="row bord-hor bord-btm text-dark" style="page-break-after: auto;">
-	<div class="col-md-11 col-xs-9 text-left text-thin pad-all">
+	<div class="col-md-10 col-xs-9 text-left text-thin pad-all">
 		{{ $id + 1 }}.&nbsp;
 		{{ ucwords(data_get($pending,'name')) }}
 		@if($printed)
@@ -118,8 +143,11 @@
 		</span>
 		@endif
 	</div>
-	<div class="col-md-1 col-xs-2 pull-right text-center text-thin bord-lft pad-all">
+	<div class="col-md-1 col-xs-2 text-center text-thin bord-lft pad-all">
 		{{ data_get($pending,'progress.progress') }}
+	</div>
+	<div class="col-md-1 col-xs-2 pull-right text-center text-thin bord-lft pad-all">
+		
 	</div>
 </div>
 @endforeach
