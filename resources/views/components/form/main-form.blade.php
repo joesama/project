@@ -92,13 +92,23 @@
     function datediff(first, second) {
         // Take the difference between the dates and divide by milliseconds per day.
         // Round to nearest whole number to deal with DST.
-        return Math.round((second-first)/(1000*60*60*24));
+        var result = Math.round((second-first)/(1000*60*60*24));
+        if (result < 0 || isNaN(result)){
+            result = 0;
+        } else {
+            result = result + 1;
+        }
+        return result;
     }
     
     function countdays(){
         var start = $('#start').val();
         var end = $('#end').val();
-        var days = datediff(parseDate(start), parseDate(end)) + 1;
+        if((typeof(start) != "undefined" && start !== null) && (typeof(end) != "undefined" && end !== null)) {
+            var days = datediff(parseDate(start), parseDate(end));
+        } else {
+            var days = 0;
+        }
         $('#days').val(days);
     }
 </script>
