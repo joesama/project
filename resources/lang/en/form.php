@@ -58,7 +58,9 @@ return [
 		'effective_days' => "Duration In Days", 
 		'group' => "Milestone", 
                 'status_id' => "Status",
-                'days' => "Duration Days"
+                'indicator_id' => "Indicator",
+                'days' => "Duration Days",
+                'description' => "Description",
 	],
 	'issue' => [
 		'profile_id' => "Person In Charge", 
@@ -171,12 +173,12 @@ return [
 	],
 	'project_milestone_physical' => [
 		'label' => 'Milestone Label',
-		'weightage' => 'Progress Weightage (%)',
-		'group' => 'Milestone Group'
+		'planned' => 'Planned Progress (%)',
+		'actual' => 'Actual Progress (%)',
 	],
 	'project_milestone_finance' => [
 		'label' => 'Milestone Label',
-		'weightage' => 'Payment Weightage (RM)',
-		'group' => 'Milestone Group'
+		'planned' => 'Planned Progress (RM)',
+		'actual' => 'Actual Progress (RM)',
 	]
 ];

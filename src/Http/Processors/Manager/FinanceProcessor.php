@@ -54,12 +54,12 @@ class FinanceProcessor
 		   [ 'field' => 'label',
 		   'title' => __('joesama/project::form.project_milestone_finance.label'),
 		   'style' => 'text-left text-capitalize'],
-		   [ 'field' => 'weightage',
-		   'title' => __('joesama/project::form.project_milestone_physical.weightage'),
+		   [ 'field' => 'planned_amount',
+		   'title' => __('joesama/project::form.project_milestone_finance.planned'),
 		   'style' => 'text-center text-bold'],
-		   [ 'field' => 'tags:label',
-		   'title' => __('joesama/project::form.project_milestone_finance.group'),
-		   'style' => 'text-center text-bold multi']
+		   [ 'field' => 'actual_amount',
+		   'title' => __('joesama/project::form.project_milestone_finance.actual'),
+		   'style' => 'text-center text-bold']
 		];
 
 		$action = [

@@ -1,6 +1,7 @@
 <?php
 namespace Joesama\Project\Database\Repositories\Project; 
 
+use Carbon\CarbonInterval;
 use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -39,7 +40,7 @@ class MilestoneRepository
 	 */
 	public function physicalList(int $corporateId, int $projectId )
 	{
-		return $this->physicalObj->where('project_id',$projectId)->with('tags')->paginate();
+		return $this->physicalObj->where('project_id',$projectId)->paginate();
 	}
 
 	/**
@@ -51,9 +52,8 @@ class MilestoneRepository
 	 */
 	public function financeList(int $corporateId, int $projectId )
 	{
-		return $this->financialObj->where('project_id',$projectId)->with('tags')->paginate();
+		return $this->financialObj->where('project_id',$projectId)->paginate();
 	}
-
 
 	/**
 	 * Manage Progress Milestone
@@ -66,9 +66,8 @@ class MilestoneRepository
 	public function physicalMilestone(Collection $request, int $projectId, ?int $milestoneId)
 	{
 		$inputData = collect($request)->intersectByKeys([
-		    'label' => null,
-		    'project_id' => null,
-		    'weightage' => 0
+		    'planned' => 0,
+		    'actual' => 0
 		]);
 
 		DB::beginTransaction();
@@ -80,20 +79,18 @@ class MilestoneRepository
 
 			$inputData->each(function($record,$field){
 				if(!is_null($record)){
-					$record = ($field == 'weightage') ? ( ($record > 100 ) ? 100 : $record ) : $record;
 					$this->physicalObj->{$field} = $record;
 				}
 			});
 
 			$this->physicalObj->save();
 
+			$financial = $this->financialObj->where('progress_date',$this->physicalObj->progress_date)->first();
 
+			$financial->planned = ($this->physicalObj->planned/100)*$this->physicalObj->project->value;
 
-			$tag = TagMilestone::firstOrNew(['label' => strtoupper($request->get('group'))]);
-
-			$this->physicalObj->tags()->detach();
-			$this->physicalObj->tags()->save($tag);
-
+			$financial->save();
+			
 			DB::commit();
 
 			return $this->physicalObj;
@@ -115,9 +112,8 @@ class MilestoneRepository
 	public function financialMilestone(Collection $request, int $projectId, ?int $milestoneId)
 	{
 		$inputData = collect($request)->intersectByKeys([
-		    'label' => null,
-		    'project_id' => null,
-		    'weightage' => 0
+		    'planned' => 0,
+		    'actual' => 0
 		]);
 
 		$project = Project::with('finance')->find($projectId);

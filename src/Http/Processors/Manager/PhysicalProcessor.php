@@ -56,12 +56,12 @@ class PhysicalProcessor
 		   [ 'field' => 'label',
 		   'title' => __('joesama/project::form.project_milestone_physical.label'),
 		   'style' => 'text-left text-capitalize'],
-		   [ 'field' => 'weightage',
-		   'title' => __('joesama/project::form.project_milestone_physical.weightage'),
+		   [ 'field' => 'planned',
+		   'title' => __('joesama/project::form.project_milestone_physical.planned'),
 		   'style' => 'text-center text-bold'],
-		   [ 'field' => 'tags:label',
-		   'title' => __('joesama/project::form.project_milestone_physical.group'),
-		   'style' => 'text-center text-bold multi']
+		   [ 'field' => 'actual',
+		   'title' => __('joesama/project::form.project_milestone_physical.actual'),
+		   'style' => 'text-center text-bold']
 		];
 
 		$action = [
@@ -104,19 +104,15 @@ class PhysicalProcessor
 	 */
 	public function milestone(Request $request, int $corporateId, int $projectId)
 	{
-		$tags = ($request->segment(6)) ? $this->modelObj->find($request->segment(6))->tags->pluck('label')->implode(',') : 'main';
-
 		$form = $this->formBuilder
 				->newModelForm($this->modelObj)
 				->mapping([
 						'project_id' => $request->segment(5)
-				])->extras([
-					'group' => 'tag'
-				])->default([
-					'group' => $tags,
 				])
+				->excludes(['progress_date'])
 				->id($request->segment(6))
-				->required(['label','weightage'])
+				->required(['planned'])
+				->readonly(['label'])
 				->renderForm(
 					__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),
 					route('api.physical.save',[$corporateId, $request->segment(5), $request->segment(6)])

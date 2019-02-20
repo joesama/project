@@ -22,6 +22,7 @@ return [
 		'title' => 'Project Title',
 		'update' => 'Status Update',
 		'complete' => 'Completion',
+                'indicator' => 'Indicator',
 		'status' => 'Status',
 		'issue' => 'Issues',
 		'plan' => [
