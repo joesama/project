@@ -4,10 +4,12 @@ namespace Joesama\Project\Database\Repositories\Project;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Collection;
-use Joesama\Project\Database\Model\Project\TagMilestone;
+use Joesama\Project\Database\Model\Project\FinanceMilestone;
+use Joesama\Project\Traits\ProjectCalculator;
 
 class FinancialRepository 
 {
+	use ProjectCalculator;
 
 	/**
 	 * Get Claim Transaction for past 24 month
@@ -270,56 +272,25 @@ class FinancialRepository
 	public function schedulePayment(int $projectId)
 	{
 
-		$trasaction = collect([]);
-		$payment = TagMilestone::has('payment')->with(['payment' => function($query) use($projectId){
-			$query->where('project_id',$projectId);
-		}])->get()->mapWithKeys(function($item){
-			return [$item['label'] => $item['payment']];
-		})->each(function($item,$key) use($trasaction){
-			
-			$sum = collect([]);
-			$paid = collect([]);
-			$claim = $item->sortBy(function ($claim, $key) {
-			    return Carbon::parse($claim['claim_date']);
-			})->mapWithKeys(function ($item, $key) use($sum,$paid){
-				$sum->push($item['claim_amount']);
-				$paid->put(Carbon::parse($item['claim_date'])->format('d-m-Y'),0);
-			    return [ Carbon::parse($item['claim_date'])->format('d-m-Y') => $sum->sum()];
-			});
+		$planned = collect([]);
 
+		$actual = collect([]);
 
-			$paidsum = collect([]);
-			$paid->each(function ($val, $date) use($item,$paidsum,$paid){
-				$amount = $item->where('paid_date',Carbon::parse($date)->format('Y-m-d'))->sum('paid_amount');
-				$paidsum->push($amount);
-				$paid->put($date,$paidsum->sum());
-			});
+		$transaction = collect([]);
 
-			$actualVariance = $paid->filter(function($alt,$key){
-				return Carbon::parse($key) < Carbon::now();
-			});
+		$milestone = FinanceMilestone::where('project_id',$projectId)->get();
+		
+		$latest = $milestone->filter(function($miles){
+			return Carbon::parse($miles->progress_date)->endOfMonth()->equalTo(Carbon::now()->endOfMonth());
+		})->first();
 
-			$planVariance = $claim->filter(function($alt,$key){
-				return Carbon::parse($key) < Carbon::now();
-			});
-
-			$variance = $actualVariance->sum() - $planVariance->sum();
-
-			$claim->prepend('Planned');
-			$paid->prepend('Actual');
-
-			$latest = $planVariance->keys()->last();
-
-			$trasaction->put($key,collect([
-				'claim' => $claim->values(),
-				'paid' => $paid->values(),
-				'categories' => $claim->keys(),
-				'variance' => $variance,
+		return collect([
+				'planned' => $milestone->pluck('planned')->prepend('Planned'),
+				'actual' => $milestone->pluck('actual')->prepend('Actual'),
+				'categories' => $milestone->pluck('label'),
+				'variance' => $this->shortHandFormat(floatval($latest->actual) - floatval($latest->planned)),
 				'latest' => $latest,
-			]));
-		});
-
-		return $trasaction;
+			]);
 	}
 
 } // END class FinancialRepository 
