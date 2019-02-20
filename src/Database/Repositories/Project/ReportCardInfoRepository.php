@@ -238,7 +238,7 @@ class ReportCardInfoRepository
 				'planned' => $milestone->pluck('planned')->prepend('Planned'),
 				'actual' => $milestone->pluck('actual')->prepend('Actual'),
 				'categories' => $milestone->pluck('label'),
-				'variance' => floatval($latest->actual) - floatval($latest->planned),
+				'variance' => floatval(data_get($latest,'actual')) - floatval(data_get($latest,'planned')),
 				'latest' => $latest,
 			]);
 

@@ -288,7 +288,7 @@ class FinancialRepository
 				'planned' => $milestone->pluck('planned')->prepend('Planned'),
 				'actual' => $milestone->pluck('actual')->prepend('Actual'),
 				'categories' => $milestone->pluck('label'),
-				'variance' => $this->shortHandFormat(floatval($latest->actual) - floatval($latest->planned)),
+				'variance' => $this->shortHandFormat(floatval(data_get($latest,'actual')) - floatval(data_get($latest,'planned'))),
 				'latest' => $latest,
 			]);
 	}
