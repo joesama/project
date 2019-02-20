@@ -105,4 +105,12 @@ class Task extends Model
     {
         return $this->morphMany(ProgressNote::class, 'note');
     }
+    
+    /**
+     * Get the task's indicator.
+     */
+    public function indicator()
+    {
+        return  $this->belongsTo(MasterData::class,'indicator_id');
+    }
 }
