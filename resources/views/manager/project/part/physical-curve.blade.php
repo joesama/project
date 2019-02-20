@@ -29,13 +29,13 @@
   </div>
 </div>
 @php
-  $taskCategories = collect(collect($projectSchedule->first())->get('categories'))->splice(1);
-  $taskLabel = $projectSchedule->mapWithKeys(function($item, $key){
-      return [$key => $key.' VARIANCE : '.number_format($item->get('variance'),2)];
-  })->implode(',');
-  $taskLine = $projectSchedule->mapWithKeys(function($item, $key){
-      return [$key => $item->get('latest')];
-  })->first();
+
+  $taskCategories = $projectSchedule->get('categories');
+  $planned = $projectSchedule->get('planned');
+  $actual = $projectSchedule->get('actual');
+  $latest = $projectSchedule->get('latest');
+  $taskLabel = ' VARIANCE : '.number_format($projectSchedule->get('variance'),2)
+
 @endphp
 @push('content.script')
 <script type="text/javascript">
@@ -43,13 +43,8 @@
   var chartPhy = bb.generate({
   data: {
     columns: [
-    @foreach($projectSchedule->except('count') as $payables)
-      @foreach($payables->except(['categories','variance','latest']) as $chart)
-
-        @json($chart),
-
-      @endforeach
-    @endforeach
+      @json($planned),
+      @json($actual)
     ],
     type: "spline"
   },
@@ -63,11 +58,15 @@
       label: "% Progress"
     }
   },
-  bindto: "#physicalSpline"
+  bindto: "#physicalSpline",
+  legend: {
+    position: "inset",
+    usePoint: true
+  }
 });
 
 chartPhy.xgrids.add(
-  {value: "24-01-2019" , text: "{{ __('joesama/project::report.current') }}"}
+  {value: "{{ data_get($latest,'label') }}" , text: "{{ __('joesama/project::report.current') }}"}
 );
 
 </script>

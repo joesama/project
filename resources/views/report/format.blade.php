@@ -17,7 +17,7 @@
 		<div class="row bord-btm">
 			<div class="col-md-12  col-xs-12 text-bold text-center" style="padding: 3px">
 				{{ strtoupper( __('joesama/project::report.format.'.request()->segment(2)) ) }}
-				{{ strtoupper( $reportDue ) }}
+				{{ '#'.strtoupper( $reportDue ) }}
 			</div>
 		</div>
 		<div class="row text-thin text-center">

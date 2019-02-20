@@ -22,4 +22,24 @@ trait ProjectCalculator{
 		}, $endDate);
 	}
 
+	/**
+	 * Create Amount Formate to nearest billion
+	 * 
+	 * @param  $sumValue
+	 * @return string
+	 */
+	public function shortHandFormat($sumValue): string 
+	{
+		if ($sumValue < 1000000000) {
+		    // Anything less than a billion
+		    $unit = 'M';
+		    $amount = round($sumValue / 1000000,2);
+		} else {
+		    $unit = 'B';
+		    $amount = round($sumValue / 1000000000,2);
+		}
+
+		return number_format($amount,2).''.$unit;
+	}
+
 }

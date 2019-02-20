@@ -54,21 +54,33 @@ class MonthlyProcessor
 	 */
 	public function form(Request $request, int $corporateId, $projectId)
 	{
+		$report = FALSE;
+
 		if( $projectId == 'report' ){
-			$projectId = data_get($this->reportCard->getMonthlyReportInfo($request->segment(6)),'project_id');
+			$report = $this->reportCard->getMonthlyReportInfo($request->segment(6));
+			$projectId = data_get($report,'project_id');
 		}
 
 		$project = $this->projectInfo->getProject($projectId);
+
+		$projectDate = Carbon::parse($project->start);
+
 		$reportDue = Carbon::now()->format('m');
-		
+
 		$startOfMonth = Carbon::now()->startOfMonth();
 
-		$reportStart = $startOfMonth->format('d-m-Y');
+		$startOfMonth = $projectDate->greaterThan($startOfMonth) ? $projectDate : $startOfMonth;
+
+		$startOfMonth = ($report) ? Carbon::parse($report->report_date) : $startOfMonth;
+
+		$reportStart = $startOfMonth->format('j M Y');
+
 		$dueStart = $startOfMonth->format('Y-m-d');
 
-		$endOfMonth = Carbon::now()->endOfMonth();
+		$endOfMonth = ($report) ? Carbon::parse($report->report_end) : Carbon::now()->endOfMonth();
 
-		$reportEnd = $endOfMonth->format('d-m-Y');
+		$reportEnd = $endOfMonth->format('j M Y');
+
 		$dueEnd = $endOfMonth->format('Y-m-d');
 
 		$workflow = $this->reportCard->monthlyWorkflow($corporateId, $dueStart, $dueEnd, $project);

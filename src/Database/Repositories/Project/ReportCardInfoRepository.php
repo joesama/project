@@ -7,6 +7,7 @@ use Joesama\Project\Database\Model\Master\MasterData;
 use Joesama\Project\Database\Model\Organization\Profile;
 use Joesama\Project\Database\Model\Project\Card;
 use Joesama\Project\Database\Model\Project\CardWorkflow;
+use Joesama\Project\Database\Model\Project\PhysicalMilestone;
 use Joesama\Project\Database\Model\Project\Report;
 use Joesama\Project\Database\Model\Project\ReportWorkflow;
 use Joesama\Project\Database\Model\Project\TagMilestone;
@@ -221,59 +222,26 @@ class ReportCardInfoRepository
 	 */
 	public function scheduleTask(int $projectId)
 	{
+		$planned = collect([]);
 
-		$trasaction = collect([]);
-		$task = TagMilestone::has('task')->with(['task' => function($query) use($projectId){
-			$query->where('project_id',$projectId);
-		}])->get()->mapWithKeys(function($item){
-			return [$item['label'] => $item['task']];
-		})->each(function($item,$key) use($trasaction){
-			
-			$sum = collect([]);
-			$actual = collect([]);
-			$plan = $item->sortBy(function ($task, $key) {
-			    return Carbon::parse($task['end']);
-			})->mapWithKeys(function ($item, $key) use($sum,$actual){
-				$sum->push($item['planned_progress']);
-				$actual->put(Carbon::parse($item['end'])->format('d-m-Y'),0);
-			    return [ Carbon::parse($item['end'])->format('d-m-Y') => $sum->sum()];
-			});
+		$actual = collect([]);
 
-			
+		$transaction = collect([]);
 
-			$paidsum = collect([]);
-			$actual->each(function ($val, $date) use($item,$paidsum,$actual){
-				$amount = $item->where('end',Carbon::parse($date)->format('Y-m-d'))->sum('actual_progress');
-				$paidsum->push($amount);
-				$actual->put($date,$paidsum->sum());
-			});
+		$milestone = PhysicalMilestone::where('project_id',$projectId)->get();
+		
+		$latest = $milestone->filter(function($miles){
+			return Carbon::parse($miles->progress_date)->endOfMonth()->equalTo(Carbon::now()->endOfMonth());
+		})->first();
 
-			
-			$actualVariance = $actual->filter(function($alt,$key){
-				return Carbon::parse($key) < Carbon::now();
-			});
-
-			$planVariance = $plan->filter(function($alt,$key){
-				return Carbon::parse($key) < Carbon::now();
-			});
-
-			$variance = $actualVariance->sum() - $planVariance->sum();
-
-			$plan->prepend('Planned');
-			$actual->prepend('Actual');
-
-			$latest = $planVariance->keys()->last();
-
-			$trasaction->put($key,collect([
-				'planned' => $plan->values(),
-				'actual' => $actual->values(),
-				'categories' => $plan->keys(),
-				'variance' => $variance,
+		return collect([
+				'planned' => $milestone->pluck('planned')->prepend('Planned'),
+				'actual' => $milestone->pluck('actual')->prepend('Actual'),
+				'categories' => $milestone->pluck('label'),
+				'variance' => floatval(data_get($latest,'actual')) - floatval(data_get($latest,'planned')),
 				'latest' => $latest,
-			]));
-		});
+			]);
 
-		return $trasaction;
 	}
 
 } // END class ReportCardInfoRepository 
