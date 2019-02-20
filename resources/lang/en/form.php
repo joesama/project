@@ -175,10 +175,12 @@ return [
 		'label' => 'Milestone Label',
 		'planned' => 'Planned Progress (%)',
 		'actual' => 'Actual Progress (%)',
+		'progress_date' => 'Date',
 	],
 	'project_milestone_finance' => [
 		'label' => 'Milestone Label',
-		'planned' => 'Planned Progress (RM)',
-		'actual' => 'Actual Progress (RM)',
+		'planned' => 'Planned Payment (RM)',
+		'actual' => 'Actual Payment (RM)',
+		'progress_date' => 'Date',
 	]
 ];
