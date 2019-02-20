@@ -5,8 +5,8 @@ use Orchestra\Support\Facades\Foundation;
 
 Foundation::group('joesama/project', '/', ['namespace' => 'Http\Controller', 'middleware' => ['web', 'entree']], function (Router $router) {
 
-    $webPolicies = collect(config('packages/joesama/project/policy'))->get('web');
-    $apiPolicies = collect(config('packages/joesama/project/policy'))->get('api');
+    $webPolicies = collect(config('joesama/project::policy.web'));
+    $apiPolicies = collect(config('joesama/project::policy.api'));
 
     $router->group(['middleware' => ['auth']], function ($router) use($webPolicies){
 

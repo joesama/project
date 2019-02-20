@@ -78,6 +78,16 @@ class ProjectServiceProvider extends ModuleServiceProvider
 
     }
 
+   /**
+     * {@inheritdoc}
+     */
+    public function boot()
+    {
+        $this->bootExtensionComponents();
+
+        parent::boot();
+    }
+
     /**
      * Booting Entree Views, Language, Configuration.
      **/

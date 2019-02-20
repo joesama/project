@@ -14,10 +14,7 @@
     "autoload": {
         "psr-4": {
             "Joesama\\Project\\": "src/"
-        },
-        "files": [
-            "src/helpers.php"
-        ]
+        }
     },
     "require": {
         "php": ">=5.6.4",
