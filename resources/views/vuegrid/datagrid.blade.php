@@ -14,17 +14,17 @@
                   <i class="fa fa-search icon-fw"></i>
                 </button>
               </span>
-          </div>
-          <div class="btn-group" v-if="gridNew">
-            <a class="btn btn-primary" :href="gridNew" v-if="gridNewDesc">
-              <i class="ion-plus-round icon-fw"></i>&nbsp;
-              @{{ gridNewDesc }}
-            </a>
-            <a class="btn btn-dark" :href="gridNew" v-else >
+          </div>{{-- 
+          <div class="btn-group"> --}}
+              <a v-for="button in gridExtraButtons" class="btn btn-primary" :href="button.uri" style="margin-left: 4px">
+                <i class="psi-notepad" aria-hidden="true"></i>&nbsp;
+                @{{ button.desc }}
+              </a>
+              <a class="btn btn-primary" :href="gridNew" >
               <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;
-              {{ trans('joesama/vuegrid::datagrid.buttons.add') }}
-            </a>
-          </div>
+                @{{ gridNewDesc }}
+              </a>
+          {{-- </div> --}}
       </div>
     </div>
   </div>

@@ -46,6 +46,20 @@ class DataGridGenerator
 	}
 
 	/**
+	 * Build Extra Button
+	 * 
+	 * @param  array  $button Button Path & Description
+	 * @return void
+	 */
+	public function buildExtraButton(array $buttons)
+	{
+		// add button link
+		$this->datagrid->extraButton( $buttons );
+
+		return $this;
+	}
+
+	/**
 	 * @param  string $dataApi url path to sources data for ajax query
 	 * @param  Illuminate\Pagination\LengthAwarePaginator  $model 
 	 * @return void
