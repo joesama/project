@@ -94,7 +94,7 @@ class MilestoneRepository
 				$this->financialObj->progress_date = Carbon::createFromFormat('d/m/Y',$request->get('progress_date'))->format('Y-m-d');
 				$this->financialObj->save();
 			}
-
+      
 			$this->physicalObj->save();
 
 			$financial = $this->financialObj->where('progress_date',$this->physicalObj->progress_date)->first();

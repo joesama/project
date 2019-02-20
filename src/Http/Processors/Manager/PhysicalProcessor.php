@@ -114,7 +114,7 @@ class PhysicalProcessor
 				
 		if($request->segment(6)){
 			$form->excludes(['progress_date'])
-				->readonly(['label']);
+				   ->readonly(['label']);
 		}
 
 		$form = $form->renderForm(
