@@ -171,12 +171,12 @@ return [
 	],
 	'project_milestone_physical' => [
 		'label' => 'Milestone Label',
-		'weightage' => 'Progress Weightage (%)',
-		'group' => 'Milestone Group'
+		'planned' => 'Planned Progress (%)',
+		'actual' => 'Actual Progress (%)',
 	],
 	'project_milestone_finance' => [
 		'label' => 'Milestone Label',
-		'weightage' => 'Payment Weightage (RM)',
-		'group' => 'Milestone Group'
+		'planned' => 'Planned Progress (RM)',
+		'actual' => 'Actual Progress (RM)',
 	]
 ];

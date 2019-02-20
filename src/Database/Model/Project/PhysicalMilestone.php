@@ -4,6 +4,7 @@ namespace Joesama\Project\Database\Model\Project;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Joesama\Project\Database\Model\Project\Card;
 
 class PhysicalMilestone extends Model
 {
@@ -21,10 +22,11 @@ class PhysicalMilestone extends Model
     }
 
     /**
-     * Get all of the tags for the milstone.
+     * Get the card info.
      */
-    public function tags()
+    public function card()
     {
-        return $this->morphToMany(TagMilestone::class, 'taggable');
+        return $this->belongsTo(Card::class,'card_id','id');
     }
+
 }

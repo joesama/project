@@ -4,6 +4,7 @@ namespace Joesama\Project\Database\Model\Project;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Joesama\Project\Database\Model\Project\Card;
 
 class FinanceMilestone extends Model
 {
@@ -11,6 +12,7 @@ class FinanceMilestone extends Model
 	
 	protected $table = 'project_milestone_finance';
     protected $guarded = ['id'];
+    protected $appends = ['planned_amount'];
 
     /**
      * Get the project info.
@@ -21,11 +23,20 @@ class FinanceMilestone extends Model
     }
 
     /**
-     * Get all of the tags for the milstone.
+     * Get the card info.
      */
-    public function tags()
+    public function card()
     {
-        return $this->morphToMany(TagMilestone::class, 'taggable');
+        return $this->belongsTo(Card::class,'card_id','id');
     }
 
+    public function getPlannedAmountAttribute($value)
+    {
+        return number_format($this->attributes['planned'],2);
+    }
+
+    public function getActualAmountAttribute($value)
+    {
+        return number_format($this->attributes['actual'],2);
+    }
 }

@@ -2,15 +2,18 @@
 namespace Joesama\Project\Database\Repositories\Project; 
 
 use Carbon\Carbon;
+use Carbon\CarbonInterval;
 use DB;
 use Exception;
 use Illuminate\Support\Collection;
 use Joesama\Project\Database\Model\Organization\Profile;
 use Joesama\Project\Database\Model\Project\Attribute;
 use Joesama\Project\Database\Model\Project\Client;
+use Joesama\Project\Database\Model\Project\FinanceMilestone;
 use Joesama\Project\Database\Model\Project\HseScore;
 use Joesama\Project\Database\Model\Project\Incident;
 use Joesama\Project\Database\Model\Project\Issue;
+use Joesama\Project\Database\Model\Project\PhysicalMilestone;
 use Joesama\Project\Database\Model\Project\Project;
 use Joesama\Project\Database\Model\Project\ProjectLad;
 use Joesama\Project\Database\Model\Project\ProjectPayment;
@@ -20,6 +23,7 @@ use Joesama\Project\Database\Model\Project\Risk;
 use Joesama\Project\Database\Model\Project\TagMilestone;
 use Joesama\Project\Database\Model\Project\Task;
 use Joesama\Project\Database\Model\Project\TaskProgress;
+use Joesama\Project\Database\Repositories\Project\MilestoneRepository;
 use Joesama\Project\Traits\ProjectCalculator;
 
 /**
@@ -86,6 +90,7 @@ class MakeProjectRepository
 				}
 			});
 
+			// Create HSE Card for project
 			if(is_null($id)){
 
 				$startDate = Carbon::parse($this->projectModel->start);
@@ -109,6 +114,33 @@ class MakeProjectRepository
 
 			$this->projectModel->save();
 
+			// Create Physical & Financial Milestones
+			if($this->projectModel->physical->count() == 0){
+
+				$period = CarbonInterval::month()->toPeriod($this->projectModel->start, $this->projectModel->end);
+
+				foreach ($period as $key => $date) {
+				    $progressDate = $date->endOfMonth()->format('Y-m-d');
+
+				    $label = $date->format('j M Y');
+
+				    $this->projectModel->physical()->save(
+				    	new PhysicalMilestone([
+				    		'label' => $label,
+				    		'progress_date' => $progressDate,
+				    	])
+				    );
+
+				    $this->projectModel->finance()->save(
+				    	new FinanceMilestone([
+				    		'label' => $label,
+				    		'progress_date' => $progressDate,
+				    	])
+				    );
+				}
+			}
+
+			// Assign Role
 			$this->projectModel->profile()->sync([
 				$projectData->get('manager_id') => ['role_id' => 2],
 				$projectData->get('approver_id') => ['role_id' => 4],
@@ -118,6 +150,7 @@ class MakeProjectRepository
 				$projectData->get('commentor_id') => ['role_id' => 7]
 			]);
 
+			// Generate Approval Workflow
 			if(is_null($id)){
 				$approval = new ProjectWorkflowRepository();
 				$approval->registerProject($this->projectModel);
@@ -209,10 +242,8 @@ class MakeProjectRepository
 			});
 
 			$totalDay = Project::find($this->taskModel->project_id)->effective_days;
-                        
-                        // As of #71 first day is counted & weekend is included
-//			$effectiveDay = $this->effectiveDays($this->taskModel->start,$this->taskModel->end);
-                        $effectiveDay = $taskData->get('days');
+
+            $effectiveDay = $taskData->get('days');
                         
 			$this->taskModel->planned_progress = !is_null($taskData->get('planned_progress')) ?  $taskData->get('planned_progress') : round( $effectiveDay/$totalDay * 100, 2 );
 
