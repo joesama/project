@@ -54,10 +54,10 @@ class FinanceProcessor
 		   [ 'field' => 'label',
 		   'title' => __('joesama/project::form.project_milestone_finance.label'),
 		   'style' => 'text-left text-capitalize'],
-		   [ 'field' => 'planned_amount',
+		   [ 'field' => 'planned',
 		   'title' => __('joesama/project::form.project_milestone_finance.planned'),
 		   'style' => 'text-center text-bold'],
-		   [ 'field' => 'actual_amount',
+		   [ 'field' => 'actual',
 		   'title' => __('joesama/project::form.project_milestone_finance.actual'),
 		   'style' => 'text-center text-bold']
 		];
@@ -101,23 +101,23 @@ class FinanceProcessor
 	 */
 	public function milestone(Request $request, int $corporateId, int $projectId)
 	{
-		$tags = ($request->segment(6)) ? $this->modelObj->find($request->segment(6))->tags->pluck('label')->implode(',') : 'main';
-
 		$form = $this->formBuilder
 				->newModelForm($this->modelObj)
 				->mapping([
 						'project_id' => $request->segment(5)
-				])->extras([
-					'group' => 'tag'
-				])->default([
-					'group' => $tags,
 				])
 				->id($request->segment(6))
-				->required(['label','weightage'])
-				->renderForm(
-					__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),
-					route('api.finance.save',[$corporateId, $request->segment(5), $request->segment(6)])
-				);
+				->required(['planned']);
+				
+		if($request->segment(6)){
+			$form->excludes(['progress_date'])
+				->readonly(['label']);
+		}
+
+		$form = $form->renderForm(
+			__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),
+			route('api.finance.save',[$corporateId, $request->segment(5), $request->segment(6)])
+		);
 
 		return compact('form');
 	}

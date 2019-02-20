@@ -109,11 +109,15 @@ class PhysicalProcessor
 				->mapping([
 						'project_id' => $request->segment(5)
 				])
-				->excludes(['progress_date'])
 				->id($request->segment(6))
-				->required(['planned'])
-				->readonly(['label'])
-				->renderForm(
+				->required(['planned']);
+				
+		if($request->segment(6)){
+			$form->excludes(['progress_date'])
+				->readonly(['label']);
+		}
+
+		$form = $form->renderForm(
 					__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),
 					route('api.physical.save',[$corporateId, $request->segment(5), $request->segment(6)])
 				);

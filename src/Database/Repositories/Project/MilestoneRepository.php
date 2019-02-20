@@ -1,6 +1,7 @@
 <?php
 namespace Joesama\Project\Database\Repositories\Project; 
 
+use Carbon\Carbon;
 use Carbon\CarbonInterval;
 use Exception;
 use Illuminate\Support\Collection;
@@ -83,6 +84,17 @@ class MilestoneRepository
 				}
 			});
 
+			if($milestoneId == null){
+				$this->physicalObj->project_id = $projectId;
+				$this->physicalObj->label = $request->get('label');
+				$this->physicalObj->progress_date = Carbon::createFromFormat('d/m/Y',$request->get('progress_date'))->format('Y-m-d');
+
+				$this->financialObj->project_id = $projectId;
+				$this->financialObj->label = $request->get('label');
+				$this->financialObj->progress_date = Carbon::createFromFormat('d/m/Y',$request->get('progress_date'))->format('Y-m-d');
+				$this->financialObj->save();
+			}
+
 			$this->physicalObj->save();
 
 			$financial = $this->financialObj->where('progress_date',$this->physicalObj->progress_date)->first();
@@ -90,7 +102,7 @@ class MilestoneRepository
 			$financial->planned = ($this->physicalObj->planned/100)*$this->physicalObj->project->value;
 
 			$financial->save();
-			
+
 			DB::commit();
 
 			return $this->physicalObj;
@@ -116,33 +128,21 @@ class MilestoneRepository
 		    'actual' => 0
 		]);
 
-		$project = Project::with('finance')->find($projectId);
-		$sumWeightage = $project->finance->sum('weightage');
-
 		DB::beginTransaction();
 
 		try{
+
 			if(!is_null($milestoneId)){
 				$this->financialObj = $this->financialObj->find($milestoneId);
-				$sumWeightage = $sumWeightage - $this->financialObj->weightage;
 			}
 
-			$available = $project->value - $sumWeightage;
-
-			$inputData->each(function($record,$field) use($available){
+			$inputData->each(function($record,$field){
 				if(!is_null($record)){
-					$record = ($field == 'weightage') ? ( ($record > $available ) ? $available : $record ) : $record;
 					$this->financialObj->{$field} = $record;
 				}
 			});
 
 			$this->financialObj->save();
-
-			$tag = TagMilestone::firstOrNew(['label' => strtoupper($request->get('group'))]);
-
-			$this->financialObj->tags()->detach();
-
-			$this->financialObj->tags()->save($tag);
 
 			DB::commit();
 
@@ -169,7 +169,6 @@ class MilestoneRepository
 
 		try{
 
-			$this->physicalObj->find($milestoneId)->tags()->detach();
 			$this->physicalObj->find($milestoneId)->delete();
 
 			DB::commit();
@@ -196,7 +195,6 @@ class MilestoneRepository
 
 		try{
 
-			$this->financialObj->find($milestoneId)->tags()->detach();
 			$this->financialObj->find($milestoneId)->delete();
 
 			DB::commit();
