@@ -29,13 +29,11 @@
   </div>
 </div>
 @php
-  $categories = collect(collect($paymentSchedule->first())->get('categories'))->splice(1);
-  $label = $paymentSchedule->mapWithKeys(function($item, $key){
-      return [$key => $key.' VARIANCE : '.number_format($item->get('variance'),2)];
-  })->implode(',');
-  $line = $paymentSchedule->mapWithKeys(function($item, $key){
-      return [$key => $item->get('latest')];
-  })->first();
+  $fCategories = $paymentSchedule->get('categories');
+  $fPlanned = $paymentSchedule->get('planned');
+  $fActual = $paymentSchedule->get('actual');
+  $fLatest = $paymentSchedule->get('latest');
+  $fLabel = ' VARIANCE : '.$paymentSchedule->get('variance')
 @endphp
 @push('content.script')
 <script type="text/javascript">
@@ -43,31 +41,30 @@
 var chart = bb.generate({
   data: {
     columns: [
-    @foreach($paymentSchedule->except('count') as $payables)
-      @foreach($payables->except(['categories','variance','latest']) as $chart)
-
-        @json($chart),
-
-      @endforeach
-    @endforeach
+      @json($fPlanned),
+      @json($fActual)
     ],
     type: "spline"
   },
   axis: {
     x: {
-      label: "{{ $label }}",
+      label: "{{ $fLabel }}",
       type: "category",
-      categories: @json($categories)
+      categories: @json($fCategories)
     },
     y: {
-      label: "Amount Claim"
+      label: "Amount Claim (RM)"
     }
   },
-  bindto: "#financialSpline"
+  bindto: "#financialSpline",
+  legend: {
+    position: "inset",
+    usePoint: true
+  }
 });
 
 chart.xgrids.add(
-  {value: "{{$line}}" , text: "{{ __('joesama/project::report.current') }}"}
+  {value: "{{ data_get($fLatest,'label') }}" , text: "{{ __('joesama/project::report.current') }}"}
 );
 
 </script>
