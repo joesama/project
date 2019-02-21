@@ -33,7 +33,7 @@ return [
 				'form' => ['corporateId','projectId?','dataId?'],
 				'view' => ['corporateId','projectId','dataId?']
 			],
-                        'plan' => [
+            'plan' => [
 				'list' => ['corporateId','projectId?'],
 				'form' => ['corporateId','projectId?','dataId?'],
 				'view' => ['corporateId','projectId','dataId?']
