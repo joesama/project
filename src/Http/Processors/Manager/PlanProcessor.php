@@ -18,7 +18,7 @@ use Joesama\Project\Traits\HasAccessAs;
  * @package default
  * @author 
  **/
-class TaskProcessor 
+class PlanProcessor 
 {
 	use HasAccessAs;
 
@@ -34,16 +34,16 @@ class TaskProcessor
 		$this->modelObj = $task;
 		$this->profile();
 	}
-
-
-	/**
+        
+        /**
 	 * @param  Request $request
 	 * @param  int $corporateId
 	 * @return mixed
 	 */
 	public function list(Request $request, int $corporateId)
 	{
-		$table = $this->listProcessor->task($request,$corporateId);
+                
+		$table = $this->listProcessor->plan($request,$corporateId);
 		
 		return compact('table');
 	}
@@ -85,7 +85,7 @@ class TaskProcessor
 
 		$lastUseDate = ($project->task->isEmpty()) ? $project->start : $project->task->last()->end;
 
-		$newStartDate = Carbon::parse($lastUseDate)->addDay();
+		$newStartDate = Carbon::parse($lastUseDate)->addDays(7);
 
 		$newEndDate = ($newStartDate < $project->end) ? Carbon::parse($newStartDate)->addDays(2) : Carbon::parse($project->end);
                 
@@ -98,12 +98,14 @@ class TaskProcessor
 					'start' => $newStartDate,
 					'end' => $newEndDate,
 					'group' => $tags,
-					'profile_id' => $this->profile()->id
+					'profile_id' => $this->profile()->id,
 				])->extras([
 					'description' => 'textarea',
 					'duration' => 'range',
-					'days'=>'text',
-				])->readonly(['days']);
+                                        'days'=>'text'
+				])->mapping([
+                                        'is_plan'=>1
+                                ])->readonly(['days']);
 
 		if(!is_null($request->segment(6))){
 			$form->readonly(['planned_progress','duration']);	
@@ -117,7 +119,7 @@ class TaskProcessor
 					__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),
 					route('api.task.save',[$corporateId, $request->segment(5), $request->segment(6)])
 				);
-
+                
 		return compact('form');
 	}
         

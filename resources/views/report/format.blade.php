@@ -60,21 +60,26 @@
 		{{ __('joesama/project::report.format.indicator') }}
 	</div>
 </div>
+@php
+    $task_number = 0;
+    $plan_number = 0;
+@endphp
 @foreach(data_get($project,'task') as $id => $task)
+@if(data_get($task,'is_plan') == null)
 <div class="row bord-hor bord-btm text-dark" style="page-break-after: auto;">
-	<div class="col-md-10  col-xs-9 text-left text-thin pad-all">
-		{{ $id + 1 }}.&nbsp;
-		{{ ucwords(data_get($task,'name')) }}
-		<br>
-		<span class="text-muted">
-			&nbsp;&nbsp;{{ ucwords(strip_tags(data_get($task,'description'))) }}
-		</span>
-	</div>
-	<div class="col-md-1 col-xs-2 text-center text-thin bord-lft pad-all">
-		{{ data_get($task,'progress.progress') }}
-	</div>
-	<div class="col-md-1 col-xs-2 text-center text-thin bord-lft pad-all">
-		@php
+        <div class="col-md-10  col-xs-9 text-left text-thin pad-all">
+                {{ $task_number + 1 }}.&nbsp;
+                {{ ucwords(data_get($task,'name')) }}
+                <br>
+                <span class="text-muted">
+                        &nbsp;&nbsp;{{ ucwords(strip_tags(data_get($task,'description'))) }}
+                </span>
+        </div>
+        <div class="col-md-1 col-xs-2 text-center text-thin bord-lft pad-all">
+                {{ data_get($task,'progress.progress') }}
+        </div>
+        <div class="col-md-1 col-xs-2 text-center text-thin bord-lft pad-all">
+                @php
                     $color = data_get($task,'indicator.description');
                     if(strtoupper($color) == strtoupper('merah') || strtoupper($color) == strtoupper('red')){
                         $bgcolor = '#cc0000';
@@ -83,10 +88,12 @@
                     }else{
                         $bgcolor = '#00ff33';
                     }
+                    $task_number = $task_number + 1;
                 @endphp
                 <span style="height: 25px;width: 25px;background-color: {{$bgcolor}};border-radius: 50%;display:inline-block;"></span>
-	</div>
+        </div>
 </div>
+@endif
 @endforeach
 <div class="row bord-hor bord-btm text-dark" style="page-break-after: auto;">
 	<div class="col-md-10  col-xs-10 text-left text-bold pad-all text-uppercase">
@@ -132,24 +139,35 @@
 	});
 @endphp
 @foreach($pendingTask as $id => $pending)
+@if(data_get($pending,'is_plan') == 1)
 <div class="row bord-hor bord-btm text-dark" style="page-break-after: auto;">
 	<div class="col-md-10 col-xs-9 text-left text-thin pad-all">
-		{{ $id + 1 }}.&nbsp;
+		{{ $plan_number + 1 }}.&nbsp;
 		{{ ucwords(data_get($pending,'name')) }}
-		@if($printed)
 		<br>
 		<span class="text-muted">
 			&nbsp;&nbsp;{{ ucwords(strip_tags(data_get($pending,'description'))) }}
 		</span>
-		@endif
 	</div>
 	<div class="col-md-1 col-xs-2 text-center text-thin bord-lft pad-all">
 		{{ data_get($pending,'progress.progress') }}
 	</div>
 	<div class="col-md-1 col-xs-2 pull-right text-center text-thin bord-lft pad-all">
-		
+		@php
+            $color = data_get($pending,'indicator.description');
+            if(strtoupper($color) == strtoupper('merah') || strtoupper($color) == strtoupper('red')){
+                $bgcolor = '#cc0000';
+            }elseif(strtoupper($color) == strtoupper('kuning') || strtoupper($color) == strtoupper('yellow')){
+                $bgcolor = '#ffff00';
+            }else{
+                $bgcolor = '#00ff33';
+            }
+            $plan_number = $plan_number + 1;
+        @endphp
+        <span style="height: 25px;width: 25px;background-color: {{$bgcolor}};border-radius: 50%;display:inline-block;"></span>
 	</div>
 </div>
+@endif
 @endforeach
 <div class="row bord-hor bord-btm bg-primary" style="page-break-after: auto;">
 	<div class="col-md-12 col-xs-12 text-left text-bold bord-rgt pad-all">

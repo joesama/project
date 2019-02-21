@@ -185,7 +185,38 @@ class ProjectInfoRepository
 				});
 			})
 			->orWhere('profile_id',$this->profile->id);
-		});
+		})
+        ->whereNull('is_plan');
+
+		return $task->component()->paginate();
+	}
+        
+        /**
+	 * List of Task Under Corporate, Project
+	 * 
+	 * @param int $corporateId - id for specific corporate
+	 * @param int | NULL $projectId
+	 **/
+	public function listProjectPlan(int $corporateId, $projectId = null)
+	{
+		$task = $this->taskModel->whereHas('project',function($query) use($corporateId, $projectId){
+			// $query->sameGroup($corporateId);
+			$query->when($projectId, function ($query, $projectId) {
+                return $query->where('id', $projectId);
+            });
+		})
+		->where(function($query){
+			$query->whereHas('project',function($query){
+				$query->whereHas('manager',function($query){
+					$query->where('profile_id',$this->profile->id);
+				})
+				->orWhereHas('profile',function($query){
+					$query->where('profile_id',$this->profile->id);
+				});
+			})
+			->orWhere('profile_id',$this->profile->id);
+		})
+        ->where('is_plan',1);
 
 		return $task->component()->paginate();
 	}

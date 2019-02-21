@@ -225,7 +225,7 @@ class MakeProjectRepository
                     'indicator_id' => null,
                     'description' => null,
 		]);
-
+                
 		DB::beginTransaction();
 
 		try{
@@ -252,6 +252,10 @@ class MakeProjectRepository
 			$this->taskModel->actual_progress = ($this->taskModel->planned_progress/100)*$taskData->get('task_progress');
 
 			$this->taskModel->effective_days = $effectiveDay;
+                        
+            if($taskData->get('is_plan') !== null){
+                $this->taskModel->is_plan = $taskData->get('is_plan');
+            }
 
 			$this->taskModel->save();
 
@@ -266,8 +270,8 @@ class MakeProjectRepository
 			$this->taskModel->tags()->save($tag);
 
 			DB::commit();
-
-			return $this->taskModel;
+                        
+            return $this->taskModel;
 
 		}catch( \Exception $e){
 

@@ -31,9 +31,15 @@ class TaskProcessor
 	public function save(Request $request,int $corporateId, int $projectId = null)
 	{
 		$task = $this->makeProject->initTask(collect($request->all()),$request->segment(6));
+                
+        if(isset($task->is_plan)){
+            $plan = 'plan';
+        } else {
+            $plan = 'task';
+        }
 
-		return redirect_with_message(
-			handles('manager/'.$request->segment(2).'/list/'.$corporateId.'/'.$task->project_id),
+        return redirect_with_message(
+        handles('manager/'.$plan.'/list/'.$corporateId.'/'.$task->project_id),
 			trans('joesama/entree::respond.data.success', [
 				'form' => trans('joesama/project::manager.'.$request->segment(2).'.view')
 			]),
