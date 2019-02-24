@@ -134,6 +134,7 @@ return [
 			'list' => [
 				'project' => ['corporateId'], 
 				'task' => ['corporateId','projectId?'], 
+				'plan' => ['corporateId','projectId?'], 
 				'issue' => ['corporateId','projectId?'],
 				'risk' => ['corporateId','projectId?'],
 				'master' => ['corporateId','masterId?'],
@@ -166,6 +167,9 @@ return [
 			'task' => [
 				'delete' => ['corporateId','projectId','taskId']
 			],
+			'plan' => [
+				'delete' => ['corporateId','projectId','taskId']
+			],
 			'issue' => [
 				'delete' => ['corporateId','projectId','issueId']
 			],
@@ -194,6 +198,9 @@ return [
 				'save' => ['corporateId','projectId?']
 			],
 			'task' => [
+				'save' => ['corporateId','projectId?','taskId?']
+			],
+			'plan' => [
 				'save' => ['corporateId','projectId?','taskId?']
 			],
 			'issue' => [

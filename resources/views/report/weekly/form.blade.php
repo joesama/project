@@ -7,7 +7,7 @@
 	<div class="col-md-12">
 	    <div class="panel">
 	        <div class="panel-body">
-	        	@include('joesama/project::report.format')
+	        	@include('joesama/project::report.format-weekly')
 	        </div>
 			<div class="panel-footer text-right">
 		  		@php

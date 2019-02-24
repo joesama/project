@@ -5,6 +5,7 @@ use Joesama\Project\Database\Model\Project\{
 	Project,
 	Client,
 	Task,
+	Plan,
 	Issue,
 	Risk,
 	Incident,
@@ -29,6 +30,7 @@ class ProjectInfoRepository
 	private $projectModel, 
 			$clientModel, 
 			$taskModel, 
+			$planModel, 
 			$issueModel, 
 			$riskModel, 
 			$incidentModel, 
@@ -43,6 +45,7 @@ class ProjectInfoRepository
 		Project $project , 
 		Client $client,
 		Task $task,
+		Plan $plan,
 		Issue $issue,
 		Risk $risk,
 		Incident $incident,
@@ -54,6 +57,7 @@ class ProjectInfoRepository
 		$this->projectModel = $project;
 		$this->clientModel = $client;
 		$this->taskModel = $task;
+		$this->planModel = $plan;
 		$this->issueModel = $issue;
 		$this->riskModel = $risk;
 		$this->incidentModel = $incident;
@@ -160,6 +164,16 @@ class ProjectInfoRepository
 	{
 		return $this->taskModel->find($taskId);
 	}
+    
+    /**
+	 * Get Project Plan for specific Id
+	 * 
+	 * @param int $projectId
+	 **/
+	public function projectPlan(int $taskId)
+	{
+		return $this->planModel->find($taskId);
+	}
 
 	/**
 	 * List of Task Under Corporate, Project
@@ -199,7 +213,7 @@ class ProjectInfoRepository
 	 **/
 	public function listProjectPlan(int $corporateId, $projectId = null)
 	{
-		$task = $this->taskModel->whereHas('project',function($query) use($corporateId, $projectId){
+		$task = $this->planModel->whereHas('project',function($query) use($corporateId, $projectId){
 			// $query->sameGroup($corporateId);
 			$query->when($projectId, function ($query, $projectId) {
                 return $query->where('id', $projectId);
@@ -215,10 +229,9 @@ class ProjectInfoRepository
 				});
 			})
 			->orWhere('profile_id',$this->profile->id);
-		})
-        ->where('is_plan',1);
+		});
 
-		return $task->component()->paginate();
+		return $task->paginate();
 	}
 
 	/**

@@ -5,7 +5,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Joesama\Project\Database\Model\Organization\Profile;
 use Joesama\Project\Database\Model\Project\Project;
-use Joesama\Project\Database\Model\Project\Task;
+use Joesama\Project\Database\Model\Project\Plan;
 use Joesama\Project\Database\Model\Master\MasterData;
 use Joesama\Project\Http\Processors\Manager\ListProcessor;
 use Joesama\Project\Http\Services\FormGenerator;
@@ -26,12 +26,12 @@ class PlanProcessor
 		ListProcessor $listProcessor,
 		FormGenerator $formBuilder,
 		ViewGenerator $viewBuilder,
-		Task $task
+		Plan $plan
 	){
 		$this->listProcessor = $listProcessor;
 		$this->formBuilder = $formBuilder;
 		$this->viewBuilder = $viewBuilder;
-		$this->modelObj = $task;
+		$this->modelObj = $plan;
 		$this->profile();
 	}
         
@@ -81,7 +81,7 @@ class PlanProcessor
 			$tags = ($tagCollection->isNotEmpty()) ? $tagCollection->pluck('label')->implode(',') : $tags;
 		}
 
-		$project = Project::with('task')->find($request->segment(5));
+		$project = Project::with('plan')->find($request->segment(5));
 
 		$lastUseDate = ($project->task->isEmpty()) ? $project->start : $project->task->last()->end;
 
@@ -102,10 +102,8 @@ class PlanProcessor
 				])->extras([
 					'description' => 'textarea',
 					'duration' => 'range',
-                                        'days'=>'text'
-				])->mapping([
-                                        'is_plan'=>1
-                                ])->readonly(['days']);
+                    'days'=>'text'
+				])->readonly(['days']);
 
 		if(!is_null($request->segment(6))){
 			$form->readonly(['planned_progress','duration']);	
@@ -117,7 +115,7 @@ class PlanProcessor
                                 ->notRequired(['description'])
 				->renderForm(
 					__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),
-					route('api.task.save',[$corporateId, $request->segment(5), $request->segment(6)])
+					route('api.plan.save',[$corporateId, $request->segment(5), $request->segment(6)])
 				);
                 
 		return compact('form');

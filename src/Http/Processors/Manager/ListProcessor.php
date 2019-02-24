@@ -360,7 +360,7 @@ class ListProcessor
 
 		$action = [
 			[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
-			    'url' => handles('joesama/project::manager/task/view/'.$corporateId.'/'.$request->segment(5)), // URL for action
+			    'url' => handles('joesama/project::manager/plan/view/'.$corporateId.'/'.$request->segment(5)), // URL for action
 			    'icons' => 'psi-magnifi-glass icon', // Icon for action : optional
 			    'key' => 'id'  ]
 		];
@@ -368,11 +368,11 @@ class ListProcessor
 		if($this->isProjectManager() || auth()->user()->isAdmin){
 			$editAction = [
 				[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
-				    'url' => handles('joesama/project::manager/task/form/'.$corporateId.'/'.$request->segment(5)), // URL for action
+				    'url' => handles('joesama/project::manager/plan/form/'.$corporateId.'/'.$request->segment(5)), // URL for action
 				    'icons' => 'psi-file-edit icon', // Icon for action : optional
 				    'key' => 'id'  ],
 				[ 'delete' => trans('joesama/vuegrid::datagrid.buttons.delete') , // Action Description
-				    'url' => handles('joesama/project::api/task/delete/'.$corporateId.'/'.$request->segment(5)), // URL for action
+				    'url' => handles('joesama/project::api/plan/delete/'.$corporateId.'/'.$request->segment(5)), // URL for action
 				    'icons' => 'fa fa-remove icon', // Icon for action : optional
 				    'key' => 'id'  ]
 			];
@@ -384,7 +384,7 @@ class ListProcessor
 		
 		$datagrid->buildTable($columns, __('joesama/project::project.list.plan') )
 				 ->buildDataModel(
-				 	route('api.list.task',[$corporateId, $request->segment(5)]), 
+				 	route('api.list.plan',[$corporateId, $request->segment(5)]), 
 				 	$this->projectObj->listProjectPlan($corporateId, $request->segment(5))
 				 );
 

@@ -23,7 +23,7 @@ class PlanController extends BaseController
 
 		if(in_array($page,['view']) && is_null($request->segment(6))){
 
-			$task = app(ProjectInfoRepository::class)->projectTask($request->segment(5));
+			$task = app(ProjectInfoRepository::class)->projectPlan($request->segment(5));
 
 			return  redirect(handles($this->module.'/'.$this->submodule.'/'.$this->page.'/'.$corporateId.'/'.data_get($task,'project_id').'/'.$request->segment(5)));
 		}

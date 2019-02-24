@@ -54,6 +54,16 @@ class ListProcessor
 	{
 		return $this->projectObj->listProjectTask($corporateId, $request->segment(5));
 	}
+    
+    /**
+	 * @param  array $request
+	 * @param  int $request,$corporateId
+	 * @return Illuminate\Pagination\LengthAwarePaginator
+	 */
+	public function plan($request,$corporateId)
+	{
+		return $this->projectObj->listProjectPlan($corporateId, $request->segment(5));
+	}
 
 	/**
 	 * @param  array $request
