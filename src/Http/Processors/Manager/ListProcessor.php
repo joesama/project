@@ -180,10 +180,10 @@ class ListProcessor
 				 ->buildOption($action, TRUE);
 
 		if($this->isProjectManager()){
-			$datagrid->buildAddButton(
-				route('report.monthly.form',[$corporateId, $request->segment(5)]),
-				__('joesama/project::report.monthly.form')
-			);
+			$datagrid->buildExtraButton([
+				['uri' => 'monthlyReport('.$request->segment(5).')',
+				'desc' => __('joesama/project::report.monthly.form')]
+			]);
 		}
 
 		return $datagrid->render();

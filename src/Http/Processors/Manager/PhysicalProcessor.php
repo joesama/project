@@ -113,8 +113,9 @@ class PhysicalProcessor
 				->required(['planned']);
 				
 		if($request->segment(6)){
-			$form->excludes(['progress_date'])
-				   ->readonly(['label']);
+			$form->readonly(['label','progress_date']);
+		}else{
+			$form->required(['label','progress_date']);
 		}
 
 		$form = $form->renderForm(

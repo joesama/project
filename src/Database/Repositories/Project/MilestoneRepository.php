@@ -7,7 +7,9 @@ use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Joesama\Project\Database\Model\Project\FinanceMilestone;
+use Joesama\Project\Database\Model\Project\FinanceProgress;
 use Joesama\Project\Database\Model\Project\PhysicalMilestone;
+use Joesama\Project\Database\Model\Project\PhysicalProgress;
 use Joesama\Project\Database\Model\Project\Project;
 use Joesama\Project\Database\Model\Project\TagMilestone;
 
@@ -93,15 +95,40 @@ class MilestoneRepository
 				$this->financialObj->label = $request->get('label');
 				$this->financialObj->progress_date = Carbon::createFromFormat('d/m/Y',$request->get('progress_date'))->format('Y-m-d');
 				$this->financialObj->save();
+
 			}
       
 			$this->physicalObj->save();
 
-			$financial = $this->financialObj->where('progress_date',$this->physicalObj->progress_date)->first();
+			$projectValue = $this->physicalObj->project->value;
 
-			$financial->planned = ($this->physicalObj->planned/100)*$this->physicalObj->project->value;
+			$financial = $this->financialObj->where('project_id',$projectId)
+											->where('progress_date',$this->physicalObj->progress_date)
+											->first();
+
+			$financial->planned = round(($this->physicalObj->planned/100)*$projectValue,2);
+
+			$actual = $request->get('actual');
+
+			if($actual != null){
+				$actualAmount = round(($actual/100)*$projectValue,2);
+
+				$financial->actual = $actualAmount;
+			}
 
 			$financial->save();
+
+			if($actual != null){
+
+				$this->physicalObj->progress()->save(new PhysicalProgress([
+					'progress' => $this->physicalObj->planned
+				]));
+
+				$financial->progress()->save(new FinanceProgress([
+					'progress' => $financial->actual
+				]));
+
+			}
 
 			DB::commit();
 

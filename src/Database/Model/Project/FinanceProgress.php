@@ -5,20 +5,21 @@ namespace Joesama\Project\Database\Model\Project;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Joesama\Project\Database\Model\Project\Card;
+use Joesama\Project\Database\Model\Project\FinanceMilestone;
 
-class PhysicalMilestone extends Model
+class FinanceProgress extends Model
 {
 	use SoftDeletes;
 	
-	protected $table = 'project_milestone_physical';
+	protected $table = 'project_finance_progress';
     protected $guarded = ['id'];
 
     /**
      * Get the project info.
      */
-    public function project()
+    public function milestone()
     {
-        return $this->belongsTo(Project::class,'project_id','id');
+        return $this->belongsTo(FinanceMilestone::class,'finance_id','id');
     }
 
     /**
@@ -27,14 +28,6 @@ class PhysicalMilestone extends Model
     public function card()
     {
         return $this->belongsTo(Card::class,'card_id','id');
-    }
-    
-    /**
-     * Get the task's progress.
-     */
-    public function progress()
-    {
-        return  $this->hasOne(PhysicalProgress::class,'physical_id')->latest();
     }
 
 }
