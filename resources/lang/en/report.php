@@ -4,12 +4,12 @@ return [
 	'current' => 'Current Progress',
 	'print' => 'Download Report',
 	'weekly' => [
-		'list' => 'Weekly Project Report List',
+		'list' => 'Weekly Report Approval History',
 		'form' => 'Weekly Project Report',
 		'view' => 'Weekly Project Report'
 	],
 	'monthly' => [
-		'list' => 'Monthly Project Report List',
+		'list' => 'Monthly Report Approval History',
 		'form' => 'Monthly Project Report',
 		'view' => 'Monthly Project Report'
 	],

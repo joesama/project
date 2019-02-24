@@ -180,10 +180,10 @@ class ListProcessor
 				 ->buildOption($action, TRUE);
 
 		if($this->isProjectManager()){
-			$datagrid->buildAddButton(
-				route('report.monthly.form',[$corporateId, $request->segment(5)]),
-				__('joesama/project::report.monthly.form')
-			);
+			$datagrid->buildExtraButton([
+				['uri' => 'monthlyReport('.$request->segment(5).')',
+				'desc' => __('joesama/project::report.monthly.form')]
+			]);
 		}
 
 		return $datagrid->render();
@@ -313,6 +313,83 @@ class ListProcessor
 
 		if ( ( $this->isProjectManager() || auth()->user()->isAdmin ) && $hasAction ) {
 			$datagrid->buildAddButton(route('manager.task.form',[$corporateId, $request->segment(5)]));
+		}
+        $datagrid->buildExtraButton([
+            ['uri' => route('manager.plan.form',[$corporateId,$request->segment(5)]),'desc' => trans('joesama/project::project.task.plan')]
+        ]);
+
+		return $datagrid->buildOption($action, TRUE)->render();
+	}
+        
+    /**
+	 * Generate Task Datagrid
+	 * 
+	 * @param  Request      $request     HTTP Request
+	 * @param  int         	$corporateId Corporate Id
+	 * @param  int|integer 	$hasAction   Can Create New Task
+	 * @return view                   
+	 */
+	public function plan($request, int $corporateId, ?int $hasAction = 1)
+	{
+
+		$columns = [
+		   [ 'field' => 'name',
+		   'title' => __('joesama/project::form.plan.name'),
+		   'style' => 'text-xs-left text-capitalize'],
+		   [ 'field' => 'description',
+		   'title' =>  __('joesama/project::form.plan.description'),
+		   'style' => 'text-left'],
+		   [ 'field' => 'start_date',
+		   'title' => __('joesama/project::form.task.start'),
+		   'style' => 'text-center date'],
+		   [ 'field' => 'end_date',
+		   'title' => __('joesama/project::form.task.end'),
+		   'style' => 'text-center date'],
+		   [ 'field' => 'effective_days',
+		   'title' => __('joesama/project::form.task.effective_days'),
+		   'style' => 'text-center']
+		];
+
+		if(is_null($request->segment(5))){
+			$columns = array_merge($columns,[[ 
+				'field' => 'project.name',
+		   		'title' => __('joesama/project::form.task.project_id'),
+		   		'style' => 'text-xs-center col-xs-3'
+		   	]]);
+		}
+
+		$action = [
+			[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
+			    'url' => handles('joesama/project::manager/plan/view/'.$corporateId.'/'.$request->segment(5)), // URL for action
+			    'icons' => 'psi-magnifi-glass icon', // Icon for action : optional
+			    'key' => 'id'  ]
+		];
+
+		if($this->isProjectManager() || auth()->user()->isAdmin){
+			$editAction = [
+				[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
+				    'url' => handles('joesama/project::manager/plan/form/'.$corporateId.'/'.$request->segment(5)), // URL for action
+				    'icons' => 'psi-file-edit icon', // Icon for action : optional
+				    'key' => 'id'  ],
+				[ 'delete' => trans('joesama/vuegrid::datagrid.buttons.delete') , // Action Description
+				    'url' => handles('joesama/project::api/plan/delete/'.$corporateId.'/'.$request->segment(5)), // URL for action
+				    'icons' => 'fa fa-remove icon', // Icon for action : optional
+				    'key' => 'id'  ]
+			];
+
+			$action = array_merge($action,$editAction);
+		}
+
+		$datagrid = new DataGridGenerator();
+		
+		$datagrid->buildTable($columns, __('joesama/project::project.list.plan') )
+				 ->buildDataModel(
+				 	route('api.list.plan',[$corporateId, $request->segment(5)]), 
+				 	$this->projectObj->listProjectPlan($corporateId, $request->segment(5))
+				 );
+
+		if ( ( $this->isProjectManager() || auth()->user()->isAdmin ) && $hasAction ) {
+			$datagrid->buildAddButton(route('manager.plan.form',[$corporateId, $request->segment(5)]));
 		}
 
 		return $datagrid->buildOption($action, TRUE)->render();

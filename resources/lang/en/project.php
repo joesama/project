@@ -14,6 +14,7 @@ return [
 	'list' => [
 		'project' => 'List Of Project',
 		'task' => 'List Of Tasks',
+		'plan' => 'List Of Plans',
 		'issue' => 'List Of Issues',
 		'risk' => 'List Of Risk'
 	],
@@ -61,6 +62,7 @@ return [
 			'start' => 'Date Start',
 			'end' => 'Date End',
 		],
+        'plan' => 'Plan For Next Week'
 	],
 	'issues' => [
 		'name' => 'Issues',

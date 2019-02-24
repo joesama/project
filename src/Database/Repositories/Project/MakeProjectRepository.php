@@ -23,6 +23,7 @@ use Joesama\Project\Database\Model\Project\Risk;
 use Joesama\Project\Database\Model\Project\TagMilestone;
 use Joesama\Project\Database\Model\Project\Task;
 use Joesama\Project\Database\Model\Project\TaskProgress;
+use Joesama\Project\Database\Model\Project\Plan;
 use Joesama\Project\Database\Repositories\Project\MilestoneRepository;
 use Joesama\Project\Traits\ProjectCalculator;
 
@@ -40,12 +41,14 @@ class MakeProjectRepository
 		Project $project , 
 		Client $client,
 		Task $task,
+		Plan $plan,
 		Issue $issue,
 		Risk $risk
 	){
 		$this->projectModel = $project;
 		$this->clientModel = $client;
 		$this->taskModel = $task;
+		$this->planModel = $plan;
 		$this->issueModel = $issue;
 		$this->riskModel = $risk;
 	}
@@ -221,11 +224,11 @@ class MakeProjectRepository
 		    'profile_id' => null,
 		    'start'=> null,
 		    'end' => null,
-                    'status_id' => null,
-                    'indicator_id' => null,
-                    'description' => null,
+            'status_id' => null,
+            'indicator_id' => null,
+            'description' => null,
 		]);
-
+                
 		DB::beginTransaction();
 
 		try{
@@ -266,8 +269,8 @@ class MakeProjectRepository
 			$this->taskModel->tags()->save($tag);
 
 			DB::commit();
-
-			return $this->taskModel;
+                        
+            return $this->taskModel;
 
 		}catch( \Exception $e){
 
@@ -292,6 +295,90 @@ class MakeProjectRepository
 		try{
 
 			$this->taskModel->find($taskId)->delete();
+
+			DB::commit();
+
+		}catch( \Exception $e){
+
+			dd($e->getMessage());
+			DB::rollback();
+		}
+	}
+    
+    /**
+	 * Create New Plan
+	 *
+	 * @return Joesama\Project\Database\Model\Project\Plan
+	 **/
+	public function initPlan(\Illuminate\Support\Collection $planData, $id = null)
+	{
+		$inputData = collect($planData)->intersectByKeys([
+		    'name' => null,
+		    'project_id' => null,
+		    'profile_id' => null,
+		    'start'=> null,
+		    'end' => null,
+            'status_id' => null,
+            'indicator_id' => null,
+            'description' => null,
+		]);
+                
+		DB::beginTransaction();
+
+		try{
+			if(!is_null($id)){
+				$this->planModel = $this->planModel->find($id);
+			}
+
+			$inputData->each(function($record,$field){
+				if(!is_null($record)){
+					if(in_array($field, ['start','end'])):
+						$record = Carbon::createFromFormat('d/m/Y',$record)->toDateTimeString();
+					endif;
+
+					$this->planModel->{$field} = $record;
+				}
+			});
+
+			$totalDay = Project::find($this->planModel->project_id)->effective_days;
+
+            $effectiveDay = $planData->get('days');
+                        
+			$this->planModel->planned_progress = !is_null($planData->get('planned_progress')) ?  $planData->get('planned_progress') : round( $effectiveDay/$totalDay * 100, 2 );
+
+			$this->planModel->actual_progress = ($this->planModel->planned_progress/100)*$planData->get('task_progress');
+
+			$this->planModel->effective_days = $effectiveDay;
+
+			$this->planModel->save();
+
+			DB::commit();
+                        
+            return $this->planModel;
+
+		}catch( \Exception $e){
+
+			dd($e->getMessage());
+			DB::rollback();
+		}
+	}
+    
+    /**
+	 * Remove plan attached to project
+	 * 
+	 * @param  int    $corporateId 	Corporate Id
+	 * @param  int    $projectId   	Project Id
+	 * @param  int    $planId   	Specific plan id
+	 * @return 
+	 */
+	public function deletePlan(int $corporateId, int $projectId, int $planId)
+	{
+
+		DB::beginTransaction();
+
+		try{
+
+			$this->planModel->find($taskId)->delete();
 
 			DB::commit();
 

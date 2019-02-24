@@ -5,6 +5,7 @@ use Joesama\Project\Database\Model\Project\{
 	Project,
 	Client,
 	Task,
+	Plan,
 	Issue,
 	Risk,
 	Incident,
@@ -29,6 +30,7 @@ class ProjectInfoRepository
 	private $projectModel, 
 			$clientModel, 
 			$taskModel, 
+			$planModel, 
 			$issueModel, 
 			$riskModel, 
 			$incidentModel, 
@@ -43,6 +45,7 @@ class ProjectInfoRepository
 		Project $project , 
 		Client $client,
 		Task $task,
+		Plan $plan,
 		Issue $issue,
 		Risk $risk,
 		Incident $incident,
@@ -54,6 +57,7 @@ class ProjectInfoRepository
 		$this->projectModel = $project;
 		$this->clientModel = $client;
 		$this->taskModel = $task;
+		$this->planModel = $plan;
 		$this->issueModel = $issue;
 		$this->riskModel = $risk;
 		$this->incidentModel = $incident;
@@ -160,6 +164,16 @@ class ProjectInfoRepository
 	{
 		return $this->taskModel->find($taskId);
 	}
+    
+    /**
+	 * Get Project Plan for specific Id
+	 * 
+	 * @param int $projectId
+	 **/
+	public function projectPlan(int $taskId)
+	{
+		return $this->planModel->find($taskId);
+	}
 
 	/**
 	 * List of Task Under Corporate, Project
@@ -185,9 +199,39 @@ class ProjectInfoRepository
 				});
 			})
 			->orWhere('profile_id',$this->profile->id);
-		});
+		})
+        ->whereNull('is_plan');
 
 		return $task->component()->paginate();
+	}
+        
+        /**
+	 * List of Task Under Corporate, Project
+	 * 
+	 * @param int $corporateId - id for specific corporate
+	 * @param int | NULL $projectId
+	 **/
+	public function listProjectPlan(int $corporateId, $projectId = null)
+	{
+		$task = $this->planModel->whereHas('project',function($query) use($corporateId, $projectId){
+			// $query->sameGroup($corporateId);
+			$query->when($projectId, function ($query, $projectId) {
+                return $query->where('id', $projectId);
+            });
+		})
+		->where(function($query){
+			$query->whereHas('project',function($query){
+				$query->whereHas('manager',function($query){
+					$query->where('profile_id',$this->profile->id);
+				})
+				->orWhereHas('profile',function($query){
+					$query->where('profile_id',$this->profile->id);
+				});
+			})
+			->orWhere('profile_id',$this->profile->id);
+		});
+
+		return $task->paginate();
 	}
 
 	/**

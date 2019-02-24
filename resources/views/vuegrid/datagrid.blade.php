@@ -20,7 +20,7 @@
                 <i class="psi-notepad" aria-hidden="true"></i>&nbsp;
                 @{{ button.desc }}
               </a>
-              <a class="btn btn-primary" :href="gridNew" >
+              <a class="btn btn-primary" :href="gridNew" v-if="gridNew">
               <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;
                 @{{ gridNewDesc }}
               </a>

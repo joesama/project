@@ -131,12 +131,8 @@
 		{{ __('joesama/project::report.format.plan.'.request()->segment(2)) }}
 	</div>
 </div>
-@php
-	$pendingTask = data_get($project,'task')->filter(function($task, $key){
-		return data_get($task,'progress.progress') != 100;
-	});
-@endphp
-@foreach($pendingTask as $id => $pending)
+
+@foreach(data_get($project,'plan') as $id => $pending)
 <div class="row bord-hor bord-btm text-dark" style="page-break-after: auto;">
 	<div class="col-md-10 col-xs-9 text-left text-thin pad-all">
 		{{ $plan_number + 1 }}.&nbsp;

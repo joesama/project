@@ -21,6 +21,11 @@ return [
 		'form' => "Schedule's Information",
 		'view' => "Schedule's Information",
 	],
+        'plan' => [
+		'list' => "Project Next Week Schedule",
+		'form' => "Plan For Next Week",
+		'view' => "Schedule's Information",
+	],
 	'risk' => [
 		'list' => "List of Project Risks",
 		'form' => "Risk's Information",

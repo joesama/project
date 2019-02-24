@@ -11,7 +11,7 @@ use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
  * @package default
  * @author 
  **/
-class TaskProcessor 
+class PlanProcessor 
 {
 
 	public function __construct(
@@ -30,10 +30,10 @@ class TaskProcessor
 	 */
 	public function save(Request $request,int $corporateId, int $projectId = null)
 	{
-		$task = $this->makeProject->initTask(collect($request->all()),$request->segment(6));
+		$task = $this->makeProject->initPlan(collect($request->all()),$request->segment(6));
 
         return redirect_with_message(
-        handles('manager/task/list/'.$corporateId.'/'.$task->project_id),
+        handles('manager/plan/list/'.$corporateId.'/'.$task->project_id),
 			trans('joesama/entree::respond.data.success', [
 				'form' => trans('joesama/project::manager.'.$request->segment(2).'.view')
 			]),

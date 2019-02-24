@@ -107,6 +107,14 @@ class Project extends Model
     {
         return $this->hasMany(Task::class,'project_id','id');
     }
+    
+    /**
+     * Get the plan progress.
+     */
+    public function plan()
+    {
+        return $this->hasMany(Plan::class,'project_id','id');
+    }
 
     /**
      * Get the issue progress.

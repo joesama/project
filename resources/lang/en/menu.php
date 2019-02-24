@@ -12,6 +12,7 @@ return [
 		'attribute' => 'Project Attributes',
 		'physical' => 'Project Progress',
 		'finance' => 'Financial Progress',
+        'plan' => 'Project Schedule'
 	],
 	'setup' => [
 		'module' => 'Setting',
