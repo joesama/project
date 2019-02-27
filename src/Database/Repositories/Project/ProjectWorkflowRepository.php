@@ -85,7 +85,11 @@ class ProjectWorkflowRepository
 			$approval->workflow()->save($workflow);
 
 			if(!is_null($approval->nextby)){
-				$approval->nextby->sendActionNotification($project,$approval,$state );
+				// $approval->nextby->sendActionNotification($project,$approval,$state );
+				$project->profile->each(function($profile){
+					$profile->sendActionNotification($project,$approval,$state );
+				});
+
 			}else{
 				$approval->creator->sendAcceptedNotification($project,$approval,$state );
 			}
@@ -137,7 +141,11 @@ class ProjectWorkflowRepository
 			$approval->workflow()->save($workflow);
 
 			if(!is_null($approval->nextby)){
-				$approval->nextby->sendActionNotification($project,$approval,$request->get('status'));
+				// $approval->nextby->sendActionNotification($project,$approval,$request->get('status'));
+				$project->profile->each(function($profile){
+					$profile->sendActionNotification($project,$approval,$request->get('status'));
+				}); 
+				
 			}else{
 				$approval->creator->sendAcceptedNotification($project,$approval,$request->get('status'));
 			}

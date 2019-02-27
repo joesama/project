@@ -29,7 +29,7 @@ class NotificationProcessor
 	 */
 	public function list(Request $request, int $corporateId)
 	{
-		$mailing = $this->profile()->mails->map(function($mail){
+		$mailing = $this->profileRefresh()->mails->sortByDesc('created_at')->map(function($mail){
 
 			return collect([
 				'id' => $mail->id,
@@ -42,12 +42,16 @@ class NotificationProcessor
 			]);
 		});
 
+		$perPage = 25;
+
 		$mailing = new LengthAwarePaginator(
-			$mailing,
+			$mailing->forPage($request->get('page'),$perPage),
 			$mailing->count(),
-			20
+			$perPage
 		);
 		
+		$mailing = $mailing->setPath(url()->current());
+
 		return compact('mailing');
 	}
 
@@ -60,7 +64,7 @@ class NotificationProcessor
 	public function view(Request $request, int $corporateId)
 	{
 
-		$email = $this->profile()->mails->where('id',$request->segment(5))->first();
+		$email = $this->profileRefresh()->mails->where('id',$request->segment(5))->first();
 
 		NotifyMail::read($email->id);
 

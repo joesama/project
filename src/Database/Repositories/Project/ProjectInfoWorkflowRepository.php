@@ -59,7 +59,10 @@ class ProjectInfoWorkflowRepository
 		$projectInfo->workflow()->save($workflow);
 
 		if($projectInfo->nextby != null){
-			$projectInfo->nextby->sendActionNotification($projectInfo->project, $projectInfo, 'info');
+			// $projectInfo->nextby->sendActionNotification($projectInfo->project, $projectInfo, 'info');
+			$project->profile->each(function($profile){
+				$profile->sendActionNotification($projectInfo->project, $projectInfo, 'info');
+			});
 		}else{
 			$projectInfo->creator->sendAcceptedNotification($projectInfo->project, $projectInfo, 'info');
 		}
@@ -105,7 +108,10 @@ class ProjectInfoWorkflowRepository
 			}
 
 			if(!is_null($projectInfo->nextby)){
-				$projectInfo->nextby->sendActionNotification($projectInfo->project,$projectInfo,'info');
+				// $projectInfo->nextby->sendActionNotification($projectInfo->project,$projectInfo,'info');
+				$project->profile->each(function($profile){
+					$profile->sendActionNotification($projectInfo->project, $projectInfo, 'info');
+				});
 			}else{
 				$projectInfo->creator->sendAcceptedNotification($projectInfo->project,$projectInfo,'info');
 			}

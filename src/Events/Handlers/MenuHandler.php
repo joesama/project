@@ -15,7 +15,7 @@ class MenuHandler
     public function __construct()
     {
         $this->profile = Profile::where('user_id',Auth::id())->first();
-        $this->webPolicies = collect(collect(config('packages/joesama/project/policy'))->get('web'));
+        $this->webPolicies = collect(config('joesama/project::policy.web'));
     }
 
     /**
