@@ -110,26 +110,32 @@ class Profile extends Model
         $message = collect([]);
         $message->put('level', 'warning');
         $message->put('title', trans('joesama/project::mailer.title.'.$type));
-        
-        if(!in_array( $type, array_map('strtolower',['weekly']) ) ) {
+
+        if( !in_array( $type, array_map('strtolower',['weekly']) ) ) {
             $message->put('content', collect([
                 title_case(trans('joesama/project::mailer.project.'.$type)),
                 trans('joesama/project::mailer.report.project', ['project' => ucwords($project->name) ]),
             ]));
 
-            if($type == 'monthly'){
+            
+            if($type == 'monthly' || $type == 'info' ){
                 $param = $project->corporate_id.'/'.$project->id.'/'.$report->id;
             }else{
                 $param = $project->corporate_id.'/'.$project->id;
             }
 
-            $message->put('action', collect([
-                memorize('threef.' .\App::getLocale(). '.name', config('app.name')) 
-                => 
-                handles('joesama/entree::manager/project/view/'.$param)
-            ]));
+            $appname = memorize('threef.' .\App::getLocale(). '.name', config('app.name'));
+
+            $path = handles('joesama/entree::manager/project/view/'.$param);
+
+            if($type == 'info' ){
+                $path = handles('joesama/entree::manager/project/info/'.$param);
+            }
+
+            $message->put('action', collect([ $appname => $path ]));
 
         }else{
+
             $message->put('content', collect([
                 title_case(trans('joesama/project::mailer.report.success')),
                 trans('joesama/project::mailer.report.project', ['project' => ucwords($project->name) ]),
@@ -144,6 +150,8 @@ class Profile extends Model
                 => 
                 handles('joesama/entree::report/'.$type.'/form/'.$project->corporate_id.'/'.$project->id.'/'.$report->id)
             ]));
+
+
         }
 
         $message->put('footer', collect([

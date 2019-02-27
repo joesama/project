@@ -172,21 +172,12 @@ class ListProcessor
 
 		$datagrid = new DataGridGenerator();
 		
-		$datagrid->buildTable($columns, __('joesama/project::report.monthly.list') )
+		return $datagrid->buildTable($columns, __('joesama/project::report.monthly.list') )
 				 ->buildDataModel(
 				 	route('api.list.monthly',[$corporateId, $request->segment(5)]), 
 				 	$this->reportCardObj->monthlyList($corporateId, $request->segment(5))
 				 )
-				 ->buildOption($action, TRUE);
-
-		if($this->isProjectManager()){
-			$datagrid->buildExtraButton([
-				['uri' => 'monthlyReport('.$request->segment(5).')',
-				'desc' => __('joesama/project::report.monthly.form')]
-			]);
-		}
-
-		return $datagrid->render();
+				 ->buildOption($action, TRUE)->render();
 	}
 
 	/**
@@ -221,21 +212,12 @@ class ListProcessor
 
 		$datagrid = new DataGridGenerator();
 		
-		$datagrid->buildTable($columns, __('joesama/project::report.weekly.list') )
+		return $datagrid->buildTable($columns, __('joesama/project::report.weekly.list') )
 				 ->buildDataModel(
 				 	route('api.list.weekly',[$corporateId, $request->segment(5)]), 
 				 	$this->reportCardObj->weeklyList($corporateId, $request->segment(5))
 				 )
-				 ->buildOption($action, TRUE);
-
-		if ( $this->isProjectManager() ){
-			$datagrid->buildAddButton(
-				route('report.weekly.form',[$corporateId, $request->segment(5)]),
-				__('joesama/project::report.weekly.form')
-			);
-		}
-
-		return $datagrid->render();
+				 ->buildOption($action, TRUE)->render();
 	}
 
 	/**

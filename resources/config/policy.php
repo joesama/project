@@ -25,6 +25,7 @@ return [
 			'project' => [
 				'list' => ['corporateId','projectId?'],
 				'approval' => ['corporateId','projectId?'],
+				'info' => ['corporateId','projectId?','infoId?'],
 				'form' => ['corporateId','projectId?'],
 				'view' => ['corporateId','projectId','reportId?']
 			],
@@ -240,6 +241,7 @@ return [
 			],
 			'workflow' => [
 				'approval' => ['corporateId','projectId'],
+				'info' => ['corporateId','projectId','infoId?'],
 				'process' => ['corporateId','projectId','reportId?']
 			],
 			'physical' => [

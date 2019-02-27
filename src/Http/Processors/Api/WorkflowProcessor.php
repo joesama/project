@@ -4,6 +4,7 @@ namespace Joesama\Project\Http\Processors\Api;
 use Illuminate\Http\Request;
 use Joesama\Project\Database\Repositories\Project\MakeReportCardRepository;
 use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
+use Joesama\Project\Database\Repositories\Project\ProjectInfoWorkflowRepository;
 use Joesama\Project\Database\Repositories\Project\ProjectWorkflowRepository;
 
 /**
@@ -19,11 +20,13 @@ class WorkflowProcessor
 	public function __construct(
 		ProjectInfoRepository $projectInfo,
 		MakeReportCardRepository $makeReportCard,
-		ProjectWorkflowRepository $projectApproval
+		ProjectWorkflowRepository $projectApproval,
+		ProjectInfoWorkflowRepository $projectInfoflow
 	){
 		$this->projectObj 		= $projectInfo;
 		$this->makeReport 		= $makeReportCard;
 		$this->projectApproval 	= $projectApproval;
+		$this->projectInfoFlow 	= $projectInfoflow;
 	}
 
 	/**
@@ -42,6 +45,27 @@ class WorkflowProcessor
 			handles('manager/project/view/'.$corporateId.'/'.$projectId),
 			trans('joesama/entree::respond.data.success', [
 				'form' => trans('joesama/project::manager.'.$request->segment(2).'.approval')
+			]),
+            'success'
+		);
+	}
+
+	/**
+	 * @param  Request $request
+	 * @param  int $corporateId
+	 * @param  int $projectId
+	 * @return [type]
+	 */
+	public function info(Request $request,int $corporateId, int $projectId)
+	{
+		$projectInfo = $this->projectInfoFlow->projectInfo($request->segment(6));
+		
+		$this->projectInfoFlow->processInfo($projectInfo,$request);
+
+		return redirect_with_message(
+			handles('manager/project/info/'.$corporateId.'/'.$projectId.'/'.$projectInfo->id),
+			trans('joesama/entree::respond.data.success', [
+				'form' => trans('joesama/project::manager.'.$request->segment(2).'.info')
 			]),
             'success'
 		);

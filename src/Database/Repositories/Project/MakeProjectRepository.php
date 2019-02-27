@@ -14,7 +14,9 @@ use Joesama\Project\Database\Model\Project\HseScore;
 use Joesama\Project\Database\Model\Project\Incident;
 use Joesama\Project\Database\Model\Project\Issue;
 use Joesama\Project\Database\Model\Project\PhysicalMilestone;
+use Joesama\Project\Database\Model\Project\Plan;
 use Joesama\Project\Database\Model\Project\Project;
+use Joesama\Project\Database\Model\Project\ProjectInfo;
 use Joesama\Project\Database\Model\Project\ProjectLad;
 use Joesama\Project\Database\Model\Project\ProjectPayment;
 use Joesama\Project\Database\Model\Project\ProjectRetention;
@@ -23,9 +25,9 @@ use Joesama\Project\Database\Model\Project\Risk;
 use Joesama\Project\Database\Model\Project\TagMilestone;
 use Joesama\Project\Database\Model\Project\Task;
 use Joesama\Project\Database\Model\Project\TaskProgress;
-use Joesama\Project\Database\Model\Project\Plan;
 use Joesama\Project\Database\Repositories\Project\MilestoneRepository;
 use Joesama\Project\Traits\ProjectCalculator;
+use Joesama\Project\Traits\HasAccessAs;
 
 /**
  * Data Handling For Create Project Record
@@ -35,7 +37,7 @@ use Joesama\Project\Traits\ProjectCalculator;
  **/
 class MakeProjectRepository 
 {
-	use ProjectCalculator;
+	use ProjectCalculator,HasAccessAs;
 
 	public function __construct(
 		Project $project , 
@@ -79,84 +81,109 @@ class MakeProjectRepository
 		DB::beginTransaction();
 
 		try{
+
 			if(!is_null($id)){
 				$this->projectModel = $this->projectModel->find($id);
 			}
 
-			$inputData->each(function($record,$field){
-				if(!is_null($record)){
-					if(in_array($field, ['start','end'])):
-						$record = Carbon::createFromFormat('d/m/Y',$record)->toDateTimeString();
-					endif;
-					
-					$this->projectModel->{$field} = $record;
+			if($this->projectModel->active != 1){
+
+				$inputData->each(function($record,$field){
+					if(!is_null($record)){
+						if(in_array($field, ['start','end'])):
+							$record = Carbon::createFromFormat('d/m/Y',$record)->toDateTimeString();
+						endif;
+						
+						$this->projectModel->{$field} = $record;
+					}
+				});
+
+				// Create HSE Card for project
+				if(is_null($id)){
+
+					$startDate = Carbon::parse($this->projectModel->start);
+
+					$endDate = Carbon::parse($this->projectModel->end);
+
+					$hse = new HseScore();
+
+					$hse->project_hour = $startDate->diffInHours($endDate);
+
+					$hse->save();
+
+					$this->projectModel->active = 0;
+					$this->projectModel->hse_id = $hse->id;
+					$this->projectModel->effective_days = $this->effectiveDays($this->projectModel->start,$this->projectModel->end);
+
+					$projectAdmin = Profile::where('user_id',auth()->id())->with('role')->first();
+
+					$this->projectModel->profile()->attach($projectAdmin->id,['role_id' => 1]);
 				}
-			});
 
-			// Create HSE Card for project
-			if(is_null($id)){
+				$this->projectModel->save();
 
-				$startDate = Carbon::parse($this->projectModel->start);
+				// Create Physical & Financial Milestones
+				if($this->projectModel->physical->count() == 0){
 
-				$endDate = Carbon::parse($this->projectModel->end);
+					$period = CarbonInterval::month()->toPeriod($this->projectModel->start, $this->projectModel->end);
 
-				$hse = new HseScore();
+					foreach ($period as $key => $date) {
+					    $progressDate = $date->endOfMonth()->format('Y-m-d');
 
-				$hse->project_hour = $startDate->diffInHours($endDate);
+					    $label = $date->format('j M Y');
 
-				$hse->save();
+					    $this->projectModel->physical()->save(
+					    	new PhysicalMilestone([
+					    		'label' => $label,
+					    		'progress_date' => $progressDate,
+					    	])
+					    );
 
-				$this->projectModel->active = 0;
-				$this->projectModel->hse_id = $hse->id;
-				$this->projectModel->effective_days = $this->effectiveDays($this->projectModel->start,$this->projectModel->end);
-
-				$projectAdmin = Profile::where('user_id',auth()->id())->with('role')->first();
-
-				$this->projectModel->profile()->attach($projectAdmin->id,['role_id' => 1]);
-			}
-
-			$this->projectModel->save();
-
-			// Create Physical & Financial Milestones
-			if($this->projectModel->physical->count() == 0){
-
-				$period = CarbonInterval::month()->toPeriod($this->projectModel->start, $this->projectModel->end);
-
-				foreach ($period as $key => $date) {
-				    $progressDate = $date->endOfMonth()->format('Y-m-d');
-
-				    $label = $date->format('j M Y');
-
-				    $this->projectModel->physical()->save(
-				    	new PhysicalMilestone([
-				    		'label' => $label,
-				    		'progress_date' => $progressDate,
-				    	])
-				    );
-
-				    $this->projectModel->finance()->save(
-				    	new FinanceMilestone([
-				    		'label' => $label,
-				    		'progress_date' => $progressDate,
-				    	])
-				    );
+					    $this->projectModel->finance()->save(
+					    	new FinanceMilestone([
+					    		'label' => $label,
+					    		'progress_date' => $progressDate,
+					    	])
+					    );
+					}
 				}
-			}
 
-			// Assign Role
-			$this->projectModel->profile()->sync([
-				$projectData->get('manager_id') => ['role_id' => 2],
-				$projectData->get('approver_id') => ['role_id' => 4],
-				$projectData->get('validator_id') => ['role_id' => 5],
-				$projectData->get('reviewer_id') => ['role_id' => 3],
-				$projectData->get('acceptance_id') => ['role_id' => 4],
-				$projectData->get('commentor_id') => ['role_id' => 7]
-			]);
+				// Assign Role
+				$this->projectModel->profile()->sync([
+					$projectData->get('manager_id') => ['role_id' => 2],
+					$projectData->get('approver_id') => ['role_id' => 4],
+					$projectData->get('validator_id') => ['role_id' => 5],
+					$projectData->get('reviewer_id') => ['role_id' => 3],
+					$projectData->get('acceptance_id') => ['role_id' => 4],
+					$projectData->get('commentor_id') => ['role_id' => 7]
+				]);
 
-			// Generate Approval Workflow
-			if(is_null($id)){
-				$approval = new ProjectWorkflowRepository();
-				$approval->registerProject($this->projectModel);
+				// Generate Approval Workflow
+				if(is_null($id)){
+					$approval = new ProjectWorkflowRepository();
+					$approval->registerProject($this->projectModel);
+				}
+
+			}else{
+
+				$requestedInfo = new ProjectInfo();
+
+				$inputData->each(function($record,$field) use($requestedInfo){
+					if($record != null){
+						if(in_array($field, ['start','end'])):
+							$record = Carbon::createFromFormat('d/m/Y',$record)->toDateTimeString();
+						endif;
+						$requestedInfo->{$field} = $record;
+					}
+				});
+				$requestedInfo->project_id = $this->projectModel->id;
+				$requestedInfo->save();
+
+				// Create Approval Workflow
+				$approval = new ProjectInfoWorkflowRepository();
+
+				$approval->registerInfoWorkflow($requestedInfo);
+
 			}
 
 			DB::commit();
@@ -164,6 +191,7 @@ class MakeProjectRepository
 			return $this->projectModel;
 
 		}catch( Exception $e){
+
 			throw new Exception($e->getMessage(), 1);
 
 			DB::rollback();

@@ -14,11 +14,27 @@
     <!--Panel body-->
     <div class="collapse in" id="workflow">
       <div class="panel-body text-center">
-        <div class="col-md-12">
-          {!! $weeklyReport !!}
+        <div class="row">
+          <div class="col-md-12 pad-no mar-btm">
+            <a class="btn btn-dark pull-right mar-hor" href="{{ handles('joesama/project::manager/finance/list/'.request()->segment(4).'/'.request()->segment(5)) }}">
+              <i class="fa fa-plus icon-fw"></i>
+              {{ __('joesama/project::report.monthly.form')  }}
+            </a>
+            <a class="btn btn-dark pull-right mar-hor" href="{{ route('report.weekly.form',[request()->segment(4), request()->segment(5)]) }}">
+              <i class="fa fa-plus icon-fw"></i>
+              {{ __('joesama/project::report.weekly.form')  }}
+            </a>
+          </div>
         </div>
-        <div class="col-md-12">
-          {!! $monthlyReport !!}
+        <div class="row">
+          <div class="col-md-12">
+            {!! $weeklyReport !!}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            {!! $monthlyReport !!}
+          </div>
         </div>
       </div>
     </div>

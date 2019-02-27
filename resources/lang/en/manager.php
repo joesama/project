@@ -7,6 +7,7 @@ return [
 	'project' => [
 		'project' => "Project",
 		'list' => "List of Project",
+		'info' => "Project Info Update",
 		'approval' => "Project Approval History",
 		'form' => "Project's Form",
 		'view' => "Project's Information",

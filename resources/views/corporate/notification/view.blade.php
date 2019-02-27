@@ -71,18 +71,26 @@
                 <!--===================================================-->
                 <div class="mail-message">
                     Greetings {{ $profile->name }},
-                    <br><br> 
-                    {{ $content->get(0) }}
                     <br><br>
-                    {{ $content->get(1) }}
-                    <br><br>
-                    To Login Please Click Link Below.
-                    <br>
-                    <i class="psi-link icon-fw"></i>
-                    <a class="text-bold text-info" href="{{ handles( $content->get('PMOIS') ) }}">
-                    	{{ memorize('threef.' .\App::getLocale(). '.name', config('app.name')) }}
-                    </a>
-                    <br><br>
+                    @foreach($content->sortKeys() as $key => $cont)
+                        @if(is_integer($key))
+                        {{ $cont }}
+                        <br><br>
+                        @endif
+                    @endforeach
+
+                    @foreach($action as $key => $act)
+                    @if(is_integer($key))
+                        {{ $act }}
+                        <br><br>
+                    @else
+                        <i class="psi-link icon-fw"></i>
+                        <a class="text-bold text-info" href="{{ $act }}">
+                        	{{ $key }}
+                        </a>
+                        <br><br>
+                    @endif
+                    @endforeach
                 </div>
                 <!--===================================================-->
                 <!--End Message-->

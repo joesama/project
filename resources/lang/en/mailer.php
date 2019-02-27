@@ -14,6 +14,7 @@ return [
 		'rejected' => 'Project Approval Has Been Rejected',
 		'new' => 'Project Approval Has Been Submitted',
 		'title' => 'Project Approval Notification',
+		'info' => 'A Request To Update Project Information Has Been Submitted',
 	],
 	'title' => [
 		'weekly' => 'Weekly Project Report Notification',
@@ -23,5 +24,6 @@ return [
 		'updated' => 'Project Information Update Notification',
 		'new' => 'Project Update Notification',
 		'rejected' => 'Project Approval Notification',
+		'info' => 'Project Information Update Notification',
 	],
 ];

@@ -65,8 +65,9 @@ class NotificationProcessor
 		NotifyMail::read($email->id);
 
 		$content = collect(json_decode($email->content));
+		$action = collect(json_decode($email->action));
 
-		return compact('email','content');
+		return compact('email','content','action');
 	}
 
 } // END class ClientProcessor 

@@ -9,6 +9,7 @@ use Joesama\Project\Database\Model\Project\Client;
 use Joesama\Project\Database\Model\Project\ReportWorkflow;
 use Joesama\Project\Database\Repositories\Project\FinancialRepository;
 use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
+use Joesama\Project\Database\Repositories\Project\ProjectInfoWorkflowRepository;
 use Joesama\Project\Database\Repositories\Project\ProjectWorkflowRepository;
 use Joesama\Project\Database\Repositories\Project\ReportCardInfoRepository;
 use Joesama\Project\Http\Processors\Manager\HseProcessor;
@@ -31,6 +32,7 @@ class ProjectProcessor
 			$financialRepo, 
 			$reportCardRepo, 
 			$projectWorkflowRepo, 
+			$projectInfoWorkflowRepo, 
 			$projectInfo, 
 			$formBuilder;
 
@@ -42,6 +44,7 @@ class ProjectProcessor
 	 * @param FinancialRepository   	$financialRepo  	Financial Info
 	 * @param ReportCardInfoRepository  $reportCard  		Financial Info
 	 * @param ProjectWorkflowRepository $projectWorkflow  	Approval Workflow
+	 * @param ProjectInfoWorkflowRepository $projectInfoWorkflow  	Project Info Workflow
 	 * @param HseProcessor          	$hseScoreCard   	HSE Info
 	 * @param FormGenerator         	$formBuilder    	Form builder
 	 */
@@ -51,6 +54,7 @@ class ProjectProcessor
 		FinancialRepository $financialRepo,
 		ReportCardInfoRepository $reportCard,
 		ProjectWorkflowRepository $projectWorkflow,
+		ProjectInfoWorkflowRepository $projectInfoWorkflow,
 		HseProcessor $hseScoreCard,
 		FormGenerator $formBuilder
 	){
@@ -59,9 +63,10 @@ class ProjectProcessor
 		$this->financialRepo = $financialRepo;
 		$this->reportCardRepo = $reportCard;
 		$this->projectWorkflowRepo = $projectWorkflow;
+		$this->projectInfoWorkflowRepo = $projectInfoWorkflow;
 		$this->projectInfo = $projectInfo;
 		$this->formBuilder = $formBuilder;
-		$this->profile();
+		$this->profileRefresh();
 	}
 
 
@@ -91,6 +96,23 @@ class ProjectProcessor
 		$table = $this->listProcessor->projectApproval($request,$corporateId);
 		
 		return compact('table');
+	}
+
+	/**
+	 * Project Approval data listing
+	 * 
+	 * @param  Request $request
+	 * @param  int $corporateId
+	 * @return mixed
+	 */
+	public function info(Request $request, int $corporateId)
+	{
+		$infoProject = $this->projectInfoWorkflowRepo->projectInfo($request->segment(6));
+		$project = $infoProject->project;
+		$reportWorkflow 	= $this->reportCardRepo->reportWorkflow($project,$project->id);
+		$infoWorkflow 	= $this->projectInfoWorkflowRepo->infoWorkflow($corporateId, $infoProject);
+
+		return compact('infoProject','reportWorkflow','project','infoWorkflow');
 	}
 
 	/**
@@ -215,16 +237,16 @@ class ProjectProcessor
 			data_get($project,'lad')
 		);
 
-		$reportDue = Carbon::now()->format('m');
+		$reportDue = '#'.Carbon::now()->format('m');
 		
 		$startOfWeek = ($report) ? Carbon::parse($report->card_date) : Carbon::now()->startOfMonth();
 
-		$reportStart = $startOfWeek->format('d-m-Y');
+		$reportStart = $startOfWeek->format('j M Y');
 		$dueStart = $startOfWeek->format('Y-m-d');
 
 		$endOfWeek = ($report) ? Carbon::parse($report->card_end) : Carbon::now()->endOfMonth();
 
-		$reportEnd = $endOfWeek->format('d-m-Y');
+		$reportEnd = $endOfWeek->format('j M Y');
 		$dueEnd = $endOfWeek->format('Y-m-d');
 
 		$reportWorkflow 	= $this->reportCardRepo->reportWorkflow($project,$project->id);
