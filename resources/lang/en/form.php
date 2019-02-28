@@ -200,5 +200,9 @@ return [
 		'planned' => 'Planned Payment (RM)',
 		'actual' => 'Actual Payment (RM)',
 		'progress_date' => 'Date',
+	],
+	'upload' =>[
+		'label' => 'Label',
+		'aging' => 'Created',
 	]
 ];

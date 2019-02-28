@@ -27,6 +27,7 @@
             @endforeach
             @includeIf('joesama/project::manager.project.part.financial')
             @includeIf('joesama/project::manager.project.part.hse')
+            @includeWhen($project->active && is_null($isReport) ,'joesama/project::manager.project.part.upload')
             @includeWhen($project->active && is_null($isReport) ,'joesama/project::manager.project.part.workflow')
             @includeWhen(!$project->active,'joesama/project::manager.project.part.approval')
             @includeWhen($isReport,'joesama/project::manager.project.part.monthlyReport')

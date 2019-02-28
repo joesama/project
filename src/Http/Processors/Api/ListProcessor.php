@@ -224,4 +224,14 @@ class ListProcessor
 	{
 		return $this->milestoneObj->physicalList($corporateId,$request->segment(5));
 	}
+
+	/**
+	 * @param  array $request
+	 * @param  int $request,$corporateId
+	 * @return Illuminate\Pagination\LengthAwarePaginator
+	 */
+	public function listUpload($request,$corporateId)
+	{
+		return $this->projectObj->listUpload($corporateId,$request->segment(5));
+	}
 } // END class MakeProjectProcessor 

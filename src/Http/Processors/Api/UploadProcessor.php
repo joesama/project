@@ -3,6 +3,7 @@ namespace Joesama\Project\Http\Processors\Api;
 
 use Illuminate\Http\Request;
 use Joesama\Entree\Services\Upload\FileUploader;
+use Joesama\Project\Database\Model\Project\ProjectUpload;
 
 /**
  * Processing All List 
@@ -20,14 +21,37 @@ class UploadProcessor
 	 */
 	public function save(Request $request,int $corporateId)
 	{
-		if ($request->hasFile('upload') && $request->file('upload')->isValid()) {
+		$projectId = $request->segment(5);
 
-			$absolutePath = storage_path($request->file('client').'/'.$corporateId.'/upload/');
+		$files = $request->file('upload');
 
-			$uploader = new FileUploader($request->file('upload'),$this);
+		$absolutePath = storage_path($request->file('client').'/'.$corporateId.'/'.$projectId.'/upload/');
 
-		    return url($uploader->destination());
+		$fileList = collect([]);
+
+		if($request->hasFile('upload')){
+			if(!is_array($files)){
+				$files = [$files ];
+			}
+
+			foreach($files as $file){
+				if($file->isValid()){
+					$uploader = new FileUploader($file,$this);
+
+					$upload = new ProjectUpload();
+					$upload->label = $file->getClientOriginalName();
+					$upload->path = $uploader->destination();
+					$upload->project_id = $projectId;
+					$upload->upload_by = \Auth()->id();
+					$upload->save();
+
+					$fileList->push($upload);
+				}
+			}
 		}
+
+
+		return response()->json($fileList);
 	}
 
 

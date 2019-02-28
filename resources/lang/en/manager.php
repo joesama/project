@@ -11,6 +11,7 @@ return [
 		'approval' => "Project Approval History",
 		'form' => "Project's Form",
 		'view' => "Project's Information",
+		'upload' => "Document Upload",
 	],
 	'issue' => [
 		'list' => "List of Project Issues",
@@ -80,5 +81,8 @@ return [
 	'finance' => [
 		'list' => 'List of Financial Milestone',
 		'milestone' => 'Financial Milestone'
+	],
+	'upload' => [
+		'list' => 'Document List'
 	]
 ];

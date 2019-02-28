@@ -154,7 +154,8 @@ return [
 				'approval-project' => ['corporateId','projectId?'],
 				'approval-dashboard' => ['corporateId','projectId?'],
 				'physical' => ['corporateId','projectId'],
-				'finance' => ['corporateId','projectId']
+				'finance' => ['corporateId','projectId'],
+				'upload' => ['corporateId','projectId']
 			],
 			'profile' => [
 				'reassign' => ['masterId','projectId']

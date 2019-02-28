@@ -12,7 +12,8 @@ use Joesama\Project\Database\Model\Project\{
 	ProjectPayment,
 	ProjectVo,
 	ProjectLad,
-	ProjectRetention
+	ProjectRetention,
+	ProjectUpload
 };
 use DB;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -39,6 +40,7 @@ class ProjectInfoRepository
 			$retentionModel, 
 			$ladModel,
 			$stricAccess,
+			$uploadModel,
 			$profile;
 
 	public function __construct(
@@ -52,7 +54,8 @@ class ProjectInfoRepository
 		ProjectPayment $payment,
 		ProjectVo $vo,
 		ProjectRetention $retention,
-		ProjectLad $lad
+		ProjectLad $lad,
+		ProjectUpload $upload
 	){
 		$this->projectModel = $project;
 		$this->clientModel = $client;
@@ -65,6 +68,7 @@ class ProjectInfoRepository
 		$this->voModel = $vo;
 		$this->retentionModel = $retention;
 		$this->ladModel = $lad;
+		$this->uploadModel = $upload;
 		$this->stricAccess = true;
 		$this->profile = Profile::where('user_id',auth()->id())->first();
 	}
@@ -434,6 +438,19 @@ class ProjectInfoRepository
                 return $query->where('id', $projectId);
             });
 		})->component()->paginate();
+	}
+
+	/**
+	 * List of Project Upload
+	 * 
+	 * @param int $corporateId - id for specific corporate
+	 * @param int $projectId
+	 **/
+	public function listUpload(int $corporateId, $projectId)
+	{
+		return $this->uploadModel->whereHas('project',function($query) use($corporateId, $projectId){
+			$query->sameGroup($corporateId);
+		})->paginate();
 	}
 
 } // END class MakeProjectRepository 
