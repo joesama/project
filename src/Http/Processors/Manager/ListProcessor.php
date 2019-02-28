@@ -2,6 +2,7 @@
 namespace Joesama\Project\Http\Processors\Manager; 
 
 use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
+use Joesama\Project\Database\Repositories\Project\ProjectUploadRepository;
 use Joesama\Project\Database\Repositories\Project\ProjectWorkflowRepository;
 use Joesama\Project\Database\Repositories\Project\ReportCardInfoRepository;
 use Joesama\Project\Http\Services\DataGridGenerator;
@@ -17,7 +18,10 @@ class ListProcessor
 {
 	use HasAccessAs;
 
-	private $projectObj, $approvalObj, $reportCardObj;
+	private $projectObj,
+		$approvalObj,
+		$reportCardObj,
+		$uploadObj;
 
 	/**
 	 * Build Class Dependency
@@ -28,11 +32,17 @@ class ListProcessor
 	public function __construct (
 		ProjectInfoRepository $projectInfo,
 		ProjectWorkflowRepository $projectWorkflow,
-		ReportCardInfoRepository $reportCard
+		ReportCardInfoRepository $reportCard,
+		ProjectUploadRepository $uploadObj
 	){
 		$this->projectObj = $projectInfo;
+
 		$this->approvalObj = $projectWorkflow;
+
 		$this->reportCardObj = $reportCard;
+
+		$this->uploadObj = $uploadObj;
+
 		$this->profile();
 	}
 
@@ -81,7 +91,6 @@ class ListProcessor
 			$action = array_merge($action,$editAction);
 
 		}
-
 
 		$datagrid = new DataGridGenerator();
 		
@@ -395,7 +404,7 @@ class ListProcessor
 		   [ 'field' => 'assignee.name',
 		   'title' => 'PIC',
 		   'style' => 'text-xs-center col-xs-3'],
-		   [ 'field' => 'progress.description',
+		   [ 'field' => 'progress',
 		   'title' => __('joesama/project::project.issues.status'),
 		   'style' => 'text-xs-center col-xs-2']
 		];
@@ -460,7 +469,7 @@ class ListProcessor
 		   [ 'field' => 'description',
 		   'title' => __('joesama/project::project.risk.name'),
 		   'style' => 'text-xs-left text-capitalize'],
-		   [ 'field' => 'severity.description',
+		   [ 'field' => 'severity',
 		   'title' => __('joesama/project::project.risk.severity'),
 		   'style' => 'text-xs-center col-xs-2'],
 //                   [ 'field' => 'status.description',
@@ -627,6 +636,48 @@ class ListProcessor
 		if($this->isProjectManager() || auth()->user()->isAdmin){
 			$datagrid->buildAddButton(route('manager.attribute.form',[$corporateId, $projectId]));
 		}
+
+		return $datagrid->buildOption($action, TRUE)->render();
+	}
+
+	/**
+	 * Upload Listing
+	 * 
+	 * @param  Request $request    Http request
+	 * @param  int    $corporateId Corporate Id
+	 * @param  int    $projectId   Project Id
+	 * @return mixed              
+	 */
+	public function upload($request, int $corporateId, int $projectId)
+	{
+
+		$columns = [
+		   [ 'field' => 'label',
+		   'title' => __('joesama/project::form.upload.label'),
+		   'style' => 'text-left text-lowercase'],
+		   [ 'field' => 'aging',
+		   'title' => __('joesama/project::form.upload.aging'),
+		   'style' => 'text-center']
+		];
+
+		$action = [
+			[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
+			    'url' => handles('joesama/project::api/upload/download/'.$corporateId.'/'.$request->segment(5)), // URL for action
+			    'icons' => 'psi-download icon', // Icon for action : optional
+			    'key' => 'id'  ],
+			[ 'delete' => trans('joesama/vuegrid::datagrid.buttons.delete') , // Action Description
+			    'url' => handles('joesama/project::api/upload/delete/'.$corporateId.'/'.$request->segment(5)), // URL for action
+			    'icons' => 'fa fa-remove icon', // Icon for action : optional
+			    'key' => 'id'  ]
+		];
+
+		$datagrid = new DataGridGenerator();
+		
+		$datagrid->buildTable($columns, __('joesama/project::manager.upload.list') )
+				 ->buildDataModel(
+				 	route('api.list.upload',[$corporateId, $projectId]), 
+				 	$this->uploadObj->listUpload($corporateId, $projectId)
+				 );
 
 		return $datagrid->buildOption($action, TRUE)->render();
 	}

@@ -15,7 +15,7 @@ class ProjectInfoWorkflowRepository
 	use HasAccessAs;
 
 	/**
-	 * undocumented function
+	 * Project Info Snippet
 	 *
 	 * @return void
 	 * @author 

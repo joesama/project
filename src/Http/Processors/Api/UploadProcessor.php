@@ -2,8 +2,9 @@
 namespace Joesama\Project\Http\Processors\Api; 
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Joesama\Entree\Services\Upload\FileUploader;
-use Joesama\Project\Database\Model\Project\ProjectUpload;
+use Joesama\Project\Database\Repositories\Project\ProjectUploadRepository;
 
 /**
  * Processing All List 
@@ -13,6 +14,14 @@ use Joesama\Project\Database\Model\Project\ProjectUpload;
  **/
 class UploadProcessor 
 {
+	private $uploadRepository;
+
+	public function __construct(
+		ProjectUploadRepository $projectUpload
+	){
+		$this->uploadRepository = $projectUpload;
+	}
+
 	/**
 	 * @param  Request $request
 	 * @param  int $corporateId
@@ -38,21 +47,50 @@ class UploadProcessor
 				if($file->isValid()){
 					$uploader = new FileUploader($file,$this);
 
-					$upload = new ProjectUpload();
-					$upload->label = $file->getClientOriginalName();
-					$upload->path = $uploader->destination();
-					$upload->project_id = $projectId;
-					$upload->upload_by = \Auth()->id();
-					$upload->save();
+					$upload = $this->uploadRepository->registerUploadedFile(
+						$projectId,
+						$file->getClientOriginalName(),
+						$uploader->destination()
+					);
 
 					$fileList->push($upload);
 				}
 			}
 		}
 
-
 		return response()->json($fileList);
 	}
 
+	/**
+	 * Remove file uploaded data from project
+	 * 
+	 * @param  Request $request
+	 * @param  int $corporateId
+	 * @param  int $projectId
+	 * @return [type]
+	 */
+	public function delete(Request $request,int $corporateId, int $projectId)
+	{
+		$file = $this->uploadRepository->getFileUploaded($request->segment(6));
+
+		Storage::delete($file->path);
+
+		return $this->uploadRepository->deleteFile($file);
+	}
+
+	/**
+	 * download file uploaded data to project
+	 * 
+	 * @param  Request $request
+	 * @param  int $corporateId
+	 * @param  int $projectId
+	 * @return [type]
+	 */
+	public function download(Request $request,int $corporateId, int $projectId)
+	{
+		$file = $this->uploadRepository->getFileUploaded($request->segment(6));
+
+		return Storage::download($file->path);
+	}
 
 } // END class MakeProjectProcessor 

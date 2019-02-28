@@ -194,6 +194,10 @@ return [
 			'finance' => [
 				'delete' => ['corporateId','projectId','milestoneId']
 			],
+			'upload' => [
+				'download' => ['corporateId','projectId','uploadId'],
+				'delete' => ['corporateId','projectId','uploadId']
+			],
 		],
 		'POST' => [
 			'project' => [

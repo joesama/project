@@ -259,6 +259,7 @@ class ProjectProcessor
 			'reportEnd' =>  $reportEnd,
 			'project' => $project,
 			'isReport' => $reportId,
+			'upload' => $this->listProcessor->upload($request,$corporateId,$project->id),
 			'paymentSchedule' =>  $this->financialRepo->schedulePayment($project->id),
 			'projectSchedule' =>  $this->reportCardRepo->scheduleTask($project->id),
 			'reportWorkflow' => $reportWorkflow,

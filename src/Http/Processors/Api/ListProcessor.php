@@ -4,6 +4,7 @@ namespace Joesama\Project\Http\Processors\Api;
 use Joesama\Project\Database\Repositories\Organization\OrganizationInfoRepository;
 use Joesama\Project\Database\Repositories\Project\MilestoneRepository;
 use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
+use Joesama\Project\Database\Repositories\Project\ProjectUploadRepository;
 use Joesama\Project\Database\Repositories\Project\ProjectWorkflowRepository;
 use Joesama\Project\Database\Repositories\Project\ReportCardInfoRepository;
 use Joesama\Project\Database\Repositories\Setup\MasterDataRepository;
@@ -17,7 +18,13 @@ use Joesama\Project\Http\Services\DataGridGenerator;
  **/
 class ListProcessor 
 {
-	private $projectObj, $masterDataObj, $organizationObj, $reportCardObj, $approvalObj, $milestoneObj;
+	private $projectObj,
+		$masterDataObj,
+		$organizationObj,
+		$reportCardObj,
+		$approvalObj,
+		$milestoneObj,
+		$uploadObj;
 
 	public function __construct(
 		ProjectInfoRepository $projectInfo,
@@ -25,7 +32,8 @@ class ListProcessor
 		OrganizationInfoRepository $organizationData,
 		ProjectWorkflowRepository $projectWorkflow,
 		ReportCardInfoRepository $reportCardObj,
-		MilestoneRepository $milestoneObj
+		MilestoneRepository $milestoneObj,
+		ProjectUploadRepository $uploadObj
 	){
 		$this->projectObj = $projectInfo;
 		$this->masterDataObj = $masterData;
@@ -33,6 +41,7 @@ class ListProcessor
 		$this->reportCardObj = $reportCardObj;
 		$this->approvalObj = $projectWorkflow;
 		$this->milestoneObj = $milestoneObj;
+		$this->uploadObj = $uploadObj;
 	}
 
 	/**
@@ -230,8 +239,8 @@ class ListProcessor
 	 * @param  int $request,$corporateId
 	 * @return Illuminate\Pagination\LengthAwarePaginator
 	 */
-	public function listUpload($request,$corporateId)
+	public function upload($request,$corporateId)
 	{
-		return $this->projectObj->listUpload($corporateId,$request->segment(5));
+		return $this->uploadObj->listUpload($corporateId,$request->segment(5));
 	}
 } // END class MakeProjectProcessor 

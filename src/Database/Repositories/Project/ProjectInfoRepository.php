@@ -440,17 +440,4 @@ class ProjectInfoRepository
 		})->component()->paginate();
 	}
 
-	/**
-	 * List of Project Upload
-	 * 
-	 * @param int $corporateId - id for specific corporate
-	 * @param int $projectId
-	 **/
-	public function listUpload(int $corporateId, $projectId)
-	{
-		return $this->uploadModel->whereHas('project',function($query) use($corporateId, $projectId){
-			$query->sameGroup($corporateId);
-		})->paginate();
-	}
-
 } // END class MakeProjectRepository 

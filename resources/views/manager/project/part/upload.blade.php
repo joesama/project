@@ -54,6 +54,11 @@
         init: function() {
         var myDropzone = this;
 
+        },
+        uploadprogress: function(file, progress, bytesSent){
+          if(progress == 100){
+            location.reload()
+          }
         }
     }
 

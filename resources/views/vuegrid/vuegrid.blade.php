@@ -15,4 +15,5 @@
 
 <script type="text/javascript" src="https://unpkg.com/sweetalert2@7.19.1/dist/sweetalert2.all.js"></script>
 <script src="{{ asset('packages/joesama/vuegrid/js/datagrid.js') }}"></script>
+
 @endpush
