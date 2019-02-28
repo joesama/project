@@ -57,7 +57,7 @@
         },
         uploadprogress: function(file, progress, bytesSent){
           if(progress == 100){
-            location.reload()
+            // location.reload()
           }
         }
     }

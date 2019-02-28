@@ -6,12 +6,13 @@
                     <div class="col-md-9">
                     </div>
                     <div class="col-md-3 text-right" class="vertical">
-                        @if( (strtolower(data_get($project,'approval.state')) == 'rejected' || data_get($project,'active') == 1) && $isProjectManager )
+                        @if( (strtolower(data_get($project,'approval.state')) == 'rejected' || data_get($project,'active') == 1) && $isProjectManager && !$isReport )
                         <a class="btn btn-dark mar-btm pull-right" href="{{ handles('joesama/project::manager/project/form/'.request()->segment(4).'/'.request()->segment(5)) }}">
                             <i class="psi-file-edit icon-fw"></i>
                             {{ __('joesama/vuegrid::datagrid.buttons.edit') }}
                         </a>
-                        @elseif($isReport)
+                        @endif
+                        @if($isReport)
                             <div class="col-md-12 text-center"> 
                                 <div class="row bord-all">
                                     <div class="col-md-12 text-bold text-center" style="padding: 3px">
