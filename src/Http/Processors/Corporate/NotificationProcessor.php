@@ -29,7 +29,7 @@ class NotificationProcessor
 	 */
 	public function list(Request $request, int $corporateId)
 	{
-		$mailing = $this->profileRefresh()->mails->sortByDesc('created_at')->map(function($mail){
+		$mailing = $this->profile()->mails->sortByDesc('created_at')->map(function($mail){
 
 			return collect([
 				'id' => $mail->id,

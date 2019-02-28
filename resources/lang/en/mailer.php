@@ -9,7 +9,7 @@ return [
 	],
 	'project'=>[
 		'approved' => 'Your Project Has Been Approved',
-		'weekly' => 'Monthweekly Project Was Submit For Your Action',
+		'weekly' => 'Weekly Project Was Submit For Your Action',
 		'monthly' => 'Monthly Project Was Submit For Your Action',
 		'accepted' => 'Your Project Has Been Accepted',
 		'updated' => 'Project Information Has Been Updated',
