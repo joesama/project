@@ -142,7 +142,7 @@ class ProjectWorkflowRepository
 
 			if(!is_null($approval->nextby)){
 				// $approval->nextby->sendActionNotification($project,$approval,$request->get('status'));
-				$project->profile->each(function($profile){
+				$project->profile->each(function($profile)  use($project,$approval,$request){
 					$profile->sendActionNotification($project,$approval,$request->get('status'));
 				}); 
 				

@@ -65,7 +65,7 @@ class MakeReportCardRepository
 			if(!is_null($card->nextby)){
 				// $card->nextby->sendActionNotification($project,$card,$request->get('type'));
 
-				$project->profile->each(function($profile){
+				$project->profile->each(function($profile) use($project,$card,$request){
 					$profile->sendActionNotification($project,$card,$request->get('type'));
 				});
 			}else{

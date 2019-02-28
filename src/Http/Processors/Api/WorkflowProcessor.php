@@ -85,14 +85,19 @@ class WorkflowProcessor
 
 		$type = 'init'.ucfirst($transtype);
 		$workflow = $type.'Workflow';
-		
-		$report = $this->makeReport->{$type}($project,$request);
+
+		$report = $this->makeReport->{$type}( $project, $request);
 
 		$message = 	trans('joesama/entree::respond.data.success', [
 						'form' => trans('joesama/project::report.'.$transtype.'.view')
 					]);
 
 		if($transtype == 'monthly'){
+
+			if($request->get('register')){
+				return $report;
+			}
+
 			return redirect_with_message(
 				handles('manager/project/view/'.$corporateId.'/'.$projectId .'/'.$report->id),
 				$message,

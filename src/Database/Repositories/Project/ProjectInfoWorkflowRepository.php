@@ -60,7 +60,7 @@ class ProjectInfoWorkflowRepository
 
 		if($projectInfo->nextby != null){
 			// $projectInfo->nextby->sendActionNotification($projectInfo->project, $projectInfo, 'info');
-			$project->profile->each(function($profile){
+			$project->profile->each(function($profile) use($projectInfo){
 				$profile->sendActionNotification($projectInfo->project, $projectInfo, 'info');
 			});
 		}else{
@@ -109,7 +109,7 @@ class ProjectInfoWorkflowRepository
 
 			if(!is_null($projectInfo->nextby)){
 				// $projectInfo->nextby->sendActionNotification($projectInfo->project,$projectInfo,'info');
-				$project->profile->each(function($profile){
+				$project->profile->each(function($profile) use($projectInfo){
 					$profile->sendActionNotification($projectInfo->project, $projectInfo, 'info');
 				});
 			}else{
