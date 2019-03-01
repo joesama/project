@@ -304,12 +304,15 @@ class ListProcessor
 
 		if ( ( $this->isProjectManager() || auth()->user()->isAdmin ) && $hasAction ) {
 			$datagrid->buildAddButton(route('manager.task.form',[$corporateId, $request->segment(5)]));
-		}
-        $datagrid->buildExtraButton([
-            ['uri' => route('manager.plan.form',[$corporateId,$request->segment(5)]),'desc' => trans('joesama/project::project.task.plan')]
-        ]);
 
-		return $datagrid->buildOption($action, TRUE)->render();
+	        $datagrid->buildExtraButton([
+	            ['uri' => route('manager.plan.form',[$corporateId,$request->segment(5)]),'desc' => trans('joesama/project::project.task.plan')]
+	        ]);
+
+	        $datagrid->buildOption($action, TRUE);
+       	}
+
+		return $datagrid->render();
 	}
         
     /**
@@ -449,9 +452,10 @@ class ListProcessor
 
 		if ( ( $this->isProjectManager() || auth()->user()->isAdmin ) && $hasAction ) {
 			$datagrid->buildAddButton(route('manager.issue.form',[$corporateId, $request->segment(5)]));
+			$datagrid->buildOption($action, TRUE);
 		}
 
-		return $datagrid->buildOption($action, TRUE)->render();
+		return $datagrid->render();
 	}
 
 	/**
@@ -509,9 +513,10 @@ class ListProcessor
 
 		if ( ( $this->isProjectManager() || auth()->user()->isAdmin ) && $hasAction ) {
 			$datagrid->buildAddButton(route('manager.risk.form',[$corporateId, $request->segment(5)]));
+			$datagrid->buildOption($action, TRUE);
 		}
 
-		return $datagrid->buildOption($action, TRUE)->render();
+		return $datagrid->render();
 	}
 
 	/**
