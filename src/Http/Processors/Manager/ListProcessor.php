@@ -407,7 +407,7 @@ class ListProcessor
 		   [ 'field' => 'assignee.name',
 		   'title' => 'PIC',
 		   'style' => 'text-xs-center col-xs-3'],
-		   [ 'field' => 'progress',
+		   [ 'field' => 'progress.description',
 		   'title' => __('joesama/project::project.issues.status'),
 		   'style' => 'text-xs-center col-xs-2']
 		];
@@ -468,17 +468,16 @@ class ListProcessor
 	 */
 	public function risk($request, int $corporateId, ?int $hasAction = 1)
 	{
-
 		$columns = [
-		   [ 'field' => 'description',
-		   'title' => __('joesama/project::project.risk.name'),
-		   'style' => 'text-xs-left text-capitalize'],
-		   [ 'field' => 'severity',
-		   'title' => __('joesama/project::project.risk.severity'),
-		   'style' => 'text-xs-center col-xs-2'],
-//                   [ 'field' => 'status.description',
-//                   'title' => __('joesama/project::project.risk.status'),
-//                   'style' => 'text-xs-center col-xs-2']
+			[ 'field' => 'description',
+			'title' => __('joesama/project::project.risk.name'),
+			'style' => 'text-xs-left text-capitalize'],
+			[ 'field' => 'severity.description',
+			'title' => __('joesama/project::project.risk.severity'),
+			'style' => 'text-xs-center col-xs-2'],
+			[ 'field' => 'status.description',
+			'title' => __('joesama/project::project.risk.status'),
+			'style' => 'text-xs-center col-xs-2']
 		];
 
 		$action = [

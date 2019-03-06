@@ -47,7 +47,7 @@ class Risk extends Model
 
     public function scopeComponent($query)
     {
-        return $query->with(['assignee','severity','project']);
+        return $query->with(['assignee','severity','project','status']);
     }
 
 }
