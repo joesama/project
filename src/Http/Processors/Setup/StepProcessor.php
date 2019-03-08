@@ -94,9 +94,18 @@ class StepProcessor
 				->id($request->segment(6))
 				->required(['*'])
 				->extras([
-					'description' => 'textarea'
-				])
-				->notRequired(['description'])
+					'description' => 'textarea',
+					'order' => 'text'
+				]);
+
+		if($request->segment(6) == null)
+		{
+			$form->default([
+				'order' => $this->modelObj->where('process_flow_id',$request->segment(5))->count() + 1
+			])->readonly(['order']);
+		}
+
+		$form = $form->notRequired(['description'])
 				->renderForm(
 					__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),
 					route('api.step.save',[$corporateId, $request->segment(5), $request->segment(6)])

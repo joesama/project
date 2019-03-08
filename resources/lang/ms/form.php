@@ -167,6 +167,7 @@ return [
 	],
 	'process_step' =>[
 		'label' => 'Nama',
+		'order' => 'Step Order',
 		'description' => 'Keterangan',
 	]
 ];

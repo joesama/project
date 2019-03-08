@@ -211,6 +211,7 @@ return [
 	],
 	'process_step' =>[
 		'label' => 'Label',
+		'order' => 'Step Order',
 		'description' => 'Description',
 	]
 ];

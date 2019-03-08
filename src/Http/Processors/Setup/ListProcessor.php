@@ -163,7 +163,10 @@ class ListProcessor
 		   'style' => 'text-xs-left text-capitalize'],
 		   [ 'field' => 'plain_description',
 		   'title' => __('joesama/project::form.process_step.description'),
-		   'style' => 'text-xs-left text-capitalize']
+		   'style' => 'text-xs-left text-capitalize'],
+		   [ 'field' => 'order',
+		   'title' => __('joesama/project::form.process_step.order'),
+		   'style' => 'text-center text-bold text-danger col-md-1 text-capitalize']
 		];
 
 		$action = [

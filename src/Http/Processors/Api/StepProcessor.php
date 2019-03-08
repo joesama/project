@@ -30,9 +30,9 @@ class StepProcessor
 	 * @param  ?int $flowId
 	 * @return 
 	 */
-	public function save(Request $request,int $corporateId, int $flowId, ?int $stepId = null)
+	public function save(Request $request,int $corporateId, int $flowId)
 	{
-		$task = $this->processRepository->saveStep(collect($request->all()), $corporateId, $flowId, $stepId);
+		$task = $this->processRepository->saveStep(collect($request->all()), $corporateId, $flowId, $request->segment(6));
 
 		return redirect_with_message(
 			handles('setup/step/list/'.$corporateId.'/'.$flowId),

@@ -55,7 +55,7 @@ class ProcessRepository
 	 */
 	public function getFlowSteps(int $flowId )
 	{
-		return $this->stepModel->where('process_flow_id',$flowId)->paginate();
+		return $this->stepModel->where('process_flow_id',$flowId)->orderBy('order','asc')->paginate();
 	}
 
 	/**
@@ -116,19 +116,35 @@ class ProcessRepository
 		if($stepId !== null)
 		{
 			$this->stepModel =  $this->stepModel->find($stepId);
+
+			$orderToReplace = $this->stepModel->order;
 		}
 		else{
 
 			$this->stepModel->process_flow_id = $flowId;
 
 			$this->stepModel->created_by = \Auth()->id();
+
+			$orderToReplace = Step::where('process_flow_id', $flowId)->count();
 		}
+
+		$order = $request->get('order');
+
+		$stepToBeReplace = Step::where('order', $order)->where('process_flow_id', $flowId)->first();
+
+		$this->stepModel->order = $order;
 
 		$this->stepModel->label = $request->get('label');
 
 		$this->stepModel->description = $request->get('description');
 
 		$this->stepModel->save();
+
+		if($stepToBeReplace !== null){
+
+			$stepToBeReplace->order = $orderToReplace ;
+			$stepToBeReplace->save();
+		}
 	}
 
 	/**

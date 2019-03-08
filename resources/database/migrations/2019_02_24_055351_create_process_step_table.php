@@ -19,9 +19,9 @@ class CreateProcessStepTable extends Migration
             $table->unsignedInteger('process_flow_id')->nullable();
             $table->unsignedInteger('created_by')->nullable();
             $table->unsignedInteger('delete_by')->nullable();
-            $table->unsignedInteger('order')->nullable();
             $table->text('label')->nullable();
             $table->text('description')->nullable();
+            $table->unsignedInteger('order')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
