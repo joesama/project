@@ -8,6 +8,7 @@ use Joesama\Project\Database\Repositories\Project\ProjectUploadRepository;
 use Joesama\Project\Database\Repositories\Project\ProjectWorkflowRepository;
 use Joesama\Project\Database\Repositories\Project\ReportCardInfoRepository;
 use Joesama\Project\Database\Repositories\Setup\MasterDataRepository;
+use Joesama\Project\Database\Repositories\Setup\ProcessRepository;
 use Joesama\Project\Http\Services\DataGridGenerator;
 
 /**
@@ -33,7 +34,8 @@ class ListProcessor
 		ProjectWorkflowRepository $projectWorkflow,
 		ReportCardInfoRepository $reportCardObj,
 		MilestoneRepository $milestoneObj,
-		ProjectUploadRepository $uploadObj
+		ProjectUploadRepository $uploadObj,
+		ProcessRepository $processObj
 	){
 		$this->projectObj = $projectInfo;
 		$this->masterDataObj = $masterData;
@@ -42,6 +44,7 @@ class ListProcessor
 		$this->approvalObj = $projectWorkflow;
 		$this->milestoneObj = $milestoneObj;
 		$this->uploadObj = $uploadObj;
+		$this->processObj = $processObj;
 	}
 
 	/**
@@ -242,5 +245,25 @@ class ListProcessor
 	public function upload($request,$corporateId)
 	{
 		return $this->uploadObj->listUpload($corporateId,$request->segment(5));
+	}
+
+	/**
+	 * @param  array $request
+	 * @param  int $request,$corporateId
+	 * @return Illuminate\Pagination\LengthAwarePaginator
+	 */
+	public function flow($request,$corporateId)
+	{
+		return $this->processObj->getAllFlowByCorporation($corporateId,$request->segment(5));
+	}
+
+	/**
+	 * @param  array $request
+	 * @param  int $request,$corporateId
+	 * @return Illuminate\Pagination\LengthAwarePaginator
+	 */
+	public function step($request,$corporateId)
+	{
+		return $this->processObj->getFlowSteps($request->segment(5));
 	}
 } // END class MakeProjectProcessor 

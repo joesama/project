@@ -48,7 +48,7 @@
 	  		@php
 	  			$listUrl = request()->segment(1).'/'.request()->segment(2).'/list/'.request()->segment(4);
 	  			$listCaption = request()->segment(1).'.'.request()->segment(2).'.list';
-	  			if( ( request()->segment(1) == 'manager' || request()->segment(2) == 'data' ) && !is_null(request()->segment(5))):
+	  			if( ( request()->segment(1) == 'manager' || request()->segment(2) == 'data' || request()->segment(2) == 'step' ) && !is_null(request()->segment(5))):
 	  			$listUrl = request()->segment(1).'/'.request()->segment(2).'/list/'.request()->segment(4).'/'.request()->segment(5);
 	  			$projectUrl = request()->segment(1).'/project/view/'.request()->segment(4).'/'.request()->segment(5);
 	  			$projectCaption = request()->segment(1).'.project.view';

@@ -10,5 +10,15 @@ return [
 		'list' => 'Data List',
 		'form' => 'Data Information',
 		'view' => 'Data Information'
+	],
+	'flow' => [
+		'list' => 'Process List',
+		'form' => 'Process Form',
+		'view' => 'Process Information'
+	],
+	'step' => [
+		'list' => 'Flow Steps List',
+		'form' => 'Flow Steps Form',
+		'view' => 'Flow Steps Information'
 	]
 ];

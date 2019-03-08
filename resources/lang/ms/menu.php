@@ -18,6 +18,7 @@ return [
 		'master' => 'Pengurusan Data',
 		'data' => 'Kategori Data',
 		'client' => 'Maklumat Klien'
+		'flow' => 'Pengurusan Process',
 	],
 	'dashboard' => [
 		'module' => 'Maklumat Eksekutif',

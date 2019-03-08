@@ -16,6 +16,17 @@ return [
 				'view' => ['corporateId','masterId','dataId'],
 				'no_menu' => TRUE
 			],
+			'flow' => [
+				'list' => ['corporateId'],
+				'form' => ['corporateId','masterId?',],
+				'view' => ['corporateId','masterId'],
+			],
+			'step' => [
+				'list' => ['corporateId','masterId'],
+				'form' => ['corporateId','masterId','stepId?'],
+				'view' => ['corporateId','masterId','stepId'],
+				'no_menu' => TRUE
+			],
 			'icon' => 'pli-wrench icon-lg icon-fw'
 		],
 		'manager' => [
@@ -155,7 +166,9 @@ return [
 				'approval-dashboard' => ['corporateId','projectId?'],
 				'physical' => ['corporateId','projectId'],
 				'finance' => ['corporateId','projectId'],
-				'upload' => ['corporateId','projectId']
+				'upload' => ['corporateId','projectId'],
+				'flow' => ['corporateId'],
+				'step' => ['corporateId','flowId']
 			],
 			'profile' => [
 				'reassign' => ['masterId','projectId']
@@ -197,6 +210,12 @@ return [
 			'upload' => [
 				'download' => ['corporateId','projectId','uploadId'],
 				'delete' => ['corporateId','projectId','uploadId']
+			],
+			'flow' => [
+				'delete' => ['corporateId','flowId']
+			],
+			'step' => [
+				'delete' => ['corporateId','flowId','stepId']
 			],
 		],
 		'POST' => [
@@ -257,6 +276,12 @@ return [
 			],
 			'upload' => [
 				'save' => ['corporateId','projectId?']
+			],
+			'flow' => [
+				'save' => ['corporateId','flowId?']
+			],
+			'step' => [
+				'save' => ['corporateId','flowId','stepId?']
 			],
 		]
 	],

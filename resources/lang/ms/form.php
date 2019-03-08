@@ -160,5 +160,13 @@ return [
 	'project_milestone_finance' => [
 		'label' => 'Milestone Label',
 		'group' => 'Milestone Group'
+	],
+	'process_flow' =>[
+		'label' => 'Nama',
+		'description' => 'Keterangan',
+	],
+	'process_step' =>[
+		'label' => 'Nama',
+		'description' => 'Keterangan',
 	]
 ];

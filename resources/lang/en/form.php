@@ -204,5 +204,13 @@ return [
 	'upload' =>[
 		'label' => 'Label',
 		'aging' => 'Created',
+	],
+	'process_flow' =>[
+		'label' => 'Label',
+		'description' => 'Description',
+	],
+	'process_step' =>[
+		'label' => 'Label',
+		'description' => 'Description',
 	]
 ];

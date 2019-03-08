@@ -18,6 +18,7 @@ return [
 		'module' => 'Setting',
 		'master' => 'Data Management',
 		'data' => 'Data Category',
+		'flow' => 'Process Management',
 	],
 	'dashboard' => [
 		'module' => 'Executive Information',
