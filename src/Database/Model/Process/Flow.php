@@ -35,7 +35,7 @@ class Flow extends Model
      */
     public function steps()
     {
-        return $this->hasMany(Steps::class,'process_flow_id','id');
+        return $this->hasMany(Step::class,'process_flow_id','id');
     }
 
     /**

@@ -133,7 +133,7 @@ class ListProcessor
 			    'icons' => 'psi-repeat-4 icon', // Icon for action : optional
 			    'key' => 'id'  ],
 			[ 'delete' => trans('joesama/vuegrid::datagrid.buttons.delete') , // Action Description
-			    'url' => handles('joesama/project::api/step/delete/'.$corporateId), // URL for action
+			    'url' => handles('joesama/project::api/flow/delete/'.$corporateId), // URL for action
 			    'icons' => 'fa fa-remove icon', // Icon for action : optional
 			    'key' => 'id'  ]
 		];
