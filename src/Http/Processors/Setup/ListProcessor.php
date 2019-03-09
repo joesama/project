@@ -164,6 +164,12 @@ class ListProcessor
 		   [ 'field' => 'plain_description',
 		   'title' => __('joesama/project::form.process_step.description'),
 		   'style' => 'text-xs-left text-capitalize'],
+		   [ 'field' => 'role',
+		   'title' => __('joesama/project::form.process_step.role_id'),
+		   'style' => 'text-xs-left text-capitalize'],
+		   [ 'field' => 'status',
+		   'title' => __('joesama/project::form.process_step.status_id'),
+		   'style' => 'text-xs-left text-capitalize'],
 		   [ 'field' => 'order',
 		   'title' => __('joesama/project::form.process_step.order'),
 		   'style' => 'text-center text-bold text-danger col-md-1 text-capitalize']

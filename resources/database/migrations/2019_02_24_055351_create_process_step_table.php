@@ -22,6 +22,8 @@ class CreateProcessStepTable extends Migration
             $table->text('label')->nullable();
             $table->text('description')->nullable();
             $table->unsignedInteger('order')->nullable();
+            $table->unsignedInteger('status_id')->nullable();
+            $table->unsignedInteger('role_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

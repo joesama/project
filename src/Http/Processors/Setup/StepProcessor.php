@@ -2,6 +2,8 @@
 namespace Joesama\Project\Http\Processors\Setup; 
 
 use Illuminate\Http\Request;
+use Joesama\Project\Database\Model\Master\MasterData;
+use Joesama\Project\Database\Model\Organization\ProfileRole;
 use Joesama\Project\Database\Model\Process\Step;
 use Joesama\Project\Http\Processors\Setup\ListProcessor;
 use Joesama\Project\Http\Services\FormGenerator;
@@ -95,7 +97,10 @@ class StepProcessor
 				->required(['*'])
 				->extras([
 					'description' => 'textarea',
-					'order' => 'text'
+					'order' => 'text',
+				])->option([
+					'role_id' => ProfileRole::pluck('role','id'),
+					'status_id' => MasterData::status()->pluck('description','id')
 				]);
 
 		if($request->segment(6) == null)

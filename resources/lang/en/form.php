@@ -211,6 +211,8 @@ return [
 	],
 	'process_step' =>[
 		'label' => 'Label',
+		'role_id' => 'Roles',
+		'status_id' => 'Status',
 		'order' => 'Step Order',
 		'description' => 'Description',
 	]

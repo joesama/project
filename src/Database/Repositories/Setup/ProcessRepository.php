@@ -138,6 +138,10 @@ class ProcessRepository
 
 		$this->stepModel->description = $request->get('description');
 
+		$this->stepModel->role_id = $request->get('role_id');
+
+		$this->stepModel->status_id = $request->get('status_id');
+
 		$this->stepModel->save();
 
 		if($stepToBeReplace !== null){

@@ -4,6 +4,8 @@ namespace Joesama\Project\Database\Model\Process;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Joesama\Project\Database\Model\Master\MasterData;
+use Joesama\Project\Database\Model\Organization\ProfileRole;
 
 class Step extends Model
 {
@@ -26,6 +28,26 @@ class Step extends Model
     public function flow()
     {
         return $this->belongsTo(Steps::class,'process_flow_id','id');
+    }
+
+    /**
+     * Parent Flow
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function role()
+    {
+        return $this->belongsTo(ProfileRole::class,'role_id','id');
+    }
+
+    /**
+     * Parent Flow
+     * 
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function status()
+    {
+        return $this->belongsTo(MasterData::class,'status_id','id');
     }
 
     public function getPlainDescriptionAttribute($value)
