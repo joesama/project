@@ -98,6 +98,7 @@ class StepProcessor
 				->extras([
 					'description' => 'textarea',
 					'order' => 'text',
+					'cross_organisation' => 'checkbox',
 				])->option([
 					'role_id' => ProfileRole::pluck('role','id'),
 					'status_id' => MasterData::status()->pluck('description','id')
@@ -110,7 +111,7 @@ class StepProcessor
 			])->readonly(['order']);
 		}
 
-		$form = $form->notRequired(['description'])
+		$form = $form->notRequired(['description','cross_organisation'])
 				->renderForm(
 					__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),
 					route('api.step.save',[$corporateId, $request->segment(5), $request->segment(6)])

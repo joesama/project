@@ -24,6 +24,7 @@ class CreateProcessStepTable extends Migration
             $table->unsignedInteger('order')->nullable();
             $table->unsignedInteger('status_id')->nullable();
             $table->unsignedInteger('role_id')->nullable();
+            $table->boolean('cross_organisation')->nullable()->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

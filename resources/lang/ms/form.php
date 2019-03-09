@@ -171,5 +171,6 @@ return [
 		'status_id' => 'Status',
 		'order' => 'Step Order',
 		'description' => 'Keterangan',
+		'cross_organisation' => 'Cross Organisation',
 	]
 ];

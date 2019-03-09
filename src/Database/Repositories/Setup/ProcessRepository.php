@@ -55,7 +55,7 @@ class ProcessRepository
 	 */
 	public function getFlowSteps(int $flowId )
 	{
-		return $this->stepModel->where('process_flow_id',$flowId)->orderBy('order','asc')->paginate();
+		return $this->stepModel->where('process_flow_id',$flowId)->orderBy('order','asc')->with(['status','role'])->paginate();
 	}
 
 	/**
@@ -141,6 +141,8 @@ class ProcessRepository
 		$this->stepModel->role_id = $request->get('role_id');
 
 		$this->stepModel->status_id = $request->get('status_id');
+		
+		$this->stepModel->cross_organisation = $request->get('cross_organisation') == 'on' ? 1 : 0;
 
 		$this->stepModel->save();
 

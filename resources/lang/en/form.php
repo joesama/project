@@ -215,5 +215,6 @@ return [
 		'status_id' => 'Status',
 		'order' => 'Step Order',
 		'description' => 'Description',
+		'cross_organisation' => 'Cross Organisation',
 	]
 ];
