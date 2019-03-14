@@ -210,6 +210,7 @@ return [
 		'description' => 'Description',
 	],
 	'process_step' =>[
+		'assign' => 'Project Assignation',
 		'label' => 'Label',
 		'role_id' => 'Roles',
 		'status_id' => 'Status',

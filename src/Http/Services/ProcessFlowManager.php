@@ -74,7 +74,10 @@ class ProcessFlowManager
 	{
 		return $this->flowProcess->map(function($flow) {
 
-			$steps = data_get($flow,'steps')->map(function($step){
+			$steps = data_get($flow,'steps')->map(function($step)
+			{
+				$profile = ($step->cross_organisation == 1) ? $this->profileCrossOrganization : $this->profileInGroup;
+
 				return collect([
 					'cross' => $step->cross_organisation,
 					'id' => $step->id,
@@ -83,7 +86,7 @@ class ProcessFlowManager
 					'role_id' => data_get($step,'role.id'),
 					'status' => data_get($step,'status.description'),
 					'status_id' => data_get($step,'status.id'),
-					'profile_list' => ($step->cross_organisation == 1) ? $this->profileCrossOrganization : $this->profileInGroup,
+					'profile_list' => $profile,
 					'profile_assign' => null
 				]);
 			});
@@ -105,20 +108,27 @@ class ProcessFlowManager
 	public function formRoleListing()
 	{
 		return $this->mappedFlowProcess->pluck('steps')->flatten(1)
-				->groupBy(['cross','role_id'])->map(function( $item, $cross )
+				->groupBy(['cross','role_id','status_id'])->map(function( $crossItem, $cross )
 				{
-					return $item->map(function($subitem , $roleId) use ( $cross ) {
-						$sub = $subitem->first();
-						return collect([
-							'identifier' => $cross .'_'. $sub->get('role_id'),
-							'cross' => $cross,
-							'role_id' => $sub->get('role_id'),
-							'role' => $sub->get('role'),
-							'label' => ucwords($subitem->pluck('label')->implode(', ')),
-							'profile' => $sub->get('profile_list')
-						]);
+					return $crossItem->map(function($roleItem , $roleId) use ( $cross ) 
+					{
+						return $roleItem->map(function($statusItem , $statusId) use ( $cross, $roleId )
+						{
+							$sub = $statusItem->first();
+
+							return collect([
+								'identifier' => $cross .'_'. $roleId  .'_'. $statusId,
+								'cross' => $cross,
+								'role_id' => $sub->get('role_id'),
+								'role' => $sub->get('role'),
+								'status' => $sub->get('status'),
+								'status_id' => $sub->get('status_id'),
+								'label' => ucwords($statusItem->pluck('label')->implode(', ')),
+								'profile' => $sub->get('profile_list')
+							]);
+						});
 					});
-				})->flatten(1);
+				})->flatten(2);
 
 	}
 

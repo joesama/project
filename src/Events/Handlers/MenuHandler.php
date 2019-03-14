@@ -3,10 +3,11 @@ namespace Joesama\Project\Events\Handlers;
 
 use Auth;
 use Joesama\Project\Database\Model\Organization\Profile;
+use Joesama\Project\Traits\HasAccessAs;
 
 class MenuHandler
 {
-
+    use HasAccessAs;
     /**
      * Create the event listener.
      *
@@ -14,7 +15,7 @@ class MenuHandler
      */
     public function __construct()
     {
-        $this->profile = Profile::where('user_id',Auth::id())->first();
+        $this->profile = $this->profile();
         $this->webPolicies = collect(config('joesama/project::policy.web'));
     }
 

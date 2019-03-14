@@ -197,32 +197,6 @@ class ProjectProcessor
 					'duration' => 'range',
 					'scope' => 'textarea',
 				])
-				->default([
-					'manager_id' 	=> 	data_get(Profile::sameGroup($corporateId)->whereHas('role',function($query) use($request){
-											$query->where('project_id',$request->segment(5));
-											$query->where('role_id',2);
-										})->first(),'id'),
-					'approver_id' 	=> 	data_get(Profile::sameGroup($corporateId)->whereHas('role',function($query) use($request){
-											$query->where('project_id',$request->segment(5));
-											$query->where('role_id',4);
-										})->first(),'id'),
-					'validator_id' 	=> 	data_get(Profile::fromParent()->whereHas('role',function($query) use($request){
-											$query->where('project_id',$request->segment(5));
-											$query->where('role_id',5);
-										})->first(),'id'),
-					'reviewer_id' 	=> 	data_get(Profile::fromParent()->whereHas('role',function($query) use($request){
-											$query->where('project_id',$request->segment(5));
-											$query->where('role_id',3);
-										})->first(),'id'),
-					'acceptance_id' => 	data_get(Profile::fromParent()->whereHas('role',function($query) use($request){
-											$query->where('project_id',$request->segment(5));
-											$query->where('role_id',4);
-										})->first(),'id'),
-					'commentor_id' => 	data_get(Profile::fromParent()->whereHas('role',function($query) use($request){
-											$query->where('project_id',$request->segment(5));
-											$query->where('role_id',7);
-										})->first(),'id'),
-				])
 				->excludes(['start','end','effective_days','planned_progress','acc_progress','actual_progress','actual_payment','planned_payment','current_variance'])
 				->id($request->segment(5))
 				->required(['*'])

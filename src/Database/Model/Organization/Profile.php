@@ -63,7 +63,7 @@ class Profile extends Model
      */
     public function scopeSameGroup($query,$corporateId)
     {
-        return $this->where('corporate_id',$corporateId)->nonAdmin();
+        return $this->nonAdmin()->where('corporate_id',$corporateId);
     }
 
     /**
@@ -73,9 +73,9 @@ class Profile extends Model
      */
     public function scopeFromParent($query)
     {
-        return $this->whereHas('corporate',function($query){
+        return $this->nonAdmin()->whereHas('corporate',function($query){
             $query->isParent();
-        })->nonAdmin();
+        });
     }
 
     /**
