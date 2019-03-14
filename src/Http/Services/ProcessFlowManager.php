@@ -139,9 +139,7 @@ class ProcessFlowManager
 	 */
 	public function getFormGeneratorEntity()
 	{
-		return $this->formRoleListing()->mapWithKeys(function($item){
-					return [ $item->get('identifier') => $item->get('profile') ];
-				});
+		return $this->mappedFlowProcess;
 	}
 
 	/**
