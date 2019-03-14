@@ -36,10 +36,21 @@ class ProcessRepository
 	}
 
 	/**
+	 * Get Process Flow that available for project for respective organization.
+	 * 
+	 * @param  int    $corporateId [description]
+	 * @return \Illuminate\Database\Eloquent\Collection 
+	 */
+	public function getProjectProcessFlow(int $corporateId)
+	{
+		return $this->flowModel->sameGroup($corporationId)->with('steps')->get();
+	}
+
+	/**
 	 * Get All Process Flow For Respected Corporation
 	 * 
-	 * @param  int    $corporationId [description]
-	 * @return [type]                [description]
+	 * @param  int    $corporationId Organisation Id
+	 * @return Joesama\Project\Database\Model\Process\Flow
 	 */
 	public function getAllFlowByCorporation( int $corporationId )
 	{

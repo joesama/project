@@ -24,7 +24,8 @@ class FormGenerator
 			$defaultValue = [], 
 			$requiredField = [],
 			$sortFields = [],
-			$notRequiredField = [];
+			$notRequiredField = [],
+			$extraView = [];
 
 	/**
 	 * Generate Model Attributes
@@ -45,16 +46,28 @@ class FormGenerator
 	public function newModelForm(Model $model)
 	{
 		$this->model = $model->newQuery();
+
 		$this->formId = $model->getTable();
+
 		$this->optionlist = collect([]);
+
 		$this->extras = collect([]);
+
 		$this->exclude = collect([]);
+
 		$this->defaultValue = collect([]);
+
 		$this->mappinglist = collect([]);
+
 		$this->readonlyList = collect([]);
+
 		$this->requiredField = collect([]);
+
 		$this->notRequiredField = collect([]);
+
 		$this->sortFields = collect([]);
+
+		$this->extraView = collect([]);
 
 		$table =  $model->fromQuery("SHOW FIELDS FROM ".$this->formId);
 
@@ -65,7 +78,7 @@ class FormGenerator
 
 	/**
 	 * @param  Model Id
-	 * @return [type]
+	 * @return this
 	 */
 	public function id($id = NULL)
 	{
@@ -76,7 +89,7 @@ class FormGenerator
 
 	/**
 	 * Set the current model to view only
-	 * @return void
+	 * @return this
 	 */
 	public function staticForm()
 	{
@@ -86,8 +99,8 @@ class FormGenerator
 	}
 
 	/**
-	 * @param  array $optionList
-	 * @return [type]
+	 * @param  array $sortedFields
+	 * @return this
 	 */
 	public function sortedFields(array $sortedFields)
 	{
@@ -98,7 +111,7 @@ class FormGenerator
 
 	/**
 	 * @param  array $optionList
-	 * @return [type]
+	 * @return this
 	 */
 	public function option(array $optionList)
 	{
@@ -108,8 +121,8 @@ class FormGenerator
 	}
 
 	/**
-	 * @param  array $mapping 
-	 * @return void
+	 * @param  array $mappings 
+	 * @return this
 	 */
 	public function mapping(array $mappings)
 	{
@@ -119,8 +132,8 @@ class FormGenerator
 	}
 
 	/**
-	 * @param  array $mapping 
-	 * @return void
+	 * @param  array $required 
+	 * @return this
 	 */
 	public function required(array $required)
 	{
@@ -130,12 +143,12 @@ class FormGenerator
 	}
 
 	/**
-	 * @param  array $mapping 
-	 * @return void
+	 * @param  array $notRequired 
+	 * @return this
 	 */
-	public function notRequired(array $required)
+	public function notRequired(array $notRequired)
 	{
-		$this->notRequiredField = $this->notRequiredField->merge($required);
+		$this->notRequiredField = $this->notRequiredField->merge($notRequired);
 
 		return $this;
 	}
@@ -199,6 +212,19 @@ class FormGenerator
 	}
 
 	/**
+	 * undocumented function
+	 *
+	 * @return void
+	 * @author 
+	 **/
+	public function appendView($view)
+	{
+		$this->extraView = $this->extraView->merge($view);
+
+		return $this;
+	}
+
+	/**
 	 * @param  string $title Id For the form
 	 * @param  string $path Path to submit the form
 	 * @param  string $type Type of submission
@@ -220,7 +246,8 @@ class FormGenerator
 			'value' => $this->model->find($this->modelId),
 			'default' => $this->defaultValue,
 			'required' => $this->requiredField,
-			'notRequired' => $this->notRequiredField
+			'notRequired' => $this->notRequiredField,
+			'extraView' => $this->extraView
 		]);
 	}
 

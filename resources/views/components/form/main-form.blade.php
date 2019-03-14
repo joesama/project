@@ -43,6 +43,9 @@
 					]);
 				@endphp
 			@endforeach
+			@foreach($extraView as $view => $params)
+				@includeIf($view,$params)
+			@endforeach
 		</div>
 		<div class="panel-footer text-right">
 	  		@php

@@ -15,6 +15,7 @@ use Joesama\Project\Database\Repositories\Project\ReportCardInfoRepository;
 use Joesama\Project\Http\Processors\Manager\HseProcessor;
 use Joesama\Project\Http\Processors\Manager\ListProcessor;
 use Joesama\Project\Http\Services\FormGenerator;
+use Joesama\Project\Http\Services\ProcessFlowManager;
 use Joesama\Project\Traits\HasAccessAs;
 
 /**
@@ -27,14 +28,62 @@ class ProjectProcessor
 {
 	use HasAccessAs;
 
-	private $listProcessor, 
-			$hseScoreProcessor, 
-			$financialRepo, 
-			$reportCardRepo, 
-			$projectWorkflowRepo, 
-			$projectInfoWorkflowRepo, 
-			$projectInfo, 
-			$formBuilder;
+	/**
+	 * Processing all project related listing
+	 * 
+	 * @var Joesama\Project\Http\Services\DataGridGenerator
+	 */
+	private $listProcessor;
+
+	/**
+	 * Processing HSE Score Card
+	 * 
+	 * @var Joesama\Project\Http\Processors\Manager\HseProcessor
+	 */
+	private $hseScoreProcessor;
+
+	/**
+	 * Financial Data Processor
+	 * 
+	 * @var Joesama\Project\Database\Repositories\Project\FinancialRepository
+	 */
+	private $financialRepo;
+
+	/**
+	 * Report Card Data Processor
+	 * 
+	 * @var Joesama\Project\Database\Repositories\Project\ReportCardInfoRepository
+	 */
+	private $reportCardRepo;
+
+	/**
+	 * Project Approval Work Flow Data Processor
+	 * 
+	 * @var Joesama\Project\Database\Repositories\Project\ProjectWorkflowRepository
+	 */
+	private $projectWorkflowRepo;
+
+	/**
+	 * Project Info Work Flow Data Processor
+	 * 
+	 * @var Joesama\Project\Database\Repositories\Project\ProjectInfoWorkflowRepository
+	 */
+	private $projectInfoWorkflowRepo;
+
+	/**
+	 * Project Information Data Processor
+	 * 
+	 * @var Joesama\Project\Database\Repositories\Project\ProjectInfoRepository
+	 */
+	private $projectInfo;
+	
+	/**
+	 * Form Generator 
+	 * 
+	 * @var Joesama\Project\Http\Services\FormGenerator
+	 */
+	private $formBuilder;
+
 
 	/**
 	 * Build Class for project processor
@@ -59,13 +108,21 @@ class ProjectProcessor
 		FormGenerator $formBuilder
 	){
 		$this->listProcessor = $listProcessor;
+
 		$this->hseScoreProcessor = $hseScoreCard;
+
 		$this->financialRepo = $financialRepo;
+
 		$this->reportCardRepo = $reportCard;
+
 		$this->projectWorkflowRepo = $projectWorkflow;
+
 		$this->projectInfoWorkflowRepo = $projectInfoWorkflow;
+
 		$this->projectInfo = $projectInfo;
+
 		$this->formBuilder = $formBuilder;
+
 		$this->profileRefresh();
 	}
 
@@ -124,6 +181,9 @@ class ProjectProcessor
 	 */
 	public function form(Request $request, int $corporateId)
 	{
+
+		$processFlow = new ProcessFlowManager($corporateId);
+
 		$form = $this->formBuilder->newModelForm(
 					app(\Joesama\Project\Database\Model\Project\Project::class)
 				)
@@ -135,12 +195,6 @@ class ProjectProcessor
 				])
 				->extras([
 					'duration' => 'range',
-					'manager_id' => Profile::sameGroup($corporateId)->pluck('name','id'),
-					'approver_id' => Profile::sameGroup($corporateId)->pluck('name','id'),
-					'validator_id' => Profile::fromParent()->pluck('name','id'),
-					'reviewer_id' => Profile::fromParent()->pluck('name','id'),
-					'acceptance_id' => Profile::fromParent()->pluck('name','id'),
-					'commentor_id' => Profile::fromParent()->pluck('name','id'),
 					'scope' => 'textarea',
 				])
 				->default([
@@ -172,6 +226,9 @@ class ProjectProcessor
 				->excludes(['start','end','effective_days','planned_progress','acc_progress','actual_progress','actual_payment','planned_payment','current_variance'])
 				->id($request->segment(5))
 				->required(['*'])
+				->appendView([
+					'joesama/project::setup.process.assignation' => [ 'flow' => $processFlow->formRoleListing() ]
+				])
 				->renderForm(
 					__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),
 					route('api.project.save',[$corporateId, $request->segment(5)])

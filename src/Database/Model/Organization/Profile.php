@@ -57,20 +57,58 @@ class Profile extends Model
     }
 
     /**
-     * Get the report progress.
+     * set profile in same group filter.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeSameGroup($query,$corporateId)
     {
-        return $this->where('corporate_id',$corporateId);
+        return $this->where('corporate_id',$corporateId)->nonAdmin();
     }
 
     /**
-     * Get the report progress.
+     * set profile from parent org filter
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeFromParent($query)
     {
         return $this->whereHas('corporate',function($query){
             $query->isParent();
+        })->nonAdmin();
+    }
+
+    /**
+     * set cross organization filter.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeCrossOrganization($query)
+    {
+        return $this->nonAdmin();
+    }
+
+    /**
+     * Set non admin filter.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeNonAdmin($query)
+    {
+        return $this->whereHas('user',function($query){
+            $query->where('isAdmin','!=',1);
+        });
+    }
+
+    /**
+     * Set non admin filter.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeAdmin($query)
+    {
+        return $this->whereHas('user',function($query){
+            $query->where('isAdmin',1);
         });
     }
 
