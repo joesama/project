@@ -201,7 +201,7 @@ class ProjectProcessor
 				->id($request->segment(5))
 				->required(['*'])
 				->appendView([
-					'joesama/project::setup.process.assignationFlow' => [ 'flow' => $processFlow->getFormGeneratorEntity() ]
+					'joesama/project::setup.process.assignation' => [ 'flow' => $processFlow->formRoleListing() ]
 				])
 				->renderForm(
 					__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),
