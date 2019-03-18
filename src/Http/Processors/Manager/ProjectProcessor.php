@@ -222,6 +222,8 @@ class ProjectProcessor
 	{
 		$projectId = $request->segment(5);
 		$reportId = $request->segment(6);
+
+        $processFlow = new ProcessFlowManager($corporateId);
                 
 		if($reportId){
 			$report = app(ReportCardInfoRepository::class)->getMonthlyReportInfo($reportId);
@@ -280,22 +282,16 @@ class ProjectProcessor
 		$reportEnd = $endOfWeek->format('j M Y');
 		$dueEnd = $endOfWeek->format('Y-m-d');
 
-		$reportWorkflow 	= $this->reportCardRepo->reportWorkflow($project,$project->id);
-		$monthlyWorkflow 	= $this->reportCardRepo->monthlyWorkflow($corporateId, $dueStart, $dueEnd, $project);
-		$approvalWorkflow 	= $this->projectWorkflowRepo->projectWorkflow($project->profile,$project->approval);
-
 		return [
 			'reportDue' =>  $reportDue,
 			'reportStart' =>  $reportStart,
 			'reportEnd' =>  $reportEnd,
 			'project' => $project,
 			'isReport' => $reportId,
+            'processFlow' => $processFlow->getAssignedFlowToProject($project),
 			'upload' => $this->listProcessor->upload($request,$corporateId,$project->id),
 			'paymentSchedule' =>  $this->financialRepo->schedulePayment($project->id),
 			'projectSchedule' =>  $this->reportCardRepo->scheduleTask($project->id),
-			'reportWorkflow' => $reportWorkflow,
-			'approvalWorkflow' => $approvalWorkflow,
-			'monthlyWorkflow' => $monthlyWorkflow,
 			'weeklyReport' => $this->listProcessor->weeklyReport($request,$corporateId),
 			'monthlyReport' => $this->listProcessor->monthlyReport($request,$corporateId),
 			'taskTable' => $this->listProcessor->task($request,$corporateId, (!is_null(data_get($project,'approval.approved_by')) && !$reportId)),

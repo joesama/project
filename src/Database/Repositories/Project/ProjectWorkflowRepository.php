@@ -96,9 +96,11 @@ class ProjectWorkflowRepository
 
 			DB::commit();
 
-		}catch( \Exception $e){
-			throw new \Exception($e->getMessage(), 1);
+		}catch( \Exception $e)
+		{
 			DB::rollback();
+
+			throw new \Exception($e->getMessage(), 1);
 		}
 	}
 

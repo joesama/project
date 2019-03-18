@@ -186,18 +186,6 @@
                         @endforelse
                     </div>
                     <div class="col-md-6 text-left">
-                        <table class="table table-bordered table-sm">
-                            @foreach($reportWorkflow as $state => $assignee)
-                            <tr>
-                                <td class="text-bold bg-primary text-light text-capitalize" style="width: 30%">
-                                    {{ __('joesama/project::report.workflow.'.$state) }}
-                                </td>
-                                <td class="pl-2">
-                                    {{ ucwords(data_get($assignee,'profile.name')) }}
-                                </td>
-                            </tr>
-                            @endforeach
-                        </table>
                          @if( ($project->active || !is_null(data_get($project,'approval.approved_by'))) && $isProjectManager && is_null($isReport))
                         <a class="btn btn-dark btn-xs mar-btm pull-right" href="{{ handles('joesama/project::manager/attribute/form/'.request()->segment(4).'/'.request()->segment(5)) }}">
                             <i class="fa fa-plus icon-fw"></i>

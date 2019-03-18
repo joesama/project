@@ -65,7 +65,7 @@ class Project extends Model
      */
     public function profile()
     {
-        return $this->belongsToMany(Profile::class,'project_role','project_id','profile_id')->withPivot('role_id');
+        return $this->belongsToMany(Profile::class,'project_role','project_id','profile_id')->withPivot(['role_id','step_id']);
     }
 
     /**

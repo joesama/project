@@ -30,6 +30,8 @@ class UpdateStepsTable extends Migration
      */
     public function down()
     {
-
+        Schema::table('process_step', function (Blueprint $table) {
+            $table->dropColumn(['status_id', 'role_id']);
+        });
     }
 }
