@@ -11,10 +11,13 @@ use Joesama\Project\Database\Model\Project\PhysicalMilestone;
 use Joesama\Project\Database\Model\Project\Report;
 use Joesama\Project\Database\Model\Project\ReportWorkflow;
 use Joesama\Project\Database\Model\Project\TagMilestone;
+use Joesama\Project\Traits\HasAccessAs;
 
 
 class ReportCardInfoRepository 
 {	
+	use HasAccessAs;
+	
 	private $reportObj, $cardObj;
 
 	public function __construct(
@@ -24,7 +27,7 @@ class ReportCardInfoRepository
 	{
 		$this->reportObj = $report;
 		$this->cardObj = $card;
-		$this->profile = Profile::where('user_id',auth()->id())->first();
+		$this->profile = $this->profile();
 	}
 
 	/**

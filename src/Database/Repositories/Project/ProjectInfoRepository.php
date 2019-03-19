@@ -18,6 +18,7 @@ use Joesama\Project\Database\Model\Project\{
 use DB;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Joesama\Project\Database\Model\Organization\Profile;
+use Joesama\Project\Traits\HasAccessAs;
 
 /**
  * Data Handling For Create Project Record
@@ -27,6 +28,7 @@ use Joesama\Project\Database\Model\Organization\Profile;
  **/
 class ProjectInfoRepository 
 {
+	use HasAccessAs;
 
 	private $projectModel, 
 			$clientModel, 
@@ -70,7 +72,7 @@ class ProjectInfoRepository
 		$this->ladModel = $lad;
 		$this->uploadModel = $upload;
 		$this->stricAccess = true;
-		$this->profile = Profile::where('user_id',auth()->id())->first();
+		$this->profile = $this->profile();
 	}
 
 	/**
