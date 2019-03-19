@@ -3,6 +3,7 @@ namespace Joesama\Project\Database\Model\Project;
 
 use Illuminate\Database\Eloquent\Model;
 use Joesama\Project\Database\Model\Organization\Profile;
+use Joesama\Project\Database\Model\Process\Step;
 
 class ProjectApprovalWorkflow extends Model
 {
@@ -26,6 +27,14 @@ class ProjectApprovalWorkflow extends Model
     }
     
     /**
+     * Get the workflow profile.
+     */
+    public function step()
+    {
+        return $this->belongsTo(Step::class,'step_id','id');
+    }
+    
+    /**
      * Get the workflow next action profile.
      */
     public function nextAction()
@@ -36,7 +45,9 @@ class ProjectApprovalWorkflow extends Model
     public function scopeComponent($query)
     {
         return $query->with(['profile' => function($query){
-                        $query->component();
-                    }]);
+                    $query->component();
+                }])->with(['step' => function($query){
+                    $query->component();
+                }]);
     }
 }

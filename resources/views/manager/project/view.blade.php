@@ -8,15 +8,18 @@
     <div class="col-12">
 
             @includeIf('joesama/project::manager.project.part.info')
+
+            @includeIf('joesama/project::manager.project.part.processflow')
+
             @includeIf('joesama/project::manager.project.part.physical-curve')
+
             @includeIf('joesama/project::manager.project.part.financial-curve')
+
             @foreach($policies as $policyId => $policy)
                 @php
-                    $currentView = 'joesama/project::manager.project.part.'.$policyId
-                @endphp
+                    $currentView = 'joesama/project::manager.project.part.'.$policyId;
 
-                @php
-                $view = 'joesama/project::manager.project.part.table'
+                    $view = 'joesama/project::manager.project.part.table';
                 @endphp
 
                 @includeFirst([$currentView,$view],[
@@ -25,13 +28,27 @@
                         'tableId' => $policyId
                     ])
             @endforeach
+
             @includeIf('joesama/project::manager.project.part.financial')
+
             @includeIf('joesama/project::manager.project.part.hse')
+
             @includeWhen($project->active && is_null($isReport) ,'joesama/project::manager.project.part.upload')
+
+            @php
+                $processTitle =  __('joesama/project::manager.workflow.approval');
+                
+                $processTitle = (!$project->active) ? config('joesama/project::workflow.process.1') : $processTitle;
+                
+            @endphp
+
+            @includeWhen(!$project->active,'joesama/project::manager.project.part.flowProcessing', [
+                    'title' => $processTitle,
+                    'workflow' => $approval
+                ])
+
             {{-- @includeWhen($project->active && is_null($isReport) ,'joesama/project::manager.project.part.workflow') --}}
-            {{-- @includeWhen(!$project->active,'joesama/project::manager.project.part.approval') --}}
             {{-- @includeWhen($isReport,'joesama/project::manager.project.part.monthlyReport') --}}
-            @includeIf('joesama/project::manager.project.part.processflow')
 
     </div>
 </div>

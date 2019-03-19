@@ -80,6 +80,7 @@ class ProjectWorkflowRepository
 			$workflow = new ProjectApprovalWorkflow([
 				'remark' => $project->scope,
 				'state' => $state ,
+				'step_id' => data_get($initialAction,'id') ,
 				'profile_id' => data_get($initialAction,'profile_assign.id'),
 			]);
 

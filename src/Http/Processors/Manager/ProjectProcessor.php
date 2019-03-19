@@ -289,6 +289,7 @@ class ProjectProcessor
 			'project' => $project,
 			'isReport' => $reportId,
             'processFlow' => $processFlow->getAssignedFlowToProject($project),
+            'approval' => (!$project->active) ? $processFlow->getApprovalFlow($project) : null,
 			'upload' => $this->listProcessor->upload($request,$corporateId,$project->id),
 			'paymentSchedule' =>  $this->financialRepo->schedulePayment($project->id),
 			'projectSchedule' =>  $this->reportCardRepo->scheduleTask($project->id),

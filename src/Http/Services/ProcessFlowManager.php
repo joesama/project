@@ -23,28 +23,28 @@ class ProcessFlowManager
 
     /**
      * Collection of profile in same corporation
-     * 
+     *
      * @var Illuminate\Support\Collection
      */
     private $profileInGroup;
 
     /**
      * Collection of profile from cross corporation
-     * 
+     *
      * @var Illuminate\Support\Collection
      */
     private $profileCrossOrganization;
 
     /**
      * Collection of profile from parent corporation
-     * 
+     *
      * @var Illuminate\Support\Collection
      */
     private $profileInParentGroup;
 
     /**
      * Collection mapped flow & steps
-     * 
+     *
      * @var Illuminate\Support\Collection
      */
     private $mappedFlowProcess;
@@ -70,7 +70,7 @@ class ProcessFlowManager
     }
 
     /**
-     * Mapping ALl Flow & Step Roles To Respective Profile List
+     * Mapping All Flow & Step Roles To Respective Profile List
      *
      * @return Illuminate\Support\Collection
      */
@@ -85,7 +85,7 @@ class ProcessFlowManager
                     'cross' => $step->cross_organisation,
                     'order' => $step->order,
                     'id' => $step->id,
-                    'label' => $step->label,
+                    'label' => strtoupper($step->label),
                     'role' => data_get($step, 'role.role'),
                     'role_id' => data_get($step, 'role.id'),
                     'status' => data_get($step, 'status.description'),
@@ -126,7 +126,7 @@ class ProcessFlowManager
                                 'role' => $sub->get('role'),
                                 'status' => $sub->get('status'),
                                 'status_id' => $sub->get('status_id'),
-                                'label' => ucwords($statusItem->pluck('label')->implode(', ')),
+                                'label' => $statusItem->pluck('label')->implode(' , '),
                                 'profile' => $sub->get('profile_list')
                             ]);
                         });
@@ -154,15 +154,15 @@ class ProcessFlowManager
     {
         $profile = $project->profile;
 
-        if(!is_a($this->mappedFlowProcess, Collection::class)){
+        if (!is_a($this->mappedFlowProcess, Collection::class)) {
             return collect([]);
         }
 
         return $this->mappedFlowProcess->map(function ($flow) use ($profile, $requiredProfile) {
             $steps = $flow->get('steps')->sortBy('order')->map(function ($step) use ($profile, $requiredProfile) {
 
-                if(!$requiredProfile){
-                    $step->put('profile_list' , []);
+                if (!$requiredProfile) {
+                    $step->put('profile_list', []);
                 }
 
                 $step->put(
@@ -181,41 +181,66 @@ class ProcessFlowManager
     }
 
     /**
-     * Get Workflow
-     * @param  Project $project [description]
-     * @return [type]           [description]
+     * Get Approval Workflow
+     *
+     * @param  Project $project Current Project Model
+     * @return Illuminate\Support\Collection
      */
-    public function getApprovalFlow(Project $project)
+    public function getApprovalFlow(Project $project) : Collection
     {
         $steps = $this->getWorkflowSteps($project, 1);
 
-        $approval = collect([
+        return $this->workflowPosition(data_get($project, 'approval'), $steps);
+    }
+
+    /**
+     * Get All Steps For The Workflow
+     *
+     * @param  Project $project Current Project Model
+     * @param  int     $type    Workflow Type
+     * @return Illuminate\Support\Collection
+     */
+    private function getWorkflowSteps(Project $project, int $type): Collection
+    {
+        $flow = $this->getAssignedFlowToProject($project)->where('type_id', $type)->first();
+
+        return $flow->get('steps')->sortBy('order');
+    }
+
+    /**
+     * Get All Position For The Workflow
+     *
+     * @param  [type] $workflow Assigned Workflow
+     * @param  [type] $steps    List of the workflow steps
+     * @return Illuminate\Support\Collection
+     */
+    private function workflowPosition($workflow, $steps): Collection
+    {
+        $position = collect([
             'current' => null,
             'first' => $steps->first(),
             'next' => null,
             'last' => $steps->last(),
-        ]);  
+            'record' => data_get($workflow,'workflow')
+        ]);
 
-        if ( data_get($project,'approval') == null ) {
-            $approval->put('next', $steps->slice(1,1)->first() );
+        if ($workflow  == null) {
+            $position->put('next', $steps->slice(1, 1)->first());
+        }else{
+            $needAction = data_get($workflow,'need_action');
+
+            $needStep = data_get($workflow,'need_step');
+
+            $currentIndex = $steps->pluck('id')->search($needStep);
+
+            $current = $steps->where('id',$needStep)->where('profile_assign.id',$needAction)->first();
+
+            $position->put('current', $current);
+
+            $position->put('next', $steps->slice(($currentIndex+1), 1)->first());
         }
 
-        return $approval;
-
-
-    }
-
-    /**
-     * undocumented function
-     *
-     * @return void
-     * @author 
-     **/
-    private function getWorkflowSteps(Project $project, int $type)
-    {
-        $flow = $this->getAssignedFlowToProject($project)->where('type_id',$type)->first();
-
-        return $flow->get('steps')->sortBy('order');
+        return $position;
     }
 
     /**

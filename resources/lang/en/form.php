@@ -205,6 +205,14 @@ return [
 		'label' => 'Label',
 		'aging' => 'Created',
 	],
+	'process' => [
+		'action' => 'Workflow Progress',
+		'record' => 'Audit Trails',
+		'status' => 'Status',
+		'assignee' => 'PIC',
+		'remark' => 'Remark',
+		'date' => 'Date',
+	],
 	'process_flow' =>[
 		'label' => 'Label',
 		'type' => 'Type of Flow',

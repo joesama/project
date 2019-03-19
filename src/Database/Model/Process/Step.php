@@ -55,4 +55,9 @@ class Step extends Model
         return Str::limit(strip_tags($this->attributes['description']),100);
     }
 
+    public function scopeComponent($query)
+    {
+        return $query->with(['status']);
+    }
+
 }

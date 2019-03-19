@@ -12,7 +12,7 @@
     </div>
 
     <!--Panel body-->
-    <div class="collapse in" id="processflow">
+    <div class="collapse" id="processflow">
       <div class="panel-body">
         @includeIf('joesama/project::setup.process.assignationView',['flow' => $processFlow])
       </div>
