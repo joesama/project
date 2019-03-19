@@ -48,6 +48,16 @@ class Flow extends Model
         return $query->where('corporate_id',$corporateId);
     }
 
+    /**
+     * Check If Flow Is Active.
+     *
+     * @return Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('active',1);
+    }
+
     public function getPlainDescriptionAttribute($value)
     {
         return Str::limit(strip_tags($this->attributes['description']),100);

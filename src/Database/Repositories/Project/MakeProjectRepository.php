@@ -154,7 +154,7 @@ class MakeProjectRepository
                 $this->projectModel->save();
 
                 // Create Physical & Financial Milestones
-                if ($this->projectModel->physical->count() == 0) {
+                if ( $this->projectModel->physical->count() == 0 ) {
                     $period = CarbonInterval::month()->toPeriod($this->projectModel->start, $this->projectModel->end);
 
                     foreach ($period as $key => $date) {
@@ -179,16 +179,18 @@ class MakeProjectRepository
                 }
 
                 // Assign Role
-                $stepsAssign->each(function($step){
+                $stepsAssign->each(function($step) {
                 	$this->projectModel->profile()->attach($step);
                 });
 
                 // Generate Approval Workflow
-                // if (is_null($id)) {
-                //     $approval = new ProjectWorkflowRepository();
-                //     $approval->registerProject($this->projectModel);
-                // }
+                if (is_null($id)) {
+                    $approvalFlow = $processFlow->getApprovalFlow($this->projectModel);
 
+                    $approval = new ProjectWorkflowRepository();
+
+                    $approval->registerProject($this->projectModel,$approvalFlow);
+                }
             } 
             else 
             {

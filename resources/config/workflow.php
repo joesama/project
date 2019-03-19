@@ -1,19 +1,9 @@
 <?php
 
 return [
-	'approval' => [
-		1 => 2,
-		5 => 3,
-		6 => 2,
-		2 => 3
-	],
-	1 => [
-		1 => 2,
-		2 => 4,
-		3 => 5,
-		4 => 3,
-		5 => 4,
-		7 => 7,
-
+	'process' => [
+		1 => 'Project Approval',
+		2 => 'Project Reporting',
+		3 => 'Information Ammendment'
 	]
 ];

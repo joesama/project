@@ -207,6 +207,8 @@ return [
 	],
 	'process_flow' =>[
 		'label' => 'Label',
+		'type' => 'Type of Flow',
+		'active' => 'Flow Is Active',
 		'description' => 'Description',
 	],
 	'process_step' =>[

@@ -47,45 +47,45 @@ class ProjectWorkflowRepository
 
 	/**
 	 * Register New Project For Approval
-	 * @param  Project $project Project Object
-	 * @return [type]           [description]
+	 * 
+	 * @param  Project $project  Created Project Model
+	 * @param          $workflow Assigned Workflow
+	 * @return [type]            [description]
 	 */
-	public function registerProject(Project $project)
+	public function registerProject(Project $project, $workflow)
 	{
-
-		$projectManager = $project->profile->where('pivot.role_id',2)->first();
-		$pmoOfficer = $project->profile->where('corporate_id','!=',$project->corporate_id)->where('pivot.role_id',5)->first();
-		$pmoHead = $project->profile->where('corporate_id','!=',$project->corporate_id)->where('pivot.role_id',3)->first();
-		$pmoCoo = $project->profile->where('corporate_id','!=',$project->corporate_id)->where('pivot.role_id',4)->first();
-
-		$initialFlow = collect(config('joesama/project::workflow.approval'))->keys()->first();
-		$nextAction = collect(config('joesama/project::workflow.approval'))->keys()->slice(1,1)->first();
+		$currentProfile = $this->profile();
+		$initialAction = $workflow->get('first');
+		$nextAction = $workflow->get('next');
 
 		try{
-
 			$approval = ProjectApproval::firstOrNew([
 				'project_id' =>  $project->id
 			]);
 
-			$state = strtolower(MasterData::find($initialFlow)->description);
+			$state = strtolower(data_get($initialAction,'status'));
 
-			$approval->workflow_id = $initialFlow;
-			$approval->creator_id = $projectManager->id;
-			$approval->need_action = $pmoHead->id;
-			$approval->need_step = $nextAction;
+			$approval->workflow_id = data_get($initialAction,'status_id');
+
+			$approval->creator_id = $currentProfile->id;
+
+			$approval->need_action = data_get($nextAction,'profile_assign.id');
+
+			$approval->need_step = data_get($nextAction,'id');
+
 			$approval->state = $state;
+			
 			$approval->save();
 
 			$workflow = new ProjectApprovalWorkflow([
 				'remark' => $project->scope,
 				'state' => $state ,
-				'profile_id' => $projectManager->id,
+				'profile_id' => data_get($initialAction,'profile_assign.id'),
 			]);
 
 			$approval->workflow()->save($workflow);
 
 			if(!is_null($approval->nextby)){
-				// $approval->nextby->sendActionNotification($project,$approval,$state );
 				$project->profile->each(function($profile) use($project,$approval,$state){
 					$profile->sendActionNotification($project,$approval,$state );
 				});
@@ -96,8 +96,7 @@ class ProjectWorkflowRepository
 
 			DB::commit();
 
-		}catch( \Exception $e)
-		{
+		}catch( \Exception $e){
 			DB::rollback();
 
 			throw new \Exception($e->getMessage(), 1);

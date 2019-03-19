@@ -94,9 +94,12 @@ class FlowProcessor
 				->id($request->segment(5))
 				->required(['*'])
 				->extras([
-					'description' => 'textarea'
-				])
-				->notRequired(['description'])
+					'description' => 'textarea',
+					'type' => collect(config('joesama/project::workflow.process')),
+					'active' => 'checkbox'
+				])->default([
+					'active' => true
+				])->notRequired(['description','active'])
 				->renderForm(
 					__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),
 					route('api.flow.save',[$corporateId, $request->segment(5), $request->segment(6)])

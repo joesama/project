@@ -83,6 +83,7 @@ class ProcessFlowManager
 
                 return collect([
                     'cross' => $step->cross_organisation,
+                    'order' => $step->order,
                     'id' => $step->id,
                     'label' => $step->label,
                     'role' => data_get($step, 'role.role'),
@@ -97,7 +98,10 @@ class ProcessFlowManager
             return collect([
                 'id' => data_get($flow, 'id'),
                 'flow' => ucwords(data_get($flow, 'label')),
+                'type' => config('joesama/project::workflow.process.'.$flow->type),
+                'type_id' => $flow->type,
                 'steps' => $steps
+                
             ]);
         });
     }
@@ -146,12 +150,21 @@ class ProcessFlowManager
      * @param  Project $project Project Data
      * @return Illuminate\Support\Collection
      */
-    public function getAssignedFlowToProject(Project $project) : Collection
+    public function getAssignedFlowToProject(Project $project, $requiredProfile = false) : Collection
     {
         $profile = $project->profile;
 
-        return $this->mappedFlowProcess->map(function ($flow) use ($profile) {
-            $steps = $flow->get('steps')->map(function ($step) use ($profile) {
+        if(!is_a($this->mappedFlowProcess, Collection::class)){
+            return collect([]);
+        }
+
+        return $this->mappedFlowProcess->map(function ($flow) use ($profile, $requiredProfile) {
+            $steps = $flow->get('steps')->sortBy('order')->map(function ($step) use ($profile, $requiredProfile) {
+
+                if(!$requiredProfile){
+                    $step->put('profile_list' , []);
+                }
+
                 $step->put(
                     'profile_assign',
                     $profile->where('pivot.step_id', $step->get('id'))
@@ -168,6 +181,44 @@ class ProcessFlowManager
     }
 
     /**
+     * Get Workflow
+     * @param  Project $project [description]
+     * @return [type]           [description]
+     */
+    public function getApprovalFlow(Project $project)
+    {
+        $steps = $this->getWorkflowSteps($project, 1);
+
+        $approval = collect([
+            'current' => null,
+            'first' => $steps->first(),
+            'next' => null,
+            'last' => $steps->last(),
+        ]);  
+
+        if ( data_get($project,'approval') == null ) {
+            $approval->put('next', $steps->slice(1,1)->first() );
+        }
+
+        return $approval;
+
+
+    }
+
+    /**
+     * undocumented function
+     *
+     * @return void
+     * @author 
+     **/
+    private function getWorkflowSteps(Project $project, int $type)
+    {
+        $flow = $this->getAssignedFlowToProject($project)->where('type_id',$type)->first();
+
+        return $flow->get('steps')->sortBy('order');
+    }
+
+    /**
      * Retrieve All Process Flow For Corporation
      *
      * @return Illuminate\Eloquent\Collection
@@ -175,7 +226,7 @@ class ProcessFlowManager
     private function getAllAvailableProcess()
     {
         if (!$this->flowProcess) {
-            return Flow::sameGroup($this->corporateId)->with([ 'steps' => function ($query) {
+            return Flow::sameGroup($this->corporateId)->active()->with([ 'steps' => function ($query) {
                 $query->with(['status','role']);
             } ])->get();
         }

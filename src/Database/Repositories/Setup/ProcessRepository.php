@@ -90,6 +90,10 @@ class ProcessRepository
 			$this->flowModel->created_by = \Auth()->id();
 		}
 
+		$this->flowModel->type = $request->get('type');
+
+		$this->flowModel->active = $request->has('active') ?  true : false;
+
 		$this->flowModel->label = $request->get('label');
 
 		$this->flowModel->description = $request->get('description');
