@@ -35,17 +35,23 @@
 
             @includeWhen($project->active && is_null($isReport) ,'joesama/project::manager.project.part.upload')
 
-            @php
-                $processTitle =  __('joesama/project::manager.workflow.approval');
-                
-                $processTitle = (!$project->active) ? config('joesama/project::workflow.process.1') : $processTitle;
-                
-            @endphp
-
-            @includeWhen(!$project->active,'joesama/project::manager.project.part.flowProcessing', [
-                    'title' => $processTitle,
+            @includeWhen(
+                ( !$project->active && (data_get($approval,'current.profile_assign.id') == $profile->id )),
+                'joesama/project::manager.project.part.flowProcessing', 
+                [
                     'workflow' => $approval
-                ])
+                ]
+            )
+
+            @includeWhen(
+                ( !$project->active && (data_get($approval,'current') == null )),
+                'joesama/project::manager.project.part.flowHistory', 
+                [
+                    'workflow' => $approval
+                ]
+            )
+
+            {{-- @includeIf('joesama/project::manager.project.part.back-panel') --}}
 
             {{-- @includeWhen($project->active && is_null($isReport) ,'joesama/project::manager.project.part.workflow') --}}
             {{-- @includeWhen($isReport,'joesama/project::manager.project.part.monthlyReport') --}}

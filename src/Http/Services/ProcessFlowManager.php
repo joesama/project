@@ -8,6 +8,8 @@ use Joesama\Project\Database\Model\Project\Project;
 
 class ProcessFlowManager
 {
+    const APPROVAL = 'approval';
+
     /**
      * Process Flow Model
      *
@@ -188,19 +190,19 @@ class ProcessFlowManager
      */
     public function getApprovalFlow(Project $project) : Collection
     {
-        $steps = $this->getWorkflowSteps($project, 1);
+        $steps = $this->getWorkflowSteps($project, self::APPROVAL);
 
-        return $this->workflowPosition(data_get($project, 'approval'), $steps);
+        return $this->workflowPosition(data_get($project, 'approval'), $steps, self::APPROVAL);
     }
 
     /**
      * Get All Steps For The Workflow
      *
      * @param  Project $project Current Project Model
-     * @param  int     $type    Workflow Type
+     * @param  string  $type    Workflow Type
      * @return Illuminate\Support\Collection
      */
-    private function getWorkflowSteps(Project $project, int $type): Collection
+    private function getWorkflowSteps(Project $project, string $type): Collection
     {
         $flow = $this->getAssignedFlowToProject($project)->where('type_id', $type)->first();
 
@@ -210,30 +212,32 @@ class ProcessFlowManager
     /**
      * Get All Position For The Workflow
      *
-     * @param  [type] $workflow Assigned Workflow
-     * @param  [type] $steps    List of the workflow steps
+     * @param               $workflow Assigned Workflow
+     * @param  Collection   $steps    List of the workflow steps
+     * @param  string       $type     Type of workflow
      * @return Illuminate\Support\Collection
      */
-    private function workflowPosition($workflow, $steps): Collection
+    private function workflowPosition($workflow, Collection $steps, string $type): Collection
     {
         $position = collect([
+            'type' => $type,
             'current' => null,
             'first' => $steps->first(),
             'next' => null,
             'last' => $steps->last(),
-            'record' => data_get($workflow,'workflow')
+            'record' => data_get($workflow, 'workflow')
         ]);
 
         if ($workflow  == null) {
             $position->put('next', $steps->slice(1, 1)->first());
-        }else{
-            $needAction = data_get($workflow,'need_action');
+        } else {
+            $needAction = data_get($workflow, 'need_action');
 
-            $needStep = data_get($workflow,'need_step');
+            $needStep = data_get($workflow, 'need_step');
 
             $currentIndex = $steps->pluck('id')->search($needStep);
 
-            $current = $steps->where('id',$needStep)->where('profile_assign.id',$needAction)->first();
+            $current = $steps->where('id', $needStep)->where('profile_assign.id', $needAction)->first();
 
             $position->put('current', $current);
 

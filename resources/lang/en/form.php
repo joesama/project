@@ -207,11 +207,14 @@ return [
 	],
 	'process' => [
 		'action' => 'Workflow Progress',
-		'record' => 'Audit Trails',
+		'record' => 'Workflow History',
 		'status' => 'Status',
 		'assignee' => 'PIC',
 		'remark' => 'Remark',
 		'date' => 'Date',
+		'form' => [
+			'action' => 'Action By'
+		]
 	],
 	'process_flow' =>[
 		'label' => 'Label',

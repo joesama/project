@@ -8,24 +8,15 @@ return [
 		'report' => 'Report Name : :type :report'
 	],
 	'project'=>[
-		'approved' => 'Your Project Has Been Approved',
-		'weekly' => 'Weekly Project Was Submit For Your Action',
-		'monthly' => 'Monthly Project Was Submit For Your Action',
-		'accepted' => 'Your Project Has Been Accepted',
-		'updated' => 'Project Information Has Been Updated',
-		'rejected' => 'Project Approval Has Been Rejected',
-		'new' => 'Project Approval Has Been Submitted',
-		'title' => 'Project Approval Notification',
-		'info' => 'A Request To Update Project Information Has Been Submitted',
+		'approval' => '{1} New Project Approval Request Has Been Submitted|[2,*] Your Project Approval Request Has Been :state',
+		'week' => '{1} Week :week Project Report Was Submitted For Your Action|[2,*] Week :week Project Report Has Been :state',
+		'month' => '{1} Month :month Project Report Was Submitted For Your Action|[2,*] Month :month Project Report Has Been :state',
+		'update' => '{1} A Request To Update Project Information Has Been Submitted|[2,*] Request To Update Project Information Has Been :state',
 	],
 	'title' => [
-		'weekly' => 'Weekly Project Report Notification',
-		'monthly' => 'Monthly Project Report Notification',
-		'approved' => 'Project Approval Notification',
-		'accepted' => 'Project Acceptance Notification',
-		'updated' => 'Project Information Update Notification',
-		'new' => 'Project Update Notification',
-		'rejected' => 'Project Approval Notification',
-		'info' => 'Project Information Update Notification',
+		'week' => 'Weekly Project Report Notification',
+		'month' => 'Monthly Project Report Notification',
+		'approval' => 'Project Approval Notification',
+		'update' => 'Project Information Update Notification'
 	],
 ];

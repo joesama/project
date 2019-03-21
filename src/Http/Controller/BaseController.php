@@ -38,7 +38,7 @@ class BaseController extends Controller
 			$this->view = 'joesama/project::components.'.$page;
 		}
 
-		Cache::forget($this->component);//@TODO remove for deploy
+		// Cache::forget($this->component);//@TODO remove for deploy
 		$this->config = Cache::remember(
 			$this->component, 60, function () {
 		    return collect(config('joesama/project::policy.web.'.$this->component));

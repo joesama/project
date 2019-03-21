@@ -222,8 +222,6 @@ class ProjectProcessor
 	{
 		$projectId = $request->segment(5);
 		$reportId = $request->segment(6);
-
-        $processFlow = new ProcessFlowManager($corporateId);
                 
 		if($reportId){
 			$report = app(ReportCardInfoRepository::class)->getMonthlyReportInfo($reportId);
@@ -233,7 +231,10 @@ class ProjectProcessor
 
 		$project = $this->projectInfo->getProject($projectId,$reportId);
 
+		$processFlow = new ProcessFlowManager( ($project) ? $project->corporate_id : $corporateId );
+
 		$projectStart = ($report) ? data_get($report,'card_date') : data_get($project,'start');
+
 		$projectEnd = ($report) ? data_get($report,'card_end') :data_get($project,'end');
 
 		$claim = $this->financialRepo->projectComponentTransaction(

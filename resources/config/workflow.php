@@ -2,8 +2,9 @@
 
 return [
 	'process' => [
-		1 => 'Project Approval',
-		2 => 'Project Reporting',
-		3 => 'Information Ammendment'
+		'approval' => 'Project Approval',
+		'month' => 'Monthly Report',
+		'week' => 'Weekly Report',
+		'update' => 'Information Ammendment'
 	]
 ];

@@ -8,7 +8,7 @@
             </button>
             <button class="btn btn-default collapsed" data-panel="minmax" data-target="#workflow" data-toggle="collapse" aria-expanded="false"><i class="psi-chevron-up"></i></button>
         </div>
-        <h3 class="panel-title">{{ $title }}</h3>
+        <h3 class="panel-title">{{ config('joesama/project::workflow.process.'.data_get($workflow,'type')) }}</h3>
     </div>
 
     <!--Panel body-->
@@ -19,12 +19,3 @@
     </div>
   </div>
 </div>
-@push('content.script')
-<script type="text/javascript">
-    $('.approvalPanel').each(function() {
-        $(this).find('.panel').matchHeight({
-            byRow: true
-        });
-    });
-</script>
-@endpush

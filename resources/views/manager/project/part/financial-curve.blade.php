@@ -6,13 +6,13 @@
                 <i class="icon-max psi-maximize-3"></i>
                 <i class="icon-min psi-minimize-3"></i>
             </button>
-            <button class="btn btn-default collapsed" data-panel="minmax" data-target="#physicalCurve" data-toggle="collapse" aria-expanded="false"><i class="psi-chevron-up"></i></button>
+            <button class="btn btn-default collapsed" data-panel="minmax" data-target="#financialCurve" data-toggle="collapse" aria-expanded="false"><i class="psi-chevron-up"></i></button>
         </div>
         <h3 class="panel-title">{{ __('joesama/project::manager.curve.financial') }}</h3>
     </div>
 
     <!--Panel body-->
-    <div class="collapse in" id="physicalCurve">
+    <div class="collapse in" id="financialCurve">
       <div class="panel-body">        
         @if( ($project->active || !is_null(data_get($project,'approval.approved_by'))) && $isProjectManager && is_null($isReport))  <div class="row">
           <div class="col-md-12 pad-no mar-btm">

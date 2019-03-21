@@ -55,7 +55,9 @@ class ProjectWorkflowRepository
 	public function registerProject(Project $project, $workflow)
 	{
 		$currentProfile = $this->profile();
+
 		$initialAction = $workflow->get('first');
+
 		$nextAction = $workflow->get('next');
 
 		try{
@@ -105,86 +107,64 @@ class ProjectWorkflowRepository
 	}
 
 	/**
-	 * Register New Project For Approval
-	 * @param  Project $project Project Object
-	 * @param  Request $project Project Object
-	 * @return [type]           [description]
+	 * Update Approval Workflow
+	 * 
+	 * @param  Project $projectId 	Project Object
+	 * @param  Request $request 	Form Input
+	 * @return Joesama\Project\Database\Model\Project\Project
 	 */
-	public function approveProject(Project $project, Request $request)
+	public function processApproval(int $projectId, Request $request): Project
 	{
 		try{
+			$project = Project::with('approval.workflow')->find($projectId);
 
-			$project->active = is_null($request->get('need_step')) ? 1 : 0;
-			$project->save();
+			$project->active = ( is_null($request->get('need_step')) &&  $request->get('state') !== 'closed') ? 1 : 0;
 
-			$approval = ProjectApproval::firstOrNew([
-				'project_id' =>  $project->id
-			]);
+			$approval = $project->approval;
 
-			$approval->workflow_id = $request->get('state');
+			$approval->workflow_id = $request->get('status');
 
 			if($request->get('state') == 5){
 				$approval->approved_by = $this->profile()->id;
+
 				$approval->approve_date = Carbon::now();
 			}
 
-			$approval->creator_id = $this->profile()->id;
 			$approval->need_action = $request->get('need_action');
+
 			$approval->need_step = $request->get('need_step');
-			$approval->state = $request->get('status');
+
+			$approval->state = $request->get('state');
+
 			$approval->save();
 
 			$workflow = new ProjectApprovalWorkflow([
 				'remark' => $request->get('remark'),
-				'state' => $request->get('status'),
-				'profile_id' => $this->profile()->id,
+				'state' => $request->get('state'),
+				'step_id' => $request->get('current_step'),
+				'profile_id' => $request->get('current_action'),
 			]);
 
 			$approval->workflow()->save($workflow);
 
+			$project->save();
+
 			if(!is_null($approval->nextby)){
-				// $approval->nextby->sendActionNotification($project,$approval,$request->get('status'));
-				$project->profile->each(function($profile)  use($project,$approval,$request){
-					$profile->sendActionNotification($project,$approval,$request->get('status'));
-				}); 
-				
+				$project->profile->groupBy('id')->each(function($profile)  use($project,$approval,$request){
+					$profile->first()->sendActionNotification($project,$approval,$request->get('type'), 'warning');
+				});
 			}else{
-				$approval->creator->sendAcceptedNotification($project,$approval,$request->get('status'));
+				$approval->creator->sendActionNotification($project,$approval,$request->get('type'));
 			}
 
 			DB::commit();
 
+			return $project;
+
 		}catch( \Exception $e){
-			throw new \Exception($e->getMessage(), 1);
 			DB::rollback();
+
+			throw new \Exception($e->getMessage(), 1);
 		}
 	}
-
-	/**
-	 * Project Approval Workflow
-	 * 
-	 * @param  int    	$projectId   	Project Id
-	 * @param       	$approval   	Project Approval Record
-	 * @return Collection
-	 */
-	public function projectWorkflow(Collection $profile, $approval)
-	{
-		return collect(config('joesama/project::workflow.approval'))->map(function($role,$state) use($profile,$approval){
-
-			$status = strtolower(MasterData::find($state)->description);
-
-			$assignee = $profile->where('pivot.role_id',$role)->first();
-
-			$workflow = collect(data_get($approval,'workflow'))->where('state',$status);
-
-			return [
-				'status' => $status,
-				'step' => $state,
-				'approval' => $workflow->first(),
-				'profile' => $assignee
-			];
-		});
-	}
-
-
 } // END class ProjectWorkflowRepository 

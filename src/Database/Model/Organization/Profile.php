@@ -140,57 +140,33 @@ class Profile extends Model
     /**
      * Send the profile notification for action.
      * 
-     * @param  string $type Type Of Report
-     * @return [type]       [description]
+     * @param  Project $project  Current Project
+     * @param          $workflow Process Workflow
+     * @param  string  $type     Type Of Workflow
+     * @param  string  $level    Email Status
+     * @return [type]            [description]
      */
-    public function sendActionNotification($project, $report, string $type)
+    public function sendActionNotification(Project $project, $workflow, string $type, ?string $level = 'success')
     {
         $message = collect([]);
-        $message->put('level', 'warning');
+        $message->put('level', $level);
+
         $message->put('title', trans('joesama/project::mailer.title.'.$type));
 
-        if( !in_array( $type, array_map('strtolower',['weekly']) ) ) {
-            $message->put('content', collect([
-                title_case(trans('joesama/project::mailer.project.'.$type)),
-                trans('joesama/project::mailer.report.project', ['project' => ucwords($project->name) ]),
-            ]));
+        $message->put('content', collect([
+            title_case(trans_choice('joesama/project::mailer.project.'.$type,
+                $workflow->workflow->count(),
+                ['state' => title_case($workflow->state)]
+            )
+            ),
+            trans('joesama/project::mailer.report.project', ['project' => ucwords($project->name) ]),
+        ]));
 
-            
-            if($type == 'monthly' || $type == 'info' ){
-                $param = $project->corporate_id.'/'.$project->id.'/'.$report->id;
-            }else{
-                $param = $project->corporate_id.'/'.$project->id;
-            }
-
-            $appname = memorize('threef.' .\App::getLocale(). '.name', config('app.name'));
-
-            $path = handles('joesama/entree::manager/project/view/'.$param);
-
-            if($type == 'info' ){
-                $path = handles('joesama/entree::manager/project/info/'.$param);
-            }
-
-            $message->put('action', collect([ $appname => $path ]));
-
-        }else{
-
-            $message->put('content', collect([
-                title_case(trans('joesama/project::mailer.report.success')),
-                trans('joesama/project::mailer.report.project', ['project' => ucwords($project->name) ]),
-                trans('joesama/project::mailer.report.report', [
-                    'type' => strtoupper($type) ,
-                    'report' => strtoupper(data_get($report,'week',data_get($report,'month')))
-                ]),
-            ]));
-
-            $message->put('action', collect([
-                memorize('threef.' .\App::getLocale(). '.name', config('app.name')) 
-                => 
-                handles('joesama/entree::report/'.$type.'/form/'.$project->corporate_id.'/'.$project->id.'/'.$report->id)
-            ]));
-
-
-        }
+        $message->put('action', collect([
+            memorize('threef.' .\App::getLocale(). '.name', config('app.name')) 
+            => 
+            handles('joesama/project::manager/project/view/'.$project->corporate_id.'/'.$project->id)
+        ]));
 
         $message->put('footer', collect([
             title_case(trans('joesama/entree::mail.validated.form')),
@@ -198,59 +174,4 @@ class Profile extends Model
 
         $this->notify(new EntreeMailer($message));
     }
-
-    /**
-     * Send the profile notification for success.
-     * 
-     * @param  string $type Type Of Report
-     * @return [type]       [description]
-     */
-    public function sendAcceptedNotification($project, $report, string $type)
-    {
-        $message = collect([]);
-        $message->put('level', 'success');
-        $message->put('title', trans('joesama/project::mailer.title.'.$type));
-
-        if(!in_array( $type, array_map('strtolower',['weekly']) ) ){
-            $message->put('content', collect([
-                title_case(trans('joesama/project::mailer.project.'.$type)),
-                trans('joesama/project::mailer.report.project', ['project' => ucwords($project->name) ]),
-            ]));
-
-            if($type == 'monthly'){
-                $param = $project->corporate_id.'/'.$project->id.'/'.$report->id;
-            }else{
-                $param = $project->corporate_id.'/'.$project->id;
-            }
-
-            $message->put('action', collect([
-                memorize('threef.' .\App::getLocale(). '.name', config('app.name')) 
-                => 
-                handles('joesama/entree::manager/project/view/'.$param)
-            ]));
-
-        }else{
-            $message->put('content', collect([
-                title_case(trans('joesama/project::mailer.report.success')),
-                trans('joesama/project::mailer.report.project', ['project' => ucwords($project->name) ]),
-                trans('joesama/project::mailer.report.report', [
-                    'type' => strtoupper($type) ,
-                    'report' => strtoupper(data_get($report,'week',data_get($report,'month')))
-                ]),
-            ]));
-
-            $message->put('action', collect([
-                memorize('threef.' .\App::getLocale(). '.name', config('app.name')) 
-                => 
-                handles('joesama/entree::report/'.$type.'/form/'.$project->corporate_id.'/'.$project->id.'/'.$report->id)
-            ]));
-        }
-
-        $message->put('footer', collect([
-            title_case(trans('joesama/entree::mail.validated.form')),
-        ]));
-
-        $this->notify(new EntreeMailer($message));
-    }
-
 }

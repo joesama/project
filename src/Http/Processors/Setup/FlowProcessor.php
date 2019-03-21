@@ -99,7 +99,7 @@ class FlowProcessor
 					'active' => 'checkbox'
 				])->default([
 					'active' => true
-				])->notRequired(['description','active'])
+				])->notRequired(['description','active','label'])
 				->renderForm(
 					__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),
 					route('api.flow.save',[$corporateId, $request->segment(5), $request->segment(6)])
