@@ -162,11 +162,20 @@ class Profile extends Model
             trans('joesama/project::mailer.report.project', ['project' => ucwords($project->name) ]),
         ]));
 
-        $message->put('action', collect([
-            memorize('threef.' .\App::getLocale(). '.name', config('app.name')) 
-            => 
-            handles('joesama/project::manager/project/view/'.$project->corporate_id.'/'.$project->id)
-        ]));
+        switch ($type) {
+            case 'update':
+                $uriHandle = handles('joesama/project::manager/project/info/'.$project->corporate_id.'/'.$project->id.'/'.$workflow->id);
+                break;
+            
+            default:
+                $uriHandle = handles('joesama/project::manager/project/view/'.$project->corporate_id.'/'.$project->id);
+                break;
+        }
+
+        $message->put(
+            'action', 
+            collect([ memorize('threef.' .\App::getLocale(). '.name', config('app.name')) => $uriHandle ]) 
+        );
 
         $message->put('footer', collect([
             title_case(trans('joesama/entree::mail.validated.form')),

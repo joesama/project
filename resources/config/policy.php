@@ -265,7 +265,7 @@ return [
 			],
 			'workflow' => [
 				'approval' => ['corporateId','projectId'],
-				'info' => ['corporateId','projectId','infoId?'],
+				'update' => ['corporateId','projectId','infoId?'],
 				'process' => ['corporateId','projectId','reportId?']
 			],
 			'physical' => [

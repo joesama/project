@@ -9,7 +9,7 @@ use Joesama\Project\Database\Model\Project\Client;
 use Joesama\Project\Database\Model\Project\ReportWorkflow;
 use Joesama\Project\Database\Repositories\Project\FinancialRepository;
 use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
-use Joesama\Project\Database\Repositories\Project\ProjectInfoWorkflowRepository;
+use Joesama\Project\Database\Repositories\Project\ProjectUpdateWorkflowRepository;
 use Joesama\Project\Database\Repositories\Project\ProjectWorkflowRepository;
 use Joesama\Project\Database\Repositories\Project\ReportCardInfoRepository;
 use Joesama\Project\Http\Processors\Manager\HseProcessor;
@@ -66,9 +66,9 @@ class ProjectProcessor
 	/**
 	 * Project Info Work Flow Data Processor
 	 * 
-	 * @var Joesama\Project\Database\Repositories\Project\ProjectInfoWorkflowRepository
+	 * @var Joesama\Project\Database\Repositories\Project\projectUpdateWorkflowsitory
 	 */
-	private $projectInfoWorkflowRepo;
+	private $projectUpdateWorkflow;
 
 	/**
 	 * Project Information Data Processor
@@ -93,7 +93,7 @@ class ProjectProcessor
 	 * @param FinancialRepository   	$financialRepo  	Financial Info
 	 * @param ReportCardInfoRepository  $reportCard  		Financial Info
 	 * @param ProjectWorkflowRepository $projectWorkflow  	Approval Workflow
-	 * @param ProjectInfoWorkflowRepository $projectInfoWorkflow  	Project Info Workflow
+	 * @param ProjectUpdateWorkflowRepository $projectInfoWorkflow  	Project Info Workflow
 	 * @param HseProcessor          	$hseScoreCard   	HSE Info
 	 * @param FormGenerator         	$formBuilder    	Form builder
 	 */
@@ -103,7 +103,7 @@ class ProjectProcessor
 		FinancialRepository $financialRepo,
 		ReportCardInfoRepository $reportCard,
 		ProjectWorkflowRepository $projectWorkflow,
-		ProjectInfoWorkflowRepository $projectInfoWorkflow,
+		ProjectUpdateWorkflowRepository $projectInfoWorkflow,
 		HseProcessor $hseScoreCard,
 		FormGenerator $formBuilder
 	){
@@ -117,7 +117,7 @@ class ProjectProcessor
 
 		$this->projectWorkflowRepo = $projectWorkflow;
 
-		$this->projectInfoWorkflowRepo = $projectInfoWorkflow;
+		$this->projectUpdateWorkflow = $projectInfoWorkflow;
 
 		$this->projectInfo = $projectInfo;
 
@@ -164,12 +164,17 @@ class ProjectProcessor
 	 */
 	public function info(Request $request, int $corporateId)
 	{
-		$infoProject = $this->projectInfoWorkflowRepo->projectInfo($request->segment(6));
-		$project = $infoProject->project;
-		$reportWorkflow 	= $this->reportCardRepo->reportWorkflow($project,$project->id);
-		$infoWorkflow 	= $this->projectInfoWorkflowRepo->infoWorkflow($corporateId, $infoProject);
+		$updateFlowId = $request->segment(6);
 
-		return compact('infoProject','reportWorkflow','project','infoWorkflow');
+		$infoProject = $this->projectUpdateWorkflow->projectInfo($updateFlowId);
+
+		$project = $infoProject->project;
+
+		$processFlow = new ProcessFlowManager( ($project) ? $project->corporate_id : $corporateId );
+		
+		$workflow = $processFlow->getUpdateFlow($project, $updateFlowId);
+
+		return compact('infoProject','workflow', 'project');
 	}
 
 	/**
@@ -199,11 +204,15 @@ class ProjectProcessor
 				])
 				->excludes(['start','end','effective_days','planned_progress','acc_progress','actual_progress','actual_payment','planned_payment','current_variance'])
 				->id($request->segment(5))
-				->required(['*'])
-				->appendView([
-					'joesama/project::setup.process.assignation' => [ 'flow' => $processFlow->formRoleListing() ]
-				])
-				->renderForm(
+				->required(['*']);
+
+		if(!$request->segment(5)){
+			$form->appendView([
+				'joesama/project::setup.process.assignation' => [ 'flow' => $processFlow->formRoleListing() ]
+			]);
+		}
+
+		$form = $form->renderForm(
 					__('joesama/project::'.$request->segment(1).'.'.$request->segment(2).'.'.$request->segment(3)),
 					route('api.project.save',[$corporateId, $request->segment(5)])
 				);

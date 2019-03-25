@@ -10,6 +10,8 @@ class ProcessFlowManager
 {
     const APPROVAL = 'approval';
 
+    const UPDATE = 'update';
+
     /**
      * Process Flow Model
      *
@@ -193,6 +195,23 @@ class ProcessFlowManager
         $steps = $this->getWorkflowSteps($project, self::APPROVAL);
 
         return $this->workflowPosition(data_get($project, 'approval'), $steps, self::APPROVAL);
+    }
+
+    /**
+
+     * Get Update Workflow
+     *
+     * @param  Project  $project  Current Project Model
+     * @param  int|null $updateId Current Update Process
+     * @return Illuminate\Support\Collection
+     */
+    public function getUpdateFlow(Project $project, ?int $updateId = null) : Collection
+    {
+        $steps = $this->getWorkflowSteps($project, self::UPDATE);
+
+        $updateProcess = collect(data_get($project, 'infoupdate'))->where('id',$updateId)->first();
+
+        return $this->workflowPosition($updateProcess, $steps, self::UPDATE);
     }
 
     /**

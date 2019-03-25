@@ -8,6 +8,7 @@ use Joesama\Project\Database\Model\Organization\Corporate;
 use Joesama\Project\Database\Model\Organization\Profile;
 use Joesama\Project\Database\Model\Organization\ProfileRole;
 use Joesama\Project\Database\Model\Project\Issue;
+use Joesama\Project\Database\Model\Project\ProjectInfo;
 use Joesama\Project\Database\Model\Project\ProjectLad;
 use Joesama\Project\Database\Model\Project\ProjectRetention;
 use Joesama\Project\Database\Model\Project\ProjectVo;
@@ -98,6 +99,14 @@ class Project extends Model
     public function report()
     {
         return $this->hasMany(Report::class,'project_id','id');
+    }
+
+    /**
+     * Get the report list.
+     */
+    public function infoupdate()
+    {
+        return $this->hasMany(ProjectInfo::class,'project_id','id');
     }
 
     /**

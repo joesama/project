@@ -16,7 +16,7 @@
 		@endphp
 		<div class="form-group has-feedback">
 		    <label class="col-md-2 control-label text-semibold" for="{{ $fieldId }}">
-				{{ $step->get('cross') == 1 ? 'Cross Org.' : '' }}&nbsp;{{ $step->get('role') }}
+				{{ $step->get('cross') == 1 ? 'PMO ' : '' }}&nbsp;{{ $step->get('role') }}
 				@if($required)
 			    <i class="ion-asterisk text-danger" style="font-size: 6px;vertical-align:text-top;"></i>
 			    @endif

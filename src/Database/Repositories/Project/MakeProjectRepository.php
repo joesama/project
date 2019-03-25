@@ -85,33 +85,6 @@ class MakeProjectRepository
 
         $stepsAssign = collect([]);
 
-        $projectData->except(['_token','files'])->diff($inputData)->each(function($profile,$identifier) use($steps,
-        	$stepsAssign){
-
-        	$identifier = explode("_",$identifier);
-
-        	$cross = $identifier[0];
-
-        	$role = $identifier[1];
-
-        	$status = $identifier[2];
-
-        	$steps->where('role_id',$role)
-        		->where('status_id',$status)
-        			->where('cross_organisation',$cross)
-        				->each(function($step) use($stepsAssign,$profile,$role){
-
-        					$stepsAssign->push([
-        						$profile => [
-        							'role_id' => intval($role), 
-        							'step_id' => $step->id,
-        							'created_at' => Carbon::now(),
-        							'updated_at' => Carbon::now()
-        						]
-        					]);
-        				});
-        });
-
         DB::beginTransaction();
 
         try {
@@ -120,6 +93,34 @@ class MakeProjectRepository
             }
 
             if ($this->projectModel->active != 1) {
+
+                $projectData->except(['_token','files'])->diff($inputData)
+                ->each( function($profile, $identifier) use ($steps, $stepsAssign){
+
+                    $identifier = explode("_",$identifier);
+
+                    $cross = $identifier[0];
+
+                    $role = $identifier[1];
+
+                    $status = $identifier[2];
+
+                    $steps->where('role_id',$role)
+                        ->where('status_id',$status)
+                            ->where('cross_organisation',$cross)
+                                ->each( function($step) use ($stepsAssign, $profile, $role){
+
+                                    $stepsAssign->push([
+                                        $profile => [
+                                            'role_id' => intval($role), 
+                                            'step_id' => $step->id,
+                                            'created_at' => Carbon::now(),
+                                            'updated_at' => Carbon::now()
+                                        ]
+                                    ]);
+                                });
+                });
+
                 $inputData->each(function ($record, $field) {
                     if (!is_null($record)) {
                         if (in_array($field, ['start','end'])) :
@@ -209,10 +210,12 @@ class MakeProjectRepository
 
                 $requestedInfo->save();
 
-                // Create Approval Workflow
-                $approval = new ProjectInfoWorkflowRepository();
+                // Create Update Workflow
+                $processflow = $processFlow->getUpdateFlow($this->projectModel);
 
-                $approval->registerInfoWorkflow($requestedInfo);
+                $updateFlow = new ProjectUpdateWorkflowRepository;
+
+                $updateFlow->registerInfoWorkflow($requestedInfo, $processflow);
             }
 
             DB::commit();

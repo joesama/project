@@ -169,18 +169,6 @@
                     </div>
                     <div class="col-md-6 text-left">
                         <table class="table table-bordered table-sm">
-                            @foreach($reportWorkflow as $state => $assignee)
-                            <tr>
-                                <td class="text-bold bg-primary text-light text-capitalize" style="width: 30%">
-                                    {{ __('joesama/project::report.workflow.'.$state) }}
-                                </td>
-                                <td class="pl-2">
-                                    {{ ucwords(data_get($assignee,'profile.name')) }}
-                                </td>
-                            </tr>
-                            @endforeach
-                        </table>
-                        <table class="table table-bordered table-sm">
                             <tr>
                                 <td class="text-bold bg-primary text-light text-capitalize" style="width: 30%">
                                     {{ __('joesama/project::project.info.contract.value') }}
@@ -257,9 +245,20 @@
 			</div>
 		</div>
     </div>
-    @includeif('joesama/project::manager.project.part.infoApproval')
 </div>
+@includeWhen(
+    ( $project->active && (data_get($workflow,'current.profile_assign.id') == $profile->id )),
+    'joesama/project::manager.project.part.flowProcessing', 
+    [
+        'workflow' => $workflow
+    ]
+)
+
+@includeWhen(
+    ( $project->active && (data_get($workflow,'current.profile_assign.id') != $profile->id )),
+    'joesama/project::manager.project.part.flowHistory', 
+    [
+        'workflow' => $workflow
+    ]
+)
 @endsection
-@push('content.script')
-@stack('datagrid')
-@endpush

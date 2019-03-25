@@ -16,7 +16,9 @@ trait HasAccessAs{
 		if( !session()->has('profile-'.auth()->id()) ){
 			session()->put(
 	            'profile-'.auth()->id() , Profile::where('user_id',auth()->id())
-	                                        ->with(['mails','role'])->first()
+	                                        ->with(['mails' => function($query){
+	                                        	$query->latest();
+	                                        }])->with(['role'])->first()
 	        );
 		}
 
