@@ -54,8 +54,14 @@ class WorkflowProcessor
 
 		$projectInfo = $update->processInfo($projectInfoId, $request);
 
+		if ($request->get('next') ==  null) {
+			$uriHandler = handles('manager/project/view/'.$corporateId.'/'.$projectInfo->project_id);
+		}else{
+			$uriHandler = handles('manager/project/info/'.$corporateId.'/'.$projectInfo->project_id.'/'.$projectInfo->id);
+		}
+
 		return redirect_with_message(
-			handles('manager/project/info/'.$corporateId.'/'.$projectInfo->project_id.'/'.$projectInfo->id),
+			$uriHandler,
 			trans('joesama/entree::respond.data.success', [
 				'form' => trans('joesama/project::manager.workflow.approval')
 			]),

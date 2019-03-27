@@ -230,21 +230,14 @@ class ProjectProcessor
 	public function view(Request $request, int $corporateId)
 	{
 		$projectId = $request->segment(5);
-		$reportId = $request->segment(6);
-                
-		if($reportId){
-			$report = app(ReportCardInfoRepository::class)->getMonthlyReportInfo($reportId);
-		}else{
-			$report = NULL;
-		}
 
-		$project = $this->projectInfo->getProject($projectId,$reportId);
+		$project = $this->projectInfo->getProject($projectId);
 
 		$processFlow = new ProcessFlowManager( ($project) ? $project->corporate_id : $corporateId );
 
-		$projectStart = ($report) ? data_get($report,'card_date') : data_get($project,'start');
+		$projectStart = data_get($project,'start');
 
-		$projectEnd = ($report) ? data_get($report,'card_end') :data_get($project,'end');
+		$projectEnd = data_get($project,'end');
 
 		$claim = $this->financialRepo->projectComponentTransaction(
 			$projectStart,
@@ -280,34 +273,35 @@ class ProjectProcessor
 			data_get($project,'lad')
 		);
 
-		$reportDue = '#'.Carbon::now()->format('m');
+		// $reportDue = '#'.Carbon::now()->format('m');
 		
-		$startOfWeek = ($report) ? Carbon::parse($report->card_date) : Carbon::now()->startOfMonth();
+		// $startOfWeek = ($report) ? Carbon::parse($report->card_date) : Carbon::now()->startOfMonth();
 
-		$reportStart = $startOfWeek->format('j M Y');
-		$dueStart = $startOfWeek->format('Y-m-d');
+		// $reportStart = $startOfWeek->format('j M Y');
+		// $dueStart = $startOfWeek->format('Y-m-d');
 
-		$endOfWeek = ($report) ? Carbon::parse($report->card_end) : Carbon::now()->endOfMonth();
+		// $endOfWeek = ($report) ? Carbon::parse($report->card_end) : Carbon::now()->endOfMonth();
 
-		$reportEnd = $endOfWeek->format('j M Y');
-		$dueEnd = $endOfWeek->format('Y-m-d');
+		// $reportEnd = $endOfWeek->format('j M Y');
+		// $dueEnd = $endOfWeek->format('Y-m-d');
 
 		return [
-			'reportDue' =>  $reportDue,
-			'reportStart' =>  $reportStart,
-			'reportEnd' =>  $reportEnd,
+			// 'reportDue' =>  $reportDue,
+			// 'reportStart' =>  $reportStart,
+			// 'reportEnd' =>  $reportEnd,
 			'project' => $project,
-			'isReport' => $reportId,
+			// 'isReport' => $reportId,
             'processFlow' => $processFlow->getAssignedFlowToProject($project),
             'approval' => (!$project->active) ? $processFlow->getApprovalFlow($project) : null,
+            'infoUpdate' => ($project->active) ? $processFlow->getUpdateFlow($project) : null,
+			'weeklyReport' => $this->listProcessor->weeklyReport($project, $processFlow->getWeeklyFlow($project)),
+			'monthlyReport' => $this->listProcessor->monthlyReport($request,$corporateId),
 			'upload' => $this->listProcessor->upload($request,$corporateId,$project->id),
 			'paymentSchedule' =>  $this->financialRepo->schedulePayment($project->id),
 			'projectSchedule' =>  $this->reportCardRepo->scheduleTask($project->id),
-			'weeklyReport' => $this->listProcessor->weeklyReport($request,$corporateId),
-			'monthlyReport' => $this->listProcessor->monthlyReport($request,$corporateId),
-			'taskTable' => $this->listProcessor->task($request,$corporateId, (!is_null(data_get($project,'approval.approved_by')) && !$reportId)),
-			'issueTable' => $this->listProcessor->issue($request,$corporateId, (!is_null(data_get($project,'approval.approved_by')) && !$reportId)),
-			'riskTable' => $this->listProcessor->risk($request,$corporateId, (!is_null(data_get($project,'approval.approved_by')) && !$reportId)),
+			'taskTable' => $this->listProcessor->task($request,$corporateId),
+			'issueTable' => $this->listProcessor->issue($request,$corporateId),
+			'riskTable' => $this->listProcessor->risk($request,$corporateId),
 			'hsecard' => data_get($project,'hsecard'),
 			'claim' => $this->financialRepo->getSparklineData($claim,'claim_amount'),
 			'payment' => $this->financialRepo->getSparklineData($paid,'paid_amount'),

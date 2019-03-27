@@ -221,6 +221,7 @@ class MakeProjectRepository
             DB::commit();
 
             return $this->projectModel;
+            
         } catch (Exception $e) {
 
             DB::rollback();

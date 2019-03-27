@@ -89,11 +89,11 @@ class ProjectWorkflowRepository
             $approval->workflow()->save($workflow);
 
             if (!is_null($approval->nextby)) {
-                $project->profile->each(function ($profile) use ($project, $approval, $state) {
-                    $profile->sendActionNotification($project, $approval, $state);
+                $project->profile->groupBy('id')->each(function ($profile) use ($project, $approval, $state) {
+                    $profile->first()->sendActionNotification($project, $approval, $workflow->get('type'), 'warning');
                 });
             } else {
-                $approval->creator->sendAcceptedNotification($project, $approval, $state);
+                $approval->creator->sendActionNotification($project, $approval, $workflow->get('type'));
             }
 
             DB::commit();

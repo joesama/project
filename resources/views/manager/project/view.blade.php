@@ -33,7 +33,7 @@
 
             @includeIf('joesama/project::manager.project.part.hse')
 
-            @includeWhen($project->active && is_null($isReport) ,'joesama/project::manager.project.part.upload')
+            @includeWhen($project->active ,'joesama/project::manager.project.part.upload')
 
             @includeWhen(
                 ( !$project->active && (data_get($approval,'current.profile_assign.id') == $profile->id )),
@@ -43,8 +43,16 @@
                 ]
             )
 
+            @php
+            $approvalMembers = collect($processFlow->firstWhere('type_id','approval')->get('steps'))
+                                ->pluck('profile_assign.id')
+                                ->filter(function ($value, $key) use($profile){
+                                    return $value === $profile->id;
+                                });
+            @endphp
+
             @includeWhen(
-                ( !$project->active && (data_get($approval,'current') == null )),
+                ( !$project->active && $approvalMembers->isNotEmpty() && (data_get($approval,'current.profile_assign.id') != $profile->id )),
                 'joesama/project::manager.project.part.flowHistory', 
                 [
                     'workflow' => $approval

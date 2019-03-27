@@ -1,18 +1,18 @@
 <style type="text/css">
-	.tab-stacked-left .nav-tabs{
+	#workflow .tab-stacked-left .nav-tabs{
 		width: 20% !important;
 	}
-	.tab-base .nav-tabs>.active>a{
+	#workflow .tab-base .nav-tabs>.active>a{
 		background-color: #3a444e;
 		color: white;
 	}
-	.tab-base .nav-tabs>.active>a, .tab-base .nav-tabs>.active a:hover, .tab-base .nav-tabs>.active>a:focus {
+	#workflow .tab-base .nav-tabs>.active>a, #workflow .tab-base .nav-tabs>.active a:hover, #workflow .tab-base .nav-tabs>.active>a:focus {
 	    border-color: transparent;
 	    background-color: #3a444e;
 	    color: white;
 	}	
 </style>
-<div class="tab-base">					
+<div class="tab-base" id="workflow">					
 	<!--Nav tabs-->
 	<ul class="nav nav-tabs tabs-right text-bold text-left">
 	    <li class="active">

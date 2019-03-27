@@ -1,6 +1,7 @@
 <?php
 namespace Joesama\Project\Http\Processors\Manager; 
 
+use Carbon\Carbon;
 use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
 use Joesama\Project\Database\Repositories\Project\ProjectUploadRepository;
 use Joesama\Project\Database\Repositories\Project\ProjectWorkflowRepository;
@@ -154,8 +155,9 @@ class ListProcessor
 	 * @param  int $request,$corporateId
 	 * @return HTML
 	 */
-	public function monthlyReport($request, int $corporateId)
+	public function monthlyReport($request, int $corporateId, $hasAction = 1)
 	{
+		$projectId = $request->segment(5);
 
 		$columns = [
 		   [ 'field' => 'generation_date',
@@ -181,12 +183,21 @@ class ListProcessor
 
 		$datagrid = new DataGridGenerator();
 		
-		return $datagrid->buildTable($columns, __('joesama/project::report.monthly.list') )
+		$datagrid->buildTable($columns, __('joesama/project::report.monthly.list') )
 				 ->buildDataModel(
-				 	route('api.list.monthly',[$corporateId, $request->segment(5)]), 
-				 	$this->reportCardObj->monthlyList($corporateId, $request->segment(5))
-				 )
-				 ->buildOption($action, TRUE)->render();
+				 	route('api.list.monthly',[$corporateId, $projectId]), 
+				 	$this->reportCardObj->monthlyList($corporateId, $projectId)
+				 );
+
+
+		if ( ( $this->isProjectManager() || auth()->user()->isAdmin ) && $hasAction ) {
+			$datagrid->buildAddButton(
+				route('manager.plan.form',[$corporateId, $projectId]),
+				__('joesama/project::manager.workflow.monthly')
+			);
+		}
+		
+		return $datagrid->buildOption($action, TRUE)->render();
 	}
 
 	/**
@@ -194,8 +205,11 @@ class ListProcessor
 	 * @param  int $request,$corporateId
 	 * @return HTML
 	 */
-	public function weeklyReport($request, int $corporateId)
+	public function weeklyReport($project, $workflow = null)
 	{
+		$projectId = $project->id;
+
+		$corporateId = $project->corporate_id;
 
 		$columns = [
 		   [ 'field' => 'generation_date',
@@ -214,19 +228,29 @@ class ListProcessor
 
 		$action = [
 			[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
-			    'url' => handles('joesama/project::report/weekly/form/'.$corporateId.'/'.$request->segment(5,'report')), // URL for action
+			    'url' => handles('joesama/project::report/weekly/form/'.$corporateId.'/'.$projectId), // URL for action
 			    'icons' => 'psi-file-edit icon', // Icon for action : optional
 			    'key' => 'id'  ]
 		];
 
 		$datagrid = new DataGridGenerator();
 		
-		return $datagrid->buildTable($columns, __('joesama/project::report.weekly.list') )
+		$datagrid->buildTable($columns, __('joesama/project::report.weekly.list') )
 				 ->buildDataModel(
-				 	route('api.list.weekly',[$corporateId, $request->segment(5)]), 
-				 	$this->reportCardObj->weeklyList($corporateId, $request->segment(5))
-				 )
-				 ->buildOption($action, TRUE)->render();
+				 	route('api.list.weekly',[$corporateId, $projectId]), 
+				 	$this->reportCardObj->weeklyList($corporateId, $projectId)
+				 );
+		
+
+
+		if ( $workflow !== null && ( data_get($workflow,'first.profile_assign.id') ==  $this->profile()->id ) ) {
+			$datagrid->buildAddButton(
+				route('report.weekly.form',[$corporateId, $projectId]),
+				__('joesama/project::manager.workflow.weekly')
+			);
+		}
+
+		return $datagrid->buildOption($action, TRUE)->render();
 	}
 
 	/**
@@ -256,9 +280,6 @@ class ListProcessor
 		   [ 'field' => 'effective_days',
 		   'title' => __('joesama/project::form.task.effective_days'),
 		   'style' => 'text-center'],
-//		   [ 'field' => 'taskstat.description',
-//		   'title' => __('joesama/project::form.task.status_id'),
-//		   'style' => 'text-center text-capitalize'],
 		   [ 'field' => 'progress.progress',
 		   'title' => __('joesama/project::form.task.progress'),
 		   'style' => 'text-center']
