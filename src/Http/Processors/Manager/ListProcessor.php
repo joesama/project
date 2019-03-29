@@ -201,9 +201,11 @@ class ListProcessor
 	}
 
 	/**
-	 * @param  array $request
-	 * @param  int $request,$corporateId
-	 * @return HTML
+	 * Project Weekly Report List
+	 * 
+	 * @param  $project  Current Project Object
+	 * @param  $workflow Current Weekly Workflow Object
+	 * @return 
 	 */
 	public function weeklyReport($project, $workflow = null)
 	{
@@ -221,9 +223,9 @@ class ListProcessor
 		   [ 'field' => 'week',
 		   'title' => 'Week',
 		   'style' => 'text-center text-bold'],
-		   [ 'field' => 'status.description',
+		   [ 'field' => 'state',
 		   'title' => 'Status',
-		   'style' => 'text-center text-bold']
+		   'style' => 'text-center text-uppercase text-bold']
 		];
 
 		$action = [
@@ -240,8 +242,6 @@ class ListProcessor
 				 	route('api.list.weekly',[$corporateId, $projectId]), 
 				 	$this->reportCardObj->weeklyList($corporateId, $projectId)
 				 );
-		
-
 
 		if ( $workflow !== null && ( data_get($workflow,'first.profile_assign.id') ==  $this->profile()->id ) ) {
 			$datagrid->buildAddButton(
@@ -250,6 +250,47 @@ class ListProcessor
 			);
 		}
 
+		return $datagrid->buildOption($action, TRUE)->render();
+	}
+
+	/**
+	 * Weekly Report History
+	 * 
+	 * @param  int    $corporateId Current User Corporate Id
+	 * @return 
+	 */
+	public function weeklyReportHistory(int $corporateId)
+	{
+		$columns = [
+		   [ 'field' => 'generation_date',
+		   'title' => __('joesama/project::form.report.report_date'),
+		   'style' => 'text-left text-capitalize'],
+		   [ 'field' => 'project.name',
+		   'title' => __('joesama/project::project.info.name'),
+		   'style' => 'text-left text-capitalize'],
+		   [ 'field' => 'week',
+		   'title' => 'Week',
+		   'style' => 'text-center text-bold'],
+		   [ 'field' => 'state',
+		   'title' => 'Status',
+		   'style' => 'text-center text-uppercase text-bold']
+		];
+
+		$action = [
+			[ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
+			    'url' => handles('joesama/project::report/weekly/redirect'), // URL for action
+			    'icons' => 'psi-magnifi-glass icon', // Icon for action : optional
+			    'key' => 'id'  ]
+		];
+
+		$datagrid = new DataGridGenerator();
+		
+		$datagrid->buildTable($columns, __('joesama/project::report.weekly.list') )
+				 ->buildDataModel(
+				 	route('api.list.weekly',[$corporateId]), 
+				 	$this->reportCardObj->weeklyList($corporateId,null)
+				 );
+		
 		return $datagrid->buildOption($action, TRUE)->render();
 	}
 

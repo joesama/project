@@ -160,7 +160,7 @@ return [
 				'partner' => ['corporateId','projectId'],
 				'attribute' => ['corporateId','projectId'],
 				'profile' => ['corporateId','masterId?'],
-				'weekly' => ['corporateId','projectId?'],
+				'weekly' => ['corporateId?','projectId?'],
 				'monthly' => ['corporateId','projectId?'],
 				'approval-project' => ['corporateId','projectId?'],
 				'approval-dashboard' => ['corporateId','projectId?'],
@@ -266,6 +266,7 @@ return [
 			'workflow' => [
 				'approval' => ['corporateId','projectId'],
 				'update' => ['corporateId','projectId','infoId?'],
+				'week' => ['corporateId','projectId','reportId?'],
 				'process' => ['corporateId','projectId','reportId?']
 			],
 			'physical' => [

@@ -12,7 +12,6 @@ use Joesama\Project\Traits\HasAccessAs;
 
 class ProjectUpdateWorkflowRepository
 {
-   
     use HasAccessAs;
 
     /**
@@ -94,7 +93,7 @@ class ProjectUpdateWorkflowRepository
         DB::beginTransaction();
 
         try {
-            $projectInfo->workflow_id = $request->get('status_id');
+            $projectInfo->workflow_id = $request->get('status');
 
             if ( is_null($request->get('need_step')) &&  $request->get('state') !== 'closed' ) {
                 $projectInfo->is_approve = 1;

@@ -118,7 +118,7 @@ class ProjectWorkflowRepository
 
             $approval = $project->approval;
 
-            $approval->workflow_id = $request->get('status_id');
+            $approval->workflow_id = $request->get('status');
 
             if (is_null($request->get('need_step'))  &&  $request->get('state') !== 'closed') {
                 $project->active = 1;

@@ -10,6 +10,7 @@ use Joesama\Project\Database\Model\Project\CardWorkflow;
 use Joesama\Project\Database\Model\Project\Project;
 use Joesama\Project\Database\Model\Project\Report;
 use Joesama\Project\Database\Model\Project\ReportWorkflow;
+use Joesama\Project\Traits\HasAccessAs;
 
 /**
  * Data Handling For Create Project Card & Report Record
@@ -19,6 +20,7 @@ use Joesama\Project\Database\Model\Project\ReportWorkflow;
  **/
 class MakeReportCardRepository 
 {
+	use HasAccessAs;
 
 	/**
 	 * Create New Project
@@ -85,65 +87,75 @@ class MakeReportCardRepository
 	}
 
 	/**
-	 * Create New Project Report
-	 *
-	 * @param 	Project $project Project Related
-	 * @param 	Request $request Report Data
-	 * @return  Project
-	 **/
-	public function initWeekly(Project $project, $request)
+	 * Initiate Weekly Report Workflow Processing 
+	 * 
+	 * @param  Request 	$request   HTTP input request
+	 * @param  int    	$projectId Current Project Id
+	 * @param  int    	$reportId  Current Report Id
+	 * @return Joesama\Project\Database\Model\Project\Report
+	 */
+	public function initWeeklyWorkflow($request, int $projectId, ?int $reportId)
 	{
-
 		DB::beginTransaction();
 
-		$initialFlow = collect(config('joesama/project::workflow.1'))->keys()->first();
+        $currentProfile = $this->profile();
 
-		$profile = Profile::where('user_id',auth()->id())->first();
+        $endReportDate = Carbon::parse($request->get('end'))->format('Y-m-d');
 
 		try{
+			if($reportId){
+				$report = Report::reporting($endReportDate)->find($reportId);
+			}else{
+				$report = Report::reporting($endReportDate)->firstOrNew([
+					'week' => (int)$request->get('cycle'), 
+					'project_id' => (int)$projectId,
+					'report_date' => Carbon::parse($request->get('start'))->format('Y-m-d'),
+					'report_end' => $endReportDate
+				]);
 
-			$report = Report::where('week',$request->get('cycle'))
-					->where('project_id',$project->id)
-					->first();
+				$report->creator_id = $currentProfile->id;
+            }
 
-			$report = is_null($report) ? new Report : $report;
+			$report->workflow_id = (int)$request->get('status');
 
-			if ( $initialFlow == $request->get('state') ){
+            $report->need_action = (int)$request->get('need_action');
 
-				$report->week = $request->get('cycle');
-				$report->project_id = $project->id;
-				$report->report_date = Carbon::parse($request->get('start'))->format('Y-m-d');
-				$report->report_end = Carbon::parse($request->get('end'))->format('Y-m-d');
-				$report->creator_id = $profile->id;
-			}
+            $report->need_step = (int)$request->get('need_step');
 
-			$report->workflow_id = $request->get('state');
-			$report->need_action = $request->get('need_action');
-			$report->need_step = $request->get('need_step');
+            $report->state = (string)$request->get('state');
+
 			$report->save();
 
-			if ( $initialFlow == $request->get('state') ){
-				$this->lockProjectData($project,$report,$request->get('type'));
+			if ( $request->get('need_action') == null ){
+				$this->lockProjectData($report->project,$report,$request->get('type'));
 			}
 
-			if(!is_null($report->nextby)){
-				// $report->nextby->sendActionNotification($project,$report,$request->get('type'));
-				$project->profile->each(function($profile){
-					$profile->sendActionNotification($project,$report,$request->get('type'));
-				});
-			}else{
-				$report->creator->sendAcceptedNotification($project,$report,$request->get('type'));
-			}
+			$reportWork = new ReportWorkflow([
+                'remark' => $request->get('remark'),
+                'state' => $request->get('state'),
+                'step_id' => (int)$request->get('current_step'),
+                'profile_id' => (int)$request->get('current_action'),
+			]);
+
+			$report->workflow()->save($reportWork);
 
 			DB::commit();
 
-			$this->initWeeklyWorkflow($report,$profile->id,$request->input());
+            $project = $report->project;
 
+            if (!is_null($report->nextby)) {
+                $project->profile->groupBy('id')->each(function ($profile) use ($project, $report, $request) {
+                    $profile->first()->sendActionNotification($project, $report, $request->get('type'), 'warning');
+                });
+            } else {
+                $report->creator->sendActionNotification($project, $report, $request->get('type'));
+            }
 			return $report;
 
 		}catch( \Exception $e){
-			dd($e->getMessage());
-			DB::rollback();
+            DB::rollback();
+
+            throw new \Exception($e->getMessage(), 1);
 		}
 	}
 
@@ -184,42 +196,6 @@ class MakeReportCardRepository
 	}
 
 	/**
-	 * Create Weekly Workflow
-	 * 
-	 * @param  Report 	$report       Get Report Header
-	 * @param  int 		$profile      Profile Id
-	 * @param  array  	$workflowData Get Form Data
-	 * @return Joesama\Project\Database\Model\Project\Report
-	 */
-	public function initWeeklyWorkflow(
-		Report $report,
-		int $profile,
-		array $workflowData
-	){
-
-		DB::beginTransaction();
-
-		try{
-
-			$reportWork = new ReportWorkflow([
-				'remark' => array_get($workflowData,'remark'),
-				'state' => array_get($workflowData,'status'),
-				'profile_id' => $profile,
-			]);
-
-			$report->workflow()->save($reportWork);
-			
-			DB::commit();
-
-			return $report;
-
-		}catch( \Exception $e){
-			dd($e->getMessage());
-			DB::rollback();
-		}
-	}
-
-	/**
 	 * Lock Project Data
 	 *
 	 * @param string $type 		Report Type	
@@ -228,21 +204,21 @@ class MakeReportCardRepository
 	public function lockProjectData(Project $project, $report, string $type)
 	{
 
-		$tasks = $project->task->where('end','<=',$report->report_end);
-		$payment = $project->payment->where('claim_date','<=',$report->report_end);
+		$tasks = $project->task;
+		$payment = $project->payment;
+		$nextWeekPlan = $project->plan;
 
 		$tasks->each(function($task) use($type,$report){
 
 			$progress = $task->allProgress;
-			$progress = ($type == 'weekly') ? $progress->where('report_id',null) :  $progress->where('card_id',null);
 
 			$progress->each(function($prog) use($type,$report){
 				
-				if ($type == 'weekly') {
+				if ($type == 'week') {
 					$prog->report_id = $report->id;
 				}
 
-				if ($type == 'monthly') {
+				if ($type == 'month') {
 					$prog->card_id = $report->id;
 				}
 
@@ -258,15 +234,27 @@ class MakeReportCardRepository
 		});
 
 		$payment->each(function($claim) use($type,$report){
-			if ($type == 'weekly') {
+			if ($type == 'week') {
 				$claim->report_id = $report->id;
 			}
 
-			if ($type == 'monthly') {
+			if ($type == 'month') {
 				$claim->card_id = $report->id;
 			}
 
 			$claim->save();
+		});
+
+		$nextWeekPlan->each(function($planning) use($type,$report){
+			if ($type == 'week') {
+				$planning->report_id = $report->id;
+			}
+
+			if ($type == 'month') {
+				$planning->card_id = $report->id;
+			}
+
+			$planning->save();
 		});
 	}
 } // END class MakeReportCardRepository 

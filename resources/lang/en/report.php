@@ -29,7 +29,7 @@ return [
 			'weekly' => 'Plan For Next Week',
 			'monthly' => 'Plan For Next Month'
 		],
-		'approval' => 'Project Information Workflow',
+		'approval' => 'Report Approval Progress',
 		'trail' => 'Report Progress',
 		'mo' => 'Project Management Office - Group Operations & Strategis Planning '
 	],

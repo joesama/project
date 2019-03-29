@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
 use Joesama\Project\Database\Repositories\Project\ReportCardInfoRepository;
 use Joesama\Project\Http\Processors\Manager\ListProcessor;
+use Joesama\Project\Http\Services\ProcessFlowManager;
 use Joesama\Project\Traits\HasAccessAs;
 use Barryvdh\DomPDF\Facade as PDF;
 
@@ -38,7 +39,7 @@ class WeeklyProcessor
 	 */
 	public function list(Request $request, int $corporateId)
 	{
-		$table = app(ListProcessor::class)->weeklyReport($request, $corporateId);
+		$table = app(ListProcessor::class)->weeklyReportHistory($corporateId);
 
 		return compact('table');
 	}
@@ -55,13 +56,19 @@ class WeeklyProcessor
 	{
 		$report = FALSE;
 
-		if( $projectId == 'report' || !is_null($request->segment(6)) ){
+		$reportId = $request->segment(6);
 
-			$report = $this->reportCard->getWeeklyReportInfo($request->segment(6));
+		if( $projectId == 'report' || !is_null($reportId) ){
+
+			$report = $this->reportCard->getWeeklyReportInfo($reportId);
+
 			$projectId = data_get($report,'project_id');
+
+			$project = data_get($report,'project');
 		}
 
-		$project = $this->projectInfo->getProject($projectId);
+
+		$processFlow = new ProcessFlowManager($project->corporate_id);
 
 		$projectDate = Carbon::parse($project->start);
 
@@ -71,19 +78,15 @@ class WeeklyProcessor
 
 		$startOfWeek = $projectDate->greaterThan($startOfWeek) ? $projectDate : $startOfWeek;
 
-		$startOfWeek = ($report) ? Carbon::parse($report->report_date) : $startOfWeek;
+		$reportStart = ($report) ? Carbon::parse($report->report_date) : $startOfWeek;
 
-		$reportStart = $startOfWeek->format('j M Y');
+		$endOfWeek = Carbon::now()->endOfWeek();
 
-		$dueStart = $startOfWeek->format('Y-m-d');
+		$endOfWeek = $projectDate->greaterThan(Carbon::now()->startOfWeek()) ? $projectDate->clone()->endOfWeek() : $endOfWeek;
 
-		$endOfWeek = ($report) ? Carbon::parse($report->report_end) : Carbon::now()->endOfWeek();
+		$reportEnd = ($report) ? Carbon::parse($report->report_end) : $endOfWeek;
 
-		$reportEnd = $endOfWeek->format('j M Y');
-
-		$dueEnd = $endOfWeek->format('Y-m-d');
-
-		$workflow = $this->reportCard->weeklyWorkflow($corporateId, $dueStart, $dueEnd, $project);
+		$workflow = $processFlow->getWeeklyFlow($project,$reportId);
 
 		$reportInit = $projectDate->isLastWeek() || $projectDate->lessThan(Carbon::now()->isLastWeek()) ? 1 : 0;
 

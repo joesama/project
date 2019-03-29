@@ -154,10 +154,16 @@ class Profile extends Model
         $message->put('title', trans('joesama/project::mailer.title.'.$type));
 
         $message->put('content', collect([
-            title_case(trans_choice('joesama/project::mailer.project.'.$type,
-                $workflow->workflow->count(),
-                ['state' => title_case($workflow->state)]
-            )
+            title_case(
+                trans_choice(
+                    'joesama/project::mailer.project.'.$type,
+                    $workflow->workflow->count(),
+                    [
+                        'state' => title_case($workflow->state),
+                        'week' => data_get($workflow,'week'),
+                        'month' => data_get($workflow,'month'),
+                    ]
+                )
             ),
             trans('joesama/project::mailer.report.project', ['project' => ucwords($project->name) ]),
         ]));
@@ -165,6 +171,10 @@ class Profile extends Model
         switch ($type) {
             case 'update':
                 $uriHandle = handles('joesama/project::manager/project/info/'.$project->corporate_id.'/'.$project->id.'/'.$workflow->id);
+                break;
+
+            case 'week':
+                $uriHandle = handles('joesama/project::report/weekly/form/'.$project->corporate_id.'/'.$project->id.'/'.$workflow->id);
                 break;
             
             default:

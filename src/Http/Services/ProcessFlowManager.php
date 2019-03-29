@@ -263,10 +263,11 @@ class ProcessFlowManager
             'first' => $steps->first(),
             'next' => null,
             'last' => $steps->last(),
-            'record' => data_get($workflow, 'workflow')
+            'record' => data_get($workflow, 'workflow') ?? collect([])
         ]);
 
         if ($workflow  == null) {
+            $position->put('current', $steps->first());
             $position->put('next', $steps->slice(1, 1)->first());
         } else {
             $needAction = data_get($workflow, 'need_action');
@@ -281,6 +282,25 @@ class ProcessFlowManager
 
             $position->put('next', $steps->slice(($currentIndex+1), 1)->first());
         }
+
+        $pcess = collect(data_get($workflow, 'workflow'))->groupBy('step_id');
+
+        $progress = $steps->sortBy('order')->mapWithKeys(function ($item, $key) use ($pcess) {
+
+            $condition = [
+                'order' => $item['order'],
+                'label' => $item['label'],
+                'photo' => data_get($item,'profile_assign.user.photo'),
+                'profile' => data_get($item,'profile_assign.name'),
+                'lastaction' => collect($pcess->get($item['id']))->last(),
+            ];
+
+            return [
+                $item['id'] => $condition
+            ];
+        });
+
+        $position->put('progress', $progress);
 
         return $position;
     }

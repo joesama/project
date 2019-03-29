@@ -22,13 +22,13 @@
 		</div>
 		<div class="row text-thin text-center">
 			<div class="col-md-4  col-xs-4  text-bold bord-rgt"  style="padding: 3px">
-				{{ $reportStart }}
+				{{ $reportStart->format('j M Y') }}
 			</div>
 			<div class="col-md-4 col-xs-4 bord-rgt"  style="padding: 3px">
 				{{ __('joesama/project::report.format.through') }}
 			</div>
 			<div class="col-md-4 col-xs-4  text-bold"  style="padding: 3px">
-				{{ $reportEnd }}
+				{{ $reportEnd->format('j M Y') }}
 			</div>
 		</div>
 	</div>
@@ -168,47 +168,26 @@
 </div>
 <div class="row bord-hor bord-btm" style="page-break-after: auto;page-break-inside: avoid;">
 	<div class="col-md-12 col-xs-12 text-left text-bold bord-rgt pad-all" id="need_action">
-		@php
-			$type = (request()->segment(2) == 'weekly') ? 'report' : 'card';
 
-			$record = collect(data_get($project,$type))->where('id',request()->segment(6))->first();
-
-			$firstStep = $workflow->pluck('step')->first();
-
-			$currentAction = $workflow->where('profile.user_id',auth()->id())
-			              ->where("step", (!is_null($record)) ? data_get($record,'need_step') : $firstStep )
-			              ->first();
-
-			$action = route('api.workflow.process',[$corporateId,$projectId]);
-			$sliceIndex = $workflow->pluck('step')->search(data_get($record,'need_step'));
-			$next = $workflow->slice($sliceIndex+1,1)->first();
-			$back = $workflow->first();
-
-			$allTrails = data_get($record,'workflow');
-			$profileRole = data_get($currentAction,'profile.pivot.role_id');
-
-	    @endphp
-	    @if(!is_null($allTrails))
-	        @foreach($allTrails as $trail)
-	          @include('joesama/project::report.workflow.panel-info',[
-	            'status' => data_get($trail,'state'),
-	            'record' => $trail,
-	            'profile' => data_get($trail,'profile'),
-	          ])
-	        @endforeach
-        @endif
-	    @if( $currentAction )
-			@include('joesama/project::report.workflow.panel-form',[
-			'back_state' => data_get($back,'step'),
-			'state' => data_get($currentAction,'step'),
-			'need_action' => data_get($next,'profile.id'),
-			'need_step' => data_get($next,'step'),
-			'status' => data_get($currentAction,'status'),
-			'profile' => data_get($currentAction,'profile'),
-			'back_action' => ($firstStep != data_get($record,'need_step') && $profileRole != 2) ? data_get($back,'profile.id') : FALSE,
-			'back_step' => data_get($back,'step'),
-			'back_status' => 'rejected',
-			])
-        @endif
+	@includeWhen(
+	    ( $project->active && (data_get($workflow,'current.profile_assign.id') == $profile->id )),
+	    'joesama/project::setup.process.workflow', 
+	    [
+	        'workflow' => $workflow,
+	        'input' => [
+	        	'start' => $reportStart->format('Y-m-d'),
+	        	'end' => $reportEnd->format('Y-m-d'),
+	        	'cycle' => $reportDue
+	        ]
+	    ]
+	)
+	
+	@includeWhen(
+	    ( $project->active && (data_get($workflow,'current.profile_assign.id') != $profile->id )),
+	    'joesama/project::manager.project.part.flowRecord', 
+	    [
+	        'records' => $workflow->get('record')
+	    ]
+	)
 	</div>
 </div>

@@ -28,64 +28,123 @@
 	</ul>
 	@php
 		$workflowType = data_get($workflow, 'type');
+		$additionalAttr = isset($input) ? $input : collect([]);
 	@endphp
 	<!--Tabs Content-->
 	<div class="tab-content bord-all">
 	    <div id="need-action" class="tab-pane fade active in">
-	        <h5 class="text-main text-semibold text-uppercase">
-	        {{ config('joesama/project::workflow.process.'.data_get($workflow,'type')) }} : 
-	        {{ data_get($workflow,'current.label') }}
-	    	</h5>
-			<form method="POST" id="workflowForm" action="{{ route('api.workflow.'.$workflowType,[request()->segment(4), request()->segment(5), request()->segment(6)]) }}" class="panel-body form-horizontal form-padding text-left">
-			@csrf	
-            @php
-            	$next = $workflow->get('next');
-            	$current = $workflow->get('current');
-            @endphp
-                <div class="form-group">
-                    <label class="col-md-2 control-label text-bold">
-                    	{{ __('joesama/project::form.process.form.action') }}
-                    </label>
-                    <div class="col-md-10">
-                    	<p class="form-control-static">
-                    		{{ data_get($current, 'profile_assign.name') }}
-                    	</p>
-                	</div>
-                </div>
-	            <input type="hidden" name="state" id="state" value="{{ strtolower(data_get($current, 'status')) }}">
-	            <input type="hidden" name="type" id="type" value="{{ data_get($workflow,'type') }}">
-	            <input type="hidden" name="status" id="status" value="{{ data_get($next, 'status_id') }}">
-	            <input type="hidden" name="need_action" id="need_action" value="{{ data_get($next, 'profile_assign.id') }}">
-	            <input type="hidden" name="need_step" id="need_step" value="{{ data_get($next, 'id') }}">
-	            <input type="hidden" name="current_step" id="current_step" value="{{ data_get($current, 'id') }}">
-	            <input type="hidden" name="current_action" id="current_action" value="{{ data_get($current, 'profile_assign.id') }}">
-                <div class="form-group">
-                    <label class="col-md-2 control-label text-bold" for="demo-textarea-input">
-                    	{{ __('joesama/project::form.process.remark') }}
-                    </label>
-                    <div class="col-md-10">
-                        <textarea id="remark" name="remark" rows="9" class="form-control" placeholder="{{ __('joesama/project::form.process.remark') }}"></textarea>
+	    <div class="row">
+	    	<div class="col-md-3">
+	    		<div class="timeline text-normal">
+                    <!-- Timeline header -->
+                    <div class="timeline-header">
+                        <div class="timeline-header-title bg-primary">
+                        	Progress
+                        </div>
                     </div>
+                    @foreach($workflow->get('progress') as $progress)
+                    @php
+                    	$lastAction = data_get($progress,'lastaction');
+                    	$rejected = data_get($lastAction,'state') == 'rejected' ? true : false;
+                    @endphp
+                    <div class="timeline-entry {{ $rejected ? 'text-danger' : ($lastAction ? 'text-success' : '') }}">
+                        <div class="timeline-stat">
+                        	<div class="timeline-icon">
+                        		@if ( data_get($progress,'photo') !== NULL )
+                        		<img src="{{ data_get($progress,'photo') }}" alt="{{ data_get($progress,'profile') }}">
+                        		@else
+                        			<i class="psi-fingerprint-2 icon-3x "></i>
+                        		@endif
+                            </div>
+                            @if(data_get($progress,'lastaction') != null)
+                            <div class="timeline-time">{{ data_get($progress,'lastaction.updated_at') }}</div>
+                            @endif
+                        </div>
+                        <div class="timeline-label text-sm">
+                            <p class="text-xs text-semibold text-overflow text-primary">
+                            	{{ data_get($progress,'label') }}
+                            </p>
+                            <p class="text-xs text-semibold">
+                            	{{ data_get($progress,'profile') }}
+                            </p>
+                        	@if(data_get($progress,'lastaction') != null)
+                            <span class="text-sm">
+                            {{ str_limit(data_get($progress,'lastaction.remark'),100) }}
+                            </span>
+                        	@endif
+                        </div>
+                    </div>
+                    @endforeach
                 </div>
-                <div class="form-group text-right">
-                	@if(data_get($workflow, 'first.id') === data_get($workflow, 'current.id'))
-	            	<input type="hidden" name="abandon" id="abandon" value="true">
-		            <button type="submit" onclick="closeproject()" class="btn btn-danger mar-ver">
-		            	<i class="ion-asterisk icon-fw"></i>
-		            	{{ __('joesama/project::form.action.close') }}
-		            </button>
-		            @else
-		            <button type="submit" onclick="reject()" class="btn btn-danger mar-ver">
-		                <i class="psi-pen icon-fw"></i>
-		                {{ __('joesama/project::form.action.reject') }} 
-		            </button>
-		            @endif
-		            <button type="submit" class="btn btn-primary mar-ver">
-		            	<i class="psi-yes text-success icon-fw"></i>
-		            	{{ __('joesama/project::form.action.approve') }} 
-		            </button>
-	        	</div>
-            </form>
+	    	</div>
+	    	<div class="col-md-9">
+		        <h5 class="text-main text-center text-semibold text-uppercase">
+		        {{ config('joesama/project::workflow.process.'.data_get($workflow,'type')) }} : 
+		        {{ data_get($workflow,'current.label') }}
+		    	</h5>
+				<form method="POST" id="workflowForm" action="{{ route('api.workflow.'.$workflowType,[request()->segment(4), request()->segment(5), request()->segment(6)]) }}" class="panel-body form-horizontal form-padding text-left">
+					@csrf	
+		            @php
+		            	$next = $workflow->get('next');
+		            	$current = $workflow->get('current');
+		            @endphp
+		                <div class="form-group">
+		                    <label class="col-md-2 control-label text-bold">
+		                    	{{ __('joesama/project::form.process.form.action') }}
+		                    </label>
+		                    <div class="col-md-10">
+		                    	<p class="form-control-static">
+		                    		{{ data_get($current, 'profile_assign.name') }}
+		                    	</p>
+		                	</div>
+		                </div>
+		                @php
+		                	$currentState = strtolower(data_get($current, 'status'));
+		                	if(strtolower(data_get($workflow,'first.status')) == $currentState 
+		                		&& $workflow->get('record')->count() > 0){
+		                		$currentState = 'Updated';
+		                	}
+		                @endphp
+			            <input type="hidden" name="state" id="state" value="{{ strtolower($currentState) }}">
+			            <input type="hidden" name="type" id="type" value="{{ data_get($workflow,'type') }}">
+			            <input type="hidden" name="status" id="status" value="{{ data_get($next, 'status_id') }}">
+			            <input type="hidden" name="need_action" id="actionBy" value="{{ data_get($next, 'profile_assign.id') }}">
+			            <input type="hidden" name="need_step" id="need_step" value="{{ data_get($next, 'id') }}">
+			            <input type="hidden" name="current_step" id="current_step" value="{{ data_get($current, 'id') }}">
+			            <input type="hidden" name="current_action" id="current_action" value="{{ data_get($current, 'profile_assign.id') }}">
+			            @foreach($additionalAttr as $inputName => $inputValue)
+			            	 <input type="hidden" name="{{ $inputName }}" id="{{ $inputName }}" value="{{ $inputValue }}">
+			            @endforeach
+		                <div class="form-group">
+		                    <label class="col-md-2 control-label text-bold" for="demo-textarea-input">
+		                    	{{ __('joesama/project::form.process.remark') }}
+		                    </label>
+		                    <div class="col-md-10">
+		                        <textarea id="remark" name="remark" rows="9" class="form-control" placeholder="{{ __('joesama/project::form.process.remark') }}"></textarea>
+		                    </div>
+		                </div>
+		                <div class="form-group text-right">
+		                	@if(data_get($workflow, 'first.id') === data_get($workflow, 'current.id') && data_get($workflow, 'type') == 'approval')
+			            	<input type="hidden" name="abandon" id="abandon" value="true">
+				            <button type="submit" onclick="closeproject()" class="btn btn-danger mar-ver">
+				            	<i class="ion-asterisk icon-fw"></i>
+				            	{{ __('joesama/project::form.action.close') }}
+				            </button>
+				            @endif
+				            @if(data_get($workflow, 'first.id') !== data_get($workflow, 'current.id'))
+				            <button type="submit" onclick="reject()" class="btn btn-danger mar-ver">
+				                <i class="psi-pen icon-fw"></i>
+				                {{ __('joesama/project::form.action.reject') }} 
+				            </button>
+				            @endif
+				            <button type="submit" class="btn btn-primary mar-ver">
+				            	<i class="psi-yes text-success icon-fw"></i>
+				            	{{ __('joesama/project::form.action.approve') }} 
+				            </button>
+			        	</div>
+		            </form>
+            	</div>
+            </div>
 	    </div>
 	    <div id="action-record" class="tab-pane fade">
 	        <table class="table table-bordered table-condensed">
@@ -131,20 +190,30 @@
 
     function reject(){
         event.preventDefault();
+
         $('#state').val("rejected");
-        $('#status').val("{{ intval(data_get($workflow, 'first.status_id')) }}");
-        $('#need_action').val("{{ intval(data_get($workflow, 'first.profile_assign.id')) }}");
-        $('#need_step').val("{{ intval(data_get($workflow, 'first.id')) }}");
+
+        $('#status').val("{{ data_get($workflow, 'first.status_id') }}");
+
+        $('#need_step').val("{{ data_get($workflow, 'first.id') }}");
+
+        $('#actionBy').val("{{ data_get($workflow, 'first.profile_assign.id') }}");
+        
         $('form#workflowForm').submit();
         
     }
 
     function closeproject(){
         event.preventDefault();
+
         $('#state').val("closed");
+
         $('#status').val(null);
-        $('#need_action').val(null);
+
+        $('#actionBy').val(null);
+
         $('#need_step').val(null);
+
         $('form#workflowForm').submit();
         
     }

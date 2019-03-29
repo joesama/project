@@ -57,6 +57,54 @@ class Report extends Model
         return $query->with(['status','project','workflow']);
     }
 
+    public function scopeReporting($query, $endDate)
+    {
+        return $query->with(['status','workflow'])
+        ->with(['project' => function($query) use ($endDate){
+            $query->with(['task'=> function($query) use ($endDate){
+                $query->with(['progress'=> function($query) use ($endDate){
+                    $query->where('created_at', '<=' ,$endDate);
+                    $query->where(function ($query) {
+                        $query->whereNull('card_id')
+                              ->orWhereNull('report_id');
+                    });
+                }]);
+            }]);
+            $query->with(['payment'=> function($query) use ($endDate){
+                $query->where('paid_date', '<=' ,$endDate);
+                $query->where(function ($query) {
+                        $query->whereNull('card_id')
+                              ->orWhereNull('report_id');
+                    });
+            }]);
+            $query->with(['plan'=> function($query) use ($endDate){
+                $query->where('created_at', '<=' ,$endDate);
+                $query->where(function ($query) {
+                        $query->whereNull('card_id')
+                              ->orWhereNull('report_id');
+                    });
+            }]);
+        }]);
+    }
+
+    public function scopeIsReported($query, $reportId)
+    {
+        return $query->with(['status','workflow'])
+        ->with(['project' => function($query) use ($reportId){
+            $query->with(['task'=> function($query) use ($reportId){
+                $query->with(['progress'=> function($query) use ($reportId){
+                    $query->where('report_id', $reportId);
+                }]);
+            }]);
+            $query->with(['payment'=> function($query) use ($reportId){
+                $query->where('report_id', $reportId);
+            }]);
+            $query->with(['plan'=> function($query) use ($reportId){
+                $query->where('report_id', $reportId);
+            }]);
+        }]);
+    }
+
     public function getGenerationDateAttribute($value)
     {
         return Carbon::parse($this->created_at)->format('d-m-Y');

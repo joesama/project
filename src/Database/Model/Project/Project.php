@@ -277,7 +277,7 @@ class Project extends Model
     public function scopeComponent($query, $reportId = null)
     {
         return $query->with([
-            'client','profile.role',
+            'client',
             'corporate','partner','attributes',
             'hsecard','manager','incident','claim',
             'retention','lad','vo','issue','role',
@@ -296,6 +296,8 @@ class Project extends Model
             $query->component();
         }])->with(['report' => function($query) {
             $query->component();
+        }])->with(['profile' => function($query) {
+            $query->with(['role','user']);
         }]);
     }
 
