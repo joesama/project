@@ -34,7 +34,7 @@
 	<div class="tab-content bord-all">
 	    <div id="need-action" class="tab-pane fade active in">
 	    <div class="row">
-	    	<div class="col-md-3">
+	    	<div class="col-md-3 text-center">
 	    		<div class="timeline text-normal">
                     <!-- Timeline header -->
                     <div class="timeline-header">
@@ -60,7 +60,7 @@
                             <div class="timeline-time">{{ data_get($progress,'lastaction.updated_at') }}</div>
                             @endif
                         </div>
-                        <div class="timeline-label text-sm">
+                        <div class="timeline-label text-sm  text-left">
                             <p class="text-xs text-semibold text-overflow text-primary">
                             	{{ data_get($progress,'label') }}
                             </p>

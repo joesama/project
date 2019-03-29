@@ -79,21 +79,23 @@ class ProjectWorkflowRepository
             
             $approval->save();
 
-            $workflow = new ProjectApprovalWorkflow([
+            $approvalFlow = new ProjectApprovalWorkflow([
                 'remark' => $project->scope,
                 'state' => $state ,
                 'step_id' => data_get($initialAction, 'id') ,
                 'profile_id' => data_get($initialAction, 'profile_assign.id'),
             ]);
 
-            $approval->workflow()->save($workflow);
+            $approval->workflow()->save($approvalFlow);
+
+            $type = $workflow->get('type');
 
             if (!is_null($approval->nextby)) {
-                $project->profile->groupBy('id')->each(function ($profile) use ($project, $approval, $state) {
-                    $profile->first()->sendActionNotification($project, $approval, $workflow->get('type'), 'warning');
+                $project->profile->groupBy('id')->each(function ($profile) use ($project, $approval, $state, $type) {
+                    $profile->first()->sendActionNotification($project, $approval, $type, 'warning');
                 });
             } else {
-                $approval->creator->sendActionNotification($project, $approval, $workflow->get('type'));
+                $approval->creator->sendActionNotification($project, $approval, $type);
             }
 
             DB::commit();
