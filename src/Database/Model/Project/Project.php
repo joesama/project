@@ -274,31 +274,53 @@ class Project extends Model
             });
     }
 
-    public function scopeComponent($query, $reportId = null)
+    public function scopeComponent($query, string $type)
     {
-        return $query->with([
-            'client',
-            'corporate','partner','attributes',
-            'hsecard','manager','incident','claim',
-            'retention','lad','vo','issue','role',
-            'physical','finance'
-        ])->with(['payment' => function($query) use($reportId){
-            $query->orderBy('claim_date');
-            $query->component($reportId);
-        }])->with(['task' => function($query) {
-            $query->orderBy('end');
-            $query->component();
-        }])->with(['issue' => function($query){
-            $query->component();
-        }])->with(['approval' => function($query){
-            $query->component();
-        }])->with(['card' => function($query) {
-            $query->component();
-        }])->with(['report' => function($query) {
-            $query->component();
-        }])->with(['profile' => function($query) {
-            $query->with(['role','user']);
-        }]);
+        switch ($type) {
+            case 'week':
+                return $query->with(['task'=> function($query) {
+                            $query->with(['progress'=> function($query) {
+                                $query->whereNull('report_id');
+                            }]);
+                        }])->with(['payment' => function($query) {
+                            $query->whereNull('report_id');
+                        }])->with(['plan'=> function($query) {
+                            $query->whereNull('report_id');
+                        }]);
+                break;
+            
+            default:
+                return $query->with([
+                            'client',
+                            'corporate','partner','attributes',
+                            'hsecard','manager','incident','claim',
+                            'retention','lad','vo','issue','role',
+                            'physical','finance'
+                        ])->with(['payment' => function($query){
+                            $query->orderBy('claim_date');
+                            $query->component();
+                        }])->with(['task' => function($query) {
+                            $query->orderBy('end');
+                            $query->component();
+                        }])->with(['issue' => function($query){
+                            $query->component();
+                        }])->with(['approval' => function($query){
+                            $query->component();
+                        }])->with(['card' => function($query) {
+                            $query->component();
+                        }])->with(['report' => function($query) {
+                            $query->component();
+                        }])->with(['profile' => function($query) {
+                            $query->with(['role','user']);
+                        }]);
+                break;
+        };
+
+    }
+
+    public function scopeForListing($query)
+    {
+        return $query->with(['manager']);
     }
 
     public function getEndDateAttribute($value)

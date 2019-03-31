@@ -240,7 +240,7 @@ class ListProcessor
 		$datagrid->buildTable($columns, __('joesama/project::report.weekly.list') )
 				 ->buildDataModel(
 				 	route('api.list.weekly',[$corporateId, $projectId]), 
-				 	$this->reportCardObj->weeklyList($corporateId, $projectId)
+				 	$this->reportCardObj->weeklyList(null, $projectId)
 				 );
 
 		if ( $workflow !== null && ( data_get($workflow,'first.profile_assign.id') ==  $this->profile()->id ) ) {
@@ -256,10 +256,10 @@ class ListProcessor
 	/**
 	 * Weekly Report History
 	 * 
-	 * @param  int    $corporateId Current User Corporate Id
-	 * @return 
+	 * @param  int|null $profileId Current User Profile Id
+	 * @return Joesama\Project\Http\Services\DataGridGenerator
 	 */
-	public function weeklyReportHistory(int $corporateId)
+	public function weeklyReportHistory(?int $profileId = NULL)
 	{
 		$columns = [
 		   [ 'field' => 'generation_date',
@@ -287,8 +287,8 @@ class ListProcessor
 		
 		$datagrid->buildTable($columns, __('joesama/project::report.weekly.list') )
 				 ->buildDataModel(
-				 	route('api.list.weekly',[$corporateId]), 
-				 	$this->reportCardObj->weeklyList($corporateId,null)
+				 	route('api.list.weekly',[$profileId]), 
+				 	$this->reportCardObj->weeklyList($profileId)
 				 );
 		
 		return $datagrid->buildOption($action, TRUE)->render();

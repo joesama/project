@@ -83,10 +83,10 @@ class ProjectInfoRepository
 	 * 
 	 * @return Joesama\Project\Database\Model\Project\Project
 	 */
-	public function getProject(int $projectId, ?int $reportId = null)
+	public function getProject(int $projectId, string $type = 'all')
 	{
 		return $this->projectModel
-				->component($reportId)
+				->component($type)
 				->find($projectId);
 	}
 
@@ -98,25 +98,15 @@ class ProjectInfoRepository
 	 **/
 	public function projectList(int $corporateId)
 	{
+		$currentProfile = $this->profile->id;
 
 		$project = $this->projectModel->active()
 					->orderBy('updated_at','desc')
-					->where(function($query){
-						$query->whereHas('manager',function($query){
-							$query->where('profile_id',$this->profile->id);
-						})
-						->orWhereHas('task',function($query){
-							$query->where('profile_id',$this->profile->id);
-						})
-						->orWhereHas('admin',function($query){
-							$query->where('profile_id',$this->profile->id);
-						})
-						->orWhereHas('profile',function($query){
-							$query->where('profile_id',$this->profile->id);
-						});
+					->whereHas('profile',function($query) use($currentProfile){
+						$query->where('profile_id',$currentProfile);
 					});
 
-		return $project->component()->paginate();
+		return $project->forListing()->paginate();
 	}
 
 	/**

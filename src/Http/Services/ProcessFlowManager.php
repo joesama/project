@@ -164,7 +164,7 @@ class ProcessFlowManager
             return collect([]);
         }
 
-        return $this->mappedFlowProcess->map(function ($flow) use ($profile, $requiredProfile) {
+        return $this->mappedFlowProcess->sortBy('type_id')->map(function ($flow) use ($profile, $requiredProfile) {
             $steps = $flow->get('steps')->sortBy('order')->map(function ($step) use ($profile, $requiredProfile) {
 
                 if (!$requiredProfile) {

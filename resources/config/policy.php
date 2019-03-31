@@ -134,6 +134,7 @@ return [
 				'view' => ['corporateId','projectId','reportId?']
 			],
 			'weekly' => [
+				'redirect' => ['reportId'],
 				'list' => ['corporateId','projectId?'],
 				'form' => ['corporateId','projectId','reportId?'],
 				'view' => ['corporateId','projectId','reportId?']
