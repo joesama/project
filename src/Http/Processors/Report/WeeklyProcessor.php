@@ -39,7 +39,7 @@ class WeeklyProcessor
      */
     public function list(Request $request, int $corporateId)
     {
-        $table = app(ListProcessor::class)->weeklyReportHistory();
+        $table = app(ListProcessor::class)->weeklyReportHistory($request);
 
         return compact('table');
     }

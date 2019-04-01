@@ -32,7 +32,7 @@ class DashboardProcessor
 	{
 
 		return [
-			'tableWeekly' => $this->listProcessor->weeklyReportHistory($this->profile()->id),
+			'tableWeekly' => $this->listProcessor->weeklyReportHistory($request, $this->profile()->id),
 			'tableMonthly' => $this->listProcessor->monthlyReport($request,$corporateId),
 			'tableApproval' => $this->listProcessor->projectApproval($request,$corporateId)
 		];

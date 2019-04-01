@@ -192,9 +192,20 @@ class ListProcessor
 	 * @param  int $request,$corporateId
 	 * @return Illuminate\Pagination\LengthAwarePaginator
 	 */
-	public function weekly($request,$corporateId)
+	public function weekly($request, int $corporateId)
 	{
 		return $this->reportCardObj->weeklyList($corporateId,$request->segment(5));
+	}
+
+	/**
+	 * Get Weekly Report Base On Profile Id
+	 * 
+	 * @param  int    $profileId Current User Profile Id
+	 * @return [type]            [description]
+	 */
+	public function week($request, int $profileId)
+	{
+		return $this->reportCardObj->weeklyList($request->segment(4), $request->segment(5), $profileId);
 	}
 
 	/**

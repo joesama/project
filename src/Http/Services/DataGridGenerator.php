@@ -67,7 +67,7 @@ class DataGridGenerator
 	public function buildDataModel(string $dataApi , LengthAwarePaginator $model = NULL)
 	{
 		// Set Data API URL
-		// $this->datagrid->apiUrl($dataApi);
+		$this->datagrid->apiUrl($dataApi);
 		// Preload data when page load : optional
 		if(!is_null($model)){
 			$this->datagrid->setModel($model);

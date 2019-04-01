@@ -85,20 +85,21 @@ class ReportCardInfoRepository
     /**
      * Get Weekly Report List
      * 
-     * @param  int|null $profileId Current User Profile Id
+     * @param  int      $corporateId Current User Corporate Id
      * @param  int|null $projectId Current Project Id
+     * @param  int|null $profileId Current User Profile Id
      * @return Illuminate\Pagination\LengthAwarePaginator
      */
-    public function weeklyList(?int $profileId = NULL, ?int $projectId = NULL)
+    public function weeklyList(int $corporateId, ?int $projectId = NULL, ?int $profileId = NULL)
     {
-        return $this->reportObj->where(function ($query) use ($projectId, $profileId) {
-			$query->when($profileId, function ($query, $profileId) {
-				$query->where('need_action', $profileId);
-			});          
+        return $this->reportObj->where(function ($query) use ($projectId,$profileId ) {         
             $query->when($projectId, function ($query, $projectId) {
                 $query->whereHas('project',function($query) use($projectId){
                     return $query->where('id', $projectId);
                 });
+            });            
+            $query->when($profileId, function ($query, $profileId) {
+                $query->where('need_action', $profileId);
             });
 			$query->whereHas('project.profile',function($query) {
 				$query->where('profile_id',$this->profile->id);
