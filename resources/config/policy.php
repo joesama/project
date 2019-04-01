@@ -162,6 +162,7 @@ return [
 				'attribute' => ['corporateId','projectId'],
 				'profile' => ['corporateId','masterId?'],
 				'weekly' => ['corporateId?','projectId?'],
+				'week' => ['corporateId','projectId?','profileId?'],
 				'monthly' => ['corporateId','projectId?'],
 				'approval-project' => ['corporateId','projectId?'],
 				'approval-dashboard' => ['corporateId','projectId?'],

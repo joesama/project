@@ -287,7 +287,7 @@ class ListProcessor
 		
 		$datagrid->buildTable($columns, __('joesama/project::report.weekly.list') )
 				 ->buildDataModel(
-				 	route('api.list.weekly',[$request->segment(4), $request->segment(5), $profileId]), 
+				 	route('api.list.week',[$request->segment(4), $request->segment(5), $profileId]), 
 				 	$this->reportCardObj->weeklyList($request->segment(4), $request->segment(5), $profileId)
 				 );
 		
