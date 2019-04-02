@@ -203,9 +203,9 @@ class ListProcessor
 	 * @param  int    $profileId Current User Profile Id
 	 * @return [type]            [description]
 	 */
-	public function week($request, int $profileId)
+	public function week($request, int $corporateId, ?int $profileId)
 	{
-		return $this->reportCardObj->weeklyList($request->segment(4), $request->segment(5), $profileId);
+		return $this->reportCardObj->weeklyList($request->segment(4), NULL, $profileId);
 	}
 
 	/**
@@ -213,9 +213,20 @@ class ListProcessor
 	 * @param  int $request,$corporateId
 	 * @return Illuminate\Pagination\LengthAwarePaginator
 	 */
-	public function monthly($request,$corporateId)
+	public function monthly($request, $corporateId)
 	{
 		return $this->reportCardObj->monthlyList($corporateId,$request->segment(5));
+	}
+
+	/**
+	 * Get Monthly Report Base On Profile Id
+	 * 
+	 * @param  int    $profileId Current User Profile Id
+	 * @return [type]            [description]
+	 */
+	public function month($request, int $corporateId, ?int $profileId)
+	{
+		return $this->reportCardObj->monthlyList($request->segment(4), NULL, $profileId);
 	}
 
 	/**

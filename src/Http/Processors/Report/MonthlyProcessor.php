@@ -41,7 +41,7 @@ class MonthlyProcessor
 	 */
 	public function list(Request $request, int $corporateId)
 	{
-		$table = app(ListProcessor::class)->monthlyReport($request, $corporateId);
+		$table = app(ListProcessor::class)->monthlyReportHistory($request);
 
 		return compact('table');
 	}

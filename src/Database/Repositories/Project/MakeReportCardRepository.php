@@ -132,7 +132,7 @@ class MakeReportCardRepository
             $report->need_step = (int)$request->get('need_step');
 
             $report->state = (string)$request->get('state');
-dd($report);
+
             $report->save();
 
             if ($request->get('need_action') == null) {

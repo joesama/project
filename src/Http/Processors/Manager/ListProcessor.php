@@ -201,6 +201,47 @@ class ListProcessor
     }
 
     /**
+     * Monthly Report History
+     *
+     * @param  int|null $profileId Current User Profile Id
+     * @return Joesama\Project\Http\Services\DataGridGenerator
+     */
+    public function monthlyReportHistory($request, ?int $profileId = null)
+    {
+        $columns = [
+           [ 'field' => 'generation_date',
+           'title' => __('joesama/project::form.report.report_date'),
+           'style' => 'text-left text-capitalize'],
+           [ 'field' => 'project.name',
+           'title' => __('joesama/project::project.info.name'),
+           'style' => 'text-left text-capitalize'],
+           [ 'field' => 'month',
+           'title' => 'Month',
+           'style' => 'text-center text-bold'],
+           [ 'field' => 'status.description',
+           'title' => 'Status',
+           'style' => 'text-center text-bold']
+        ];
+
+        $action = [
+            [ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
+                'url' => handles('joesama/project::report/monthly/redirect'), // URL for action
+                'icons' => 'psi-magnifi-glass icon', // Icon for action : optional
+                'key' => 'id'  ]
+        ];
+
+        $datagrid = new DataGridGenerator();
+
+        $datagrid->buildTable($columns, __('joesama/project::report.monthly.list'))
+                 ->buildDataModel(
+                     route('api.list.month', [$request->segment(4), $profileId]),
+                     $this->reportCardObj->monthlyList($request->segment(4), $request->segment(5), $profileId)
+                 );
+        
+        return $datagrid->buildOption($action, true)->render();
+    }
+
+    /**
      * Project Weekly Report List
      *
      * @param  $project  Current Project Object
@@ -287,7 +328,7 @@ class ListProcessor
         
         $datagrid->buildTable($columns, __('joesama/project::report.weekly.history'))
                  ->buildDataModel(
-                     route('api.list.week', [$request->segment(4), $request->segment(5), $profileId]),
+                     route('api.list.week', [$request->segment(4), $profileId]),
                      $this->reportCardObj->weeklyList($request->segment(4), $request->segment(5), $profileId)
                  );
         
