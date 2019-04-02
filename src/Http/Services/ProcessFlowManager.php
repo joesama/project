@@ -14,6 +14,8 @@ class ProcessFlowManager
 
     const WEEKLY = 'week';
 
+    const MONTHLY = 'month';
+
     /**
      * Process Flow Model
      *
@@ -231,6 +233,23 @@ class ProcessFlowManager
         $updateProcess = collect(data_get($project, 'report'))->where('id',$weekReportId)->first();
 
         return $this->workflowPosition($updateProcess, $steps, self::WEEKLY);
+    }
+
+    /**
+
+     * Get Monthly Report Workflow
+     *
+     * @param  Project  $project        Current Project Model
+     * @param  int|null $monthReportId   Current Weekly Report Process
+     * @return Illuminate\Support\Collection
+     */
+    public function getMonthlyFlow(Project $project, ?int $monthReportId = null) : Collection
+    {
+        $steps = $this->getWorkflowSteps($project, self::MONTHLY);
+
+        $updateProcess = collect(data_get($project, 'card'))->where('id',$monthReportId)->first();
+
+        return $this->workflowPosition($updateProcess, $steps, self::MONTHLY);
     }
 
     /**

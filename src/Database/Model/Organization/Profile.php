@@ -176,6 +176,10 @@ class Profile extends Model
             case 'week':
                 $uriHandle = handles('joesama/project::report/weekly/form/'.$project->corporate_id.'/'.$project->id.'/'.$workflow->id);
                 break;
+
+            case 'month':
+                $uriHandle = handles('joesama/project::report/monthly/form/'.$project->corporate_id.'/'.$project->id.'/'.$workflow->id);
+                break;
             
             default:
                 $uriHandle = handles('joesama/project::manager/project/view/'.$project->corporate_id.'/'.$project->id);

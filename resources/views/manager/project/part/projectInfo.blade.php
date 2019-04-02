@@ -1,36 +1,3 @@
-<div class="row mar-btm">
-    <div class="col-md-9">
-    </div>
-    <div class="col-md-3 text-right" class="vertical">
-        @if( $approval !== null && ( data_get($approval,'first.profile_assign.id') ==  $profile->id ) || $infoUpdate !== null && ( data_get($infoUpdate,'first.profile_assign.id') ==  $profile->id ) ) 
-        <a class="btn btn-primary mar-btm pull-right" href="{{ handles('joesama/project::manager/project/form/'.request()->segment(4).'/'.request()->segment(5)) }}">
-            <i class="psi-file-edit icon-fw"></i>
-            {{ __('joesama/project::manager.project.info') }}
-        </a>
-        @endif
-        @if(false)
-            <div class="col-md-12 text-center"> 
-                <div class="row bord-all">
-                    <div class="col-md-12 text-bold text-center" style="padding: 3px">
-                        {{ strtoupper( __('joesama/project::report.format.monthly') ) }}
-                        {{ strtoupper( $reportDue ) }}
-                    </div>
-                </div>
-                <div class="row text-thin text-center">
-                    <div class="col-md-4 text-bold bord-hor bord-btm"  style="padding: 3px">
-                        {{ $reportStart }}
-                    </div>
-                    <div class="col-md-4 bord-rgt bord-btm"  style="padding: 3px">
-                        {{ __('joesama/project::report.format.through') }}
-                    </div>
-                    <div class="col-md-4 text-bold bord-rgt bord-btm"  style="padding: 3px">
-                        {{ $reportEnd }}
-                    </div>
-                </div>
-            </div>
-        @endif
-    </div>
-</div>
 <div class="row">
     <div class="col-md-12">
         <table class="table table-bordered table-sm">

@@ -37,7 +37,7 @@ class ReportCardInfoRepository
      */
     public function getMonthlyReportInfo(int $reportId)
     {
-        return Card::where('id', $reportId)->component()->first();
+        return Card::where('id', $reportId)->isReported($reportId)->first();
     }
 
     /**
@@ -54,32 +54,28 @@ class ReportCardInfoRepository
     /**
      * Get Monthly Report List
      *
-     * @param  int    $corporateId Subsidiary Id
-     * @param  int    $projectId   Project Id
+     * @param  int      $corporateId Current User Corporate Id
+     * @param  int|null $projectId   Current Project Id
+     * @param  int|null $profileId   Current User Profile Id
      * @return Illuminate\Pagination\LengthAwarePaginator
      */
-    public function monthlyList(int $corporateId, ?int $projectId)
+    public function monthlyList(int $corporateId, ?int $projectId = NULL, ?int $profileId = NULL)
     {
-        $isHistory = (request()->segment(1) == 'report' && request()->segment(3) == 'list') ? true : false;
+        return $this->cardObj->where(function ($query) use ($projectId, $profileId) {
+            $query->when($projectId, function ($query, $projectId) {
+                $query->whereHas('project',function($query) use($projectId){
+                    return $query->where('id', $projectId);
+                });
+            });
 
-        return $this->cardObj->where(function ($query) use ($projectId, $isHistory) {
-                    $query->when($isHistory, function ($query, $isHistory) use ($projectId) {
-                        $query->whereHas('project', function ($query) use ($projectId) {
-                            $query->whereHas('manager', function ($query) {
-                                $query->where('profile_id', $this->profile->id);
-                            })
-                            ->orWhereHas('profile', function ($query) {
-                                $query->where('profile_id', $this->profile->id);
-                            });
+            $query->when($profileId, function ($query, $profileId) {
+                $query->where('need_action', $profileId);
+            });
 
-                            $query->when($projectId, function ($query, $projectId) {
-                                return $query->where('id', $projectId);
-                            });
-                        });
-                    });
-                    $query->orWhere('need_action', $this->profile->id);
-        })->component()
-                ->paginate();
+            $query->whereHas('project.profile',function($query) {
+                $query->where('profile_id',$this->profile->id);
+            });
+        })->component()->paginate();
     }
 
     /**
@@ -92,15 +88,17 @@ class ReportCardInfoRepository
      */
     public function weeklyList(int $corporateId, ?int $projectId = NULL, ?int $profileId = NULL)
     {
-        return $this->reportObj->where(function ($query) use ($projectId,$profileId ) {         
+        return $this->reportObj->where(function ($query) use ($projectId, $profileId) {         
             $query->when($projectId, function ($query, $projectId) {
                 $query->whereHas('project',function($query) use($projectId){
                     return $query->where('id', $projectId);
                 });
-            });            
+            });
+
             $query->when($profileId, function ($query, $profileId) {
                 $query->where('need_action', $profileId);
             });
+
 			$query->whereHas('project.profile',function($query) {
 				$query->where('profile_id',$this->profile->id);
 			});

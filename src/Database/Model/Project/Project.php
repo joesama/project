@@ -288,6 +288,18 @@ class Project extends Model
                             $query->whereNull('report_id');
                         }]);
                 break;
+
+            case 'month':
+                return $query->with(['task'=> function($query) {
+                            $query->with(['progress'=> function($query) {
+                                $query->whereNull('card_id');
+                            }]);
+                        }])->with(['payment' => function($query) {
+                            $query->whereNull('card_id');
+                        }])->with(['plan'=> function($query) {
+                            $query->whereNull('card_id');
+                        }])->with(['approval']);
+                break;
             
             default:
                 return $query->with([

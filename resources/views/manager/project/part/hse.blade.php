@@ -15,12 +15,16 @@
     <div class="collapse in" id="hse">
       <div class="panel-body">
           @if(!is_null($hsecard))
-             @if( ($project->active || !is_null(data_get($project,'approval.approved_by'))) && $isProjectManager ))
+             @if ( ($project->active || !is_null(data_get($project,'approval.approved_by'))) && $isProjectManager)
+            
             <div class="row">
               <div class="col-md-6">
                 <p class="text-bold mar-no">
                   {{ __('joesama/project::form.project_incident.last') }}&nbsp;:&nbsp;
-                  {{ Carbon\Carbon::parse(data_get(collect(data_get($project,'incident'))->first(),'created_at'))->format('d/m/Y') }}
+                  @php
+                    $lastIncident = data_get(collect(data_get($project,'incident'))->first(),'created_at');
+                  @endphp
+                  {{ $lastIncident != null ? Carbon\Carbon::parse($lastIncident)->format('d/m/Y') : 'N/A' }}
                 </p>
               </div>
               <div class="col-md-6">

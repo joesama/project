@@ -1,5 +1,5 @@
 <?php
-namespace Joesama\Project\Database\Repositories\Project; 
+namespace Joesama\Project\Database\Repositories\Project;
 
 use App\Jobs\Joesama\Project\Jobs\MailForAction;
 use Carbon\Carbon;
@@ -16,107 +16,43 @@ use Joesama\Project\Traits\HasAccessAs;
  * Data Handling For Create Project Card & Report Record
  *
  * @package default
- * @author 
+ * @author
  **/
-class MakeReportCardRepository 
+class MakeReportCardRepository
 {
-	use HasAccessAs;
+    use HasAccessAs;
 
-	/**
-	 * Create New Project
-	 *
-	 * @param 	Project $project Project Related
-	 * @param 	Request $request Report Data
-	 * @return  Project
-	 **/
-	public function initMonthly(Project $project, $request)
-	{
-		DB::beginTransaction();
-
-		$initialFlow = collect(config('joesama/project::workflow.1'))->keys()->first();
-
-		$profile = Profile::where('user_id',auth()->id())->first();
-
-		try{
-
-			$card = Card::where('month',$request->get('cycle'))
-					->where('project_id',$project->id)
-					->first();
-
-			$card = is_null($card) ? new Card : $card;
-
-
-			if ( $initialFlow == $request->get('state') ){
-
-				$card->month = $request->get('cycle');
-				$card->project_id = $project->id;
-				$card->card_date = Carbon::parse($request->get('start'))->format('Y-m-d');
-				$card->card_end = Carbon::parse($request->get('end'))->format('Y-m-d');
-				$card->creator_id = $profile->id;
-			}
-
-			$card->workflow_id = $request->get('state');
-			$card->need_action = $request->get('need_action');
-			$card->need_step = $request->get('need_step');
-			$card->save();
-
-			if ( $initialFlow == $request->get('state') ){
-				$this->lockProjectData($project,$card,$request->get('type'));
-			}
-
-			if(!is_null($card->nextby)){
-				// $card->nextby->sendActionNotification($project,$card,$request->get('type'));
-
-				$project->profile->each(function($profile) use($project,$card,$request){
-					$profile->sendActionNotification($project,$card,$request->get('type'));
-				});
-			}else{
-				$card->creator->sendAcceptedNotification($project,$card,$request->get('type'));
-			}
-
-			DB::commit();
-
-			$this->initMonthlyWorkflow($card,$profile->id,$request->input());
-
-			return $card;
-
-		}catch( \Exception $e){
-			dd($e->getMessage());
-			DB::rollback();
-		}
-	}
-
-	/**
-	 * Initiate Weekly Report Workflow Processing 
-	 * 
-	 * @param  Request 	$request   HTTP input request
-	 * @param  int    	$projectId Current Project Id
-	 * @param  int    	$reportId  Current Report Id
-	 * @return Joesama\Project\Database\Model\Project\Report
-	 */
-	public function initWeeklyWorkflow($request, int $projectId, ?int $reportId)
-	{
-		DB::beginTransaction();
+    /**
+     * Initiate Monthly Report Workflow Processing
+     *
+     * @param  Request  $request   HTTP input request
+     * @param  int      $projectId Current Project Id
+     * @param  int      $reportId  Current Report Id
+     * @return Joesama\Project\Database\Model\Project\Card
+     **/
+    public function initMonthly($request, int $projectId, ?int $reportId)
+    {
+        DB::beginTransaction();
 
         $currentProfile = $this->profile();
 
         $endReportDate = Carbon::parse($request->get('end'))->format('Y-m-d');
 
-		try{
-			if($reportId){
-				$report = Report::reporting($endReportDate)->find($reportId);
-			}else{
-				$report = Report::reporting($endReportDate)->firstOrNew([
-					'week' => (int)$request->get('cycle'), 
-					'project_id' => (int)$projectId,
-					'report_date' => Carbon::parse($request->get('start'))->format('Y-m-d'),
-					'report_end' => $endReportDate
-				]);
+        try {
+            if ($reportId) {
+                $report = Card::reporting($endReportDate)->find($reportId);
+            } else {
+                $report = Card::reporting($endReportDate)->firstOrNew([
+                    'month' => (int)$request->get('cycle'),
+                    'project_id' => (int)$projectId,
+                    'card_date' => Carbon::parse($request->get('start'))->format('Y-m-d'),
+                    'card_end' => $endReportDate
+                ]);
 
-				$report->creator_id = $currentProfile->id;
+                $report->creator_id = $currentProfile->id;
             }
 
-			$report->workflow_id = (int)$request->get('status');
+            $report->workflow_id = (int)$request->get('status');
 
             $report->need_action = (int)$request->get('need_action');
 
@@ -124,22 +60,22 @@ class MakeReportCardRepository
 
             $report->state = (string)$request->get('state');
 
-			$report->save();
+            $report->save();
 
-			if ( $request->get('need_action') == null ){
-				$this->lockProjectData($report->project,$report,$request->get('type'));
-			}
+            if ($request->get('need_action') == null) {
+                $this->lockProjectData($report->project, $report, $request->get('type'));
+            }
 
-			$reportWork = new ReportWorkflow([
+            $reportWork = new CardWorkflow([
                 'remark' => $request->get('remark'),
                 'state' => $request->get('state'),
                 'step_id' => (int)$request->get('current_step'),
                 'profile_id' => (int)$request->get('current_action'),
-			]);
+            ]);
 
-			$report->workflow()->save($reportWork);
+            $report->workflow()->save($reportWork);
 
-			DB::commit();
+            DB::commit();
 
             $project = $report->project;
 
@@ -150,111 +86,175 @@ class MakeReportCardRepository
             } else {
                 $report->creator->sendActionNotification($project, $report, $request->get('type'));
             }
-			return $report;
 
-		}catch( \Exception $e){
+            return $report;
+        } catch (\Exception $e) {
             DB::rollback();
 
             throw new \Exception($e->getMessage(), 1);
-		}
-	}
+        }
+    }
 
-	/**
-	 * Create Monthly Card Workflow
-	 * 
-	 * @param  Report 	$report       Get Report Header
-	 * @param  int 		$profile      Profile Id
-	 * @param  array  	$workflowData Get Form Data
-	 * @return JJoesama\Project\Database\Model\Project\Card
-	 **/
-	public function initMonthlyWorkflow(
-		Card $card,
-		int $profile,
-		array $workflowData
-	){
+    /**
+     * Initiate Weekly Report Workflow Processing
+     *
+     * @param  Request  $request   HTTP input request
+     * @param  int      $projectId Current Project Id
+     * @param  int      $reportId  Current Report Id
+     * @return Joesama\Project\Database\Model\Project\Report
+     */
+    public function initWeeklyWorkflow($request, int $projectId, ?int $reportId)
+    {
+        DB::beginTransaction();
 
-		DB::beginTransaction();
+        $currentProfile = $this->profile();
 
-		try{
+        $endReportDate = Carbon::parse($request->get('end'))->format('Y-m-d');
 
-			$workflow = new CardWorkflow([
-				'remark' => array_get($workflowData,'remark'),
-				'state' => array_get($workflowData,'status'),
-				'profile_id' => $profile,
-			]);
+        try {
+            if ($reportId) {
+                $report = Report::reporting($endReportDate)->find($reportId);
+            } else {
+                $report = Report::reporting($endReportDate)->firstOrNew([
+                    'week' => (int)$request->get('cycle'),
+                    'project_id' => (int)$projectId,
+                    'report_date' => Carbon::parse($request->get('start'))->format('Y-m-d'),
+                    'report_end' => $endReportDate
+                ]);
 
-			$card->workflow()->save($workflow);
+                $report->creator_id = $currentProfile->id;
+            }
 
-			DB::commit();
+            $report->workflow_id = (int)$request->get('status');
 
-			return $card;
+            $report->need_action = (int)$request->get('need_action');
 
-		}catch( \Exception $e){
-			dd($e->getMessage());
-			DB::rollback();
-		}
-	}
+            $report->need_step = (int)$request->get('need_step');
 
-	/**
-	 * Lock Project Data
-	 *
-	 * @param string $type 		Report Type	
-	 * @param Report $project 	Project Data
-	 **/
-	public function lockProjectData(Project $project, $report, string $type)
-	{
+            $report->state = (string)$request->get('state');
+dd($report);
+            $report->save();
 
-		$tasks = $project->task;
-		$payment = $project->payment;
-		$nextWeekPlan = $project->plan;
+            if ($request->get('need_action') == null) {
+                $this->lockProjectData($report->project, $report, $request->get('type'));
+            }
 
-		$tasks->each(function($task) use($type,$report){
+            $reportWork = new ReportWorkflow([
+                'remark' => $request->get('remark'),
+                'state' => $request->get('state'),
+                'step_id' => (int)$request->get('current_step'),
+                'profile_id' => (int)$request->get('current_action'),
+            ]);
 
-			$progress = $task->allProgress;
+            $report->workflow()->save($reportWork);
 
-			$progress->each(function($prog) use($type,$report){
-				
-				if ($type == 'week') {
-					$prog->report_id = $report->id;
-				}
+            DB::commit();
 
-				if ($type == 'month') {
-					$prog->card_id = $report->id;
-				}
+            $project = $report->project;
 
-				$prog->save();
-			});
+            if (!is_null($report->nextby)) {
+                $project->profile->groupBy('id')->each(function ($profile) use ($project, $report, $request) {
+                    $profile->first()->sendActionNotification($project, $report, $request->get('type'), 'warning');
+                });
+            } else {
+                $report->creator->sendActionNotification($project, $report, $request->get('type'));
+            }
+            return $report;
+        } catch (\Exception $e) {
+            DB::rollback();
 
-			if($progress->isNotEmpty()){
-				$task->actual_progress = $progress->last()->progress/100*$task->planned_progress;
-				$task->save();
-			}
-			
+            throw new \Exception($e->getMessage(), 1);
+        }
+    }
 
-		});
+    /**
+     * Create Monthly Card Workflow
+     *
+     * @param  Report   $report       Get Report Header
+     * @param  int      $profile      Profile Id
+     * @param  array    $workflowData Get Form Data
+     * @return JJoesama\Project\Database\Model\Project\Card
+     **/
+    public function initMonthlyWorkflow(
+        Card $card,
+        int $profile,
+        array $workflowData
+    ) {
+        DB::beginTransaction();
 
-		$payment->each(function($claim) use($type,$report){
-			if ($type == 'week') {
-				$claim->report_id = $report->id;
-			}
+        try {
+            $workflow = new CardWorkflow([
+                'remark' => array_get($workflowData, 'remark'),
+                'state' => array_get($workflowData, 'status'),
+                'profile_id' => $profile,
+            ]);
 
-			if ($type == 'month') {
-				$claim->card_id = $report->id;
-			}
+            $card->workflow()->save($workflow);
 
-			$claim->save();
-		});
+            DB::commit();
 
-		$nextWeekPlan->each(function($planning) use($type,$report){
-			if ($type == 'week') {
-				$planning->report_id = $report->id;
-			}
+            return $card;
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            DB::rollback();
+        }
+    }
 
-			if ($type == 'month') {
-				$planning->card_id = $report->id;
-			}
+    /**
+     * Lock Project Data
+     *
+     * @param string $type      Report Type
+     * @param Report $project   Project Data
+     **/
+    public function lockProjectData(Project $project, $report, string $type)
+    {
+        $tasks = $project->task;
+        $payment = $project->payment;
+        $nextWeekPlan = $project->plan;
 
-			$planning->save();
-		});
-	}
-} // END class MakeReportCardRepository 
+        $tasks->each(function ($task) use ($type, $report) {
+            $progress = $task->allProgress;
+
+            $progress->each(function ($prog) use ($type, $report) {
+                if ($type == 'week') {
+                    $prog->report_id = $report->id;
+                }
+
+                if ($type == 'month') {
+                    $prog->card_id = $report->id;
+                }
+
+                $prog->save();
+            });
+
+            if ($progress->isNotEmpty()) {
+                $task->actual_progress = $progress->last()->progress/100*$task->planned_progress;
+                $task->save();
+            }
+        });
+
+        $payment->each(function ($claim) use ($type, $report) {
+            if ($type == 'week') {
+                $claim->report_id = $report->id;
+            }
+
+            if ($type == 'month') {
+                $claim->card_id = $report->id;
+            }
+
+            $claim->save();
+        });
+
+        $nextWeekPlan->each(function ($planning) use ($type, $report) {
+            if ($type == 'week') {
+                $planning->report_id = $report->id;
+            }
+
+            if ($type == 'month') {
+                $planning->card_id = $report->id;
+            }
+
+            $planning->save();
+        });
+    }
+} // END class MakeReportCardRepository

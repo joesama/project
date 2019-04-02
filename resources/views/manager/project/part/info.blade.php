@@ -21,6 +21,18 @@
     <!--Tabs Content-->
     <div class="tab-content">
         <div id="info" class="tab-pane fade active in">
+            <div class="row mar-btm">
+                <div class="col-md-9">
+                </div>
+                <div class="col-md-3 text-right" class="vertical">
+                    @if( $approval !== null && ( data_get($approval,'first.profile_assign.id') ==  $profile->id ) || $infoUpdate !== null && ( data_get($infoUpdate,'first.profile_assign.id') ==  $profile->id ) ) 
+                    <a class="btn btn-primary mar-btm pull-right" href="{{ handles('joesama/project::manager/project/form/'.request()->segment(4).'/'.request()->segment(5)) }}">
+                        <i class="psi-file-edit icon-fw"></i>
+                        {{ __('joesama/project::manager.project.info') }}
+                    </a>
+                    @endif
+                </div>
+            </div>
             @include('joesama/project::manager.project.part.projectInfo')
         </div>
         <div id="weekly" class="tab-pane fade">

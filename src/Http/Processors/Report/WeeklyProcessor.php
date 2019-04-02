@@ -70,17 +70,17 @@ class WeeklyProcessor
      */
     public function form(Request $request, int $corporateId, $projectId)
     {
-        $report = false;
-
         $reportId = $request->segment(6);
 
-        if ($request->segment(6,NULL) !== NULL) {
+        if ($reportId !== NULL) {
             $report = $this->reportCard->getWeeklyReportInfo($reportId);
 
             $projectId = data_get($report, 'project_id');
 
             $project = data_get($report, 'project');
         }else{
+            $report = false;
+
         	$project = $this->projectInfo->getProject($projectId,'week');
         }
 

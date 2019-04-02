@@ -170,7 +170,7 @@
 	<div class="col-md-12 col-xs-12 text-left text-bold bord-rgt pad-all" id="need_action">
 
 	@includeWhen(
-	    ( $project->active && (data_get($workflow,'current.profile_assign.id') == $profile->id )),
+	    ($project->active && (data_get($workflow,'current.profile_assign.id') == $profile->id)),
 	    'joesama/project::setup.process.workflow', 
 	    [
 	        'workflow' => $workflow,
@@ -183,7 +183,7 @@
 	)
 	
 	@includeWhen(
-	    ( $project->active && (data_get($workflow,'current.profile_assign.id') != $profile->id )),
+	    ($project->active && (data_get($workflow,'current.profile_assign.id') != $profile->id)),
 	    'joesama/project::manager.project.part.flowRecord', 
 	    [
 	        'records' => $workflow->get('record')

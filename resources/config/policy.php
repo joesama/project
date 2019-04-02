@@ -269,6 +269,7 @@ return [
 				'approval' => ['corporateId','projectId'],
 				'update' => ['corporateId','projectId','infoId?'],
 				'week' => ['corporateId','projectId','reportId?'],
+				'month' => ['corporateId','projectId','reportId?'],
 				'process' => ['corporateId','projectId','reportId?']
 			],
 			'physical' => [

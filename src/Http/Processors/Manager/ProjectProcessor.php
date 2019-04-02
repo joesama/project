@@ -295,7 +295,7 @@ class ProjectProcessor
             'approval' => (!$project->active) ? $processFlow->getApprovalFlow($project) : null,
             'infoUpdate' => ($project->active) ? $processFlow->getUpdateFlow($project) : null,
 			'weeklyReport' => $this->listProcessor->weeklyReport($project, $processFlow->getWeeklyFlow($project)),
-			'monthlyReport' => $this->listProcessor->monthlyReport($request,$corporateId),
+			'monthlyReport' => $this->listProcessor->monthlyReport($project, $processFlow->getMonthlyFlow($project)),
 			'upload' => $this->listProcessor->upload($request,$corporateId,$project->id),
 			'paymentSchedule' =>  $this->financialRepo->schedulePayment($project->id),
 			'projectSchedule' =>  $this->reportCardRepo->scheduleTask($project->id),

@@ -65,23 +65,20 @@ class Report extends Model
                 $query->with(['progress'=> function($query) use ($endDate){
                     $query->where('created_at', '<=' ,$endDate);
                     $query->where(function ($query) {
-                        $query->whereNull('card_id')
-                              ->orWhereNull('report_id');
+                        $query->whereNull('report_id');
                     });
                 }]);
             }]);
             $query->with(['payment'=> function($query) use ($endDate){
                 $query->where('paid_date', '<=' ,$endDate);
                 $query->where(function ($query) {
-                        $query->whereNull('card_id')
-                              ->orWhereNull('report_id');
+                        $query->whereNull('report_id');
                     });
             }]);
             $query->with(['plan'=> function($query) use ($endDate){
                 $query->where('created_at', '<=' ,$endDate);
                 $query->where(function ($query) {
-                        $query->whereNull('card_id')
-                              ->orWhereNull('report_id');
+                        $query->whereNull('report_id');
                     });
             }]);
         }]);

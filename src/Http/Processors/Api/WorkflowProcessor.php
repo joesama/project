@@ -84,6 +84,32 @@ class WorkflowProcessor
 	}
 
 	/**
+	 * Monthly Report Workflow
+	 * 
+	 * @param  Request $request     Http Input Request
+	 * @param  int     $corporateId Current Corporate Id
+	 * @param  int     $projectId   Current Project Id
+	 * @return void 
+	 */
+	public function month(Request $request, int $corporateId, int $projectId)
+	{
+		$reportId = $request->segment(6);
+
+		$report = new MakeReportCardRepository();
+		
+		$reportInfo = $report->initMonthly($request, $projectId, $reportId);
+
+		if ($request->get('need_step') ==  null) {
+			$uriHandler = handles('manager/project/view/'.$corporateId.'/'.$reportInfo->project_id);
+		}else{
+			$uriHandler = handles('report/monthly/form/'.$corporateId.'/'.$reportInfo->project_id.'/'.$reportInfo->id);
+		}
+
+		return $this->redirectAction($uriHandler, $request->get('type'));
+
+	}
+
+	/**
 	 * Redirect action
 	 * 
 	 * @param  string $uriHandler Uri Handler for redirection
