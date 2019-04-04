@@ -273,24 +273,8 @@ class ProjectProcessor
 			data_get($project,'lad')
 		);
 
-		// $reportDue = '#'.Carbon::now()->format('m');
-		
-		// $startOfWeek = ($report) ? Carbon::parse($report->card_date) : Carbon::now()->startOfMonth();
-
-		// $reportStart = $startOfWeek->format('j M Y');
-		// $dueStart = $startOfWeek->format('Y-m-d');
-
-		// $endOfWeek = ($report) ? Carbon::parse($report->card_end) : Carbon::now()->endOfMonth();
-
-		// $reportEnd = $endOfWeek->format('j M Y');
-		// $dueEnd = $endOfWeek->format('Y-m-d');
-
 		return [
-			// 'reportDue' =>  $reportDue,
-			// 'reportStart' =>  $reportStart,
-			// 'reportEnd' =>  $reportEnd,
 			'project' => $project,
-			// 'isReport' => $reportId,
             'processFlow' => $processFlow->getAssignedFlowToProject($project),
             'approval' => (!$project->active) ? $processFlow->getApprovalFlow($project) : null,
             'infoUpdate' => ($project->active) ? $processFlow->getUpdateFlow($project) : null,

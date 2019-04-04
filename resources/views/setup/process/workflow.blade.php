@@ -69,7 +69,7 @@
                             </p>
                         	@if(data_get($progress,'lastaction') != null)
                             <span class="text-sm">
-                            {{ str_limit(data_get($progress,'lastaction.remark'),100) }}
+                            {!! strip_tags(str_limit(data_get($progress,'lastaction.remark'),100)) !!}
                             </span>
                         	@endif
                         </div>

@@ -22,7 +22,7 @@
               {{ data_get($record,'profile.name') }}
           </td>
           <td class="text-normal">
-    {!! data_get($record,'remark') !!}
+              {!! data_get($record,'remark') !!}
           </td>
           <td class="text-normal">
               {{ Carbon\Carbon::parse(data_get($record,'created_at'))->format('d-m-Y H:i:s') }}

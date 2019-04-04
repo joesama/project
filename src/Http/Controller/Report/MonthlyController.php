@@ -26,6 +26,10 @@ class MonthlyController extends BaseController
 
 		$page = $this->page;
 
+		if($request->is('*/redirect/*')){
+			return 	app($this->processor)->$page($request,$corporateId,$projectId);
+		}
+		
 		return view(
 			$this->view ,
 			app($this->processor)->$page($request,$corporateId,$projectId)

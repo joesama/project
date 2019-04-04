@@ -129,6 +129,7 @@ return [
 		],
 		'report' => [
 			'monthly' => [
+				'redirect' => ['reportId'],
 				'list' => ['corporateId','projectId?'],
 				'form' => ['corporateId','projectId','reportId?'],
 				'view' => ['corporateId','projectId','reportId?']

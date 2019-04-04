@@ -46,6 +46,22 @@ class MonthlyProcessor
 		return compact('table');
 	}
 
+    /**
+     * Redirecting current report to exact uri
+     *
+     * @param  int    $reportId  Current report id
+     * @param  Request $request  [description]
+     * @return [type]            [description]
+     */
+    public function redirect(Request $request, int $reportId)
+    {
+        $report = $this->reportCard->getMonthlyReportInfo($reportId);
+
+        return redirect(
+            handles('report/monthly/form/'.$report->project->corporate_id.'/'.$report->project_id.'/'.$reportId)
+        );
+    }
+
 	/**
 	 * Weekly Report Form
 	 * 

@@ -16,6 +16,13 @@
                 {{ __('joesama/project::manager.workflow.monthly') }}
             </a>
         </li>
+        @if($project->active)
+        <li class="">
+            <a data-toggle="tab" href="#approval" aria-expanded="false">
+                {{ __('joesama/project::manager.workflow.approval-project') }}
+            </a>
+        </li>
+        @endif
     </ul>
 
     <!--Tabs Content-->
@@ -41,5 +48,11 @@
         <div id="monthly" class="tab-pane fade">
             {!! $monthlyReport !!}
         </div>
+        @if($project->active)
+        <div id="approval" class="tab-pane fade">
+            <h5>{{ __('joesama/project::manager.workflow.approval-project') }}</h5>
+            @includeIf('joesama/project::manager.project.part.flowRecord',[ 'records' => data_get($project,'approval.workflow')])
+        </div>
+        @endif
     </div>
 </div>
