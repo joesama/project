@@ -15,8 +15,10 @@ use Joesama\Project\Database\Model\Project\{
 	ProjectRetention,
 	ProjectUpload
 };
+use Carbon\Carbon;
 use DB;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Joesama\Project\Database\Model\Master\MasterData;
 use Joesama\Project\Database\Model\Organization\Profile;
 use Joesama\Project\Traits\HasAccessAs;
 
@@ -85,9 +87,7 @@ class ProjectInfoRepository
 	 */
 	public function getProject(int $projectId, string $type = 'all')
 	{
-		return $this->projectModel
-				->component($type)
-				->find($projectId);
+		return $this->projectModel->component($type)->find($projectId);
 	}
 
 	/**
@@ -430,6 +430,57 @@ class ProjectInfoRepository
                 return $query->where('id', $projectId);
             });
 		})->component()->paginate();
+	}
+
+	/**
+	 * Get HSE Score For Project
+	 * 
+	 * @param  Project $project [description]
+	 * @return Illumnate/Support/Collection
+	 */
+	public function hseScore(Project $project)
+	{
+		$hsecard = data_get($project,'hsecard');
+
+		$projectHour = collect([
+    		['title' 	=> 	__('joesama/project::form.project_hse.project_hour'),
+    		'code' 	=> 	'TOT',
+    		'total' 	=> 	$hsecard->project_hour,
+    		'month' 	=> 	NULL,
+    		'subdata' 	=> 	NULL
+    		]
+    	]);
+
+		$master = MasterData::incident()
+		->with('subdata.hse')->get()
+		->map(function($hse) use ($hsecard){
+
+			$subdata = $hse->subdata;
+
+			$month = $subdata->map(function($data) {
+				$flter = data_get($data, 'hse')->filter(function($incident) {
+					return Carbon::parse(data_get($incident, 'incident_date'))->month == Carbon::now()->month;
+				});
+				return $flter->sum('incident');
+			});
+
+			$sub = $subdata->map(function($data){
+				return [
+					'item' => data_get($data, 'description'),
+					'count' => (int)data_get($data, 'hse')->sum('incident')
+				];
+			});
+
+        	return [
+        		'title' 	=> 	data_get($hse, 'description'),
+        		'code' 	=> 	data_get($hse, 'formula'),
+        		'total' 	=> 	(int)$hsecard->{strtolower(data_get($hse, 'formula'))},
+        		'month' 	=> 	(int)$month->sum(),	
+        		'subdata' 	=> 	$sub,	
+        	];
+        });
+
+        return $projectHour->merge($master);
 	}
 
 } // END class MakeProjectRepository 

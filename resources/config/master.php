@@ -2,24 +2,68 @@
 
 return [
 	'role' => [
-		'user' => ['Group Admin', 'Subsidiary Admin', 'Staff'],
-		'profile' => ['Admin','Project Manager','Reviewer','Approver','Validator','Viewer','BODs']
+		'user' => [
+			'Group Admin',
+			'Subsidiary Admin',
+			'Staff'
+		],
+		'profile' => [
+			'Admin',
+			'Project Manager',
+			'Reviewer',
+			'Approver',
+			'Validator',
+			'Viewer',
+			'BODs'
+		]
 	],
 	'master' => [
 		'status' => [
-			'New', 'Approved', 'Validated', 'Reviewed', 'Accepted', 'Updated', 'Active'
+			'New',
+			'Approved',
+			'Validated',
+			'Reviewed',
+			'Accepted',
+			'Updated',
+			'Active'
 		],
-		'progress' => ['0-25','26-50','51-75','76-100'],
-		'severity' => ['low','medium','critical'],
-		'hse' => [	'Lost Time Injuries (LTI)','Unsafe Act / Unsafe Condition',
-					'Stop Work Order','Summon By Authorities','Complaint By Communities'],
+		'progress' => [
+			'0-25',
+			'26-50',
+			'51-75',
+			'76-100'
+		],
+		'severity' => [
+			'low',
+			'medium',
+			'critical'
+		],
+		'hse' => [
+			'MAN' => 'Total Man Hours',
+			'LTI' => 'Lost Time Injuries (LTI)',
+			'NONLTI' => 'Injurious Non LTI',
+			'NONINJ' => 'Non Injurious',
+			'UAUC' => 'Unsafe Act & Condition'
+		],
 		'position' => [
-			'Asisstant Manager', 'Senior Manager',
-			'Asisstant General Manager', 'General Manager', 
-			'Vice President', 'COO', 'CEO'
+			'Asisstant Manager',
+			'Senior Manager',
+			'Asisstant General Manager', 
+			'General Manager', 
+			'Vice President',
+			'COO',
+			'CEO'
 		],
-		'active' => ['open','closed','resolved'],
-		'indicator' => ['hijau','kuning','merah'],
+		'active' => [
+			'open',
+			'closed',
+			'resolved'
+		],
+		'indicator' => [
+			'hijau',
+			'kuning',
+			'merah'
+		]
 	],
 	'corporate' => [
 		'KUB Malaysia' => [
@@ -47,21 +91,5 @@ return [
  			2 => 'fa fa-exclamation-circle',
  			3 => 'fa fa-exclamation-circle'
  		]
-	],
-	'process' => [
-		'project' => [
-			1 => [2],
-			5 => [3],
-			6 => [2],
-			2 => [3]
-		],
-		'report' => [
-			1 => [2],
-			2 => [4],
-			3 => [5],
-			4 => [3],
-			5 => [4],
-			7 => [7],
-		]
 	]
 ];

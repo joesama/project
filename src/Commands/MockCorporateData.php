@@ -4,6 +4,7 @@ namespace Joesama\Project\Commands;
 
 use Faker\Generator as Faker;
 use Illuminate\Console\Command;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Joesama\Entree\Database\Model\Role;
 use Joesama\Entree\Database\Model\User;
@@ -48,7 +49,6 @@ class MockCorporateData extends Command
      */
     public function handle()
     {
-
         $masterData = collect(config('joesama/project::master'));
 
         $role = data_get($masterData,'role');
@@ -132,12 +132,19 @@ class MockCorporateData extends Command
             $master = Master::firstOrNew(['description' => $mkey]);
             $master->save();
 
-            collect($mdata)->each(function($data) use($master){
+            collect($mdata)->each(function($data, $dataKey) use ($master, $mkey){
+
+                $updateDetail = [
+                    'master_id' => $master->id,
+                ];
+
+                if ($mkey == 'hse') {
+                    $updateDetail['formula'] = $dataKey;
+                }
+
                 $masterdt = MasterData::firstOrNew(
                     ['description' => ucwords($data)],
-                    [
-                        'master_id' => $master->id,
-                    ]
+                     $updateDetail
                 );
                 $masterdt->save();
             });
@@ -145,6 +152,34 @@ class MockCorporateData extends Command
             $inforMaster->push([$master->description,MasterData::where('master_id',$master->id)->pluck('description')->implode(',')]);
 
         });
+
+        $rawpath = realpath('vendor/joesama/project/resources/database/raw/hse.json');
+
+        $hseConfig = collect(json_decode(file_get_contents($rawpath), true));
+
+        MasterData::incident()->get()->each(function($hse) use ($hseConfig){
+            $hseMaster = $hseConfig->where('master_id',$hse->id)->where('master_code',$hse->formula)->first();
+
+            $hseSubType = collect(collect($hseMaster)->get('sub_types'),true);
+
+            if ($hseSubType->isNotEmpty()){
+                $hseSubType->each(function($subType) use ($hse){
+
+                    $updateDetail = [
+                        'master_id' => $hse->id,
+                        'formula' => strtolower(Arr::get($subType,'code'))
+                    ];
+
+                    $masterdt = MasterData::firstOrNew(
+                        ['description' => ucwords(Arr::get($subType,'desc'))],
+                         $updateDetail
+                    );
+
+                    $masterdt->save();
+                });
+            }
+        });
+
 
         $this->table(
             [ 'master','master data' ],

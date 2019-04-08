@@ -52,16 +52,26 @@ class HseProcessor
 	 */
 	public function form(Request $request, int $corporateId)
 	{
+
+		$type = MasterData::incident()->with('subdata')->get()->flatMap(function($subtype){
+			return 	data_get($subtype,'subdata')->pluck('description','formula')
+					->flatMap(function($dataSub,$dataCode) use ($subtype){
+						return [ 
+							strtolower($subtype->id.'-'.$subtype->formula.'-'.$dataCode) => $subtype->description .' : '. $dataSub
+						];
+					});
+		});
+
 		$form = $this->formBuilder
 				->newModelForm($this->modelObj)
 				->mapping([
 					'project_id' => $request->segment(5),
 					'report_by' => auth()->id()
 				])->option([
-					'incident_id' => MasterData::incident()->pluck('description','id')
+					'incident_id' => $type
 				])
 				->id($request->segment(6))
-				->required(['*'])
+				->excludes(['incident_code','sub_code'])
 				->renderForm(
 					__('joesama/project::'
 						.$request->segment(1).'.'

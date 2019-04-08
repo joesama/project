@@ -286,7 +286,7 @@ class ProjectProcessor
 			'taskTable' => $this->listProcessor->task($request,$corporateId),
 			'issueTable' => $this->listProcessor->issue($request,$corporateId),
 			'riskTable' => $this->listProcessor->risk($request,$corporateId),
-			'hsecard' => data_get($project,'hsecard'),
+			'hsecard' => $this->projectInfo->hseScore($project),
 			'claim' => $this->financialRepo->getSparklineData($claim,'claim_amount'),
 			'payment' => $this->financialRepo->getSparklineData($paid,'paid_amount'),
 			'vo' => $this->financialRepo->getSparklineData($vo,'amount'),

@@ -3,6 +3,7 @@ namespace Joesama\Project\Database\Model\Master;
 
 use Illuminate\Database\Eloquent\Model;
 use Joesama\Project\Database\Model\Organization\Profile;
+use Joesama\Project\Database\Model\Project\Incident;
 
 class MasterData extends Model
 {
@@ -16,6 +17,22 @@ class MasterData extends Model
     public function master()
     {
         return $this->belongsTo(Master::class,'master_id','id');
+    }
+
+    /**
+     * Get the master data
+     */
+    public function subdata()
+    {
+        return $this->hasMany(MasterData::class,'master_id','id');
+    }
+
+    /**
+     * Get the master data
+     */
+    public function hse()
+    {
+        return $this->hasMany(Incident::class,'sub_code','formula');
     }
 
     /**

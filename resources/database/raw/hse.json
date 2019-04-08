@@ -1,0 +1,55 @@
+[
+	{
+		"master_id":15,
+		"master_code":"MAN",
+		"sub_types":[
+			{ "code":"DRT", "desc":"Man Hours DIRECT" },
+			{ "code":"IRT", "desc":"Man Hours INDIRECT" }
+		]
+	},
+	{
+		"master_id":16,
+		"master_code":"LTI",
+		"sub_types":[]
+	},
+	{
+		"master_id":17,
+		"master_code":"NONLTI",
+		"sub_types":[
+			{ "code":"RWC", "desc":"Restricted Workday Cases" },
+			{ "code":"MTC", "desc":"Medical Treatment Case" },
+			{ "code":"FAC", "desc":"First Aid Case" }
+		]
+	},
+	{
+		"master_id":18,
+		"master_code":"NONINJ",
+		"sub_types":[
+			{ "code":"MIS", "desc":"Near Miss" },
+			{ "code":"FOE", "desc":"Fire / Explosion" },
+			{ "code":"PDL", "desc":"Property Damage / Loss" }
+		]
+	},
+	{
+		"master_id":19,
+		"master_code":"UAUC",
+		"sub_types":[
+			{ "code":"UA1", "desc":"PPE Violations" },
+			{ "code":"UA2", "desc":"Work Permit / Procedure Violations" },
+			{ "code":"UA3", "desc":"Ignoring Safety Sign / Barrier" },
+			{ "code":"UA4", "desc":"Use Wrong / Faulty Tool / Equipment" },
+			{ "code":"UA5", "desc":"Improper Handling / Ergonomic" },
+			{ "code":"UA6", "desc":"Horseplay / Disorderly Conduct" },
+			{ "code":"UA7", "desc":"Inedequate Supervision" },
+			{ "code":"UC1", "desc":"Unsatisfactory Housekeeping" },
+			{ "code":"UC2", "desc":"Slip, Trip & Fail" },
+			{ "code":"UC3", "desc":"Fire / Explosion Hazard" },
+			{ "code":"UC4", "desc":"Electrical Hazard" },
+			{ "code":"UC5", "desc":"Improper / Unsafe Tool / Equipment" },
+			{ "code":"UC6", "desc":"Health Hazard: Noise & Other" },
+			{ "code":"UC7", "desc":"Improper Working Environment" },
+			{ "code":"UC8", "desc":"Environmental Hazard" },
+			{ "code":"PF", "desc":"Positif Finding" }
+		]
+	}
+]

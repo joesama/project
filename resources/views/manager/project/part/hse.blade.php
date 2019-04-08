@@ -39,11 +39,14 @@
               </div>
             </div>
             @endif
-            @foreach(collect($hsecard->toArray())->except(['id','created_at','updated_at','deleted_at']) as $field => $hse)
-              @includeIf('joesama/project::manager.project.part.card-panel',[
-                  'id' => $field,
-                  'title' => __('joesama/project::form.project_hse.'.$field),
-                  'value' => $hse,
+            
+            @foreach($hsecard as $hse)
+              @includeIf('joesama/project::manager.project.part.card-panel2',[
+                  'id' => $hse['code'],
+                  'title' => $hse['title'],
+                  'total' => $hse['total'],
+                  'month' => $hse['month'],
+                  'sub' => $hse['subdata'],
                 ])
             @endforeach()
           @endif
@@ -51,3 +54,17 @@
     </div>
   </div>
 </div>
+@push('content.script')
+<script type="text/javascript">
+  $('#123').easyPieChart({
+        barColor :'#ffffff',
+        scaleColor:'#1B8F85',
+        trackColor : '#1B8F85',
+        lineCap : 'round',
+        lineWidth :8,
+        onStep: function(from, to, percent) {
+            $(this.el).find('.pie-value').text(Math.round(percent));
+        }
+    });
+</script>
+@endpush

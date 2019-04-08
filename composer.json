@@ -24,6 +24,7 @@
         "laravel": {
             "providers": [
                 "Joesama\\Project\\ProjectServiceProvider",
+                "Joesama\\Project\\CommandServiceProvider",
                 "Barryvdh\\DomPDF\\ServiceProvider"
             ]
         }

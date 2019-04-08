@@ -264,9 +264,9 @@ class MakeProjectRepository
 
             return $this->clientModel;
         } catch (\Exception $e) {
-            throw new Exception($e->getMessage(), 1);
-            
             DB::rollback();
+
+            throw new Exception($e->getMessage(), 1);
         }
     }
 
@@ -331,8 +331,9 @@ class MakeProjectRepository
                         
             return $this->taskModel;
         } catch (\Exception $e) {
-            dd($e->getMessage());
             DB::rollback();
+
+            throw new Exception($e->getMessage(), 1);
         }
     }
 
@@ -353,8 +354,9 @@ class MakeProjectRepository
 
             DB::commit();
         } catch (\Exception $e) {
-            dd($e->getMessage());
             DB::rollback();
+
+            throw new Exception($e->getMessage(), 1);
         }
     }
     
@@ -409,8 +411,9 @@ class MakeProjectRepository
                         
             return $this->planModel;
         } catch (\Exception $e) {
-            dd($e->getMessage());
             DB::rollback();
+
+            throw new Exception($e->getMessage(), 1);
         }
     }
     
@@ -431,8 +434,9 @@ class MakeProjectRepository
 
             DB::commit();
         } catch (\Exception $e) {
-            dd($e->getMessage());
             DB::rollback();
+
+            throw new Exception($e->getMessage(), 1);
         }
     }
 
@@ -476,8 +480,9 @@ class MakeProjectRepository
 
             return $this->issueModel;
         } catch (\Exception $e) {
-            dd($e->getMessage());
             DB::rollback();
+
+            throw new Exception($e->getMessage(), 1);
         }
     }
 
@@ -498,8 +503,9 @@ class MakeProjectRepository
 
             DB::commit();
         } catch (\Exception $e) {
-            dd($e->getMessage());
             DB::rollback();
+
+            throw new Exception($e->getMessage(), 1);
         }
     }
 
@@ -541,8 +547,9 @@ class MakeProjectRepository
 
             return $this->riskModel;
         } catch (\Exception $e) {
-            dd($e->getMessage());
             DB::rollback();
+
+            throw new Exception($e->getMessage(), 1);
         }
     }
 
@@ -563,8 +570,9 @@ class MakeProjectRepository
 
             DB::commit();
         } catch (\Exception $e) {
-            dd($e->getMessage());
             DB::rollback();
+
+            throw new Exception($e->getMessage(), 1);
         }
     }
 
@@ -590,8 +598,9 @@ class MakeProjectRepository
 
             return $this->projectModel;
         } catch (\Exception $e) {
-            dd($e->getMessage());
             DB::rollback();
+
+            throw new Exception($e->getMessage(), 1);
         }
     }
 
@@ -615,8 +624,9 @@ class MakeProjectRepository
 
             return $this->projectModel;
         } catch (\Exception $e) {
-            dd($e->getMessage());
             DB::rollback();
+
+            throw new Exception($e->getMessage(), 1);
         }
     }
 
@@ -649,8 +659,9 @@ class MakeProjectRepository
 
             return $this->projectModel;
         } catch (\Exception $e) {
-            dd($e->getMessage());
             DB::rollback();
+
+            throw new Exception($e->getMessage(), 1);
         }
     }
 
@@ -671,8 +682,9 @@ class MakeProjectRepository
 
             DB::commit();
         } catch (\Exception $e) {
-            dd($e->getMessage());
             DB::rollback();
+
+            throw new Exception($e->getMessage(), 1);
         }
     }
 
@@ -681,14 +693,17 @@ class MakeProjectRepository
      *
      * @return Joesama\Project\Database\Model\Project\Project
      **/
-    public function initIncident(Collection $partnerData, $id = null)
+    public function initIncident(Collection $incidentData, $id = null)
     {
-        $inputData = collect($partnerData)->intersectByKeys([
+        $inputData = collect($incidentData)->intersectByKeys([
             'project_id'=> null,
             'incident_id'=> null,
             'report_by'=> null,
             'incident'=> null,
+            'incident_date'=> null,
         ]);
+
+        $incidentIds = collect(['incident_id','incident_code','sub_code'])->combine(explode('-', data_get($inputData, 'incident_id')));
 
         DB::beginTransaction();
 
@@ -702,42 +717,47 @@ class MakeProjectRepository
 
                 $incident->incident = data_get($inputData, 'incident');
 
+                $incident->incident_date = Carbon::createFromFormat('d/m/Y', data_get($inputData, 'incident_date'))->toDateTimeString();
+
                 $incident->report_by = data_get($inputData, 'report_by');
+
+                $incidentIds->each(function($value, $field) use($incident){
+                    $incident->{$field} = $value;
+                });
 
                 $incident->save();
             } else {
-                $incident = new Incident([
-                    'incident_id'=> data_get($inputData, 'incident_id'),
+
+                $newDetail = [
                     'incident'=> data_get($inputData, 'incident'),
+                    'incident_date'=> Carbon::createFromFormat('d/m/Y', data_get($inputData, 'incident_date'))->toDateTimeString(),
                     'report_by'=> data_get($inputData, 'report_by')
-                ]);
+                ];
+
+                $newDetail = array_merge($newDetail,$incidentIds->toArray());
+
+                $incident = new Incident($newDetail);
 
                 $this->projectModel->incident()->save($incident);
             }
-
-            $currentIncident = data_get($inputData, 'incident_id');
 
             $scoreCard = $this->projectModel->hsecard;
 
             $incidentRecord = $this->projectModel->incident;
 
-            $incidentGroup = $incidentRecord->groupBy('incident_id');
+            $incidentUpdate = $incidentRecord->groupBy('incident_code')->flatMap(function($incident,$type){
+                return [ $type => $incident->sum('incident')];
+            });
 
-            $scoreCard->update([
-                'acc_lti' => collect($incidentGroup->get(15))->sum('incident'), //8
-                'zero_lti' => 0, //9
-                'unsafe' => collect($incidentGroup->get(16))->sum('incident'),//9
-                'stop' => collect($incidentGroup->get(17))->sum('incident'),//10
-                'summon' => collect($incidentGroup->get(18))->sum('incident'),//11
-                'complaint' => collect($incidentGroup->get(19))->sum('incident') //12
-            ]);
+            $scoreCard->update($incidentUpdate->toArray());
 
             DB::commit();
 
             return $this->projectModel;
         } catch (\Exception $e) {
-            dd($e->getMessage());
             DB::rollback();
+
+            throw new Exception($e->getMessage(), 1);
         }
     }
 
@@ -774,8 +794,9 @@ class MakeProjectRepository
             
             DB::commit();
         } catch (\Exception $e) {
-            dd($e->getMessage());
             DB::rollback();
+
+            throw new Exception($e->getMessage(), 1);
         }
     }
 
@@ -815,8 +836,9 @@ class MakeProjectRepository
 
             return $this->projectModel;
         } catch (\Exception $e) {
-            dd($e->getMessage());
             DB::rollback();
+
+            throw new Exception($e->getMessage(), 1);
         }
     }
 
@@ -853,8 +875,9 @@ class MakeProjectRepository
 
             return $payment;
         } catch (\Exception $e) {
-            dd($e->getMessage());
             DB::rollback();
+
+            throw new Exception($e->getMessage(), 1);
         }
     }
 
@@ -875,8 +898,9 @@ class MakeProjectRepository
 
             DB::commit();
         } catch (\Exception $e) {
-            dd($e->getMessage());
             DB::rollback();
+
+            throw new Exception($e->getMessage(), 1);
         }
     }
 
@@ -919,8 +943,9 @@ class MakeProjectRepository
 
             return $this->projectModel;
         } catch (\Exception $e) {
-            dd($e->getMessage());
             DB::rollback();
+
+            throw new Exception($e->getMessage(), 1);
         }
     }
 
@@ -941,8 +966,9 @@ class MakeProjectRepository
 
             DB::commit();
         } catch (\Exception $e) {
-            dd($e->getMessage());
             DB::rollback();
+
+            throw new Exception($e->getMessage(), 1);
         }
     }
 
@@ -985,8 +1011,9 @@ class MakeProjectRepository
 
             return $this->projectModel;
         } catch (\Exception $e) {
-            dd($e->getMessage());
             DB::rollback();
+
+            throw new Exception($e->getMessage(), 1);
         }
     }
 
@@ -1007,8 +1034,9 @@ class MakeProjectRepository
 
             DB::commit();
         } catch (\Exception $e) {
-            dd($e->getMessage());
             DB::rollback();
+
+            throw new Exception($e->getMessage(), 1);
         }
     }
 
@@ -1051,8 +1079,9 @@ class MakeProjectRepository
 
             return $this->projectModel;
         } catch (\Exception $e) {
-            dd($e->getMessage());
             DB::rollback();
+
+            throw new Exception($e->getMessage(), 1);
         }
     }
 
@@ -1073,8 +1102,9 @@ class MakeProjectRepository
 
             DB::commit();
         } catch (\Exception $e) {
-            dd($e->getMessage());
             DB::rollback();
+
+            throw new Exception($e->getMessage(), 1);
         }
     }
 } // END class MakeProjectRepository
