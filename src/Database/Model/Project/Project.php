@@ -305,10 +305,12 @@ class Project extends Model
                 return $query->with([
                             'client',
                             'corporate','partner','attributes',
-                            'hsecard','manager','incident','claim',
+                            'manager','hsecard','claim',
                             'retention','lad','vo','issue','role',
                             'physical','finance'
-                        ])->with(['payment' => function($query){
+                        ])->with(['incident' => function($query){
+                            $query->component();
+                        }])->with(['payment' => function($query){
                             $query->orderBy('claim_date');
                             $query->component();
                         }])->with(['task' => function($query) {

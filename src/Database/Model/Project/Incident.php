@@ -49,44 +49,4 @@ class Incident extends Model
         return Carbon::parse($this->created_at)->format('d-m-Y H:i:s');
     }
 
-    /**
-     * Lost Time Injuries (LTI)
-     */
-    public function scopeLostTime($query)
-    {
-        return $query->where('id', 8);
-    }
-
-    /**
-     * Unsafe Act / Unsafe Condition
-     */
-    public function scopeUnsafe($query)
-    {
-        return $query->where('id', 9);
-    }
-
-    /**
-     * Stop Work Order
-     */
-    public function scopeStop($query)
-    {
-        return $query->where('id', 10);
-    }
-
-    /**
-     * Summon By Authorities
-     */
-    public function scopeSummon($query)
-    {
-        return $query->where('id', 11);
-    }
-
-    /**
-     * Complaint By Communities
-     */
-    public function scopeComplaint($query)
-    {
-        return $query->where('id', 12);
-    }
-
 }

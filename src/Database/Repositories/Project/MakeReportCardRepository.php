@@ -211,6 +211,7 @@ class MakeReportCardRepository
         $tasks = $project->task;
         $payment = $project->payment;
         $nextWeekPlan = $project->plan;
+        $incident = $project->incident;
 
         $tasks->each(function ($task) use ($type, $report) {
             $progress = $task->allProgress;
@@ -255,6 +256,18 @@ class MakeReportCardRepository
             }
 
             $planning->save();
+        });
+
+        $incident->each(function ($case) use ($type, $report) {
+            if ($type == 'week') {
+                $case->report_id = $report->id;
+            }
+
+            if ($type == 'month') {
+                $case->card_id = $report->id;
+            }
+
+            $case->save();
         });
     }
 } // END class MakeReportCardRepository

@@ -81,6 +81,12 @@ class Report extends Model
                         $query->whereNull('report_id');
                     });
             }]);
+            $query->with(['incident'=> function($query) use ($endDate){
+                $query->where('incident_date', '<=' ,$endDate);
+                $query->where(function ($query) {
+                        $query->whereNull('report_id');
+                    });
+            }]);
         }]);
     }
 
@@ -97,6 +103,9 @@ class Report extends Model
                 $query->where('report_id', $reportId);
             }]);
             $query->with(['plan'=> function($query) use ($reportId){
+                $query->where('report_id', $reportId);
+            }]);
+            $query->with(['incident'=> function($query) use ($reportId){
                 $query->where('report_id', $reportId);
             }]);
         }]);

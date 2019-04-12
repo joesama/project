@@ -1,4 +1,4 @@
-<div class="{{ $sub ? 'col-md-4' : 'col-md-2' }}">
+<div class="{{ $sub ? 'col-md-4' : 'col-md-4' }}">
   <h5 class="text-uppercase text-muted text-semibold">
       {{ $title }}
   </h5>
