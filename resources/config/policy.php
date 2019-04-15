@@ -168,6 +168,7 @@ return [
 				'month' => ['corporateId','profileId?'],
 				'approval-project' => ['corporateId','projectId?'],
 				'approval-dashboard' => ['corporateId','projectId?'],
+				'update' => ['corporateId','projectId'],
 				'physical' => ['corporateId','projectId'],
 				'finance' => ['corporateId','projectId'],
 				'upload' => ['corporateId','projectId'],

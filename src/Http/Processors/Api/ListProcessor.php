@@ -4,6 +4,7 @@ namespace Joesama\Project\Http\Processors\Api;
 use Joesama\Project\Database\Repositories\Organization\OrganizationInfoRepository;
 use Joesama\Project\Database\Repositories\Project\MilestoneRepository;
 use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
+use Joesama\Project\Database\Repositories\Project\ProjectUpdateWorkflowRepository;
 use Joesama\Project\Database\Repositories\Project\ProjectUploadRepository;
 use Joesama\Project\Database\Repositories\Project\ProjectWorkflowRepository;
 use Joesama\Project\Database\Repositories\Project\ReportCardInfoRepository;
@@ -25,6 +26,7 @@ class ListProcessor
 		$reportCardObj,
 		$approvalObj,
 		$milestoneObj,
+		$updateObj,
 		$uploadObj;
 
 	public function __construct(
@@ -34,6 +36,7 @@ class ListProcessor
 		ProjectWorkflowRepository $projectWorkflow,
 		ReportCardInfoRepository $reportCardObj,
 		MilestoneRepository $milestoneObj,
+		ProjectUpdateWorkflowRepository $updateObj,
 		ProjectUploadRepository $uploadObj,
 		ProcessRepository $processObj
 	){
@@ -44,6 +47,7 @@ class ListProcessor
 		$this->approvalObj = $projectWorkflow;
 		$this->milestoneObj = $milestoneObj;
 		$this->uploadObj = $uploadObj;
+		$this->updateObj = $updateObj;
 		$this->processObj = $processObj;
 	}
 
@@ -237,6 +241,16 @@ class ListProcessor
 	public function approval($request,$corporateId)
 	{
 		return $this->approvalObj->projectApprovalList($request,$corporateId);
+	}
+
+	/**
+	 * @param  array $request
+	 * @param  int $request,$corporateId
+	 * @return Illuminate\Pagination\LengthAwarePaginator
+	 */
+	public function update($request,$corporateId)
+	{
+		return $this->updateObj->projectUpdateList($corporateId, $request->segment(5));
 	}
 
 	/**

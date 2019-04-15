@@ -278,6 +278,7 @@ class ProjectProcessor
             'processFlow' => $processFlow->getAssignedFlowToProject($project),
             'approval' => (!$project->active) ? $processFlow->getApprovalFlow($project) : null,
             'infoUpdate' => ($project->active) ? $processFlow->getUpdateFlow($project) : null,
+			'projectUpdate' => $this->listProcessor->projectUpdate($project, $processFlow->getUpdateFlow($project)),
 			'weeklyReport' => $this->listProcessor->weeklyReport($project, $processFlow->getWeeklyFlow($project)),
 			'monthlyReport' => $this->listProcessor->monthlyReport($project, $processFlow->getMonthlyFlow($project)),
 			'upload' => $this->listProcessor->upload($request,$corporateId,$project->id),

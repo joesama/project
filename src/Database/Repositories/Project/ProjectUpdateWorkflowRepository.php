@@ -26,6 +26,34 @@ class ProjectUpdateWorkflowRepository
     }
 
     /**
+     * List of project information
+     * 
+     * @param  int    $corporateId Corporate Id
+     * @param  int    $projectId   Project Id
+     * @return Illuminate\Pagination\LengthAwarePaginator
+     */
+    public function projectUpdateList(int $corporateId, int $projectId)
+    {
+        $currentProfile = $this->profile();
+
+        return ProjectInfo::where(function ($query) use ($projectId, $currentProfile) {
+            $query->when($projectId, function ($query, $projectId) {
+                $query->whereHas('project',function($query) use($projectId){
+                    return $query->where('id', $projectId);
+                });
+            });
+
+            // $query->when($profileId, function ($query, $profileId) {
+            //     $query->where('need_action', $profileId);
+            // });
+
+            $query->whereHas('project.profile',function($query) use ($currentProfile){
+                $query->where('profile_id',$currentProfile);
+            });
+        })->orderBy('updated_at', 'desc')->paginate();
+    }
+
+    /**
      * Register New Project Information Update Workflow
      *
      * @param  ProjectInfo $projectInfo    Project Information Model

@@ -6,6 +6,7 @@ use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
 use Joesama\Project\Database\Repositories\Project\ProjectUploadRepository;
 use Joesama\Project\Database\Repositories\Project\ProjectWorkflowRepository;
 use Joesama\Project\Database\Repositories\Project\ReportCardInfoRepository;
+use Joesama\Project\Database\Repositories\Project\ProjectUpdateWorkflowRepository;
 use Joesama\Project\Http\Services\DataGridGenerator;
 use Joesama\Project\Traits\HasAccessAs;
 
@@ -21,24 +22,31 @@ class ListProcessor
 
     private $projectObj,
         $approvalObj,
+        $updateObj,
         $reportCardObj,
         $uploadObj;
 
     /**
-     * Build Class Dependency
+     * Initiate class depenndency
      *
-     * @param ProjectInfoRepository    $projectInfo Repository for project info
-     * @param ReportCardInfoRepository $reportCard  Repository for report card
+     * @param ProjectInfoRepository           $projectInfo     Project Info Repo
+     * @param ProjectWorkflowRepository       $projectWorkflow Project Workflow Repo
+     * @param ProjectUpdateWorkflowRepository $projectUpdate   Project Update Information Repo
+     * @param ReportCardInfoRepository        $reportCard      Project Report Repository
+     * @param ProjectUploadRepository         $uploadObj       Project File Upload
      */
     public function __construct(
         ProjectInfoRepository $projectInfo,
         ProjectWorkflowRepository $projectWorkflow,
+        ProjectUpdateWorkflowRepository $projectUpdate,
         ReportCardInfoRepository $reportCard,
         ProjectUploadRepository $uploadObj
     ) {
         $this->projectObj = $projectInfo;
 
         $this->approvalObj = $projectWorkflow;
+
+        $this->updateObj = $projectUpdate;
 
         $this->reportCardObj = $reportCard;
 
@@ -54,7 +62,6 @@ class ListProcessor
      */
     public function project($request, $corporateId)
     {
-
         $columns = [
            [ 'field' => 'name',
            'title' => __('joesama/project::project.info.name'),
@@ -113,7 +120,6 @@ class ListProcessor
      */
     public function projectApproval($request, int $corporateId)
     {
-
         $columns = [
            [ 'field' => 'generation_date',
            'title' => __('joesama/project::form.report.submit_date'),
@@ -149,6 +155,59 @@ class ListProcessor
     }
 
     /**
+     * Project Information Update
+     *
+     * @param  [type] $project  [description]
+     * @param  [type] $workflow [description]
+     * @return [type]           [description]
+     */
+    public function projectUpdate($project, $workflow = null)
+    {
+        $projectId = $project->id;
+
+        $corporateId = $project->corporate_id;
+
+        $columns = [
+         [ 'field' => 'generation_date',
+         'title' => __('joesama/project::form.report.submit_date'),
+         'style' => 'text-left text-capitalize'],
+         [ 'field' => 'project.name',
+         'title' => __('joesama/project::project.info.name'),
+         'style' => 'text-left text-capitalize'],
+         [ 'field' => 'aging_action',
+         'title' => __('joesama/project::form.report.aging'),
+         'style' => 'text-center text-capitalize'],
+         [ 'field' => 'state',
+         'title' => 'Status',
+         'style' => 'text-center text-bold text-capitalize']
+        ];
+
+        $action = [
+          [ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
+              'url' => handles('joesama/project::manager/project/info/'.$corporateId), // URL for action
+              'icons' => 'psi-file-edit icon', // Icon for action : optional
+              'key' => 'project_id'  ]
+        ];
+
+        $datagrid = new DataGridGenerator();
+      
+        $datagrid->buildTable($columns, __('joesama/project::manager.project.info'))
+               ->buildDataModel(
+                   route('api.list.update', [$corporateId, $projectId]),
+                   $this->updateObj->projectUpdateList($corporateId, $projectId)
+               );
+
+        if ($workflow !== null && ( data_get($workflow, 'first.profile_assign.id') ==  $this->profile()->id )) {
+            $datagrid->buildAddButton(
+                route('manager.project.form', [$corporateId, $projectId]),
+                __('joesama/project::manager.project.info')
+            );
+        }
+
+        return $datagrid->buildOption($action, true)->render();
+    }
+
+    /**
      * @param  array $request
      * @param  int $request,$corporateId
      * @return HTML
@@ -160,34 +219,34 @@ class ListProcessor
         $corporateId = $project->corporate_id;
 
         $columns = [
-           [ 'field' => 'generation_date',
-           'title' => __('joesama/project::form.report.report_date'),
-           'style' => 'text-left text-capitalize'],
-           [ 'field' => 'project.name',
-           'title' => __('joesama/project::project.info.name'),
-           'style' => 'text-left text-capitalize'],
-           [ 'field' => 'month',
-           'title' => 'Month',
-           'style' => 'text-center text-bold'],
-           [ 'field' => 'status.description',
-           'title' => 'Status',
-           'style' => 'text-center text-bold']
+         [ 'field' => 'generation_date',
+         'title' => __('joesama/project::form.report.report_date'),
+         'style' => 'text-left text-capitalize'],
+         [ 'field' => 'project.name',
+         'title' => __('joesama/project::project.info.name'),
+         'style' => 'text-left text-capitalize'],
+         [ 'field' => 'month',
+         'title' => 'Month',
+         'style' => 'text-center text-bold'],
+         [ 'field' => 'status.description',
+         'title' => 'Status',
+         'style' => 'text-center text-bold']
         ];
 
         $action = [
-            [ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
-                'url' => handles('joesama/project::manager/project/view/'.$corporateId.'/'.$projectId), // URL for action
-                'icons' => 'psi-file-edit icon', // Icon for action : optional
-                'key' => 'id'  ]
+          [ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
+              'url' => handles('joesama/project::manager/project/view/'.$corporateId.'/'.$projectId), // URL for action
+              'icons' => 'psi-file-edit icon', // Icon for action : optional
+              'key' => 'id'  ]
         ];
 
         $datagrid = new DataGridGenerator();
-        
+      
         $datagrid->buildTable($columns, __('joesama/project::report.monthly.list'))
-                 ->buildDataModel(
-                     route('api.list.monthly', [$corporateId, $projectId]),
-                     $this->reportCardObj->monthlyList($corporateId, $projectId)
-                 );
+               ->buildDataModel(
+                   route('api.list.monthly', [$corporateId, $projectId]),
+                   $this->reportCardObj->monthlyList($corporateId, $projectId)
+               );
 
 
         if ($workflow !== null && ( data_get($workflow, 'first.profile_assign.id') ==  $this->profile()->id )) {
@@ -196,7 +255,7 @@ class ListProcessor
                 __('joesama/project::manager.workflow.monthly')
             );
         }
-        
+      
         return $datagrid->buildOption($action, true)->render();
     }
 
@@ -209,35 +268,35 @@ class ListProcessor
     public function monthlyReportHistory($request, ?int $profileId = null)
     {
         $columns = [
-           [ 'field' => 'generation_date',
-           'title' => __('joesama/project::form.report.report_date'),
-           'style' => 'text-left text-capitalize'],
-           [ 'field' => 'project.name',
-           'title' => __('joesama/project::project.info.name'),
-           'style' => 'text-left text-capitalize'],
-           [ 'field' => 'month',
-           'title' => 'Month',
-           'style' => 'text-center text-bold'],
-           [ 'field' => 'status.description',
-           'title' => 'Status',
-           'style' => 'text-center text-bold']
+         [ 'field' => 'generation_date',
+         'title' => __('joesama/project::form.report.report_date'),
+         'style' => 'text-left text-capitalize'],
+         [ 'field' => 'project.name',
+         'title' => __('joesama/project::project.info.name'),
+         'style' => 'text-left text-capitalize'],
+         [ 'field' => 'month',
+         'title' => 'Month',
+         'style' => 'text-center text-bold'],
+         [ 'field' => 'status.description',
+         'title' => 'Status',
+         'style' => 'text-center text-bold']
         ];
 
         $action = [
-            [ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
-                'url' => handles('joesama/project::report/monthly/redirect'), // URL for action
-                'icons' => 'psi-magnifi-glass icon', // Icon for action : optional
-                'key' => 'id'  ]
+          [ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
+              'url' => handles('joesama/project::report/monthly/redirect'), // URL for action
+              'icons' => 'psi-magnifi-glass icon', // Icon for action : optional
+              'key' => 'id'  ]
         ];
 
         $datagrid = new DataGridGenerator();
 
         $datagrid->buildTable($columns, __('joesama/project::report.monthly.list'))
-                 ->buildDataModel(
-                     route('api.list.month', [$request->segment(4), $profileId]),
-                     $this->reportCardObj->monthlyList($request->segment(4), $request->segment(5), $profileId)
-                 );
-        
+               ->buildDataModel(
+                   route('api.list.month', [$request->segment(4), $profileId]),
+                   $this->reportCardObj->monthlyList($request->segment(4), $request->segment(5), $profileId)
+               );
+      
         return $datagrid->buildOption($action, true)->render();
     }
 
