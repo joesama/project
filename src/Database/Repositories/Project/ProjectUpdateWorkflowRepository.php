@@ -47,10 +47,10 @@ class ProjectUpdateWorkflowRepository
             //     $query->where('need_action', $profileId);
             // });
 
-            $query->whereHas('project.profile',function($query) use ($currentProfile){
-                $query->where('profile_id',$currentProfile);
-            });
-        })->orderBy('updated_at', 'desc')->paginate();
+            // $query->whereHas('project.profile',function($query) use ($currentProfile){
+            //     $query->where('profile_id',$currentProfile);
+            // });
+        })->with('creator')->orderBy('updated_at', 'desc')->paginate();
     }
 
     /**

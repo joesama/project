@@ -12,7 +12,10 @@ use Joesama\Project\Database\Model\Project\ProjectInfoWorkflow;
 class ProjectInfo extends Model
 {
 	protected $table = 'project_info';
+
     protected $guarded = ['id'];
+
+    protected $appends = ['generation_date','aging_action'];
 
     /**
      * Get the project.
@@ -59,9 +62,7 @@ class ProjectInfo extends Model
                     ->with(['workflow' => function($query){
                         $query->component();
                     }])
-                    ->with(['project' => function($query){
-                        $query->component();
-                    }]);
+                    ->with(['project']);
     }
 
     public function getGenerationDateAttribute($value)

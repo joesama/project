@@ -106,11 +106,6 @@
                                 </td>
                                 <td class="pl-2">
                                     {{ data_get($partner,'name') }}
-                                    @if($isProjectManager && is_null($isReport))
-                                    <a class="btn btn-danger btn-xs pull-right" href="{{ route('api.partner.delete',[$project->corporate_id,$project->id,$partner->id]) }}">
-                                        <i class="fa fa-remove"></i>
-                                    </a>
-                                    @endif
                                 </td>
                             </tr>
                             <tr>
@@ -261,4 +256,20 @@
         'workflow' => $workflow
     ]
 )
+<div class="row mb-3">
+    <div class="col-md-12">
+        <div class="panel">
+            <div class="panel-footer text-right">
+                @php
+                    $projectUrl = request()->segment(1).'/project/view/'.request()->segment(4).'/'.request()->segment(5);
+                    $projectCaption = request()->segment(1).'.project.view';
+                @endphp
+                <a class="btn btn-dark" href="{{ handles($projectUrl) }}">
+                    <i class="psi-folder-with-document icon-fw"></i>
+                    {{ __('joesama/project::'.$projectCaption) }}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection

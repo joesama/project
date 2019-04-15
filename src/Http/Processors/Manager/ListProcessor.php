@@ -171,8 +171,8 @@ class ListProcessor
          [ 'field' => 'generation_date',
          'title' => __('joesama/project::form.report.submit_date'),
          'style' => 'text-left text-capitalize'],
-         [ 'field' => 'project.name',
-         'title' => __('joesama/project::project.info.name'),
+         [ 'field' => 'creator.name',
+         'title' => __('joesama/project::form.project.manager_id'),
          'style' => 'text-left text-capitalize'],
          [ 'field' => 'aging_action',
          'title' => __('joesama/project::form.report.aging'),
@@ -184,9 +184,9 @@ class ListProcessor
 
         $action = [
           [ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
-              'url' => handles('joesama/project::manager/project/info/'.$corporateId), // URL for action
+              'url' => handles('joesama/project::manager/project/info/'. $corporateId . '/' . $projectId ), // URL for action
               'icons' => 'psi-file-edit icon', // Icon for action : optional
-              'key' => 'project_id'  ]
+              'key' => 'id' ]
         ];
 
         $datagrid = new DataGridGenerator();
