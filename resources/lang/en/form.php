@@ -137,14 +137,14 @@ return [
 	],
 	'project_payment' => [
 		'project_id' => 'Project',
-		'claim_date' => 'Schedule Date',
-		'paid_date' => 'Invoice Date',
+		'claim_date' => 'Claim Date',
+		'paid_date' => 'Payment Date',
 		'paid_on' => 'Paid Date',
-		'claim_report_by' => 'Schedule  By',
-		'paid_report_by' => 'Invoice By',
-		'claim_amount' => 'Schedule Amount',
-		'paid_amount' => 'Invoice Amount', 
-		'group' => "Receiver", 
+		'claim_report_by' => 'Claim  By',
+		'paid_report_by' => 'Payment By',
+		'claim_amount' => 'Claim Amount',
+		'paid_amount' => 'Payment Amount',
+		'client_id' => "To / From", 
 		'reference' => 'Payment Reference',
 	],
 	'project_vo' => [
@@ -154,10 +154,12 @@ return [
 	'project_retention' => [
 		'date' => 'Date Retention',
 		'amount' => 'Amount Retention',
+		'client_id' => "To / From", 
 	],
 	'project_lad' => [
 		'date' => 'Date LAD',
 		'amount' => 'Amount LAD',
+		'client_id' => "Imposed To / By", 
 	],
 	'financial' => [
 		'record' => 'Payment Schedule',
@@ -169,8 +171,8 @@ return [
 		'vo' => 'VO',
 		'lad' => 'LAD',
 		'revise' => 'Revised Sum',
-		'claim' => 'Scheduled Amount',
-		'paid' => 'Invoiced Amount',
+		'claim' => 'Claimed Amount',
+		'paid' => 'Paid Amount',
 		'retention' => 'Retention'
 	],
 	'profile' => [

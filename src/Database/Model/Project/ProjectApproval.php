@@ -67,7 +67,9 @@ class ProjectApproval extends Model
 
     public function getAgingActionAttribute($value)
     {
-        return Carbon::parse($this->updated_at)->diffInDays(Carbon::now());
+        $endDate = ($this->approve_date != null) ? Carbon::parse($this->approve_date) : Carbon::now(); 
+
+        return Carbon::parse($this->updated_at)->diffInDays($endDate);
     }
     
 }

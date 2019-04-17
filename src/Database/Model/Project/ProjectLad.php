@@ -26,6 +26,14 @@ class ProjectLad extends Model
         return $this->belongsTo(Profile::class,'report_by','user_id');
     }
 
+    /**
+     * Get all of the tags for the milstone.
+     */
+    public function recipient()
+    {
+        return $this->belongsTo(Client::class,'client_id','id');
+    }
+
     public function getDateAttribute($value)
     {
         return (is_null($value)) ? $value : Carbon::parse($value)->format('d-m-Y');
@@ -33,7 +41,7 @@ class ProjectLad extends Model
 
     public function scopeComponent($query)
     {
-        return $query->with(['reporter','project']);
+        return $query->with(['reporter','project','recipient']);
     }
 
 }

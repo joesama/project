@@ -11,6 +11,7 @@ class ProjectPayment extends Model
 {
 	protected $table = 'project_payment';
     protected $guarded = ['id'];
+    protected $appends = ['payment_date'];
 
     /**
      * Get the project.
@@ -39,19 +40,19 @@ class ProjectPayment extends Model
     /**
      * Get all of the tags for the milstone.
      */
-    public function tags()
+    public function recipient()
     {
-        return $this->morphToMany(TagMilestone::class, 'taggable');
+        return $this->belongsTo(Client::class,'client_id','id');
     }
 
     public function getClaimDateAttribute($value)
     {
-        return (is_null($value)) ? $value : Carbon::parse($value)->format('d-m-Y');
+        return Carbon::parse($this->attributes['claim_date'])->format('d-m-Y');
     }
 
     public function getPaymentDateAttribute($value)
     {
-        return (is_null($value)) ? $value : Carbon::parse($value)->format('d-m-Y');
+        return Carbon::parse($this->attributes['paid_date'])->format('d-m-Y');
     }
 
     public function scopeComponent($query,$reportId = null)
@@ -60,7 +61,7 @@ class ProjectPayment extends Model
             return $query->where('card_id', $reportId);
         });
 
-        return $query->with(['creporter','preporter','project','tags']);
+        return $query->with(['creporter','preporter','project','recipient']);
     }
 
 

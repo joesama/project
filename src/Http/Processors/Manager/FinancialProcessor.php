@@ -78,7 +78,7 @@ class FinancialProcessor
 		   [ 'field' => 'claim_date',
 		   'title' => __('joesama/project::form.project_payment.claim_date'),
 		   'style' => 'text-xs-left text-capitalize'],
-		   [ 'field' => 'paid_date',
+		   [ 'field' => 'payment_date',
 		   'title' => __('joesama/project::form.project_payment.paid_date'),
 		   'style' => 'text-xs-left text-capitalize'],
 		   [ 'field' => 'claim_amount',
@@ -86,6 +86,12 @@ class FinancialProcessor
 		   'style' => 'text-xs-center'],
 		   [ 'field' => 'paid_amount',
 		   'title' => __('joesama/project::form.project_payment.paid_amount'),
+		   'style' => 'text-xs-center'],
+		   [ 'field' => 'recipient.name',
+		   'title' => __('joesama/project::form.project_payment.client_id'),
+		   'style' => 'text-xs-left  text-capitalize'],
+		   [ 'field' => 'reference',
+		   'title' => __('joesama/project::form.project_payment.reference'),
 		   'style' => 'text-xs-center']
 		];
 
@@ -139,26 +145,24 @@ class FinancialProcessor
 	 */
 	public function claim(Request $request, int $corporateId)
 	{
-		$project = $this->projectObj->getProject($request->segment(5));
+		$projectId = $request->segment(5);
 
-		$tags = ($request->segment(6)) ? $this->modelObj->find($request->segment(6))->tags->pluck('label')->implode(',') : 'main';
+		$dataQuery = $this->getClientListing($projectId);
 
 		$form = $this->formBuilder
 				->newModelForm($this->modelObj)
 				->mapping([
-					'project_id' 		=> 	$request->segment(5),
-					'claim_report_by' 	=> 	auth()->id(),
+					'project_id' 		=> 	$projectId,
+					'claim_report_by' 	=> 	$this->profile()->id,
 					'paid_report_by' 	=> 	null,
 					'paid_date' 		=> 	null,
 					'paid_amount' 		=> 	null,
 					'reference' 		=> 	null,
 				])->extras([
-					'group' => 'tag'
-				])->default([
-					'group' => $tags,
+					'client_id' => $dataQuery->get('client')->pluck('name','id')
 				])
-				->id($request->segment(5))
-				->required(['claim_date','claim_amount','group'])
+				->id($projectId)
+				->required(['claim_date','claim_amount'])
 				->renderForm(
 					__('joesama/project::'
 						.$request->segment(1).'.'
@@ -167,7 +171,7 @@ class FinancialProcessor
 					),
 					route('api.financial.claim',[
 						$corporateId, 
-						$request->segment(5), 
+						$projectId, 
 						$request->segment(6)]
 					)
 				);
@@ -182,28 +186,25 @@ class FinancialProcessor
 	 */
 	public function payment(Request $request, int $corporateId)
 	{
-		$tags = 'main';
+		$projectId = $request->segment(5);
 
-		if($request->segment(6)){
-			$tagCollection = $this->modelObj->find($request->segment(6))->tags;
-			$tags = ($tagCollection->isNotEmpty()) ? $tagCollection->pluck('label')->implode(',') : $tags;
-		}
+		$dataQuery = $this->getClientListing($projectId, 'claim', $request->segment(6));
 
 		$form = $this->formBuilder
 				->newModelForm($this->modelObj)
 				->mapping([
-					'project_id' => $request->segment(5),
-					'paid_report_by' => auth()->id(),
+					'project_id' => $projectId,
+					'paid_report_by' => $this->profile()->id,
 				])
 				->readonly([
-					'claim_amount','claim_date','group'
+					'claim_amount','claim_date'
 				])->extras([
-					'group' => 'tag'
+					'client_id' => $dataQuery->get('client')->pluck('name','id'),
 				])->default([
-					'group' => $tags,
+					'paid_amount' => $dataQuery->get('amount')
 				])
 				->id($request->segment(6))
-				->required(['paid_date','paid_amount'])
+				->required(['paid_date','paid_amount','client_id'])
 				->renderForm(
 					__('joesama/project::'
 						.$request->segment(1).'.'
@@ -212,7 +213,7 @@ class FinancialProcessor
 					),
 					route('api.financial.payment',[
 						$corporateId, 
-						$request->segment(5), 
+						$projectId, 
 						$request->segment(6)]
 					)
 				);
@@ -309,6 +310,9 @@ class FinancialProcessor
 		   [ 'field' => 'amount',
 		   'title' => __('joesama/project::form.project_retention.amount'),
 		   'style' => 'text-xs-center'],
+		   [ 'field' => 'recipient.name',
+		   'title' => __('joesama/project::form.project_retention.client_id'),
+		   'style' => 'text-xs-left  text-capitalize']
 		];
 
 		$action = [
@@ -323,7 +327,7 @@ class FinancialProcessor
 		];
 
 		$datagrid = new DataGridGenerator();
-		
+
 		$table = $datagrid->buildTable($columns, __('joesama/project::manager.financial.retention') )
 				 ->buildDataModel(
 				 	route('api.list.retention',[$corporateId, $request->segment(5)]), 
@@ -341,11 +345,17 @@ class FinancialProcessor
 	 **/
 	public function retentionform(Request $request, int $corporateId)
 	{
+		$projectId = $request->segment(5);
+
+		$dataQuery = $this->getClientListing($projectId);
+
 		$form = $this->formBuilder
 				->newModelForm($this->retentionObj)
 				->mapping([
-					'project_id' => $request->segment(5),
-					'report_by' => auth()->id()
+					'project_id' => $projectId,
+					'report_by' => $this->profile()->id
+				])->extras([
+					'client_id' => $dataQuery->get('client')->pluck('name','id'),
 				])
 				->id($request->segment(6))
 				->required(['*'])
@@ -357,7 +367,7 @@ class FinancialProcessor
 					),
 					route('api.financial.retention',[
 						$corporateId, 
-						$request->segment(5), 
+						$projectId, 
 						$request->segment(6)]
 					)
 				);
@@ -381,6 +391,9 @@ class FinancialProcessor
 		   [ 'field' => 'amount',
 		   'title' => __('joesama/project::form.project_lad.amount'),
 		   'style' => 'text-xs-center'],
+		   [ 'field' => 'recipient.name',
+		   'title' => __('joesama/project::form.project_retention.client_id'),
+		   'style' => 'text-xs-left  text-capitalize']
 		];
 
 		$action = [
@@ -413,11 +426,17 @@ class FinancialProcessor
 	 **/
 	public function ladform(Request $request, int $corporateId)
 	{
+		$projectId = $request->segment(5);
+
+		$dataQuery = $this->getClientListing($projectId);
+
 		$form = $this->formBuilder
 				->newModelForm($this->ladObj)
 				->mapping([
 					'project_id' => $request->segment(5),
-					'report_by' => auth()->id()
+					'report_by' => $this->profile()->id
+				])->extras([
+					'client_id' => $dataQuery->get('client')->pluck('name','id'),
 				])
 				->id($request->segment(6))
 				->required(['*'])
@@ -435,6 +454,26 @@ class FinancialProcessor
 				);
 
 		return compact('form');
+	}
+
+	/**
+	 * Get Client Listing For Payment
+	 * 
+	 * @param  int    $projectId
+	 * @return Illuminate\Support\Collection
+	 */
+	protected function getClientListing(int $projectId, ?string $claimName = NULL, ?int $claimId = NULL)
+	{
+		$project = $this->projectObj->getProject($projectId);
+
+		$client = data_get($project,'client');
+
+		$amount = $claimName != NULL ? data_get($project,$claimName)->where('id',$claimId)->first() : NULL;
+
+		return collect([
+			'client' => collect(data_get($project,'partner'))->push($client),
+			'amount' => $amount
+		]);
 	}
 
 } // END class MakeProjectProcessor 
