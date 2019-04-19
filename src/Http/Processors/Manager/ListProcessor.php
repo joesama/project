@@ -20,11 +20,11 @@ class ListProcessor
 {
     use HasAccessAs;
 
-    private $projectObj,
-        $approvalObj,
-        $updateObj,
-        $reportCardObj,
-        $uploadObj;
+    private $projectObj;
+    private $approvalObj;
+    private $updateObj;
+    private $reportCardObj;
+    private $uploadObj;
 
     /**
      * Initiate class depenndency
@@ -184,7 +184,7 @@ class ListProcessor
 
         $action = [
           [ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
-              'url' => handles('joesama/project::manager/project/info/'. $corporateId . '/' . $projectId ), // URL for action
+              'url' => handles('joesama/project::manager/project/info/'. $corporateId . '/' . $projectId), // URL for action
               'icons' => 'psi-file-edit icon', // Icon for action : optional
               'key' => 'id' ]
         ];
@@ -197,7 +197,7 @@ class ListProcessor
                    $this->updateObj->projectUpdateList($corporateId, $projectId)
                );
 
-        if ($workflow !== null && ( data_get($workflow, 'first.profile_assign.id') ==  $this->profile()->id )) {
+        if ($workflow !== null && (data_get($workflow, 'first.profile_assign.id') ==  $this->profile()->id)) {
             $datagrid->buildAddButton(
                 route('manager.project.form', [$corporateId, $projectId]),
                 __('joesama/project::manager.project.info')
@@ -249,7 +249,7 @@ class ListProcessor
                );
 
 
-        if ($workflow !== null && ( data_get($workflow, 'first.profile_assign.id') ==  $this->profile()->id )) {
+        if ($workflow !== null && (data_get($workflow, 'first.profile_assign.id') ==  $this->profile()->id)) {
             $datagrid->buildAddButton(
                 route('report.monthly.form', [$corporateId, $projectId]),
                 __('joesama/project::manager.workflow.monthly')
@@ -343,7 +343,7 @@ class ListProcessor
                      $this->reportCardObj->weeklyList($corporateId, $projectId)
                  );
 
-        if ($workflow !== null && ( data_get($workflow, 'first.profile_assign.id') ==  $this->profile()->id )) {
+        if ($workflow !== null && (data_get($workflow, 'first.profile_assign.id') ==  $this->profile()->id)) {
             $datagrid->buildAddButton(
                 route('report.weekly.form', [$corporateId, $projectId]),
                 __('joesama/project::manager.workflow.weekly')
@@ -404,7 +404,6 @@ class ListProcessor
      */
     public function task($request, int $corporateId, ?int $hasAction = 1)
     {
-
         $columns = [
            [ 'field' => 'name',
            'title' => __('joesama/project::form.task.name'),
@@ -464,7 +463,7 @@ class ListProcessor
                      $this->projectObj->listProjectTask($corporateId, $request->segment(5))
                  );
 
-        if (( $this->isProjectManager() || auth()->user()->isAdmin ) && $hasAction) {
+        if (($this->isProjectManager() || auth()->user()->isAdmin) && $hasAction) {
             $datagrid->buildAddButton(route('manager.task.form', [$corporateId, $request->segment(5)]));
 
             $datagrid->buildExtraButton([
@@ -487,7 +486,6 @@ class ListProcessor
      */
     public function plan($request, int $corporateId, ?int $hasAction = 1)
     {
-
         $columns = [
            [ 'field' => 'name',
            'title' => __('joesama/project::form.plan.name'),
@@ -544,7 +542,7 @@ class ListProcessor
                      $this->projectObj->listProjectPlan($corporateId, $request->segment(5))
                  );
 
-        if (( $this->isProjectManager() || auth()->user()->isAdmin ) && $hasAction) {
+        if (($this->isProjectManager() || auth()->user()->isAdmin) && $hasAction) {
             $datagrid->buildAddButton(route('manager.plan.form', [$corporateId, $request->segment(5)]));
         }
 
@@ -561,7 +559,6 @@ class ListProcessor
      */
     public function issue($request, int $corporateId, ?int $hasAction = 1)
     {
-
         $columns = [
            [ 'field' => 'label',
            'title' => __('joesama/project::project.issues.name'),
@@ -612,7 +609,7 @@ class ListProcessor
                      $this->projectObj->listProjectIssue($corporateId, $request->segment(5))
                  );
 
-        if (( $this->isProjectManager() || auth()->user()->isAdmin ) && $hasAction) {
+        if (($this->isProjectManager() || auth()->user()->isAdmin) && $hasAction) {
             $datagrid->buildAddButton(route('manager.issue.form', [$corporateId, $request->segment(5)]));
             $datagrid->buildOption($action, true);
         }
@@ -672,7 +669,7 @@ class ListProcessor
                      $this->projectObj->listProjectRisk($corporateId, $request->segment(5))
                  );
 
-        if (( $this->isProjectManager() || auth()->user()->isAdmin ) && $hasAction) {
+        if (($this->isProjectManager() || auth()->user()->isAdmin) && $hasAction) {
             $datagrid->buildAddButton(route('manager.risk.form', [$corporateId, $request->segment(5)]));
             $datagrid->buildOption($action, true);
         }
@@ -687,7 +684,6 @@ class ListProcessor
      */
     public function incident($request, $corporateId)
     {
-
         $columns = [
            [ 'field' => 'type.description',
            'title' => __('joesama/project::form.project_incident.incident_id'),
@@ -736,7 +732,6 @@ class ListProcessor
      */
     public function partner($request, $corporateId)
     {
-
         $columns = [
            [ 'field' => 'name',
            'title' => __('joesama/project::form.project_partner.partner_id'),
@@ -774,7 +769,6 @@ class ListProcessor
      */
     public function attribute($request, int $corporateId, int $projectId)
     {
-
         $columns = [
            [ 'field' => 'variable',
            'title' => __('joesama/project::form.project_attribute.variable'),
@@ -816,7 +810,6 @@ class ListProcessor
      */
     public function upload($request, int $corporateId, int $projectId)
     {
-
         $columns = [
            [ 'field' => 'label',
            'title' => __('joesama/project::form.upload.label'),

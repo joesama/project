@@ -153,7 +153,13 @@ class MockCorporateData extends Command
 
         });
 
-        $rawpath = realpath('vendor/joesama/project/resources/database/raw/hse.json');
+        MasterData::active()->get()->each(function($active) {
+            $active->formula = (strtolower($active->description) == 'open') ? 1 : 0; 
+
+            $active->save();
+        });
+
+        $rawpath = base_path('vendor/joesama/project/resources/database/raw/hse.json');
 
         $hseConfig = collect(json_decode(file_get_contents($rawpath), true));
 
@@ -228,6 +234,9 @@ class MockCorporateData extends Command
                 $profile->corporate_id = $group->id;
                 $profile->email = $user->email;
                 $profile->abbr = $abbr;
+                if ($role->id == 2) {
+                    $profile->is_pm = 1;
+                }
                 $profile->save();
 
                 $startId->put('id',data_get($startId,'id')+1);
@@ -260,6 +269,9 @@ class MockCorporateData extends Command
                     $profile->email = $user->email;
                     $profile->corporate_id = $subsidiary->id;
                     $profile->abbr = $abbr;
+                    if ($role->id == 2) {
+                        $profile->is_pm = 1;
+                    }
                     $profile->save();
 
                     if($role->id == 1){

@@ -4,6 +4,7 @@ namespace Joesama\Project\Http\Processors\Dashboard;
 use Illuminate\Http\Request;
 use Joesama\Project\Database\Repositories\Dashboard\MasterRepository;
 use Joesama\Project\Traits\HasAccessAs;
+use Joesama\Project\Traits\ProjectCalculator;
 
 /**
  * Processing All List 
@@ -13,7 +14,7 @@ use Joesama\Project\Traits\HasAccessAs;
  **/
 class PortfolioProcessor 
 {
-	use HasAccessAs;
+	use HasAccessAs, ProjectCalculator;
 
 	public function __construct(
 		MasterRepository $masterPortfolio
@@ -41,17 +42,6 @@ class PortfolioProcessor
 
 		$beforeQp = data_get($beforePayment,'actual') - data_get($beforePayment,'planned');
 
-		if ($gp < 1000000000) {
-		    // Anything less than a billion
-		    $unit = 'M';
-		    $format = round($gp / 1000000,2);
-		} else {
-		    $unit = 'B';
-		    $format = round($gp / 1000000000,2);
-		}
-
-		$gp = $format.$unit;
-
 		return [
 			'corporateId' => $corporateId,
 			'project' => $this->masterRepo->projectSummary(),
@@ -62,7 +52,7 @@ class PortfolioProcessor
 				'task' => $this->masterRepo->projectTask(),
 				'issue' => $this->masterRepo->projectIssue(),
 				'payment' => $financial,
-				'gp' => $gp,
+				'gp' => $this->shortHandFormat($gp),
 				'gpDiff' => floatval($gp) - floatval($beforeQp)
 			]
 		];
@@ -96,17 +86,6 @@ class PortfolioProcessor
 
 			$beforeQp = data_get($beforePayment,'actual') - data_get($beforePayment,'planned');
 
-			if ($gp < 1000000000) {
-			    // Anything less than a billion
-			    $unit = 'M';
-			    $format = round($gp / 1000000,2);
-			} else {
-			    $unit = 'B';
-			    $format = round($gp / 1000000000,2);
-			}
-
-			$gp = $format.$unit;
-
 			$corporateData->push(collect([
 				'corporate' => $subs,
 				'summary' => [
@@ -114,7 +93,7 @@ class PortfolioProcessor
 					'issue' => $this->masterRepo->projectIssue($subs->id),
 					'progress' => $this->masterRepo->projectProgress($subs->id),
 					'payment' => $financial,
-					'gp' => $gp,
+					'gp' => $this->shortHandFormat($gp),
 					'gpDiff' => floatval($gp) - floatval($beforeQp),
 				]
 			]));

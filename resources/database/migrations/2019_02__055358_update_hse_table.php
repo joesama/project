@@ -13,7 +13,7 @@ class UpdateHseTable extends Migration
      */
     public function up()
     {
-        $rawpath = realpath('vendor/joesama/project/resources/database/raw/hse.json');
+        $rawpath = base_path('vendor/joesama/project/resources/database/raw/hse.json');
 
         $hseConfig = collect(json_decode(file_get_contents($rawpath), true));
 

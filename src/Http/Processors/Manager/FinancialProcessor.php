@@ -476,7 +476,7 @@ class FinancialProcessor
 
 		$client = data_get($project,'client');
 
-		$amount = $claimName != NULL ? data_get($project,$claimName)->where('id',$claimId)->first() : NULL;
+		$amount = $claimName != NULL ? data_get($project,$claimName)->where('id',$claimId)->first()->claim_amount : NULL;
 
 		return collect([
 			'client' => collect(data_get($project,'partner'))->push($client),

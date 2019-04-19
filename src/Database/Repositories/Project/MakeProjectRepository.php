@@ -6,6 +6,7 @@ use Carbon\CarbonInterval;
 use DB;
 use Exception;
 use Illuminate\Support\Collection;
+use Joesama\Project\Database\Model\Master\MasterData;
 use Joesama\Project\Database\Model\Organization\Profile;
 use Joesama\Project\Database\Model\Project\Attribute;
 use Joesama\Project\Database\Model\Project\Client;
@@ -473,6 +474,8 @@ class MakeProjectRepository
                     $this->issueModel->{$field} = $record;
                 }
             });
+
+            $this->issueModel->active = MasterData::find($inputData['progress_id'])->formula;
 
             $this->issueModel->save();
 
