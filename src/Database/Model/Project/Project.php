@@ -4,6 +4,7 @@ namespace Joesama\Project\Database\Model\Project;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Joesama\Project\Database\Model\Organization\Corporate;
 use Joesama\Project\Database\Model\Organization\Profile;
 use Joesama\Project\Database\Model\Organization\ProfileRole;
@@ -15,6 +16,8 @@ use Joesama\Project\Database\Model\Project\ProjectVo;
 
 class Project extends Model
 {
+    use SoftDeletes;
+    
     protected $table = 'project';
     protected $guarded = ['id'];
     protected $appends = ['start_date','end_date','in_charge','duration_word'];
@@ -305,13 +308,22 @@ class Project extends Model
                 return $query->with([
                             'client',
                             'corporate','partner','attributes',
-                            'manager','hsecard','claim',
+                            'manager','hsecard',
                             'retention','lad','vo','issue','role',
                             'physical','finance'
                         ])->with(['incident' => function($query){
                             $query->component();
-                        }])->with(['payment' => function($query){
+                        }])->with(['retention' => function($query){
+                            $query->orderBy('date');
+                            $query->component();
+                        }])->with(['lad' => function($query){
+                            $query->orderBy('date');
+                            $query->component();
+                        }])->with(['claim' => function($query){
                             $query->orderBy('claim_date');
+                            $query->component();
+                        }])->with(['payment' => function($query){
+                            $query->orderBy('paid_date');
                             $query->component();
                         }])->with(['task' => function($query) {
                             $query->orderBy('end');

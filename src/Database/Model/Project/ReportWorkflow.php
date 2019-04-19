@@ -2,10 +2,13 @@
 namespace Joesama\Project\Database\Model\Project;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Joesama\Project\Database\Model\Organization\Profile;
 
 class ReportWorkflow extends Model
 {
+    use SoftDeletes;
+    
 	protected $table = 'project_report_workflow';
     protected $guarded = ['id'];
 

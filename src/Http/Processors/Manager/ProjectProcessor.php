@@ -290,9 +290,9 @@ class ProjectProcessor
 			'hsecard' => $this->projectInfo->hseScore($project),
 			'claim' => $this->financialRepo->getSparklineData($claim,'claim_amount'),
 			'payment' => $this->financialRepo->getSparklineData($paid,'paid_amount'),
-			'vo' => $this->financialRepo->getSparklineData($vo,'amount'),
 			'retention' => $this->financialRepo->getSparklineData($retention,'amount'),
 			'lad' => $this->financialRepo->getSparklineData($lad,'amount'),
+			'vo' => $this->financialRepo->getSparklineData($vo,'amount'),
 			'balanceSheet' => $this->financialRepo->balanceSheet($project),
 			'policies' => collect(config('joesama/project::policy.dashboard'))
 		];

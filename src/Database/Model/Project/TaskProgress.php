@@ -2,10 +2,13 @@
 namespace Joesama\Project\Database\Model\Project;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Joesama\Project\Database\Model\Organization\Profile;
 
 class TaskProgress extends Model
 {
+    use SoftDeletes;
+    
 	protected $table = 'task_progress';
     protected $fillable = ['progress'];
     /**

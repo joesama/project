@@ -3,12 +3,15 @@ namespace Joesama\Project\Database\Model\Project;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Joesama\Project\Database\Model\Organization\Profile;
 use Joesama\Project\Database\Model\Project\FinanceMilestone;
 use Joesama\Project\Database\Model\Project\TagMilestone;
 
 class ProjectPayment extends Model
 {
+    use SoftDeletes;
+    
 	protected $table = 'project_payment';
     protected $guarded = ['id'];
     protected $appends = ['payment_date'];

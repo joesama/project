@@ -910,7 +910,6 @@ class MakeProjectRepository
             'date'=> null,
             'report_by'=> null,
             'amount'=> null,
-            'client_id'=> null,
         ]);
 
         DB::beginTransaction();
@@ -922,7 +921,8 @@ class MakeProjectRepository
                 $vo = new ProjectVo([
                 'date'=> Carbon::createFromFormat('d/m/Y', data_get($inputData, 'date'))->toDateTimeString(),
                 'amount'=> data_get($inputData, 'amount'),
-                'report_by'=> data_get($inputData, 'report_by')
+                'report_by'=> data_get($inputData, 'report_by'),
+                'client_id'=> data_get($this->projectModel, 'client_id')
                 ]);
 
                 $this->projectModel->vo()->save($vo);

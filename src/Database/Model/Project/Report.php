@@ -3,11 +3,14 @@ namespace Joesama\Project\Database\Model\Project;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Joesama\Project\Database\Model\Master\MasterData;
 use Joesama\Project\Database\Model\Organization\Profile;
 
 class Report extends Model
 {
+    use SoftDeletes;
+    
 	protected $table = 'project_report';
     protected $guarded = ['id'];
     protected $appends = ['generation_date'];

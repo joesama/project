@@ -1,63 +1,61 @@
 <div class="panel panel-{{$background}} panel-colorful text-left">
     <div class="pad-all">
         <p class="text-lg text-semibold">
-          <i class="demo-pli-basket-coins icon-fw"></i> 
+          <i class="psi-coins icon-fw"></i> 
           {{ $title }}
         </p>
-        <p class="mar-no">
-          {{ Carbon\Carbon::now()->localeMonth }}
-          <span class="pull-right text-bold">
-            RM&nbsp;{{ number_format(data_get($transData,'monthTrans'),2) }}
+        <p class="mar-no text-2x text-thin">
+          {{ Carbon\Carbon::now()->localeMonth }} - {{ Carbon\Carbon::now()->format('Y') }}
+        </p>
+        @foreach(data_get($transData,'monthTransDets') as $clientName => $clientMonthTrans)
+        <p class="mar-no text-sm">
+          @php
+            $client = (int)($clientMonthTrans->get('detail')->first()->client_id == $project->client_id);
+          @endphp
+          <span class="text-bold">
+            {{ __('joesama/project::manager.financial.receiver.' . $chartId . '.' . $client) }}
+          </span>
+          {{ $clientName }}
+          <span class="pull-right text-semibold">
+            {{ number_format($clientMonthTrans->get('amount'),2) }}
           </span>
         </p>
-        <p class="mar-no">
-          YTD
-          <span class="pull-right text-bold">
-            RM&nbsp;{{ number_format(data_get($transData,'ytd'),2) }}
+        @endforeach
+        <p class="clearfix"></p>
+        <p class="mar-no text-2x text-thin">
+          YTD - {{ Carbon\Carbon::now()->format('Y') }}
+        </p>
+        @foreach(data_get($transData,'yearDetails') as $clientName => $clientYearTrans)
+        <p class="mar-no text-sm">
+          @php
+            $client = (int)($clientYearTrans->get('detail')->first()->client_id == $project->client_id);
+          @endphp
+          <span class="text-bold">
+            {{ __('joesama/project::manager.financial.receiver.' . $chartId . '.' . $client) }}
+          </span>
+          {{ $clientName }}
+          <span class="pull-right text-semibold">
+            {{ number_format($clientYearTrans->get('amount'),2) }}
           </span>
         </p>
-        <p class="mar-no">
+        @endforeach
+        <p class="clearfix"></p>
+        <p class="mar-no text-2x text-thin">
           TTD
-          <span class="pull-right text-bold">
-            RM&nbsp;{{ number_format(data_get($transData,'ttd'),2) }}
+        </p>
+        @foreach(data_get($transData,'tillDate') as $clientName => $tillDateTrans)
+        <p class="mar-no text-sm">
+          @php
+            $client = (int)($tillDateTrans->get('detail')->first()->client_id == $project->client_id);
+          @endphp
+          <span class="text-bold">
+            {{ __('joesama/project::manager.financial.receiver.' . $chartId . '.' . $client) }}
+          </span>
+          {{ $clientName }}
+          <span class="pull-right text-semibold">
+            {{ number_format($tillDateTrans->get('amount'),2) }}
           </span>
         </p>
-    </div>
-    <div class="text-center">
-        <!--Placeholder-->
-        <div id="{{$chartId}}-bar" class="box-inline"></div>
+        @endforeach
     </div>
 </div>
-@php
-  $sparlineData = data_get($transData,'sparlineData');
-@endphp
-@push('pages.script')
-<script type="text/javascript">
-
-    var barEl = $("#"+"{{$chartId}}-bar");
-    var barValues = @json($sparlineData);
-    var barValueCount = barValues.length;
-    var barSpacing = 1;
-
-    var salesSparkline = function(){
-         barEl.sparkline(barValues, {
-            type: 'bar',
-            height: 45,
-            barWidth: Math.round((barEl.parent().width() - ( barValueCount - 1 ) * barSpacing ) / barValueCount),
-            barSpacing: barSpacing,
-            zeroAxis: false,
-            tooltipChartTitle: "{{ $title }}",
-            tooltipSuffix: "{{ $title }}",
-            barColor: 'rgba(0,0,0,.15)'
-        });
-    }
-
-
-    $(window).on('resizeEnd', function(){
-        salesSparkline();
-    })
-
-    salesSparkline();
-
-</script>
-@endpush

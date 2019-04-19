@@ -3,10 +3,13 @@
 namespace Joesama\Project\Database\Model\Project;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Joesama\Project\Database\Model\Organization\Corporate;
 
 class Client extends Model
 {
+    use SoftDeletes;
+    
 	protected $table = 'client';
     protected $guarded = ['id'];
 

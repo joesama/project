@@ -160,8 +160,9 @@ class FinancialProcessor
 					'reference' 		=> 	null,
 				])->extras([
 					'client_id' => $dataQuery->get('client')->pluck('name','id')
-				])
-				->id($projectId)
+				])->default([
+					'claim_date' => $dataQuery->get('start')
+				])->id($projectId)
 				->required(['claim_date','claim_amount'])
 				->renderForm(
 					__('joesama/project::'
@@ -201,7 +202,8 @@ class FinancialProcessor
 				])->extras([
 					'client_id' => $dataQuery->get('client')->pluck('name','id'),
 				])->default([
-					'paid_amount' => $dataQuery->get('amount')
+					'paid_amount' => $dataQuery->get('amount'),
+					'paid_date' => $dataQuery->get('start')
 				])
 				->id($request->segment(6))
 				->required(['paid_date','paid_amount','client_id'])
@@ -358,6 +360,9 @@ class FinancialProcessor
 					'client_id' => $dataQuery->get('client')->pluck('name','id'),
 				])
 				->id($request->segment(6))
+				->default([
+					'date' => $dataQuery->get('start')
+				])
 				->required(['*'])
 				->renderForm(
 					__('joesama/project::'
@@ -439,6 +444,9 @@ class FinancialProcessor
 					'client_id' => $dataQuery->get('client')->pluck('name','id'),
 				])
 				->id($request->segment(6))
+				->default([
+					'date' => $dataQuery->get('start')
+				])
 				->required(['*'])
 				->renderForm(
 					__('joesama/project::'
@@ -472,7 +480,9 @@ class FinancialProcessor
 
 		return collect([
 			'client' => collect(data_get($project,'partner'))->push($client),
-			'amount' => $amount
+			'amount' => $amount,
+			'start' => $project->start,
+			'end' => $project->end
 		]);
 	}
 

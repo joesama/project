@@ -165,7 +165,13 @@ class FinancialRepository
                     Carbon::parse($item[$date])->format('m') => $item
                 ];
             })->each(function ($trans, $id) use ($transCollection, $year) {
-                $transCollection->get($year)->put(intval($id), $trans);
+                $paymentByclient = $trans->mapToGroups(function ($payment, $key){
+                    return [
+                        data_get($payment,'recipient.name') => $payment
+                    ];
+                });
+
+                $transCollection->get($year)->put(intval($id), $paymentByclient);
             });
         });
 
@@ -180,14 +186,70 @@ class FinancialRepository
      */
     public function getSparklineData(Collection $transData, string $amount = 'amount')
     {
+        $currentYear = Carbon::now()->format('Y');
+
+        $currentMonth = Carbon::now()->format('m');
+
+        $transDataCurYear = collect($transData->get($currentYear));
+
+        $transDataCurMonth = collect($transDataCurYear->get((int)$currentMonth));
+
+        $clientMontDets = $transDataCurMonth->filter(function($item){
+            return $item instanceof Collection;
+        })->flatMap(function($payment, $client) use($amount){
+            return [ $client => collect([ 
+                'detail' => $payment,
+                'amount' => $payment->sum($amount)
+                ])
+            ];
+        });
+        
+        $clientYearDets = collect([]);
+
+        $transDataCurYear->filter(function($item){
+            return $item instanceof Collection;
+        })->each(function($yearPay, $monthOf) use($clientYearDets) {
+            $yearPay->each(function($yearLy, $client) use($clientYearDets) {
+                $clientYearDets->put($client, $yearLy->merge(collect($clientYearDets->get($client))));
+            });
+        });
+
+        $clientYearDets = $clientYearDets->flatMap(function($payment, $client) use($amount){
+            return [ $client => collect([ 
+                'detail' => $payment,
+                'amount' => $payment->sum($amount)
+                ])
+            ];
+        });
+
+        $tillDate = collect([]);
+
+        $transData->flatten(1)->filter(function($item){
+            return $item instanceof Collection;
+        })->each(function($yearPay, $monthOf) use($tillDate) {
+            $yearPay->each(function($yearLy, $client) use($tillDate) {
+                $tillDate->put($client, $yearLy->merge(collect($tillDate->get($client))));
+            });
+        });
+
+        $tillDate = $tillDate->flatMap(function($payment, $client) use($amount){
+            return [ $client => collect([ 
+                'detail' => $payment,
+                'amount' => $payment->sum($amount)
+                ])
+            ];
+        });
+
         return collect([
-            'monthTrans' => collect($transData->get(Carbon::now()->format('Y'))
-                        ->get(intval(Carbon::now()->format('m'))))
-                        ->sum($amount),
-            'ytd' => collect($transData->get(Carbon::now()->format('Y'))->flatten(1))->sum($amount),
-            'ttd' => collect($transData->flatten(2))->sum($amount),
-            'sparlineData' => $transData->flatten(2)->pluck($amount)->map(function ($item) {
-                return is_null($item) ? 0 :$item;
+            'field' => $amount,
+            'monthTrans' => $transDataCurMonth->flatten(1)->sum($amount),
+            'monthTransDets' => $clientMontDets,
+            'ytd' => $transDataCurYear->flatten(2)->sum($amount),
+            'yearDetails' => $clientYearDets,
+            'ttd' => collect($transData->flatten(3))->sum($amount),
+            'tillDate' => $tillDate,
+            'sparlineData' => $transData->flatten(3)->pluck($amount)->map(function ($item) {
+                return is_null($item) ? 0 : (float)$item;
             })->toArray()
         ]);
     }
@@ -198,15 +260,40 @@ class FinancialRepository
      *
      * @return Illuminate\Support\Collection
      **/
-    public function balanceSheet($project)
+    public function balanceSheet($project): Collection
     {
-        $contract = data_get($project, 'value');
-        $payment = data_get($project, 'payment')->sum('paid_amount');
-        $voo = data_get($project, 'vo')->sum('amount');
-        $rentention = data_get($project, 'retention')->sum('amount');
-        $lad = data_get($project, 'lad')->sum('amount');
+        $clientId = data_get($project, 'client_id');
 
-        return number_format($contract + $voo + $rentention - $lad - $payment, 2);
+        $contract = data_get($project, 'value');
+
+        $paymentIn = data_get($project, 'payment')->where('client_id',$clientId)->sum('paid_amount');
+
+        $paymentOut = data_get($project, 'payment')->whereNotIn('client_id',[$clientId])->sum('paid_amount');
+
+        $voo = data_get($project, 'vo')->sum('amount');
+
+        $rententionTo = data_get($project, 'retention')->where('client_id',$clientId)->sum('amount');
+
+        $rententionBy = data_get($project, 'retention')->whereNotIn('client_id',[$clientId])->sum('amount');
+
+        $ladBy = data_get($project, 'lad')->where('client_id',$clientId)->sum('amount');
+
+        $ladTo = data_get($project, 'lad')->whereNotIn('client_id',[$clientId])->sum('amount');
+
+        $balanceContract = (float)(($contract + $voo + $rententionTo) - $paymentIn - $ladBy);
+
+        $financialend = (float)(($balanceContract - $paymentOut - $rententionBy) + $ladTo);
+
+        return collect([
+            'balanceContract' => $balanceContract,
+            'financialend' => $financialend,
+            'paymentIn' => $paymentIn,
+            'paymentOut' => $paymentOut,
+            'rententionTo' => $rententionTo,
+            'rententionBy' => $rententionBy,
+            'ladBy' => $ladBy,
+            'ladTo' => $ladTo,
+        ]);
     }
 
 

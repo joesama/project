@@ -69,6 +69,24 @@ return [
 		'retentionform' => "Retention Information",
 		'lad' => "Project LAD",
 		'ladform' => "LAD Information",
+		'receiver' => [
+			'claim' => [
+				1 => 'To',
+				0 => 'By'
+			],
+			'paid' => [
+				0 => 'To',
+				1 => 'By'
+			],
+			'lad' => [
+				0 => 'To',
+				1 => 'By'
+			],
+			'retention' => [
+				1 => 'To',
+				0 => 'From'
+			],
+		]
 	],
 	'curve' => [
 		'physical' => 'Physical S-Curve',

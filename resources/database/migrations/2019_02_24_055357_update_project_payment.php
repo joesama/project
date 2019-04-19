@@ -27,6 +27,14 @@ class UpdateProjectPayment extends Migration
             });
         }
 
+        if (!Schema::hasColumn('project_lad', 'card_id')) {
+            Schema::table('project_lad', function (Blueprint $table) 
+            {
+                $table->unsignedInteger('report_id')->after('client_id')->nullable();            
+                $table->unsignedInteger('card_id')->after('report_id')->nullable();            
+            });
+        }
+
         if (!Schema::hasColumn('project_retention', 'client_id')) {
             Schema::table('project_retention', function (Blueprint $table) 
             {
@@ -34,10 +42,26 @@ class UpdateProjectPayment extends Migration
             });
         }
 
+        if (!Schema::hasColumn('project_retention', 'card_id')) {
+            Schema::table('project_retention', function (Blueprint $table) 
+            {
+                $table->unsignedInteger('report_id')->after('client_id')->nullable();            
+                $table->unsignedInteger('card_id')->after('report_id')->nullable();            
+            });
+        }
+
         if (!Schema::hasColumn('project_vo', 'client_id')) {
             Schema::table('project_vo', function (Blueprint $table) 
             {
                 $table->unsignedInteger('client_id')->after('amount')->nullable();            
+            });
+        }
+
+        if (!Schema::hasColumn('project_vo', 'card_id')) {
+            Schema::table('project_vo', function (Blueprint $table) 
+            {
+                $table->unsignedInteger('report_id')->after('client_id')->nullable();            
+                $table->unsignedInteger('card_id')->after('report_id')->nullable();             
             });
         }
     }

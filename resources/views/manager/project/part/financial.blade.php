@@ -37,45 +37,64 @@
         </div>
         @endif
         <div class="row mh-byrow">
-          <div class="col-md-1"></div>
-          <div class="col-md-2 text-right">
+          <div class="col-md-4 text-right">
             <div class="panel panel-dark panel-colorful">
                 <div class="panel-body text-center pad-ver">
                     <i class="pli-coin icon-3x"></i>
                 </div>
-                <div class="pad-btm text-center">
-                    <p class="text-2x text-semibold text-lg mar-no">
-                    {{ __('joesama/project::form.financial.value') }}
+                <div class="pad-all text-left">
+                    <p class="mar-no text-sm">
+                      <span class="text-left text-semibold">
+                        {{ __('joesama/project::form.financial.duration') }}
+                      </span>
+                      <span class="pull-right text-semibold">
+                        {{ data_get($project,'duration_word') }}
+                      </span>
                     </p>
-                    <p class="text-bold mar-no">
-                      {{ number_format(data_get($project,'value'),2) }}
+                    <p class="mar-no text-sm">
+                      <span class="text-left text-semibold">
+                        {{ __('joesama/project::form.financial.contractval') }}
+                      </span>
+                      <span class="pull-right text-semibold">
+                        {{ number_format(data_get($project,'value'),2) }}
+                      </span>
                     </p>
-                    <p class="text-2x text-semibold text-lg mar-no">
-                    {{ __('joesama/project::form.financial.duration') }}
+                    <p class="clearfix"></p>
+                    <p class="mar-no text-2x text-thin">
+                      {{ __('joesama/project::form.financial.vo') }}
                     </p>
-                    <p class="text-bold mar-no">
-                    {{ data_get($project,'duration_word') }}
+                    <p class="mar-no text-sm">
+                      <span class="text-left text-bold">
+                        YTD
+                      </span>
+                      <span class="pull-right text-semibold">
+                        {{ number_format($vo->get('ytd'),2) }}
+                      </span>
+                    </p>
+                    <p class="mar-no text-sm">
+                      <span class="text-left text-bold">
+                        TTD
+                      </span>
+                      <span class="pull-right text-semibold">
+                        {{ number_format($vo->get('ttd'),2) }}
+                      </span>
+                    </p>
+                    <p class="clearfix"></p>
+                    <p class="mar-no text-2x text-thin">
+                      {{ __('joesama/project::form.financial.revise') }}
+                    </p>
+                    <p class="mar-no text-sm">
+                      <span class="text-left text-bold">
+                        {{ __('joesama/project::form.financial.revise') }}
+                      </span>
+                      <span class="pull-right text-semibold">
+                        {{ number_format((data_get($project,'value')+$vo->get('ttd')),2) }}
+                      </span>
                     </p>
                 </div>
             </div>
           </div>
-          <div class="col-md-3 text-right">
-            @includeIf('joesama/project::manager.project.part.sparkline',[
-                'title' => __('joesama/project::form.financial.vo'),
-                'chartId' => 'vo',
-                'transData' => $vo,
-                'background' => 'primary'
-              ])
-          </div>
-          <div class="col-md-3 text-right">
-            @includeIf('joesama/project::manager.project.part.sparkline',[
-                'title' => __('joesama/project::form.financial.revise'),
-                'chartId' => 'revise',
-                'transData' => $vo,
-                'background' => 'primary'
-              ])
-          </div>
-          <div class="col-md-3 text-right">
+          <div class="col-md-4 text-right">
             @includeIf('joesama/project::manager.project.part.sparkline',[
                 'title' => __('joesama/project::form.financial.claim'),
                 'chartId' => 'claim',
@@ -83,7 +102,7 @@
                 'background' => 'warning'
               ])
           </div>
-          <div class="col-md-3 text-right">
+          <div class="col-md-4 text-right">
             @includeIf('joesama/project::manager.project.part.sparkline',[
                 'title' => __('joesama/project::form.financial.paid'),
                 'chartId' => 'paid',
@@ -91,7 +110,7 @@
                 'background' => 'mint'
               ])
           </div>
-          <div class="col-md-3 text-right">
+          <div class="col-md-4 text-right">
             @includeIf('joesama/project::manager.project.part.sparkline',[
                 'title' => __('joesama/project::form.financial.lad'),
                 'chartId' => 'lad',
@@ -99,7 +118,7 @@
                 'background' => 'danger'
               ])
           </div>
-          <div class="col-md-3 text-right">
+          <div class="col-md-4 text-right">
             @includeIf('joesama/project::manager.project.part.sparkline',[
                 'title' => __('joesama/project::form.financial.retention'),
                 'chartId' => 'retention',
@@ -107,17 +126,84 @@
                 'background' => 'danger'
               ])
           </div>
-          <div class="col-md-2 text-right">
-            <div class="panel panel-{{ ($balanceSheet > 0)  ? 'success' : 'danger' }} panel-colorful">
+          <div class="col-md-4 text-right">
+            <div class="panel panel-{{ ($balanceSheet->get('balanceContract',0) > 0)  ? 'success' : 'danger' }} panel-colorful">
                 <div class="panel-body text-center pad-ver">
-                    <i class="pli-coin icon-3x"></i>
+                    <i class="pli-calculator icon-3x"></i>
                 </div>
-                <div class="pad-btm text-center">
-                    <p class="text-2x text-semibold text-lg mar-no">
-                    {{ __('joesama/project::form.financial.balance') }}
+                <div class="pad-all text-left">
+                    <p class="mar-no text-sm">
+                      <span class="text-left text-bold">
+                        <i class="fa fa-plus icon-fw"></i>
+                        {{ __('joesama/project::form.financial.retentionTo') }}
+                      </span>
+                      <span class="pull-right text-semibold">
+                        {{ number_format($balanceSheet->get('rententionTo',0),2) }}
+                      </span>
                     </p>
-                    <p class="text-bold mar-no">
-                      {{ $balanceSheet }}
+                    <p class="mar-no text-sm">
+                      <span class="text-left text-bold">
+                        <i class="fa fa-minus icon-fw text-danger"></i>
+                        {{ __('joesama/project::form.financial.paymentFrom') }}
+                      </span>
+                      <span class="pull-right text-semibold">
+                        {{ number_format($balanceSheet->get('paymentIn',0),2) }}
+                      </span>
+                    </p>
+                    <p class="mar-no text-sm">
+                      <span class="text-left text-bold">
+                        <i class="fa fa-minus icon-fw text-danger"></i>
+                        {{ __('joesama/project::form.financial.ladby') }}
+                      </span>
+                      <span class="pull-right text-semibold">
+                        {{ number_format($balanceSheet->get('ladBy',0),2) }}
+                      </span>
+                    </p>
+                    <p class="clearfix"></p>
+                    <p class="mar-no text-lg bord-top pad-top">
+                      <span class="text-left text-bold">
+                        {{ __('joesama/project::form.financial.balance') }}
+                      </span>
+                      <span class="pull-right text-semibold">
+                        {{ number_format($balanceSheet->get('balanceContract',0),2) }}
+                      </span>
+                    </p>
+                    <p class="clearfix"></p>
+                    <p class="mar-no text-sm">
+                      <span class="text-left text-bold">
+                        <i class="fa fa-minus icon-fw text-danger"></i>
+                        {{ __('joesama/project::form.financial.retentionBy') }}
+                      </span>
+                      <span class="pull-right text-semibold">
+                        {{ number_format($balanceSheet->get('rententionBy',0),2) }}
+                      </span>
+                    </p>
+                    <p class="mar-no text-sm">
+                      <span class="text-left text-bold">
+                        <i class="fa fa-minus icon-fw text-danger"></i>
+                        {{ __('joesama/project::form.financial.paymentTo') }}
+                      </span>
+                      <span class="pull-right text-semibold">
+                        {{ number_format($balanceSheet->get('paymentOut',0),2) }}
+                      </span>
+                    </p>
+                    <p class="mar-no text-sm">
+                      <span class="text-left text-bold">
+                        <i class="fa fa-plus icon-fw"></i>
+                        {{ __('joesama/project::form.financial.ladto') }}
+                      </span>
+                      <span class="pull-right text-semibold">
+                        {{ number_format($balanceSheet->get('ladTo',0),2) }}
+                      </span>
+                    </p>
+                    <p class="clearfix"></p>
+                    <p class="mar-no text-lg bord-top pad-top">
+                      <span class="text-left text-bold">
+                        {{ __('joesama/project::form.financial.finacialend') }}
+                      </span>
+                      <span class="pull-right text-semibold">
+                        {{ number_format($balanceSheet->get('financialend',0),2) }}
+                      </span>
                     </p>
                 </div>
             </div>
