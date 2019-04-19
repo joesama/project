@@ -69,7 +69,7 @@ class Master extends Model
      */
     public function scopeTask($query)
     {
-        return $query->where('id', 8);
+        return $query->where('id', 6);
     }
 
     /**
