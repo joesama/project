@@ -173,16 +173,18 @@ return [
 		'vo' => 'Variation Order',
 		'lad' => 'Liquidated Ascertained Damages (LAD)',
 		'ladby' => 'LAD Imposed By Client',
-		'ladto' => 'LAD Imposed To Subs',
+		'ladto' => 'LAD Imposed To Subcontractor',
 		'revise' => 'Revised Sum',
 		'claim' => 'Claimed Amount',
+		'claimTo' => 'Amount Claim To Client',
+		'claimBy' => 'Amount Claim By Subcontractor',
 		'paid' => 'Paid Amount',
 		'retention' => 'Retention',
 		'retentionTo' => 'Retention To Client',
-		'retentionBy' => 'Retention By Subs',
+		'retentionBy' => 'Retention By Subcontractor',
 		'payment' => 'Payment',
 		'paymentFrom' => 'Payment From Client',
-		'paymentTo' => 'Payment To Subs'
+		'paymentTo' => 'Payment To Subcontractor'
 	],
 	'profile' => [
 		'name' => 'Name',

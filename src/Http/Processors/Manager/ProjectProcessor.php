@@ -239,39 +239,42 @@ class ProjectProcessor
 
 		$projectEnd = data_get($project,'end');
 
-		$claim = $this->financialRepo->projectComponentTransaction(
-			$projectStart,
-			$projectEnd,
-			data_get($project,'claim'),
-			'claim_date',
-			'claim_amount'
-		);
+		$vo = $this->financialRepo->financialMapping($project,'vo');
 
-		$paid = $this->financialRepo->projectComponentTransaction(
-			$projectStart,
-			$projectEnd,
-			data_get($project,'payment'),
-			'payment_date',
-			'paid_amount'
-		);
-
-		$vo = $this->financialRepo->projectComponentTransaction(
-			$projectStart,
-			$projectEnd,
-			data_get($project,'vo')
-		);
-
-		$retention = $this->financialRepo->projectComponentTransaction(
-			$projectStart,
-			$projectEnd,
-			data_get($project,'retention')
-		);
-
-		$lad = $this->financialRepo->projectComponentTransaction(
-			$projectStart,
-			$projectEnd,
-			data_get($project,'lad')
-		);
+		$paymentTrans = collect([
+			'claimTo' => $this->financialRepo->financialMapping(
+				$project,
+				'claim',
+				true,
+				'claim_date',
+				'claim_amount'
+			),
+			'paymentFrom' => $this->financialRepo->financialMapping(
+				$project,
+				'payment',
+				true,
+				'payment_date',
+				'paid_amount'
+			),
+			'retentionTo' => $this->financialRepo->financialMapping($project, 'retention'),
+			'ladby' => $this->financialRepo->financialMapping($project, 'lad'),
+			'claimBy' => $this->financialRepo->financialMapping(
+				$project,
+				'claim',
+				false,
+				'claim_date',
+				'claim_amount'
+			),
+			'paymentTo' => $this->financialRepo->financialMapping(
+				$project,
+				'payment',
+				false,
+				'payment_date',
+				'paid_amount'
+			),
+			'retentionBy' => $this->financialRepo->financialMapping($project, 'retention', false),
+			'ladto' => $this->financialRepo->financialMapping($project, 'lad', false)
+		]);
 
 		return [
 			'project' => $project,
@@ -288,11 +291,8 @@ class ProjectProcessor
 			'issueTable' => $this->listProcessor->issue($request,$corporateId),
 			'riskTable' => $this->listProcessor->risk($request,$corporateId),
 			'hsecard' => $this->projectInfo->hseScore($project),
-			'claim' => $this->financialRepo->getSparklineData($claim,'claim_amount'),
-			'payment' => $this->financialRepo->getSparklineData($paid,'paid_amount'),
-			'retention' => $this->financialRepo->getSparklineData($retention,'amount'),
-			'lad' => $this->financialRepo->getSparklineData($lad,'amount'),
-			'vo' => $this->financialRepo->getSparklineData($vo,'amount'),
+			'vo' => $vo,
+			'paymentTrans' => $paymentTrans,
 			'balanceSheet' => $this->financialRepo->balanceSheet($project),
 			'policies' => collect(config('joesama/project::policy.dashboard'))
 		];

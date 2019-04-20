@@ -226,9 +226,9 @@ class ReportCardInfoRepository
         })->first();
 
         return collect([
-                'planned' => $milestone->pluck('planned')->prepend('Planned'),
-                'actual' => $milestone->pluck('actual')->prepend('Actual'),
-                'categories' => $milestone->pluck('label'),
+                'planned' => $milestone->pluck('planned')->prepend(0)->prepend('Planned'),
+                'actual' => $milestone->pluck('actual')->prepend(0)->prepend('Actual'),
+                'categories' => $milestone->pluck('label')->prepend([Carbon::parse($milestone->first()->label)->subMonth()->format('d M Y')]),
                 'variance' => floatval(data_get($latest, 'actual')) - floatval(data_get($latest, 'planned')),
                 'latest' => $latest,
             ]);

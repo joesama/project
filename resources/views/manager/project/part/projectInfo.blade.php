@@ -185,7 +185,7 @@
                     {{ __('joesama/project::project.info.contract.gp.original') }}
                 </td>
                 <td class="pl-2">
-                    {{ number_format(data_get($project,'gp_propose'),2) }}
+                    RM {{ number_format(data_get($project,'gp_propose'),2) }}
                 </td>
             </tr>
             <tr>
@@ -193,7 +193,7 @@
                     {{ __('joesama/project::project.info.contract.gp.latest') }}
                 </td>
                 <td class="pl-2">
-                    {{ number_format(data_get($project,'gp_latest'),2) }}
+                    RM {{ number_format(data_get($project,'gp_latest'),2) }}
                 </td>
             </tr>
             <tr>

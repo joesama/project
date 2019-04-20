@@ -5,135 +5,12 @@ use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Collection;
 use Joesama\Project\Database\Model\Project\FinanceMilestone;
+use Joesama\Project\Database\Model\Project\Project;
 use Joesama\Project\Traits\ProjectCalculator;
 
 class FinancialRepository
 {
     use ProjectCalculator;
-
-    /**
-     * Get Claim Transaction for past 24 month
-     *
-     * @param  string     $start  [description]
-     * @param  string     $end    [description]
-     * @param  Collection $claims [description]
-     * @return Illuminate\Support\Collection
-     */
-    public function projectClaimTransaction(string $start, string $end, Collection $claims)
-    {
-        $transCollection = $this->getProjectTrasactionRow($start, $end);
-
-        $claims->sortByDesc(function ($product, $key) {
-            return $product['claim_date'];
-        })->mapToGroups(function ($item, $key) {
-            return [
-                Carbon::parse($item['claim_date'])->format('Y') => $item
-            ];
-        })->each(function ($item, $year) use ($transCollection) {
-            $item->mapToGroups(function ($item, $key) {
-                return [
-                    Carbon::parse($item['claim_date'])->format('m') => $item
-                ];
-            })->each(function ($trans, $id) use ($transCollection, $year) {
-                $transCollection->get($year)->put(intval($id), $trans);
-            });
-        });
-
-        return $transCollection;
-    }
-
-    /**
-     * Get Payment Transaction for past 24 month
-     *
-     * @param  string     $start  [description]
-     * @param  string     $end    [description]
-     * @param  Collection $claims [description]
-     * @return Illuminate\Support\Collection
-     */
-    public function projectPaymentTransaction(string $start, string $end, Collection $claims)
-    {
-        $transCollection = $this->getProjectTrasactionRow($start, $end);
-
-        $claims->sortByDesc(function ($product, $key) {
-            return $product['payment_date'];
-        })->mapToGroups(function ($item, $key) {
-            return [
-                Carbon::parse($item['payment_date'])->format('Y') => $item
-            ];
-        })->each(function ($item, $year) use ($transCollection) {
-            $item->mapToGroups(function ($item, $key) {
-                return [
-                    Carbon::parse($item['payment_date'])->format('m') => $item
-                ];
-            })->each(function ($trans, $id) use ($transCollection, $year) {
-                $transCollection->get($year)->put(intval($id), $trans);
-            });
-        });
-
-        return $transCollection;
-    }
-
-
-    /**
-     * Get VO transaction
-     *
-     * @param  string     $start project start date
-     * @param  string     $end   project start date
-     * @param  Collection $vo    collection of vo
-     * @return array
-     */
-    public function projectVoTransaction(string $start, string $end, Collection $voo)
-    {
-        $transCollection = $this->getProjectTrasactionRow($start, $end);
-
-        $voo->sortByDesc(function ($product, $key) {
-            return $product['date'];
-        })->mapToGroups(function ($item, $key) {
-            return [
-                Carbon::parse($item['date'])->format('Y') => $item
-            ];
-        })->each(function ($item, $year) use ($transCollection) {
-            $item->mapToGroups(function ($item, $key) {
-                return [
-                    Carbon::parse($item['date'])->format('m') => $item
-                ];
-            })->each(function ($trans, $id) use ($transCollection, $year) {
-                $transCollection->get($year)->put(intval($id), $trans);
-            });
-        });
-        return $transCollection;
-    }
-
-    /**
-     * Get Retention transaction
-     *
-     * @param  string     $start        project start date
-     * @param  string     $end          project start date
-     * @param  Collection $retention    collection of retention
-     * @return array
-     */
-    public function projectRetentionTransaction(string $start, string $end, Collection $retention)
-    {
-        $transCollection = $this->getProjectTrasactionRow($start, $end);
-
-        $retention->sortByDesc(function ($product, $key) {
-            return $product['date'];
-        })->mapToGroups(function ($item, $key) {
-            return [
-                Carbon::parse($item['date'])->format('Y') => $item
-            ];
-        })->each(function ($item, $year) use ($transCollection) {
-            $item->mapToGroups(function ($item, $key) {
-                return [
-                    Carbon::parse($item['date'])->format('m') => $item
-                ];
-            })->each(function ($trans, $id) use ($transCollection, $year) {
-                $transCollection->get($year)->put(intval($id), $trans);
-            });
-        });
-
-        return $transCollection;
-    }
 
     /**
      * Get component transaction data
@@ -165,9 +42,9 @@ class FinancialRepository
                     Carbon::parse($item[$date])->format('m') => $item
                 ];
             })->each(function ($trans, $id) use ($transCollection, $year) {
-                $paymentByclient = $trans->mapToGroups(function ($payment, $key){
+                $paymentByclient = $trans->mapToGroups(function ($payment, $key) {
                     return [
-                        data_get($payment,'recipient.name') => $payment
+                        data_get($payment, 'recipient.name') => $payment
                     ];
                 });
 
@@ -178,6 +55,45 @@ class FinancialRepository
         return $transCollection;
     }
 
+    /**
+     * Mapping Financial transaction
+     * 
+     * @param  Project      $project     [description]
+     * @param  string       $component   [description]
+     * @param  string       $dateField   [description]
+     * @param  string       $amountField [description]
+     * @param  bool|boolean $isClient    [description]
+     * @return Collection                   [description]
+     */
+    public function financialMapping(
+        Project $project,
+        string $component,
+        bool $isClient = true,
+        string $dateField = 'date',
+        string $amountField = 'amount'
+    ) {
+
+      $projectStart = data_get($project,'start');
+
+      $projectEnd = data_get($project,'end');
+
+      $sourceData = data_get($project,$component);
+
+      if ($isClient) {
+        $sourceData = $sourceData->where('client_id',$project->client_id);
+      } else {
+        $sourceData = $sourceData->where('client_id','!=',$project->client_id);
+      }
+
+      $processData = $this->projectComponentTransaction(
+        $projectStart,
+        $projectEnd,
+        $sourceData,
+        $dateField
+      );
+
+      return $this->getSparklineData($processData, $amountField);
+    }
 
     /**
      * Get Data For Sparkline
@@ -194,10 +110,10 @@ class FinancialRepository
 
         $transDataCurMonth = collect($transDataCurYear->get((int)$currentMonth));
 
-        $clientMontDets = $transDataCurMonth->filter(function($item){
+        $clientMontDets = $transDataCurMonth->filter(function ($item) {
             return $item instanceof Collection;
-        })->flatMap(function($payment, $client) use($amount){
-            return [ $client => collect([ 
+        })->flatMap(function ($payment, $client) use ($amount) {
+            return [ $client => collect([
                 'detail' => $payment,
                 'amount' => $payment->sum($amount)
                 ])
@@ -206,16 +122,16 @@ class FinancialRepository
         
         $clientYearDets = collect([]);
 
-        $transDataCurYear->filter(function($item){
+        $transDataCurYear->filter(function ($item) {
             return $item instanceof Collection;
-        })->each(function($yearPay, $monthOf) use($clientYearDets) {
-            $yearPay->each(function($yearLy, $client) use($clientYearDets) {
+        })->each(function ($yearPay, $monthOf) use ($clientYearDets) {
+            $yearPay->each(function ($yearLy, $client) use ($clientYearDets) {
                 $clientYearDets->put($client, $yearLy->merge(collect($clientYearDets->get($client))));
             });
         });
 
-        $clientYearDets = $clientYearDets->flatMap(function($payment, $client) use($amount){
-            return [ $client => collect([ 
+        $clientYearDets = $clientYearDets->flatMap(function ($payment, $client) use ($amount) {
+            return [ $client => collect([
                 'detail' => $payment,
                 'amount' => $payment->sum($amount)
                 ])
@@ -224,16 +140,16 @@ class FinancialRepository
 
         $tillDate = collect([]);
 
-        $transData->flatten(1)->filter(function($item){
+        $transData->flatten(1)->filter(function ($item) {
             return $item instanceof Collection;
-        })->each(function($yearPay, $monthOf) use($tillDate) {
-            $yearPay->each(function($yearLy, $client) use($tillDate) {
+        })->each(function ($yearPay, $monthOf) use ($tillDate) {
+            $yearPay->each(function ($yearLy, $client) use ($tillDate) {
                 $tillDate->put($client, $yearLy->merge(collect($tillDate->get($client))));
             });
         });
 
-        $tillDate = $tillDate->flatMap(function($payment, $client) use($amount){
-            return [ $client => collect([ 
+        $tillDate = $tillDate->flatMap(function ($payment, $client) use ($amount) {
+            return [ $client => collect([
                 'detail' => $payment,
                 'amount' => $payment->sum($amount)
                 ])
@@ -266,19 +182,19 @@ class FinancialRepository
 
         $contract = data_get($project, 'value');
 
-        $paymentIn = data_get($project, 'payment')->where('client_id',$clientId)->sum('paid_amount');
+        $paymentIn = data_get($project, 'payment')->where('client_id', $clientId)->sum('paid_amount');
 
-        $paymentOut = data_get($project, 'payment')->whereNotIn('client_id',[$clientId])->sum('paid_amount');
+        $paymentOut = data_get($project, 'payment')->whereNotIn('client_id', [$clientId])->sum('paid_amount');
 
         $voo = data_get($project, 'vo')->sum('amount');
 
-        $rententionTo = data_get($project, 'retention')->where('client_id',$clientId)->sum('amount');
+        $rententionTo = data_get($project, 'retention')->where('client_id', $clientId)->sum('amount');
 
-        $rententionBy = data_get($project, 'retention')->whereNotIn('client_id',[$clientId])->sum('amount');
+        $rententionBy = data_get($project, 'retention')->whereNotIn('client_id', [$clientId])->sum('amount');
 
-        $ladBy = data_get($project, 'lad')->where('client_id',$clientId)->sum('amount');
+        $ladBy = data_get($project, 'lad')->where('client_id', $clientId)->sum('amount');
 
-        $ladTo = data_get($project, 'lad')->whereNotIn('client_id',[$clientId])->sum('amount');
+        $ladTo = data_get($project, 'lad')->whereNotIn('client_id', [$clientId])->sum('amount');
 
         $balanceContract = (float)(($contract + $voo + $rententionTo) - $paymentIn - $ladBy);
 
@@ -350,9 +266,9 @@ class FinancialRepository
         })->first();
 
         return collect([
-                'planned' => $milestone->pluck('planned')->prepend('Planned'),
-                'actual' => $milestone->pluck('actual')->prepend('Actual'),
-                'categories' => $milestone->pluck('label'),
+                'planned' => $milestone->pluck('planned')->prepend(0)->prepend('Planned'),
+                'actual' => $milestone->pluck('actual')->prepend(0)->prepend('Actual'),
+                'categories' => $milestone->pluck('label')->prepend([Carbon::parse($milestone->first()->label)->subMonth()->format('d M Y')]),
                 'variance' => $this->shortHandFormat(floatval(data_get($latest, 'actual')) - floatval(data_get($latest, 'planned'))),
                 'latest' => $latest,
             ]);

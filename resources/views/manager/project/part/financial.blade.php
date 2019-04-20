@@ -39,11 +39,12 @@
         <div class="row mh-byrow">
           <div class="col-md-4 text-right">
             <div class="panel panel-dark panel-colorful">
-                <div class="panel-body text-center pad-ver">
-                    <i class="pli-coin icon-3x"></i>
-                </div>
                 <div class="pad-all text-left">
-                    <p class="mar-no text-sm">
+                    <p class="text-lg text-semibold">
+                      <i class="pli-coins icon-fw"></i> 
+                      Project Information
+                    </p>
+                    <p class="mar-no text-semibold">
                       <span class="text-left text-semibold">
                         {{ __('joesama/project::form.financial.duration') }}
                       </span>
@@ -51,81 +52,58 @@
                         {{ data_get($project,'duration_word') }}
                       </span>
                     </p>
-                    <p class="mar-no text-sm">
+                    <p class="mar-no text-semibold">
                       <span class="text-left text-semibold">
                         {{ __('joesama/project::form.financial.contractval') }}
                       </span>
                       <span class="pull-right text-semibold">
-                        {{ number_format(data_get($project,'value'),2) }}
+                        RM {{ number_format(data_get($project,'value'),2) }}
                       </span>
                     </p>
-                    <p class="clearfix"></p>
-                    <p class="mar-no text-2x text-thin">
-                      {{ __('joesama/project::form.financial.vo') }}
-                    </p>
-                    <p class="mar-no text-sm">
+                    <p class="mar-no text-semibold">
                       <span class="text-left text-bold">
-                        YTD
+                        {{ __('joesama/project::form.financial.vo') }} YTD
                       </span>
                       <span class="pull-right text-semibold">
-                        {{ number_format($vo->get('ytd'),2) }}
+                        RM {{ number_format($vo->get('ytd'),2) }}
                       </span>
                     </p>
-                    <p class="mar-no text-sm">
+                    <p class="mar-no text-semibold">
                       <span class="text-left text-bold">
-                        TTD
+                        {{ __('joesama/project::form.financial.vo') }} TTD
                       </span>
                       <span class="pull-right text-semibold">
-                        {{ number_format($vo->get('ttd'),2) }}
+                        RM {{ number_format($vo->get('ttd'),2) }}
                       </span>
                     </p>
-                    <p class="clearfix"></p>
-                    <p class="mar-no text-2x text-thin">
-                      {{ __('joesama/project::form.financial.revise') }}
-                    </p>
-                    <p class="mar-no text-sm">
+                    <p class="mar-no text-semibold">
                       <span class="text-left text-bold">
                         {{ __('joesama/project::form.financial.revise') }}
                       </span>
                       <span class="pull-right text-semibold">
-                        {{ number_format((data_get($project,'value')+$vo->get('ttd')),2) }}
+                        RM {{ number_format((data_get($project,'value')+$vo->get('ttd')),2) }}
                       </span>
                     </p>
                 </div>
             </div>
           </div>
-          <div class="col-md-4 text-right">
-            @includeIf('joesama/project::manager.project.part.sparkline',[
-                'title' => __('joesama/project::form.financial.claim'),
-                'chartId' => 'claim',
-                'transData' => $claim,
-                'background' => 'warning'
+          @php
+            $color = collect(['warning','mint','info','danger'])
+          @endphp
+          @foreach($paymentTrans as $key => $payTransaction)
+            <div class="col-md-4 text-right">
+              @includeIf('joesama/project::manager.project.part.sparkline',[
+                'title' => __('joesama/project::form.financial.'.$key),
+                'chartId' => $key,
+                'transData' => $payTransaction,
+                'background' => $color->first()
               ])
-          </div>
-          <div class="col-md-4 text-right">
-            @includeIf('joesama/project::manager.project.part.sparkline',[
-                'title' => __('joesama/project::form.financial.paid'),
-                'chartId' => 'paid',
-                'transData' => $payment,
-                'background' => 'mint'
-              ])
-          </div>
-          <div class="col-md-4 text-right">
-            @includeIf('joesama/project::manager.project.part.sparkline',[
-                'title' => __('joesama/project::form.financial.lad'),
-                'chartId' => 'lad',
-                'transData' => $lad,
-                'background' => 'danger'
-              ])
-          </div>
-          <div class="col-md-4 text-right">
-            @includeIf('joesama/project::manager.project.part.sparkline',[
-                'title' => __('joesama/project::form.financial.retention'),
-                'chartId' => 'retention',
-                'transData' => $retention,
-                'background' => 'danger'
-              ])
-          </div>
+            </div>
+            @php
+              $arranger = $color->slice(1,$color->count())->push($color->first())->toArray();
+              $color->splice(0,1,$arranger);
+            @endphp
+          @endforeach
           <div class="col-md-4 text-right">
             <div class="panel panel-{{ ($balanceSheet->get('balanceContract',0) > 0)  ? 'success' : 'danger' }} panel-colorful">
                 <div class="panel-body text-center pad-ver">
@@ -138,7 +116,7 @@
                         {{ __('joesama/project::form.financial.retentionTo') }}
                       </span>
                       <span class="pull-right text-semibold">
-                        {{ number_format($balanceSheet->get('rententionTo',0),2) }}
+                        RM {{ number_format($balanceSheet->get('rententionTo',0),2) }}
                       </span>
                     </p>
                     <p class="mar-no text-sm">
@@ -147,7 +125,7 @@
                         {{ __('joesama/project::form.financial.paymentFrom') }}
                       </span>
                       <span class="pull-right text-semibold">
-                        {{ number_format($balanceSheet->get('paymentIn',0),2) }}
+                        RM {{ number_format($balanceSheet->get('paymentIn',0),2) }}
                       </span>
                     </p>
                     <p class="mar-no text-sm">
@@ -156,16 +134,16 @@
                         {{ __('joesama/project::form.financial.ladby') }}
                       </span>
                       <span class="pull-right text-semibold">
-                        {{ number_format($balanceSheet->get('ladBy',0),2) }}
+                        RM {{ number_format($balanceSheet->get('ladBy',0),2) }}
                       </span>
                     </p>
                     <p class="clearfix"></p>
                     <p class="mar-no text-lg bord-top pad-top">
                       <span class="text-left text-bold">
-                        {{ __('joesama/project::form.financial.balance') }}
+                        
                       </span>
                       <span class="pull-right text-semibold">
-                        {{ number_format($balanceSheet->get('balanceContract',0),2) }}
+                        RM {{ number_format($balanceSheet->get('balanceContract',0),2) }}
                       </span>
                     </p>
                     <p class="clearfix"></p>
@@ -175,7 +153,7 @@
                         {{ __('joesama/project::form.financial.retentionBy') }}
                       </span>
                       <span class="pull-right text-semibold">
-                        {{ number_format($balanceSheet->get('rententionBy',0),2) }}
+                        RM {{ number_format($balanceSheet->get('rententionBy',0),2) }}
                       </span>
                     </p>
                     <p class="mar-no text-sm">
@@ -184,7 +162,7 @@
                         {{ __('joesama/project::form.financial.paymentTo') }}
                       </span>
                       <span class="pull-right text-semibold">
-                        {{ number_format($balanceSheet->get('paymentOut',0),2) }}
+                        RM {{ number_format($balanceSheet->get('paymentOut',0),2) }}
                       </span>
                     </p>
                     <p class="mar-no text-sm">
@@ -193,16 +171,16 @@
                         {{ __('joesama/project::form.financial.ladto') }}
                       </span>
                       <span class="pull-right text-semibold">
-                        {{ number_format($balanceSheet->get('ladTo',0),2) }}
+                        RM {{ number_format($balanceSheet->get('ladTo',0),2) }}
                       </span>
                     </p>
                     <p class="clearfix"></p>
                     <p class="mar-no text-lg bord-top pad-top">
                       <span class="text-left text-bold">
-                        {{ __('joesama/project::form.financial.finacialend') }}
+                        {{ __('joesama/project::form.financial.balance') }}
                       </span>
                       <span class="pull-right text-semibold">
-                        {{ number_format($balanceSheet->get('financialend',0),2) }}
+                        RM {{ number_format($balanceSheet->get('financialend',0),2) }}
                       </span>
                     </p>
                 </div>

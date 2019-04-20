@@ -4,10 +4,13 @@
           <i class="psi-coins icon-fw"></i> 
           {{ $title }}
         </p>
-        <p class="mar-no text-2x text-thin">
+        <p class="mar-no text-semibold">
           {{ Carbon\Carbon::now()->localeMonth }} - {{ Carbon\Carbon::now()->format('Y') }}
+          <span class="pull-right text-semibold">
+            RM {{ number_format($transData->get('monthTrans'),2) }}
+          </span>
         </p>
-        @foreach(data_get($transData,'monthTransDets') as $clientName => $clientMonthTrans)
+{{--         @foreach(data_get($transData,'monthTransDets') as $clientName => $clientMonthTrans)
         <p class="mar-no text-sm">
           @php
             $client = (int)($clientMonthTrans->get('detail')->first()->client_id == $project->client_id);
@@ -20,12 +23,14 @@
             {{ number_format($clientMonthTrans->get('amount'),2) }}
           </span>
         </p>
-        @endforeach
-        <p class="clearfix"></p>
-        <p class="mar-no text-2x text-thin">
+        @endforeach --}}
+        <p class="mar-no text-semibold">
           YTD - {{ Carbon\Carbon::now()->format('Y') }}
+          <span class="pull-right text-semibold">
+            RM {{ number_format($transData->get('ytd'),2) }}
+          </span>
         </p>
-        @foreach(data_get($transData,'yearDetails') as $clientName => $clientYearTrans)
+{{--         @foreach(data_get($transData,'yearDetails') as $clientName => $clientYearTrans)
         <p class="mar-no text-sm">
           @php
             $client = (int)($clientYearTrans->get('detail')->first()->client_id == $project->client_id);
@@ -38,12 +43,14 @@
             {{ number_format($clientYearTrans->get('amount'),2) }}
           </span>
         </p>
-        @endforeach
-        <p class="clearfix"></p>
-        <p class="mar-no text-2x text-thin">
+        @endforeach --}}
+        <p class="mar-no text-semibold">
           TTD
+          <span class="pull-right text-semibold">
+            RM {{ number_format($transData->get('ttd'),2) }}
+          </span>
         </p>
-        @foreach(data_get($transData,'tillDate') as $clientName => $tillDateTrans)
+{{--         @foreach(data_get($transData,'tillDate') as $clientName => $tillDateTrans)
         <p class="mar-no text-sm">
           @php
             $client = (int)($tillDateTrans->get('detail')->first()->client_id == $project->client_id);
@@ -56,6 +63,6 @@
             {{ number_format($tillDateTrans->get('amount'),2) }}
           </span>
         </p>
-        @endforeach
+        @endforeach --}}
     </div>
 </div>
