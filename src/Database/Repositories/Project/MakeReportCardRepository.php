@@ -209,9 +209,18 @@ class MakeReportCardRepository
     public function lockProjectData(Project $project, $report, string $type)
     {
         $tasks = $project->task;
+
         $payment = $project->payment;
+
         $nextWeekPlan = $project->plan;
+
         $incident = $project->incident;
+
+        $vo = $project->vo;
+
+        $retention = $project->retention;
+        
+        $lad = $project->lad;
 
         $tasks->each(function ($task) use ($type, $report) {
             $progress = $task->allProgress;
@@ -259,6 +268,42 @@ class MakeReportCardRepository
         });
 
         $incident->each(function ($case) use ($type, $report) {
+            if ($type == 'week') {
+                $case->report_id = $report->id;
+            }
+
+            if ($type == 'month') {
+                $case->card_id = $report->id;
+            }
+
+            $case->save();
+        });
+
+        $vo->each(function ($case) use ($type, $report) {
+            if ($type == 'week') {
+                $case->report_id = $report->id;
+            }
+
+            if ($type == 'month') {
+                $case->card_id = $report->id;
+            }
+
+            $case->save();
+        });
+
+        $retention->each(function ($case) use ($type, $report) {
+            if ($type == 'week') {
+                $case->report_id = $report->id;
+            }
+
+            if ($type == 'month') {
+                $case->card_id = $report->id;
+            }
+
+            $case->save();
+        });
+
+        $lad->each(function ($case) use ($type, $report) {
             if ($type == 'week') {
                 $case->report_id = $report->id;
             }

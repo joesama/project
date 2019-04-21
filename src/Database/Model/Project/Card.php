@@ -68,21 +68,41 @@ class Card extends Model
                 $query->with(['progress'=> function($query) use ($endDate){
                     $query->where('created_at', '<=' ,$endDate);
                     $query->where(function ($query) {
-                        $query->whereNull('report_id');
+                        $query->whereNull('card_id');
                     });
                 }]);
             }]);
+
             $query->with(['payment'=> function($query) use ($endDate){
                 $query->where('paid_date', '<=' ,$endDate);
                 $query->where(function ($query) {
-                        $query->whereNull('report_id');
-                    });
+                    $query->whereNull('card_id');
+                });
             }]);
+
             $query->with(['plan'=> function($query) use ($endDate){
                 $query->where('created_at', '<=' ,$endDate);
-                $query->where(function ($query) {
-                        $query->whereNull('report_id');
-                    });
+                $query->whereNull('card_id');
+            }]);
+
+            $query->with(['incident'=> function($query) use ($endDate){
+                $query->where('incident_date', '<=' ,$endDate);
+                $query->whereNull('card_id');
+            }]);
+
+            $query->with(['vo'=> function($query) use ($endDate){
+                $query->where('date', '<=' ,$endDate);
+                $query->whereNull('card_id');
+            }]);
+            
+            $query->with(['retention'=> function($query) use ($endDate){
+                $query->where('date', '<=' ,$endDate);
+                $query->whereNull('card_id');
+            }]);
+            
+            $query->with(['lad'=> function($query) use ($endDate){
+                $query->where('date', '<=' ,$endDate);
+                $query->whereNull('card_id');
             }]);
         }]);
     }
@@ -93,14 +113,32 @@ class Card extends Model
         ->with(['project' => function($query) use ($reportId){
             $query->with(['task'=> function($query) use ($reportId){
                 $query->with(['progress'=> function($query) use ($reportId){
-                    $query->where('report_id', $reportId);
+                    $query->where('card_id', $reportId);
                 }]);
             }]);
+
             $query->with(['payment'=> function($query) use ($reportId){
-                $query->where('report_id', $reportId);
+                $query->where('card_id', $reportId);
             }]);
+
             $query->with(['plan'=> function($query) use ($reportId){
-                $query->where('report_id', $reportId);
+                $query->where('card_id', $reportId);
+            }]);
+
+            $query->with(['incident'=> function($query) use ($reportId){
+                $query->where('card_id', $reportId);
+            }]);
+            
+            $query->with(['vo'=> function($query) use ($reportId){
+                $query->where('card_id', $reportId);
+            }]);
+            
+            $query->with(['retention'=> function($query) use ($reportId){
+                $query->where('card_id', $reportId);
+            }]);
+            
+            $query->with(['lad'=> function($query) use ($reportId){
+                $query->where('card_id', $reportId);
             }]);
         }]);
     }
