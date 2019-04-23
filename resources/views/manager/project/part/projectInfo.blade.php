@@ -73,7 +73,7 @@
                 </td>
             </tr>
         </table>
-        @if( ($project->active || !is_null(data_get($project,'approval.approved_by'))) && $isProjectManager)
+        @if(!$project->active && $isProjectManager)
         <a class="btn btn-dark btn-xs mar-btm pull-right" href="{{ handles('joesama/project::manager/partner/form/'.request()->segment(4).'/'.request()->segment(5)) }}">
             <i class="fa fa-plus icon-fw"></i>
             {{ __('joesama/project::project.client.partner.name') }}
@@ -87,7 +87,7 @@
                 </td>
                 <td class="pl-2">
                     {{ data_get($partner,'name') }}
-                    @if($isProjectManager)
+                    @if(!$project->active && $isProjectManager)
                     <a class="btn btn-danger btn-xs pull-right" href="{{ route('api.partner.delete',[$project->corporate_id,$project->id,$partner->id]) }}">
                         <i class="fa fa-remove"></i>
                     </a>
@@ -149,7 +149,7 @@
         @endforelse
     </div>
     <div class="col-md-6 text-left">
-         @if( ($project->active || !is_null(data_get($project,'approval.approved_by'))) && $isProjectManager )
+         @if(!$project->active && $isProjectManager)
         <a class="btn btn-dark btn-xs mar-btm pull-right" href="{{ handles('joesama/project::manager/attribute/form/'.request()->segment(4).'/'.request()->segment(5)) }}">
             <i class="fa fa-plus icon-fw"></i>
             {{ __('joesama/project::project.attr') }}
@@ -211,7 +211,7 @@
                 </td>
                 <td class="pl-2">
                     {!! data_get($attributes,'data') !!}
-                    @if($isProjectManager)
+                    @if(!$project->active && $isProjectManager)
                     <a class="btn btn-danger btn-xs pull-right" href="{{ route('api.attribute.delete',[$project->corporate_id,$project->id,$attributes->id]) }}">
                         <i class="fa fa-remove"></i>
                     </a>

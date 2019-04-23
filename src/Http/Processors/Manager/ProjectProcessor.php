@@ -170,11 +170,17 @@ class ProjectProcessor
 
 		$project = $infoProject->project;
 
+		$newPartner = collect(json_decode($infoProject->partner_id,true));
+
+		$partner = $this->projectUpdateWorkflow->getClientUpdated($newPartner->toArray());
+
+		$client = $this->projectUpdateWorkflow->getClientUpdated([$infoProject->client_id])->first();
+
 		$processFlow = new ProcessFlowManager( ($project) ? $project->corporate_id : $corporateId );
 		
 		$workflow = $processFlow->getUpdateFlow($project, $updateFlowId);
 
-		return compact('infoProject','workflow', 'project');
+		return compact('infoProject','workflow', 'project', 'partner', 'client');
 	}
 
 	/**
@@ -189,26 +195,47 @@ class ProjectProcessor
 
 		$processFlow = new ProcessFlowManager($corporateId);
 
+		if ($request->segment(5)) {
+			$project = $this->projectInfo->getProject($request->segment(5));
+
+			$partner = Client::whereNotIn('id',[$project->client_id])->pluck('name','id');
+
+			$subs = $project->partner->pluck('name','id');
+		} else {
+			$partner = Client::pluck('name','id');
+
+			$subs = collect([]);
+		}
+
 		$form = $this->formBuilder->newModelForm(
 					app(\Joesama\Project\Database\Model\Project\Project::class)
 				)
 				->option([
-					'client_id' => Client::pluck('name','id')
+					'client_id' => Client::pluck('name','id'),
+					'partner_id' => $partner
 				])
 				->mapping([
 					'corporate_id' => $corporateId
 				])
+				->default([
+					'partner_id' => $subs
+				])
 				->extras([
 					'duration' => 'range',
 					'scope' => 'textarea',
+					'partner_id' => 'multi',
 				])
 				->excludes(['start','end','effective_days','planned_progress','acc_progress','actual_progress','actual_payment','planned_payment','current_variance'])
 				->id($request->segment(5))
 				->required(['*']);
 
-		if(!$request->segment(5)){
+		if (!$request->segment(5)) {
 			$form->appendView([
 				'joesama/project::setup.process.assignation' => [ 'flow' => $processFlow->formRoleListing() ]
+			]);
+		} else {
+			$form->appendView([
+				'joesama/project::setup.process.assignationFlow' => [ 'flow' => $processFlow->getAssignedFlowToProject($project, true) ]
 			]);
 		}
 

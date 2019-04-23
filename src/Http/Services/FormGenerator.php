@@ -302,6 +302,10 @@ class FormGenerator
 						return 'checkbox';
 					}
 
+					if(in_array($type,['multi'])){
+						return 'multiselect';
+					}
+
 					if(in_array($key,collect($this->optionlist)->keys()->toArray())){
 
 						$extraKey = $this->extras->get($key);

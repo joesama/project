@@ -51,7 +51,7 @@
                         <div class="timeline-stat">
                         	<div class="timeline-icon">
                         		@if ( data_get($progress,'photo') !== NULL )
-                        		<img src="{{ data_get($progress,'photo') }}" alt="{{ data_get($progress,'profile') }}">
+                        		<img src="{{ asset(data_get($progress,'photo')) }}" alt="{{ data_get($progress,'profile') }}">
                         		@else
                         			<i class="psi-fingerprint-2 icon-3x "></i>
                         		@endif

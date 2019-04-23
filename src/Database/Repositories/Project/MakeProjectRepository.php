@@ -207,6 +207,10 @@ class MakeProjectRepository
                     }
                 });
 
+                $requestedInfo->partner_id = json_encode(data_get($projectData, 'partner_id'));
+
+                $requestedInfo->role_id = json_encode(data_get($projectData, 'role_id'));
+
                 $requestedInfo->project_id = $this->projectModel->id;
 
                 $requestedInfo->save();

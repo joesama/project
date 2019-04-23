@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Joesama\Project\Database\Model\Master\MasterData;
+use Joesama\Project\Database\Model\Project\Client;
 use Joesama\Project\Database\Model\Project\ProjectInfo;
 use Joesama\Project\Database\Model\Project\ProjectInfoWorkflow;
 use Joesama\Project\Traits\HasAccessAs;
@@ -23,6 +24,17 @@ class ProjectUpdateWorkflowRepository
     public function projectInfo($id)
     {
         return ProjectInfo::component()->find($id);
+    }
+
+    /**
+     * Get Updated Client Info
+     *  
+     * @param  array  $clientId Client Id Enquiry
+     * @return Illuminate\Support\Collection
+     */
+    public function getClientUpdated(array $clientId)
+    {
+        return Client::whereIn('id',$clientId)->get();
     }
 
     /**
@@ -198,5 +210,28 @@ class ProjectUpdateWorkflowRepository
         $project->end = $infoProject->end;
 
         $project->save();
+
+        $project->profile()->detach();
+
+        collect(json_decode($infoProject->role_id))->each(function($profile, $key) use($project) {
+            $attr = explode('_', $key);
+            
+            $project->profile()->attach(
+                (int)$profile, 
+                [
+                    'step_id' => (int)$attr[0],
+                    'role_id' => (int)$attr[1],
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now()
+                ]
+            );
+        });
+
+        $partner = collect(json_decode($infoProject->partner_id))->mapWithKeys(function($map) {
+            return [ $map =>  ['created_at' => Carbon::now(), 'updated_at' => Carbon::now()] ];
+        });
+
+        $project->partner()->sync($partner);
+
     }
 } // END class ProjectInfoWorkflowRepository

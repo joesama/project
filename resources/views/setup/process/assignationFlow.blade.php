@@ -32,7 +32,7 @@
         	@endphp
         	@foreach($steps as $step)
         		@php
-					$fieldId = $step->get('cross').'_'. $step->get('role_id')  .'_'. $step->get('status_id');
+					$fieldId =  'role_id[' .$step->get('id') .'_'. $step->get('role_id') .']';
 				@endphp
 				<div class="form-group has-feedback">
 				    <label class="col-md-2 control-label text-semibold" for="{{ $fieldId }}">
@@ -45,7 +45,7 @@
 				    	<select class="selectpicker" name="{{ $fieldId }}" data-live-search="true" data-width="100%">
 				            <option value="">{{ __('joesama/project::form.is.choose') }}</option>
 				    		@foreach($step->get('profile_list') as $id => $option)
-				    			<option {{ (old($fieldId) == $id) ?  'selected':'' }} value="{{$id}}">
+				    			<option {{ (old($fieldId) == $id || data_get($step,'profile_assign.id') == $id) ?  'selected':'' }} value="{{$id}}">
 				    				{{ ucwords($option) }}
 				    			</option>
 				    		@endforeach

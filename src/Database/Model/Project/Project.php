@@ -280,6 +280,15 @@ class Project extends Model
     public function scopeComponent($query, string $type)
     {
         switch ($type) {
+            case 'simple':
+                return $query->with([
+                            'client',
+                            'corporate','partner','attributes',
+                            'manager','hsecard',
+                            'retention','lad','vo','issue','role',
+                            'physical','finance'
+                        ]);
+                break;
             case 'week':
                 return $query->with(['task'=> function($query) {
                             $query->with(['progress'=> function($query) {

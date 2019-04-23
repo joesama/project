@@ -64,7 +64,7 @@
                                 <td class="pl-2">
                                     {{ data_get($project,'client.name') }}&nbsp;
                                     <i class="text-bold text-danger psi-arrow-out-right"></i>
-                                    &nbsp;{{ data_get($infoProject,'client.name') }}
+                                    &nbsp;{{ data_get($client,'name') }}
                                 </td>
                             </tr>
                             <tr>
@@ -74,7 +74,7 @@
                                 <td class="pl-2">
                                     {{ data_get($project,'client.phone') }}&nbsp;
                                     <i class="text-bold text-danger psi-arrow-out-right"></i>
-                                    &nbsp;{{ data_get($infoProject,'client.phone') }}
+                                    &nbsp;{{ data_get($client,'phone') }}
                                 </td>
                             </tr>
                             <tr>
@@ -84,7 +84,7 @@
                                 <td class="pl-2">
                                     {{ data_get($project,'client.manager') }}&nbsp;
                                     <i class="text-bold text-danger psi-arrow-out-right"></i>
-                                    &nbsp;{{ data_get($infoProject,'client.manager') }}
+                                    &nbsp;{{ data_get($client,'manager') }}
                                 </td>
                             </tr>
                             <tr>
@@ -94,18 +94,18 @@
                                 <td class="pl-2">
                                     {{ data_get($project,'client.contact') }}&nbsp;
                                     <i class="text-bold text-danger psi-arrow-out-right"></i>
-                                    &nbsp;{{ data_get($infoProject,'client.contact') }}
+                                    &nbsp;{{ data_get($client,'contact') }}
                                 </td>
                             </tr>
                         </table>
-                        @forelse(data_get($project,'partner') as $index => $partner)
+                        @forelse(data_get($project,'partner') as $index => $oldpartner)
                         <table class="table table-bordered table-sm">
                             <tr>
                                 <td class="text-bold bg-primary text-light text-capitalize" style="width: 30%">
                                     {{ __('joesama/project::project.client.partner.name') }}  {{ ($index+1) }}
                                 </td>
                                 <td class="pl-2">
-                                    {{ data_get($partner,'name') }}
+                                    {{ data_get($oldpartner,'name') }}
                                 </td>
                             </tr>
                             <tr>
@@ -113,7 +113,7 @@
                                     {{ __('joesama/project::project.client.partner.tel') }}
                                 </td>
                                 <td class="pl-2">
-                                    {{ data_get($partner,'phone') }}
+                                    {{ data_get($oldpartner,'phone') }}
                                 </td>
                             </tr>
                             <tr>
@@ -121,7 +121,7 @@
                                     {{ __('joesama/project::project.client.partner.pm') }}
                                 </td>
                                 <td class="pl-2">
-                                    {{ data_get($partner,'manager') }}
+                                    {{ data_get($oldpartner,'manager') }}
                                 </td>
                             </tr>
                             <tr>
@@ -129,12 +129,12 @@
                                     {{ __('joesama/project::project.client.partner.contact') }}
                                 </td>
                                 <td class="pl-2">
-                                    {{ data_get($partner,'contact') }}
+                                    {{ data_get($oldpartner,'contact') }}
                                 </td>
                             </tr>
                         </table>
                         @empty
-                        <table class="table table-bordered table-sm">
+                        <table class="table table-bordered table-sm  mar-no">
                             <tr>
                                 <td class="text-bold bg-primary text-light text-capitalize" style="width: 30%">
                                     {{ __('joesama/project::project.client.partner.name') }}
@@ -161,6 +161,46 @@
                             </tr>
                         </table>
                         @endforelse
+                        @forelse($partner as $index => $sub)
+                        <div class="mar-no text-center text-2x">
+                            <i class="text-bold text-danger pli-arrow-down-2"></i>
+                        </div>
+                        <table class="table table-bordered table-sm">
+                            <tr>
+                                <td class="text-bold bg-primary text-light text-capitalize" style="width: 30%">
+                                    {{ __('joesama/project::project.client.partner.name') }}  {{ ($index+1) }}
+                                </td>
+                                <td class="pl-2">
+                                    {{ data_get($sub,'name') }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-bold bg-primary text-light text-capitalize">
+                                    {{ __('joesama/project::project.client.partner.tel') }}
+                                </td>
+                                <td class="pl-2">
+                                    {{ data_get($sub,'phone') }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-bold bg-primary text-light text-capitalize">
+                                    {{ __('joesama/project::project.client.partner.pm') }}
+                                </td>
+                                <td class="pl-2">
+                                    {{ data_get($sub,'manager') }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-bold bg-primary text-light text-capitalize">
+                                    {{ __('joesama/project::project.client.partner.contact') }}
+                                </td>
+                                <td class="pl-2">
+                                    {{ data_get($sub,'contact') }}
+                                </td>
+                            </tr>
+                        </table>
+                        @empty
+                        @endforelse
                     </div>
                     <div class="col-md-6 text-left">
                         <table class="table table-bordered table-sm">
@@ -171,7 +211,7 @@
                                 <td class="pl-2">
                                     RM {{ number_format(data_get($project,'value'),2) }}&nbsp;
                                     <i class="text-bold text-danger psi-arrow-out-right"></i>
-                                    &nbsp;{{ number_format(data_get($infoProject,'value'),2) }}
+                                    &nbsp;RM {{ number_format(data_get($infoProject,'value'),2) }}
                                 </td>
                             </tr>
                             <tr>
@@ -201,7 +241,7 @@
                                 <td class="pl-2">
                                     RM {{ number_format(data_get($project,'gp_propose'),2) }}&nbsp;
                                     <i class="text-bold text-danger psi-arrow-out-right"></i>
-                                    &nbsp;{{ number_format(data_get($infoProject,'gp_propose'),2) }}
+                                    &nbsp;RM {{ number_format(data_get($infoProject,'gp_propose'),2) }}
                                 </td>
                             </tr>
                             <tr>
@@ -211,7 +251,7 @@
                                 <td class="pl-2">
                                     RM {{ number_format(data_get($project,'gp_latest'),2) }}&nbsp;
                                     <i class="text-bold text-danger psi-arrow-out-right"></i>
-                                    &nbsp;{{ number_format(data_get($infoProject,'gp_latest'),2) }}
+                                    &nbsp;RM {{ number_format(data_get($infoProject,'gp_latest'),2) }}
                                 </td>
                             </tr>
                             <tr>
@@ -221,7 +261,7 @@
                                 <td class="pl-2">
                                     RM {{ number_format(data_get($project,'bond'),2) }}&nbsp;
                                     <i class="text-bold text-danger psi-arrow-out-right"></i>
-                                    &nbsp;{{ number_format(data_get($infoProject,'gp_latest'),2) }}
+                                    &nbsp;RM {{ number_format(data_get($infoProject,'bond'),2) }}
                                 </td>
                             </tr>
                             @foreach(data_get($project,'attributes') as $index => $attributes)
