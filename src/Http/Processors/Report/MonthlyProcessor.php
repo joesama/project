@@ -154,17 +154,44 @@ class MonthlyProcessor
 			data_get($project,'lad')
 		);
 
-		$hsecard = data_get($project,'hsecard');
-
-		$claim = $financialRepo->getSparklineData($claim,'claim_amount');
-
-		$payment = $financialRepo->getSparklineData($paid,'paid_amount');
+		$hsecard = $this->projectInfo->hseScore($project);
 
 		$vo = $financialRepo->getSparklineData($vo,'amount');
 
-		$retention = $financialRepo->getSparklineData($retention,'amount');
-
-		$lad = $financialRepo->getSparklineData($lad,'amount');
+		$paymentTrans = collect([
+			'claimTo' => $financialRepo->financialMapping(
+				$project,
+				'claim',
+				true,
+				'claim_date',
+				'claim_amount'
+			),
+			'paymentFrom' => $financialRepo->financialMapping(
+				$project,
+				'payment',
+				true,
+				'payment_date',
+				'paid_amount'
+			),
+			'retentionTo' => $financialRepo->financialMapping($project, 'retention'),
+			'ladby' => $financialRepo->financialMapping($project, 'lad'),
+			'claimBy' => $financialRepo->financialMapping(
+				$project,
+				'claim',
+				false,
+				'claim_date',
+				'claim_amount'
+			),
+			'paymentTo' => $financialRepo->financialMapping(
+				$project,
+				'payment',
+				false,
+				'payment_date',
+				'paid_amount'
+			),
+			'retentionBy' => $financialRepo->financialMapping($project, 'retention', false),
+			'ladto' => $financialRepo->financialMapping($project, 'lad', false)
+		]);
 
 		$taskTable = $listProcessor->task($request,$corporateId);
 
@@ -176,7 +203,7 @@ class MonthlyProcessor
 
 		$balanceSheet = $financialRepo->balanceSheet($project);
 
-		return compact('project','reportDue','reportStart','reportEnd','corporateId','projectId','workflow', 'paymentSchedule','projectSchedule', 'claim', 'payment', 'paid', 'vo', 'retention', 'lad', 'taskTable', 'issueTable', 'riskTable', 'policies', 'hsecard', 'balanceSheet');
+		return compact('project','reportDue','reportStart','reportEnd','corporateId','projectId','workflow', 'paymentSchedule','projectSchedule', 'claim', 'payment', 'paid', 'vo', 'paymentTrans', 'taskTable', 'issueTable', 'riskTable', 'policies', 'hsecard', 'balanceSheet');
 	}
 
 	/**
