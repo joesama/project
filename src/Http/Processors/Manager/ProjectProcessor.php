@@ -200,7 +200,7 @@ class ProjectProcessor
 
 			$partner = Client::whereNotIn('id',[$project->client_id])->pluck('name','id');
 
-			$subs = $project->partner->pluck('name','id');
+			$subs = $project->partner->pluck('id');
 		} else {
 			$partner = Client::pluck('name','id');
 

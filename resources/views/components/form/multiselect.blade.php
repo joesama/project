@@ -3,7 +3,7 @@
     <div class="col-md-10">
     	<select class="date-select2 form-validation" {{ ($required) ? 'required="TRUE"':'' }} id="{{ $fieldId }}" name="{{ $fieldId }}[]" data-width="100%" multiple="multiple" title="Choose one of the following...">
     		@foreach($optionList as $id => $option)
-    			<option value="{{$id}}">
+    			<option {{ $value->contains($id) ?  'selected':'' }}  value="{{$id}}">
     				{{ ucwords($option) }}
     			</option>
     		@endforeach
