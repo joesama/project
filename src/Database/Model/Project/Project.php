@@ -294,6 +294,9 @@ class Project extends Model
                             $query->with(['progress'=> function($query) {
                                 $query->whereNull('report_id');
                             }]);
+                            $query->whereHas('progress',function($query) {
+                                $query->whereNull('report_id');
+                            });
                         }])->with(['payment' => function($query) {
                             $query->whereNull('report_id');
                         }])->with(['plan'=> function($query) {
@@ -306,6 +309,9 @@ class Project extends Model
                             $query->with(['progress'=> function($query) {
                                 $query->whereNull('card_id');
                             }]);
+                            $query->whereHas('progress',function($query) {
+                                $query->whereNull('card_id');
+                            });
                         }])->with(['payment' => function($query) {
                             $query->whereNull('card_id');
                         }])->with(['plan'=> function($query) {
