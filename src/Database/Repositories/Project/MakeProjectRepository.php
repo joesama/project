@@ -203,6 +203,8 @@ class MakeProjectRepository
 
                 $requestedInfo->role_id = json_encode(data_get($projectData, 'role_id'));
 
+                $requestedInfo->remark = data_get($projectData, 'remark');
+
                 $requestedInfo->project_id = $this->projectModel->id;
 
                 $requestedInfo->save();

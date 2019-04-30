@@ -245,6 +245,10 @@ class ProjectProcessor
 				'joesama/project::setup.process.assignationFlow' => [ 'flow' => $processFlow->getMappedProcess() ]
 			]);
 		} else {
+			$form->extras([
+				'remark' => 'textarea',
+			]);
+
 			$form->appendView([
 				'joesama/project::setup.process.assignationFlow' => [ 'flow' => $processFlow->getAssignedFlowToProject($project, true) ]
 			]);

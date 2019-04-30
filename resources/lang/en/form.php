@@ -42,6 +42,7 @@ return [
 		'current_variance' => 'Current Variance',
 		'duration' => 'Project Duration',
 		'job_code' => 'Project Job Code',
+		'remark' => 'Remark',
 
 	],
 	'task' => [

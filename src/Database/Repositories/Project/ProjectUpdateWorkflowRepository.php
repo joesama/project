@@ -99,7 +99,7 @@ class ProjectUpdateWorkflowRepository
         $projectInfo->save();
 
         $workflow = new ProjectInfoWorkflow([
-            'remark' => 'Changes Project Information',
+            'remark' => $projectInfo->remark,
             'state' => $state ,
             'step_id' => data_get($initialAction, 'id') ,
             'profile_id' => data_get($initialAction, 'profile_assign.id')
