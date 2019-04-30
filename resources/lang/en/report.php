@@ -17,8 +17,8 @@ return [
 	],
 	'format' => [
 		'dept' => 'Department Name',
-		'weekly' => 'Week',
-		'monthly' => 'Month',
+		'weekly' => 'Report Week',
+		'monthly' => 'Report Month',
 		'through' => 'Through',
 		'company' => 'Company',
 		'title' => 'Project Title',

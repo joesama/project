@@ -37,7 +37,7 @@
         </div>
         @endif
         <div class="row mh-byrow">
-          <div class="col-md-4 text-right">
+          <div class="col-md-12 text-right">
             <div class="panel panel-dark panel-colorful">
                 <div class="pad-all text-left">
                     <p class="text-lg text-semibold">
@@ -88,10 +88,10 @@
             </div>
           </div>
           @php
-            $color = collect(['warning','mint','info','danger'])
+            $color = collect(['primary','mint','info','danger'])
           @endphp
           @foreach($paymentTrans as $key => $payTransaction)
-            <div class="col-md-4 text-right">
+            <div class="col-md-3 text-right">
               @includeIf('joesama/project::manager.project.part.sparkline',[
                 'title' => __('joesama/project::form.financial.'.$key),
                 'chartId' => $key,
@@ -104,12 +104,13 @@
               $color->splice(0,1,$arranger);
             @endphp
           @endforeach
-          <div class="col-md-4 text-right">
+          <div class="col-md-12 text-right">
             <div class="panel panel-{{ ($balanceSheet->get('balanceContract',0) > 0)  ? 'success' : 'danger' }} panel-colorful">
-                <div class="panel-body text-center pad-ver">
-                    <i class="pli-calculator icon-3x"></i>
-                </div>
                 <div class="pad-all text-left">
+                    <p class="text-lg text-semibold">
+                      <i class="pli-calculator icon-fw"></i> 
+                      {{ __('joesama/project::form.financial.balance') }}
+                    </p>
                     <p class="mar-no text-sm">
                       <span class="text-left text-bold">
                         <i class="fa fa-plus icon-fw"></i>
@@ -140,7 +141,7 @@
                     <p class="clearfix"></p>
                     <p class="mar-no text-lg bord-top pad-top">
                       <span class="text-left text-bold">
-                        
+                        TOTAL
                       </span>
                       <span class="pull-right text-semibold">
                         RM {{ number_format($balanceSheet->get('balanceContract',0),2) }}
@@ -177,7 +178,7 @@
                     <p class="clearfix"></p>
                     <p class="mar-no text-lg bord-top pad-top">
                       <span class="text-left text-bold">
-                        {{ __('joesama/project::form.financial.balance') }}
+                        TOTAL
                       </span>
                       <span class="pull-right text-semibold">
                         RM {{ number_format($balanceSheet->get('financialend',0),2) }}

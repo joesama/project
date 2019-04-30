@@ -95,33 +95,6 @@ class MakeProjectRepository
 
             if ($this->projectModel->active != 1) {
 
-                $projectData->except(['_token','files'])->diff($inputData)
-                ->each( function($profile, $identifier) use ($steps, $stepsAssign){
-
-                    $identifier = explode("_",$identifier);
-
-                    $cross = $identifier[0];
-
-                    $role = $identifier[1];
-
-                    $status = $identifier[2];
-
-                    $steps->where('role_id',$role)
-                        ->where('status_id',$status)
-                            ->where('cross_organisation',$cross)
-                                ->each( function($step) use ($stepsAssign, $profile, $role){
-
-                                    $stepsAssign->push([
-                                        $profile => [
-                                            'role_id' => intval($role), 
-                                            'step_id' => $step->id,
-                                            'created_at' => Carbon::now(),
-                                            'updated_at' => Carbon::now()
-                                        ]
-                                    ]);
-                                });
-                });
-
                 $inputData->each(function ($record, $field) {
                     if (!is_null($record)) {
                         if (in_array($field, ['start','end'])) :
@@ -180,6 +153,25 @@ class MakeProjectRepository
                     }
                 }
 
+                $partner = collect($projectData->get('partner_id'))->mapWithKeys(function($map) {
+                    return [ $map =>  ['created_at' => Carbon::now(), 'updated_at' => Carbon::now()] ];
+                });
+
+                $this->projectModel->partner()->sync($partner);
+
+                collect($projectData->get('role_id'))->each(function($profile, $key) {
+                    $attr = explode('_', $key);
+                    
+                    $this->projectModel->profile()->attach(
+                        (int)$profile, 
+                        [
+                            'step_id' => (int)$attr[0],
+                            'role_id' => (int)$attr[1],
+                            'created_at' => Carbon::now(),
+                            'updated_at' => Carbon::now()
+                        ]
+                    );
+                });
                 // Assign Role
                 $stepsAssign->each(function($step) {
                 	$this->projectModel->profile()->attach($step);
@@ -820,6 +812,7 @@ class MakeProjectRepository
             'claim_report_by'=> null,
             'claim_amount'=> null,
             'client_id'=> null,
+            'remark_claim'=> null,
         ]);
 
         DB::beginTransaction();
@@ -831,7 +824,8 @@ class MakeProjectRepository
                 'claim_date'=> Carbon::createFromFormat('d/m/Y', data_get($inputData, 'claim_date'))->toDateTimeString(),
                 'claim_amount'=> (float)data_get($inputData, 'claim_amount'),
                 'claim_report_by'=> (int)data_get($inputData, 'claim_report_by'),
-                'client_id'=> (int)data_get($inputData, 'client_id')
+                'client_id'=> (int)data_get($inputData, 'client_id'),
+                'remark_claim'=> data_get($inputData, 'remark_claim')
             ]);
 
             $this->projectModel->payment()->save($claim);
@@ -859,6 +853,7 @@ class MakeProjectRepository
             'paid_report_by'=> null,
             'reference'=> null,
             'client_id'=> null,
+            'remark_payment'=> null,
         ]);
 
         DB::beginTransaction();
@@ -870,6 +865,7 @@ class MakeProjectRepository
             $payment->paid_report_by = data_get($inputData, 'paid_report_by');
             $payment->reference = data_get($inputData, 'reference');
             $payment->client_id = data_get($inputData, 'client_id');
+            $payment->remark_payment = data_get($inputData, 'remark_payment');
             $payment->save();
 
             DB::commit();
@@ -917,6 +913,7 @@ class MakeProjectRepository
             'date'=> null,
             'report_by'=> null,
             'amount'=> null,
+            'remark'=> null
         ]);
 
         DB::beginTransaction();
@@ -928,6 +925,7 @@ class MakeProjectRepository
                 $vo = new ProjectVo([
                 'date'=> Carbon::createFromFormat('d/m/Y', data_get($inputData, 'date'))->toDateTimeString(),
                 'amount'=> data_get($inputData, 'amount'),
+                'remark'=> data_get($inputData, 'remark'),
                 'report_by'=> data_get($inputData, 'report_by'),
                 'client_id'=> data_get($this->projectModel, 'client_id')
                 ]);
@@ -937,6 +935,7 @@ class MakeProjectRepository
                 ProjectVo::find($id)->update([
                     'date'=> Carbon::createFromFormat('d/m/Y', data_get($inputData, 'date'))->toDateTimeString(),
                     'amount'=> data_get($inputData, 'amount'),
+                    'remark'=> data_get($inputData, 'remark'),
                     'report_by'=> data_get($inputData, 'report_by')
                 ]);
             }
@@ -987,6 +986,7 @@ class MakeProjectRepository
             'report_by'=> null,
             'amount'=> null,
             'client_id'=> null,
+            'remark'=> null
         ]);
 
         DB::beginTransaction();
@@ -998,6 +998,7 @@ class MakeProjectRepository
                 $vo = new ProjectRetention([
                 'date'=> Carbon::createFromFormat('d/m/Y', data_get($inputData, 'date'))->toDateTimeString(),
                 'amount'=> data_get($inputData, 'amount'),
+                'remark'=> data_get($inputData, 'remark'),
                 'report_by'=> data_get($inputData, 'report_by'),
                 'client_id'=> data_get($inputData, 'client_id')
                 ]);
@@ -1007,6 +1008,7 @@ class MakeProjectRepository
                 ProjectRetention::find($id)->update([
                     'date'=> Carbon::createFromFormat('d/m/Y', data_get($inputData, 'date'))->toDateTimeString(),
                     'amount'=> data_get($inputData, 'amount'),
+                    'remark'=> data_get($inputData, 'remark'),
                     'report_by'=> data_get($inputData, 'report_by'),
                     'client_id'=> data_get($inputData, 'client_id')
                 ]);
@@ -1058,6 +1060,7 @@ class MakeProjectRepository
             'report_by'=> null,
             'amount'=> null,
             'client_id'=> null,
+            'remark'=> null
         ]);
 
         DB::beginTransaction();
@@ -1069,6 +1072,7 @@ class MakeProjectRepository
                 $vo = new ProjectLad([
                 'date'=> Carbon::createFromFormat('d/m/Y', data_get($inputData, 'date'))->toDateTimeString(),
                 'amount'=> data_get($inputData, 'amount'),
+                'remark'=> data_get($inputData, 'remark'),
                 'report_by'=> data_get($inputData, 'report_by'),
                 'client_id'=> data_get($inputData, 'client_id')
                 ]);
@@ -1078,6 +1082,7 @@ class MakeProjectRepository
                 ProjectLad::find($id)->update([
                     'date'=> Carbon::createFromFormat('d/m/Y', data_get($inputData, 'date'))->toDateTimeString(),
                     'amount'=> data_get($inputData, 'amount'),
+                    'remark'=> data_get($inputData, 'remark'),
                     'report_by'=> data_get($inputData, 'report_by'),
                     'client_id'=> data_get($inputData, 'client_id')
                 ]);

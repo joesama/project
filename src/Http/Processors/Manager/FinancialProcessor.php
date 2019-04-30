@@ -158,12 +158,14 @@ class FinancialProcessor
 					'paid_date' 		=> 	null,
 					'paid_amount' 		=> 	null,
 					'reference' 		=> 	null,
+					'remark_payment' 		=> 	null,
 				])->extras([
+					'remark_claim' => 'textarea',
 					'client_id' => $dataQuery->get('client')->pluck('name','id')
 				])->default([
 					'claim_date' => $dataQuery->get('start')
 				])->id($projectId)
-				->required(['claim_date','claim_amount'])
+				->required(['claim_date','claim_amount','remark_claim'])
 				->renderForm(
 					__('joesama/project::'
 						.$request->segment(1).'.'
@@ -198,15 +200,18 @@ class FinancialProcessor
 					'paid_report_by' => $this->profile()->id,
 				])
 				->readonly([
-					'claim_amount','claim_date'
+					'claim_amount','claim_date','remark_claim'
+				])->excludes([
+					'remark_claim'
 				])->extras([
+					'remark_payment' => 'textarea',
 					'client_id' => $dataQuery->get('client')->pluck('name','id'),
 				])->default([
 					'paid_amount' => $dataQuery->get('amount'),
 					'paid_date' => $dataQuery->get('start')
 				])
 				->id($request->segment(6))
-				->required(['paid_date','paid_amount','client_id'])
+				->required(['paid_date','paid_amount','client_id','remark_payment'])
 				->renderForm(
 					__('joesama/project::'
 						.$request->segment(1).'.'
@@ -276,8 +281,9 @@ class FinancialProcessor
 				->mapping([
 					'project_id' => $request->segment(5),
 					'report_by' => auth()->id()
-				])
-				->id($request->segment(6))
+				])->extras([
+					'remark' => 'textarea'
+				])->id($request->segment(6))
 				->required(['*'])
 				->renderForm(
 					__('joesama/project::'
@@ -357,6 +363,7 @@ class FinancialProcessor
 					'project_id' => $projectId,
 					'report_by' => $this->profile()->id
 				])->extras([
+					'remark' => 'textarea',
 					'client_id' => $dataQuery->get('client')->pluck('name','id'),
 				])
 				->id($request->segment(6))
@@ -441,6 +448,7 @@ class FinancialProcessor
 					'project_id' => $request->segment(5),
 					'report_by' => $this->profile()->id
 				])->extras([
+					'remark' => 'textarea',
 					'client_id' => $dataQuery->get('client')->pluck('name','id'),
 				])
 				->id($request->segment(6))

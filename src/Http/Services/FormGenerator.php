@@ -326,6 +326,10 @@ class FormGenerator
 					if(in_array($key,collect($this->extras)->keys()->toArray())){
 						return 'select';
 					}
+
+					if(in_array($type,['multi'])){
+						return 'multiselect';
+					}
 				}
 			}
 

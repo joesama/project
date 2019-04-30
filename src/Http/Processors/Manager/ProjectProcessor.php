@@ -198,20 +198,31 @@ class ProjectProcessor
 		if ($request->segment(5)) {
 			$project = $this->projectInfo->getProject($request->segment(5));
 
+			$client = Client::whereNotIn('id',$project->partner->pluck('id'))->get()->mapWithKeys(function($client) {
+                    return [ $client->id =>   ucwords($client->name) . ' | ' . ucwords($client->manager) ];
+                });
+
 			$partner = Client::whereNotIn('id',[$project->client_id])->pluck('name','id');
 
 			$subs = $project->partner->pluck('id');
+
 		} else {
+			$client = Client::get()->mapWithKeys(function($client) {
+                    return [ $client->id =>   ucwords($client->name) . ' | ' . ucwords($client->manager) ];
+                });
+
 			$partner = Client::pluck('name','id');
 
 			$subs = collect([]);
 		}
 
+
+
 		$form = $this->formBuilder->newModelForm(
 					app(\Joesama\Project\Database\Model\Project\Project::class)
 				)
 				->option([
-					'client_id' => Client::pluck('name','id'),
+					'client_id' => $client,
 					'partner_id' => $partner
 				])
 				->mapping([
@@ -231,7 +242,7 @@ class ProjectProcessor
 
 		if (!$request->segment(5)) {
 			$form->appendView([
-				'joesama/project::setup.process.assignation' => [ 'flow' => $processFlow->formRoleListing() ]
+				'joesama/project::setup.process.assignationFlow' => [ 'flow' => $processFlow->getMappedProcess() ]
 			]);
 		} else {
 			$form->appendView([

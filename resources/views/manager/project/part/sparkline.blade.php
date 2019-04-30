@@ -4,7 +4,7 @@
           <i class="psi-coins icon-fw"></i> 
           {{ $title }}
         </p>
-        <p class="mar-no text-semibold">
+        <p class="mar-no pad-hor text-semibold bg-primary text-warning">
           {{ Carbon\Carbon::now()->localeMonth }} - {{ Carbon\Carbon::now()->format('Y') }}
           <span class="pull-right text-semibold">
             RM {{ number_format($transData->get('monthTrans'),2) }}
@@ -24,7 +24,7 @@
           </span>
         </p>
         @endforeach --}}
-        <p class="mar-no text-semibold">
+        <p class="mar-no pad-hor text-semibold">
           YTD - {{ Carbon\Carbon::now()->format('Y') }}
           <span class="pull-right text-semibold">
             RM {{ number_format($transData->get('ytd'),2) }}
@@ -44,7 +44,7 @@
           </span>
         </p>
         @endforeach --}}
-        <p class="mar-no text-semibold">
+        <p class="mar-no pad-hor text-semibold">
           TTD
           <span class="pull-right text-semibold">
             RM {{ number_format($transData->get('ttd'),2) }}

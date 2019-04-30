@@ -147,6 +147,16 @@ class ProcessFlowManager
      *
      * @return Illuminate\Support\Collection
      */
+    public function getMappedProcess() : Collection
+    {
+        return $this->mappedFlowProcess;
+    }
+
+    /**
+     * Get Steps Model
+     *
+     * @return Illuminate\Support\Collection
+     */
     public function getStepsModel() : Collection
     {
         return $this->flowProcess->pluck('steps')->flatten(1);

@@ -44,8 +44,8 @@ return [
 		'view' => "Project Attributes Information",
 	],
 	'hse' => [
-		'list' => "List Of Incident Reported",
-		'form' => "Report Incident",
+		'list' => "List Of Report",
+		'form' => "Report",
 		'view' => "Health & Safety Environment",
 	],
 	'workflow' => [

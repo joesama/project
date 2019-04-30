@@ -10,7 +10,9 @@
 	{
 		"master_id":16,
 		"master_code":"LTI",
-		"sub_types":[]
+		"sub_types":[
+			{ "code":"LTI1", "desc":"Lost Time Injury" }
+		]
 	},
 	{
 		"master_id":17,
