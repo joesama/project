@@ -52,6 +52,14 @@ class PartnerProcessor
 	 */
 	public function form(Request $request, int $corporateId)
 	{
+		$partner = Client::whereNotIn(
+			'id',
+			$this->modelObj->where('id',$request->segment(5))->pluck('client_id')
+		)->mapWithKeys(function($client) {
+		    return [ $client->id =>   ucwords($client->name) . ' | ' . ucwords($client->manager) ];
+		});
+
+
 		$form = $this->formBuilder
 				->newModelForm($this->modelObj)
 				->staticForm()
@@ -60,7 +68,7 @@ class PartnerProcessor
 						'corporate_id' => $request->segment(4)
 				])
 				->extras([
-					'partner_id' => Client::whereNotIn('id',$this->modelObj->where('id',$request->segment(5))->pluck('client_id'))->pluck('name','id')
+					'partner_id' => $partner
 				])
 				->id($request->segment(5))
 				->required(['*'])

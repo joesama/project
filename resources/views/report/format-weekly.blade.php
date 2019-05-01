@@ -7,11 +7,11 @@
 	</div>
 </div>
 <div class="row bord-hor bord-btm text-dark" style="page-break-after: auto;">
-	<div class="col-md-2 col-xs-2 text-center text-bold bord-rgt pad-all">
-		{{ strtoupper( __('joesama/project::report.format.dept') ) }}
+	<div class="col-md-2 col-xs-2 text-left text-bold bord-rgt pad-all">
+		{{ strtoupper( __('joesama/project::report.format.company') ) }}
 	</div>
-	<div class="col-md-5 col-xs-5 text-center text-semibold bord-rgt pad-all"> 
-		{{ __('joesama/project::report.format.mo') }}
+	<div class="col-md-5 col-xs-5 text-left text-semibold bord-rgt pad-all"> 
+		{{ ucwords( data_get($project,'corporate.name') ) }}
 	</div>
 	<div class="col-md-5 col-xs-5 text-center"> 
 		<div class="row bord-btm">
@@ -31,14 +31,6 @@
 				{{ $reportEnd->format('j M Y') }}
 			</div>
 		</div>
-	</div>
-</div>
-<div class="row bord-hor bord-btm bg-primary" style="page-break-after: auto;">
-	<div class="col-md-2 col-xs-2 text-left text-bold bord-rgt pad-all">
-		{{ strtoupper( __('joesama/project::report.format.company') ) }}
-	</div>
-	<div class="col-md-10 col-xs-10 text-left text-bold pad-all">
-		{{ ucwords( data_get($project,'corporate.name') ) }}
 	</div>
 </div>
 <div class="row bord-hor bord-btm bg-primary" style="page-break-after: auto;">
@@ -68,7 +60,7 @@
 <div class="row bord-hor bord-btm text-dark" style="page-break-after: auto;">
         <div class="col-md-10  col-xs-9 text-left text-thin pad-all">
                 {{ $task_number + 1 }}.&nbsp;
-                {{ ucwords(data_get($task,'name')) }}
+                {{ ucwords(strip_tags(data_get($task,'name'))) }}
                 <br>
                 <span class="text-muted">
                         &nbsp;&nbsp;{{ ucwords(strip_tags(data_get($task,'description'))) }}

@@ -202,16 +202,17 @@ class ProjectProcessor
                     return [ $client->id =>   ucwords($client->name) . ' | ' . ucwords($client->manager) ];
                 });
 
-			$partner = Client::whereNotIn('id',[$project->client_id])->pluck('name','id');
+			$partner = Client::whereNotIn('id',[$project->client_id])->get()
+			->mapWithKeys(function($client) {
+				return [ $client->id =>   ucwords($client->name) . ' | ' . ucwords($client->manager) ];
+			});
 
 			$subs = $project->partner->pluck('id');
 
 		} else {
-			$client = Client::get()->mapWithKeys(function($client) {
+			$partner = $client = Client::get()->mapWithKeys(function($client) {
                     return [ $client->id =>   ucwords($client->name) . ' | ' . ucwords($client->manager) ];
                 });
-
-			$partner = Client::pluck('name','id');
 
 			$subs = collect([]);
 		}

@@ -120,11 +120,11 @@ return [
 		'contact' => 'Contact Number',
 	],
 	'project_incident' => [
-		'incident_id' => 'Type Of Incident',
+		'incident_id' => 'Type Of Report',
 		'incident' => 'Hours / Hours Lost or Quantity',
 		'last' => 'Reported Date',
 		'report' => 'Reported By',
-		'incident_date' => 'Date Incident',
+		'incident_date' => 'Date Of Report',
 		'date' => 'Date Reported'
 	],
 	'project_hse' => [
