@@ -1,6 +1,44 @@
 @extends('joesama/entree::layouts.content')
 @push('content.style')
 <link href="https://naver.github.io/billboard.js/release/latest/dist/billboard.min.css" rel="stylesheet">
+<style type="text/css">
+.panel-FFE4B5 {
+  background-color: #FFE4B5;
+  color: #fff;
+  border-color: #3a444e;
+}
+
+.panel-40E0D0 {
+  background-color: #40E0D0;
+  color: #fff;
+  border-color: #3a444e;
+}
+
+.panel-7B68EE {
+  background-color: #7B68EE;
+  color: #fff;
+  border-color: #3a444e;
+}
+
+.panel-EE82EE {
+  background-color: #EE82EE;
+  color: #fff;
+  border-color: #3a444e;
+}
+
+.panel-CD853F {
+  background-color: #CD853F;
+  color: #fff;
+  border-color: #3a444e;
+}
+
+.panel-87CEFA {
+  background-color: #87CEFA;
+  color: #fff;
+  border-color: #3a444e;
+}
+
+</style>
 @endpush
 @section('content')
 

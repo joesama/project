@@ -198,9 +198,12 @@ class FinancialRepository
 
         $balanceContract = (float)(($contract + $voo + $rententionTo) - $paymentIn - $ladBy);
 
+        $claimtoclient = (float)(($contract + $voo + $rententionTo) - $paymentIn);
+
         $financialend = (float)(($balanceContract - $paymentOut - $rententionBy) + $ladTo);
 
         return collect([
+            'claimtoclient' => $claimtoclient,
             'balanceContract' => $balanceContract,
             'financialend' => $financialend,
             'paymentIn' => $paymentIn,

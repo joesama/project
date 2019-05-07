@@ -76,7 +76,8 @@
                         RM {{ number_format($vo->get('ttd'),2) }}
                       </span>
                     </p>
-                    <p class="mar-no text-semibold">
+                    <p class="clearfix"></p>
+                    <p class="mar-no text-lg bord-top pad-top">
                       <span class="text-left text-bold">
                         {{ __('joesama/project::form.financial.revise') }}
                       </span>
@@ -129,7 +130,7 @@
                         RM {{ number_format($balanceSheet->get('paymentIn',0),2) }}
                       </span>
                     </p>
-                    <p class="mar-no text-sm">
+{{--                     <p class="mar-no text-sm">
                       <span class="text-left text-bold">
                         <i class="fa fa-minus icon-fw text-danger"></i>
                         {{ __('joesama/project::form.financial.ladby') }}
@@ -137,17 +138,17 @@
                       <span class="pull-right text-semibold">
                         RM {{ number_format($balanceSheet->get('ladBy',0),2) }}
                       </span>
-                    </p>
+                    </p> --}}
                     <p class="clearfix"></p>
                     <p class="mar-no text-lg bord-top pad-top">
                       <span class="text-left text-bold">
                         TOTAL
                       </span>
                       <span class="pull-right text-semibold">
-                        RM {{ number_format($balanceSheet->get('balanceContract',0),2) }}
+                        RM {{ number_format($balanceSheet->get('claimtoclient',0),2) }}
                       </span>
                     </p>
-                    <p class="clearfix"></p>
+{{--                     <p class="clearfix"></p>
                     <p class="mar-no text-sm">
                       <span class="text-left text-bold">
                         <i class="fa fa-minus icon-fw text-danger"></i>
@@ -182,7 +183,7 @@
                       </span>
                       <span class="pull-right text-semibold">
                         RM {{ number_format($balanceSheet->get('financialend',0),2) }}
-                      </span>
+                      </span> --}}
                     </p>
                 </div>
             </div>

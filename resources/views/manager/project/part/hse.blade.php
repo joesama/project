@@ -39,7 +39,9 @@
               </div>
             </div>
             @endif
-            
+            @php
+              $color = collect(['FFE4B5','40E0D0','7B68EE','EE82EE','CD853F','87CEFA'])
+            @endphp
             @foreach($hsecard as $hse)
               @includeIf('joesama/project::manager.project.part.card-panel2',[
                   'id' => $hse['code'],
@@ -47,8 +49,13 @@
                   'total' => $hse['total'],
                   'month' => $hse['month'],
                   'sub' => $hse['subdata'],
+                  'background' => $color->first(),
                 ])
-            @endforeach()
+              @php
+                $arranger = $color->slice(1,$color->count())->push($color->first())->toArray();
+                $color->splice(0,1,$arranger);
+              @endphp
+            @endforeach
           @endif
       </div>
     </div>

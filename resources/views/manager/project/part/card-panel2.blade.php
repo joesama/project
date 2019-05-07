@@ -6,7 +6,7 @@
   <div class="row mar-top">
         <div class="{{ $sub ? 'col-sm-5' : 'col-sm-12' }}">
             <div class="panel">
-                <div class="pad-all bg-mint text-center">
+                <div class="pad-all panel-{{$background}} panel-colorful text-center">
                     <div id="{{ $id }}" data-percent="{{ $total ?? 0 }}" class="pie-title-center">
                         <span class="  pie-value">
                             {{ $total ?? 0 }}

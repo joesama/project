@@ -1,6 +1,6 @@
 <div class="row bord-all">
 	<div class="col-md-2 col-xs-2 bord-rgt text-center ">
-		<img class="pad-no img-lg" src="{{ asset('packages/joesama/project/img/kub.png') }}">
+		<img class="pad-no img-lg" src="{{ asset(asset(memorize('joesama.logo','packages/joesama/project/img/kub.png'))) }}">
 	</div>
 	<div class="col-md-10 col-xs-10 text-center text-bold text-3x text-dark pad-all"> 
 			{{ __('joesama/project::report.'.request()->segment(2).'.form') }}
