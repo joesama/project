@@ -184,6 +184,8 @@ class FinancialRepository
 
         $paymentIn = data_get($project, 'payment')->where('client_id', $clientId)->sum('paid_amount');
 
+        $claimAmount = data_get($project, 'payment')->where('client_id', $clientId)->sum('claim_amount');
+
         $paymentOut = data_get($project, 'payment')->whereNotIn('client_id', [$clientId])->sum('paid_amount');
 
         $voo = data_get($project, 'vo')->sum('amount');
@@ -198,11 +200,12 @@ class FinancialRepository
 
         $balanceContract = (float)(($contract + $voo + $rententionTo) - $paymentIn - $ladBy);
 
-        $claimtoclient = (float)(($contract + $voo + $rententionTo) - $paymentIn);
+        $claimtoclient = (float)(($contract + $voo ) - $claimAmount);
 
         $financialend = (float)(($balanceContract - $paymentOut - $rententionBy) + $ladTo);
 
         return collect([
+            'claimAmount' => $claimAmount,
             'claimtoclient' => $claimtoclient,
             'balanceContract' => $balanceContract,
             'financialend' => $financialend,

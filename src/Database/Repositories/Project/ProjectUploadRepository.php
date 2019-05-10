@@ -70,7 +70,7 @@ class ProjectUploadRepository
 	{
 		return ProjectUpload::whereHas('project',function($query) use($corporateId, $projectId){
 			$query->sameGroup($corporateId);
-		})->where('project_id',$projectId)->paginate();
+		})->where('project_id',$projectId)->orderBy('created_at','desc')->paginate();
 	}
 
 	/**

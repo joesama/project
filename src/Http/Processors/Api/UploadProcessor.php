@@ -90,7 +90,9 @@ class UploadProcessor
 	{
 		$file = $this->uploadRepository->getFileUploaded($request->segment(6));
 
-		return Storage::download($file->path);
+		$path = str_replace('storage','public',$file->path);
+
+		return Storage::download($path);
 	}
 
 } // END class MakeProjectProcessor 

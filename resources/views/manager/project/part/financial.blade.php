@@ -112,7 +112,7 @@
                       <i class="pli-calculator icon-fw"></i> 
                       {{ __('joesama/project::form.financial.balance') }}
                     </p>
-                    <p class="mar-no text-sm">
+  {{--                   <p class="mar-no text-sm">
                       <span class="text-left text-bold">
                         <i class="fa fa-plus icon-fw"></i>
                         {{ __('joesama/project::form.financial.retentionTo') }}
@@ -120,14 +120,14 @@
                       <span class="pull-right text-semibold">
                         RM {{ number_format($balanceSheet->get('rententionTo',0),2) }}
                       </span>
-                    </p>
-                    <p class="mar-no text-sm">
+                    </p> --}}
+                    <p class="mar-no text-semibold">
                       <span class="text-left text-bold">
                         <i class="fa fa-minus icon-fw text-danger"></i>
-                        {{ __('joesama/project::form.financial.paymentFrom') }}
+                        {{ __('joesama/project::form.financial.claimTo') }}
                       </span>
                       <span class="pull-right text-semibold">
-                        RM {{ number_format($balanceSheet->get('paymentIn',0),2) }}
+                        RM {{ number_format($balanceSheet->get('claimAmount',0),2) }}
                       </span>
                     </p>
 {{--                     <p class="mar-no text-sm">
