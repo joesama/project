@@ -11,6 +11,7 @@ use Joesama\Project\Database\Repositories\Project\ReportCardInfoRepository;
 use Joesama\Project\Http\Processors\Manager\ListProcessor;
 use Joesama\Project\Http\Services\ProcessFlowManager;
 use Joesama\Project\Traits\HasAccessAs;
+use Joesama\Project\Traits\ProjectCalculator;
 
 /**
  * Client Record 
@@ -20,7 +21,7 @@ use Joesama\Project\Traits\HasAccessAs;
  **/
 class MonthlyProcessor 
 {
-	use HasAccessAs;
+	use HasAccessAs, ProjectCalculator;
 	
 	private $project, $reportCard;
 
@@ -92,15 +93,17 @@ class MonthlyProcessor
 
 		$projectDate = Carbon::parse($project->start);
 
-		$reportDue = Carbon::now()->format('m');
+		$today = Carbon::now();
 
-        $startOfMonth = Carbon::now()->startOfMonth();
+		$reportDue = $this->calculateMonth($today, $projectDate);
+
+        $startOfMonth = $today->startOfMonth();
 
         $startOfMonth = $projectDate->greaterThan($startOfMonth) ? $projectDate : $startOfMonth;
 
         $reportStart = ($report) ? Carbon::parse($report->report_date) : $startOfMonth;
 
-        $endOfMonth = Carbon::now()->endOfMonth();
+        $endOfMonth = $today->clone()->endOfMonth();
 
         $endOfMonth = $projectDate->greaterThan(Carbon::now()->startOfMonth()) ? $projectDate->clone()->endOfMonth() : $endOfMonth;
 
@@ -120,43 +123,9 @@ class MonthlyProcessor
 
 		$projectEnd = $reportEnd->format('Y-m-d');
 
-		$claim = $financialRepo->projectComponentTransaction(
-			$projectStart,
-			$projectEnd,
-			data_get($project,'claim'),
-			'claim_date',
-			'claim_amount'
-		);
-
-		$paid = $financialRepo->projectComponentTransaction(
-			$projectStart,
-			$projectEnd,
-			data_get($project,'payment'),
-			'payment_date',
-			'paid_amount'
-		);
-
-		$vo = $financialRepo->projectComponentTransaction(
-			$projectStart,
-			$projectEnd,
-			data_get($project,'vo')
-		);
-
-		$retention = $financialRepo->projectComponentTransaction(
-			$projectStart,
-			$projectEnd,
-			data_get($project,'retention')
-		);
-
-		$lad = $financialRepo->projectComponentTransaction(
-			$projectStart,
-			$projectEnd,
-			data_get($project,'lad')
-		);
-
 		$hsecard = $this->projectInfo->hseScore($project);
 
-		$vo = $financialRepo->getSparklineData($vo,'amount');
+		$vo = $financialRepo->financialMapping($project,'vo');
 
 		$paymentTrans = collect([
 			'claimTo' => $financialRepo->financialMapping(
@@ -203,7 +172,17 @@ class MonthlyProcessor
 
 		$balanceSheet = $financialRepo->balanceSheet($project);
 
-		return compact('project','reportDue','reportStart','reportEnd','corporateId','projectId','workflow', 'paymentSchedule','projectSchedule', 'claim', 'payment', 'paid', 'vo', 'paymentTrans', 'taskTable', 'issueTable', 'riskTable', 'policies', 'hsecard', 'balanceSheet');
+        $lastAction = collect(data_get($report, 'workflow'))
+        ->where('state', strtolower(data_get($workflow,'last.status')))
+        ->where('profile_id', strtolower(data_get($workflow,'last.profile_assign.id')));
+
+        $printed = $lastAction->count();
+
+        if ($request->get('print') == true) {
+            dd($request->get('print'));
+        }
+
+		return compact('project','reportDue','reportStart','reportEnd','reportId','corporateId','projectId','workflow', 'paymentSchedule','projectSchedule', 'claim', 'payment', 'paid', 'vo', 'paymentTrans', 'taskTable', 'issueTable', 'riskTable', 'policies', 'hsecard', 'balanceSheet', 'printed');
 	}
 
 	/**

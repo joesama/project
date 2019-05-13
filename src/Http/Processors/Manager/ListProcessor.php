@@ -235,7 +235,7 @@ class ListProcessor
 
         $action = [
           [ 'action' => trans('joesama/vuegrid::datagrid.buttons.edit') , // Action Description
-              'url' => handles('joesama/project::manager/project/view/'.$corporateId.'/'.$projectId), // URL for action
+              'url' => handles('joesama/project::report/monthly/form/'.$corporateId.'/'.$projectId), // URL for action
               'icons' => 'psi-file-edit icon', // Icon for action : optional
               'key' => 'id'  ]
         ];

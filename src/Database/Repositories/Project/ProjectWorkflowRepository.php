@@ -91,9 +91,9 @@ class ProjectWorkflowRepository
             $type = $workflow->get('type');
 
             if (!is_null($approval->nextby)) {
-                $project->profile->groupBy('id')->each(function ($profile) use ($project, $approval, $state, $type) {
-                    $profile->first()->sendActionNotification($project, $approval, $type, 'warning');
-                });
+                // $project->profile->groupBy('id')->each(function ($profile) use ($project, $approval, $state, $type) {
+                    $approval->nextby->sendActionNotification($project, $approval, $type, 'warning');
+                // });
             } else {
                 $approval->creator->sendActionNotification($project, $approval, $type);
             }
@@ -150,9 +150,9 @@ class ProjectWorkflowRepository
             $project->save();
 
             if (!is_null($approval->nextby)) {
-                $project->profile->groupBy('id')->each(function ($profile) use ($project, $approval, $request) {
-                    $profile->first()->sendActionNotification($project, $approval, $request->get('type'), 'warning');
-                });
+                // $project->profile->groupBy('id')->each(function ($profile) use ($project, $approval, $request) {
+                    $approval->nextby->sendActionNotification($project, $approval, $request->get('type'), 'warning');
+                // });
             } else {
                 $approval->creator->sendActionNotification($project, $approval, $request->get('type'));
             }

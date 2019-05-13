@@ -8,6 +8,7 @@ use Joesama\Project\Database\Repositories\Project\ReportCardInfoRepository;
 use Joesama\Project\Http\Processors\Manager\ListProcessor;
 use Joesama\Project\Http\Services\ProcessFlowManager;
 use Joesama\Project\Traits\HasAccessAs;
+use Joesama\Project\Traits\ProjectCalculator;
 use Barryvdh\DomPDF\Facade as PDF;
 
 /**
@@ -18,7 +19,7 @@ use Barryvdh\DomPDF\Facade as PDF;
  **/
 class WeeklyProcessor
 {
-    use HasAccessAs;
+    use HasAccessAs, ProjectCalculator;
     
     private $reportCard;
 
@@ -88,15 +89,17 @@ class WeeklyProcessor
 
         $projectDate = Carbon::parse($project->start);
 
-        $reportDue = Carbon::now()->weekOfYear - $projectDate->weekOfYear;
+        $today = Carbon::now();
 
-        $startOfWeek = Carbon::now()->startOfWeek();
+        $reportDue = $this->calculateWeek($today, $projectDate); 
+
+        $startOfWeek = $today->startOfWeek();
 
         $startOfWeek = $projectDate->greaterThan($startOfWeek) ? $projectDate : $startOfWeek;
 
         $reportStart = ($report) ? Carbon::parse($report->report_date) : $startOfWeek;
 
-        $endOfWeek = Carbon::now()->endOfWeek();
+        $endOfWeek = $today->clone()->endOfWeek();
 
         $endOfWeek = $projectDate->greaterThan(Carbon::now()->startOfWeek()) ? $projectDate->clone()->endOfWeek() : $endOfWeek;
 
@@ -106,7 +109,11 @@ class WeeklyProcessor
 
         $reportInit = $projectDate->isLastWeek() || $projectDate->lessThan(Carbon::now()->isLastWeek()) ? 1 : 0;
 
-        $printed = collect(data_get($report, 'workflow'))->where('state', 'accepted')->count();
+        $lastAction = collect(data_get($report, 'workflow'))
+        ->where('state', strtolower(data_get($workflow,'last.status')))
+        ->where('profile_id', strtolower(data_get($workflow,'last.profile_assign.id')));
+
+        $printed = $lastAction->count();
 
         $params = compact('project', 'reportDue', 'reportStart', 'reportEnd', 'corporateId', 'projectId', 'workflow', 'printed', 'reportId');
 

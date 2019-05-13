@@ -165,10 +165,9 @@ class ProjectUpdateWorkflowRepository
             }
 
             if (!is_null($projectInfo->nextby)) {
-                // $projectInfo->nextby->sendActionNotification($projectInfo->project,$projectInfo,'info');
-                $projectInfo->project->profile->groupBy('id')->each(function ($profile) use ($projectInfo, $type) {
-                    $profile->first()->sendActionNotification($projectInfo->project, $projectInfo, $type, 'warning');
-                });
+                // $projectInfo->project->profile->groupBy('id')->each(function ($profile) use ($projectInfo, $type) {
+                    $projectInfo->nextby->sendActionNotification($projectInfo->project, $projectInfo, $type, 'warning');
+                // });
             } else {
                 $projectInfo->creator->sendActionNotification($projectInfo->project, $projectInfo, $type, 'success');
             }

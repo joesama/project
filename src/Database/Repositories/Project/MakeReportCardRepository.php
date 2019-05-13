@@ -60,6 +60,10 @@ class MakeReportCardRepository
 
             $report->state = (string)$request->get('state');
 
+            if ($request->get('need_action') == null) {
+                $report->approved = Carbon::now();
+            }
+            
             $report->save();
 
             if ($request->get('need_action') == null) {
@@ -80,9 +84,9 @@ class MakeReportCardRepository
             $project = $report->project;
 
             if (!is_null($report->nextby)) {
-                $project->profile->groupBy('id')->each(function ($profile) use ($project, $report, $request) {
-                    $profile->first()->sendActionNotification($project, $report, $request->get('type'), 'warning');
-                });
+                // $project->profile->groupBy('id')->each(function ($profile) use ($project, $report, $request) {
+                    $report->nextby->sendActionNotification($project, $report, $request->get('type'), 'warning');
+                // });
             } else {
                 $report->creator->sendActionNotification($project, $report, $request->get('type'));
             }
@@ -133,6 +137,10 @@ class MakeReportCardRepository
 
             $report->state = (string)$request->get('state');
 
+            if ($request->get('need_action') == null) {
+                $report->approved = Carbon::now();
+            }
+
             $report->save();
 
             if ($request->get('need_action') == null) {
@@ -153,9 +161,9 @@ class MakeReportCardRepository
             $project = $report->project;
 
             if (!is_null($report->nextby)) {
-                $project->profile->groupBy('id')->each(function ($profile) use ($project, $report, $request) {
-                    $profile->first()->sendActionNotification($project, $report, $request->get('type'), 'warning');
-                });
+                // $project->profile->groupBy('id')->each(function ($profile) use ($project, $report, $request) {
+                    $report->nextby->sendActionNotification($project, $report, $request->get('type'), 'warning');
+                // });
             } else {
                 $report->creator->sendActionNotification($project, $report, $request->get('type'));
             }

@@ -23,6 +23,30 @@ trait ProjectCalculator{
 	}
 
 	/**
+	 * Calculate week different
+	 * 
+	 * @param  [type] $startDate [description]
+	 * @param  [type] $endDate   [description]
+	 * @return [type]            [description]
+	 */
+	public function calculateWeek($startDate, $endDate)
+	{
+		return $startDate->clone()->addWeek()->diffInWeeks($endDate->clone()->startOfWeek());
+	}
+
+	/**
+	 * Calculate month different
+	 * 
+	 * @param  [type] $startDate [description]
+	 * @param  [type] $endDate   [description]
+	 * @return [type]            [description]
+	 */
+	public function calculateMonth($startDate, $endDate)
+	{
+		return $startDate->clone()->addMonth()->diffInMonths($endDate->clone()->startOfMonth());
+	}
+
+	/**
 	 * Create Amount Formate to nearest billion
 	 * 
 	 * @param  $sumValue
