@@ -65,7 +65,7 @@ class ProjectServiceProvider extends ModuleServiceProvider
      * @var array
      */
     protected $routeMiddleware = [
-        // 
+        Orchestra\Messages\Http\Middleware\StoreMessageBag::class
     ];
 
     /**
@@ -75,17 +75,6 @@ class ProjectServiceProvider extends ModuleServiceProvider
      */
     public function register()
     {
-
-    }
-
-   /**
-     * {@inheritdoc}
-     */
-    public function boot()
-    {
-        $this->bootExtensionComponents();
-
-        parent::boot();
     }
 
     /**
@@ -119,5 +108,4 @@ class ProjectServiceProvider extends ModuleServiceProvider
 
         $this->loadFrontendRoutesFrom($path.'/routes.php');
     }
-
 } // END class Entree

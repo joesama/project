@@ -1,5 +1,5 @@
 <?php
-namespace Joesama\Project\Database\Repositories\Project; 
+namespace Joesama\Project\Database\Repositories\Project;
 
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
@@ -13,223 +13,208 @@ use Joesama\Project\Database\Model\Project\PhysicalProgress;
 use Joesama\Project\Database\Model\Project\Project;
 use Joesama\Project\Database\Model\Project\TagMilestone;
 
-
 /**
  * undocumented class
  *
  * @package default
- * @author 
+ * @author
  **/
-class MilestoneRepository 
+class MilestoneRepository
 {
-	private $physicalObj, $financialObj;
+    private $physicalObj;
+    private $financialObj;
 
-	function __construct(
-		PhysicalMilestone $physicalObj,
-		FinanceMilestone $financialObj
-	)
-	{
-		$this->physicalObj = $physicalObj;
-		$this->financialObj = $financialObj;
-	}
+    public function __construct(
+        PhysicalMilestone $physicalObj,
+        FinanceMilestone $financialObj
+    ) {
+        $this->physicalObj = $physicalObj;
+        $this->financialObj = $financialObj;
+    }
 
 
-	/**
-	 * Physical Progress List
-	 * 
-	 * @param  int    $corporateId [description]
-	 * @param  int    $projectId   [description]
-	 * @return Paginate
-	 */
-	public function physicalList(int $corporateId, int $projectId )
-	{
-		return $this->physicalObj->where('project_id',$projectId)->paginate();
-	}
+    /**
+     * Physical Progress List
+     *
+     * @param  int    $corporateId [description]
+     * @param  int    $projectId   [description]
+     * @return Paginate
+     */
+    public function physicalList(int $corporateId, int $projectId)
+    {
+        return $this->physicalObj->where('project_id', $projectId)->paginate();
+    }
 
-	/**
-	 * Physical Progress List
-	 * 
-	 * @param  int    $corporateId [description]
-	 * @param  int    $projectId   [description]
-	 * @return Paginate
-	 */
-	public function financeList(int $corporateId, int $projectId )
-	{
-		return $this->financialObj->where('project_id',$projectId)->paginate();
-	}
+    /**
+     * Physical Progress List
+     *
+     * @param  int    $corporateId [description]
+     * @param  int    $projectId   [description]
+     * @return Paginate
+     */
+    public function financeList(int $corporateId, int $projectId)
+    {
+        return $this->financialObj->where('project_id', $projectId)->paginate();
+    }
 
-	/**
-	 * Manage Progress Milestone
-	 * 
-	 * @param  Collection $request   	HTTP Request
-	 * @param  int        $projectId 	Project Id
-	 * @param  int|null   $milestoneId 	Milestone ID
-	 * @return PhysicalMilestone
-	 */
-	public function physicalMilestone(Collection $request, int $projectId, ?int $milestoneId)
-	{
-		$inputData = collect($request)->intersectByKeys([
-		    'planned' => 0,
-		    'actual' => 0
-		]);
+    /**
+     * Manage Progress Milestone
+     *
+     * @param  Collection $request      HTTP Request
+     * @param  int        $projectId    Project Id
+     * @param  int|null   $milestoneId  Milestone ID
+     * @return PhysicalMilestone
+     */
+    public function physicalMilestone(Collection $request, int $projectId, ?int $milestoneId)
+    {
+        $inputData = collect($request)->intersectByKeys([
+            'planned' => 0,
+            'actual' => 0
+        ]);
 
-		DB::beginTransaction();
+        DB::beginTransaction();
 
-		try{
-			if(!is_null($milestoneId)){
-				$this->physicalObj = $this->physicalObj->find($milestoneId);
-			}
+        try {
+            if (!is_null($milestoneId)) {
+                $this->physicalObj = $this->physicalObj->find($milestoneId);
+            }
 
-			$inputData->each(function($record,$field){
-				if(!is_null($record)){
-					$this->physicalObj->{$field} = $record;
-				}
-			});
+            $inputData->each(function ($record, $field) {
+                if (!is_null($record)) {
+                    $this->physicalObj->{$field} = $record;
+                }
+            });
 
-			if($milestoneId == null){
-				$this->physicalObj->project_id = $projectId;
-				$this->physicalObj->label = $request->get('label');
-				$this->physicalObj->progress_date = Carbon::createFromFormat('d/m/Y',$request->get('progress_date'))->format('Y-m-d');
+            if ($milestoneId == null) {
+                $this->physicalObj->project_id = $projectId;
+                $this->physicalObj->label = $request->get('label');
+                $this->physicalObj->progress_date = Carbon::createFromFormat('d/m/Y', $request->get('progress_date'))->format('Y-m-d');
 
-				$this->financialObj->project_id = $projectId;
-				$this->financialObj->label = $request->get('label');
-				$this->financialObj->progress_date = Carbon::createFromFormat('d/m/Y',$request->get('progress_date'))->format('Y-m-d');
-				$this->financialObj->save();
-
-			}
+                $this->financialObj->project_id = $projectId;
+                $this->financialObj->label = $request->get('label');
+                $this->financialObj->progress_date = Carbon::createFromFormat('d/m/Y', $request->get('progress_date'))->format('Y-m-d');
+                $this->financialObj->save();
+            }
       
-			$this->physicalObj->save();
+            $this->physicalObj->save();
 
-			$projectValue = $this->physicalObj->project->value;
+            $projectValue = $this->physicalObj->project->value;
 
-			$financial = $this->financialObj->where('project_id',$projectId)
-											->where('progress_date',$this->physicalObj->progress_date)
-											->first();
+            $financial = $this->financialObj->where('project_id', $projectId)
+                                            ->where('progress_date', $this->physicalObj->progress_date)
+                                            ->first();
 
-			$financial->planned = round(($this->physicalObj->planned/100)*$projectValue,2);
+            $financial->planned = round(($this->physicalObj->planned/100)*$projectValue, 2);
 
-			$actual = $request->get('actual');
+            $actual = $request->get('actual');
 
-			if($actual != null){
-				$actualAmount = round(($actual/100)*$projectValue,2);
+            if ($actual != null) {
+                $actualAmount = round(($actual/100)*$projectValue, 2);
 
-				$financial->actual = $actualAmount;
-			}
+                $financial->actual = $actualAmount;
+            }
 
-			$financial->save();
+            $financial->save();
 
-			if($actual != null){
+            if ($actual != null) {
+                $this->physicalObj->progress()->save(new PhysicalProgress([
+                    'progress' => $this->physicalObj->planned
+                ]));
 
-				$this->physicalObj->progress()->save(new PhysicalProgress([
-					'progress' => $this->physicalObj->planned
-				]));
+                $financial->progress()->save(new FinanceProgress([
+                    'progress' => $financial->actual
+                ]));
+            }
 
-				$financial->progress()->save(new FinanceProgress([
-					'progress' => $financial->actual
-				]));
+            DB::commit();
 
-			}
+            return $this->physicalObj;
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage(), 1);
+            DB::rollback();
+        }
+    }
 
-			DB::commit();
+    /**
+     * Manage Progress Milestone
+     *
+     * @param  Collection $request      HTTP Request
+     * @param  int        $projectId    Project Id
+     * @param  int|null   $milestoneId  Milestone ID
+     * @return PhysicalMilestone
+     */
+    public function financialMilestone(Collection $request, int $projectId, ?int $milestoneId)
+    {
+        $inputData = collect($request)->intersectByKeys([
+            'planned' => 0,
+            'actual' => 0
+        ]);
 
-			return $this->physicalObj;
+        DB::beginTransaction();
 
-		}catch( Exception $e){
-			throw new Exception($e->getMessage(), 1);
-			DB::rollback();
-		}
-	}
+        try {
+            if (!is_null($milestoneId)) {
+                $this->financialObj = $this->financialObj->find($milestoneId);
+            }
 
-	/**
-	 * Manage Progress Milestone
-	 * 
-	 * @param  Collection $request   	HTTP Request
-	 * @param  int        $projectId 	Project Id
-	 * @param  int|null   $milestoneId 	Milestone ID
-	 * @return PhysicalMilestone
-	 */
-	public function financialMilestone(Collection $request, int $projectId, ?int $milestoneId)
-	{
-		$inputData = collect($request)->intersectByKeys([
-		    'planned' => 0,
-		    'actual' => 0
-		]);
+            $inputData->each(function ($record, $field) {
+                if (!is_null($record)) {
+                    $this->financialObj->{$field} = $record;
+                }
+            });
 
-		DB::beginTransaction();
+            $this->financialObj->save();
 
-		try{
+            DB::commit();
 
-			if(!is_null($milestoneId)){
-				$this->financialObj = $this->financialObj->find($milestoneId);
-			}
+            return $this->financialObj;
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage(), 1);
+            DB::rollback();
+        }
+    }
 
-			$inputData->each(function($record,$field){
-				if(!is_null($record)){
-					$this->financialObj->{$field} = $record;
-				}
-			});
+    /**
+     * Remove physical milestone attached to project
+     *
+     * @param  int    $corporateId  Corporate Id
+     * @param  int    $projectId    Project Id
+     * @param  int    $taskId       Specific task id
+     * @return
+     */
+    public function deletePhysical(int $corporateId, int $projectId, int $milestoneId)
+    {
+        DB::beginTransaction();
 
-			$this->financialObj->save();
+        try {
+            $this->physicalObj->find($milestoneId)->delete();
 
-			DB::commit();
+            DB::commit();
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            DB::rollback();
+        }
+    }
 
-			return $this->financialObj;
+    /**
+     * Remove finance milestone attached to project
+     *
+     * @param  int    $corporateId  Corporate Id
+     * @param  int    $projectId    Project Id
+     * @param  int    $taskId       Specific task id
+     * @return
+     */
+    public function deleteFinance(int $corporateId, int $projectId, int $milestoneId)
+    {
+        DB::beginTransaction();
 
-		}catch( Exception $e){
-			throw new Exception($e->getMessage(), 1);
-			DB::rollback();
-		}
-	}
+        try {
+            $this->financialObj->find($milestoneId)->delete();
 
-	/**
-	 * Remove physical milestone attached to project
-	 * 
-	 * @param  int    $corporateId 	Corporate Id
-	 * @param  int    $projectId   	Project Id
-	 * @param  int    $taskId   	Specific task id
-	 * @return 
-	 */
-	public function deletePhysical(int $corporateId, int $projectId, int $milestoneId)
-	{
-
-		DB::beginTransaction();
-
-		try{
-
-			$this->physicalObj->find($milestoneId)->delete();
-
-			DB::commit();
-
-		}catch( \Exception $e){
-
-			dd($e->getMessage());
-			DB::rollback();
-		}
-	}
-
-	/**
-	 * Remove finance milestone attached to project
-	 * 
-	 * @param  int    $corporateId 	Corporate Id
-	 * @param  int    $projectId   	Project Id
-	 * @param  int    $taskId   	Specific task id
-	 * @return 
-	 */
-	public function deleteFinance(int $corporateId, int $projectId, int $milestoneId)
-	{
-
-		DB::beginTransaction();
-
-		try{
-
-			$this->financialObj->find($milestoneId)->delete();
-
-			DB::commit();
-
-		}catch( \Exception $e){
-
-			dd($e->getMessage());
-			DB::rollback();
-		}
-	}
-} // END class MilestoneRepository 
+            DB::commit();
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            DB::rollback();
+        }
+    }
+} // END class MilestoneRepository

@@ -57,7 +57,7 @@ class FinancialRepository
 
     /**
      * Mapping Financial transaction
-     * 
+     *
      * @param  Project      $project     [description]
      * @param  string       $component   [description]
      * @param  string       $dateField   [description]
@@ -72,27 +72,26 @@ class FinancialRepository
         string $dateField = 'date',
         string $amountField = 'amount'
     ) {
+        $projectStart = data_get($project, 'start');
 
-      $projectStart = data_get($project,'start');
+        $projectEnd = data_get($project, 'end');
 
-      $projectEnd = data_get($project,'end');
+        $sourceData = data_get($project, $component);
 
-      $sourceData = data_get($project,$component);
+        if ($isClient) {
+            $sourceData = $sourceData->where('client_id', $project->client_id);
+        } else {
+            $sourceData = $sourceData->where('client_id', '!=', $project->client_id);
+        }
 
-      if ($isClient) {
-        $sourceData = $sourceData->where('client_id',$project->client_id);
-      } else {
-        $sourceData = $sourceData->where('client_id','!=',$project->client_id);
-      }
-
-      $processData = $this->projectComponentTransaction(
+        $processData = $this->projectComponentTransaction(
         $projectStart,
         $projectEnd,
         $sourceData,
         $dateField
       );
 
-      return $this->getSparklineData($processData, $amountField);
+        return $this->getSparklineData($processData, $amountField);
     }
 
     /**
@@ -200,7 +199,7 @@ class FinancialRepository
 
         $balanceContract = (float)(($contract + $voo + $rententionTo) - $paymentIn - $ladBy);
 
-        $claimtoclient = (float)(($contract + $voo ) - $claimAmount);
+        $claimtoclient = (float)(($contract + $voo) - $claimAmount);
 
         $financialend = (float)(($balanceContract - $paymentOut - $rententionBy) + $ladTo);
 

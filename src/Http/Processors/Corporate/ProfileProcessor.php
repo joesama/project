@@ -120,12 +120,29 @@ class ProfileProcessor
 	 */
 	public function view(Request $request, int $corporateId)
 	{
+		$profileId = $request->segment(5);
+
 		$view = $this->viewBuilder->newView($this->profileObj)
 		->relation([
 			'user_id' => 'user.id',
 			'corporate_id' => 'corporate.name',
 		])
 		->id($request->segment(5))
+		->extends([
+			'is_pm' => function($value){
+				if ($value) {
+					return '<i class="fa fa-check-square-o text-success"></i>';
+				} else {
+					return '<i class="fa fa-square-o"></i>';
+				}
+			},
+			'email' => function($value){
+				return strtolower($value);
+			},
+			'user_id' => function($value) use ($corporateId, $profileId){
+				return strtolower($value) . '&nbsp;<a class="btn btn-xs btn-danger pull-right" href="' . route('api.profile.password',[$corporateId, $profileId]) . '"><i class="psi-mail-password icon-fw"></i>Reset Password</a>';
+			}
+		])
 		->renderView(
 			__('joesama/project::'.$request->segment(1).'.'
 				.$request->segment(2).'.'

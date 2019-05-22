@@ -15,7 +15,7 @@ Foundation::group('joesama/project', '/', ['namespace' => 'Http\Controller', 'mi
         $router->get('dashboard', 'DashboardController@projectDashboard');
 
         collect($webPolicies)->each(function($policy,$module) use($router){
-            collect($policy)->except('icon')->each(function($config,$submodule) use($module,$router){
+            collect($policy)->except(['icon','no_menu'])->each(function($config,$submodule) use($module,$router){
                 $router->name($module.'.'.$submodule.'.')
                 ->prefix($module.'/'.$submodule)
                 ->namespace(ucfirst($module))

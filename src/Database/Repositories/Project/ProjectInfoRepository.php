@@ -30,20 +30,20 @@ class ProjectInfoRepository
 {
     use HasAccessAs;
 
-    private $projectModel,
-            $clientModel,
-            $taskModel,
-            $planModel,
-            $issueModel,
-            $riskModel,
-            $incidentModel,
-            $paymentModel,
-            $voModel,
-            $retentionModel,
-            $ladModel,
-            $stricAccess,
-            $uploadModel,
-            $profile;
+    private $projectModel;
+    private $clientModel;
+    private $taskModel;
+    private $planModel;
+    private $issueModel;
+    private $riskModel;
+    private $incidentModel;
+    private $paymentModel;
+    private $voModel;
+    private $retentionModel;
+    private $ladModel;
+    private $stricAccess;
+    private $uploadModel;
+    private $profile;
 
     public function __construct(
         Project $project,
@@ -284,7 +284,6 @@ class ProjectInfoRepository
      **/
     public function listProjectPartner(int $corporateId, $projectId)
     {
-
         $project = $this->getProject($projectId);
         $partner = data_get($project, 'partner');
 
@@ -303,7 +302,6 @@ class ProjectInfoRepository
      **/
     public function listProjectAttribute(int $corporateId, $projectId)
     {
-
         $project = $this->getProject($projectId);
         $attribute = data_get($project, 'attributes');
 
@@ -451,7 +449,6 @@ class ProjectInfoRepository
         $master = MasterData::incident()
         ->with('subdata')->get()
         ->map(function ($hse) use ($hsecard, $incident) {
-
             $subdata = $hse->subdata;
 
             $subItem = collect([]);
@@ -459,11 +456,10 @@ class ProjectInfoRepository
             $monthItem = collect([]);
 
             $subdata->each(function ($data) use ($incident, $subItem, $monthItem) {
-
                 $caseCode = data_get($data, 'formula');
 
                 $month = $incident->filter(function ($case) use ($caseCode) {
-                    return (  $caseCode == data_get($case, 'sub_code') ) && ( Carbon::parse(data_get($case, 'incident_date'))->month == Carbon::now()->month );
+                    return ($caseCode == data_get($case, 'sub_code')) && (Carbon::parse(data_get($case, 'incident_date'))->month == Carbon::now()->month);
                 });
 
                 $flter = $incident->filter(function ($case) use ($caseCode) {

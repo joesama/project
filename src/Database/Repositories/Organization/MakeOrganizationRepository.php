@@ -1,5 +1,5 @@
 <?php
-namespace Joesama\Project\Database\Repositories\Organization; 
+namespace Joesama\Project\Database\Repositories\Organization;
 
 use DB;
 use Illuminate\Support\Collection;
@@ -12,91 +12,84 @@ use Joesama\Project\Database\Model\Organization\ProfileRole;
  * Data Handling For Create Project Record
  *
  * @package default
- * @author 
+ * @author
  **/
-class MakeOrganizationRepository 
+class MakeOrganizationRepository
 {
+    public function __construct(
+        Corporate $model,
+        Profile $profile,
+        ProfileRole $role
+    ) {
+        $this->corporatetModel = $model;
+        $this->profileModel = $profile;
+        $this->roleModel = $role;
+    }
 
-	public function __construct(
-		Corporate $model,
-		Profile $profile,
-		ProfileRole $role
-	){
-		$this->corporatetModel = $model;
-		$this->profileModel = $profile;
-		$this->roleModel = $role;
-	}
+    /**
+     * Create New Corporate
+     *
+     * @return Joesama\Project\Database\Model\Organization\Corporate
+     **/
+    public function initCorporate($corporateData)
+    {
+        $inputData = collect($corporateData)->intersectByKeys([
+            'name' => 0
+        ]);
 
-	/**
-	 * Create New Corporate
-	 *
-	 * @return Joesama\Project\Database\Model\Organization\Corporate
-	 **/
-	public function initCorporate($corporateData)
-	{
-		$inputData = collect($corporateData)->intersectByKeys([
-		    'name' => 0
-		]);
+        DB::beginTransaction();
 
-		DB::beginTransaction();
+        try {
+            $inputData->each(function ($record, $field) {
+                $this->corporatetModel->{$field} = $record;
+            });
 
-		try{
+            $this->corporatetModel->save();
 
-			$inputData->each(function($record,$field){
-				$this->corporatetModel->{$field} = $record;
-			});
+            DB::commit();
 
-			$this->corporatetModel->save();
+            return $this->corporatetModel;
+        } catch (\Exception $e) {
+            DB::rollback();
+        }
+    }
 
-			DB::commit();
+    /**
+     * Manage Profile Information
+     *
+     * @param  Collection $profileData Form Request
+     * @param  int     $profileID   Profile Id
+     * @return [type]               [description]
+     */
+    public function initProfile(Collection $profileData, ?int $profileID)
+    {
+        $inputData = collect($profileData)->intersectByKeys([
+            'corporate_id' => null,
+            'position_id' => null,
+            'name' => null,
+            'abbr'=> null,
+            'email'=> null,
+            'phone'=> null
+        ]);
 
-			return $this->corporatetModel;
+        DB::beginTransaction();
 
-		}catch( \Exception $e){
+        try {
+            $password = str_random(12);
 
-			DB::rollback();
-		}
-	}
+            if (!is_null($profileID)) {
+                $this->profileModel = $this->profileModel->find($profileID);
+            }
 
-	/**
-	 * Manage Profile Information
-	 * 
-	 * @param  Collection $profileData Form Request
-	 * @param  int     $profileID   Profile Id
-	 * @return [type]               [description]
-	 */
-	public function initProfile(Collection $profileData, ?int $profileID)
-	{
-		$inputData = collect($profileData)->intersectByKeys([
-		    'corporate_id' => null,
-		    'position_id' => null,
-			'name' => null,
-			'abbr'=> null,
-			'email'=> null,
-			'phone'=> null
-		]);
+            $inputData->each(function ($record, $field) {
+                $this->profileModel->{$field} = $record;
+            });
 
-		DB::beginTransaction();
+            $isPm = $profileData->get('is_pm', null);
 
-		try{
+            $this->profileModel->is_pm = ($isPm == 'on') ? 1 : $isPm;
 
-			$password = str_random(12);
-
-			if(!is_null($profileID)){
-				$this->profileModel = $this->profileModel->find($profileID);
-			}
-
-			$inputData->each(function($record,$field){
-
-				$this->profileModel->{$field} = $record;
-			});
-
-			$isPm = $profileData->get('is_pm',null);
-
-			$this->profileModel->is_pm = ($isPm == 'on') ? 1 : $isPm;
-
-			if(is_null($profileID)){
-
+            if (is_null($profileID)) {
                 $user = User::firstOrNew(['email' => $this->profileModel->email]);
 
                 $user->username = $this->profileModel->email;
@@ -111,116 +104,119 @@ class MakeOrganizationRepository
 
                 $user->roles()->sync(4);
 
-		      	if (config('joesama/entree::entree.validation')):
+                if (config('joesama/entree::entree.validation')):
 
-		            event('joesama.email.user: new', [$user]); else:
+                    event('joesama.email.user: new', [$user]); else:
 
-		            $user->sendWelcomeNotification($password);
+                    $user->sendWelcomeNotification($password);
 
-		        endif;
+                endif;
 
-				$this->profileModel->user_id = $user->id;
-			}
+                $this->profileModel->user_id = $user->id;
+            }
 
-			$this->profileModel->save();
+            $this->profileModel->save();
 
-			DB::commit();
+            DB::commit();
 
-			return $this->profileModel;
-
-		}catch( \Exception $e){
-			dd($e->getMessage());
-			DB::rollback();
-		}
-	}
-
-
-	/**
-	 * Assign Profile To Project & Role
-	 * 
-	 * @param  Collection $profileData Form Data
-	 * @param  int        $profileID   Profile Id
-	 * @return Joesama\Project\Database\Model\Organization\Profile
-	 */
-	public function assignProfile(Collection $profileData, int $profileID)
-	{
-
-		DB::beginTransaction();
-
-		try{
-
-			$this->profileModel = $this->profileModel->find($profileID);
-
-			$this->profileModel->project()->attach($profileData->get('project_id'),['role_id' => $profileData->get('role_id')]);
-			
-			DB::commit();
-
-			return $this->profileModel;
-
-		}catch( \Exception $e){
-			dd($e->getMessage());
-			DB::rollback();
-		}
-	}
-
-	/**
-	 * Reassign Profile To Project & Role
-	 * 
-	 * @param  int        $profileID   Profile Id
-	 * @param  int        $projectId   Project Id
-	 * @return Joesama\Project\Database\Model\Organization\Profile
-	 */
-	public function reassignProfile(int $profileID, int $projectId)
-	{
-
-		DB::beginTransaction();
-
-		try{
-
-			$this->profileModel = $this->profileModel->find($profileID);
-
-			$this->profileModel->project()->detach($projectId);
-			
-			DB::commit();
-
-			return $this->profileModel;
-
-		}catch( \Exception $e){
-			dd($e->getMessage());
-			DB::rollback();
-		}
-	}
-
-	/**
-	 * Create New Role
-	 *
-	 * @return Joesama\Project\Database\Model\Organization\ProfileRole
-	 **/
-	public function initRole($roleData)
-	{
-		$inputData = collect($roleData)->intersectByKeys([
-		    'role' => null,
-		]);
-
-		DB::beginTransaction();
-
-		try{
-
-			$inputData->each(function($record,$field){
-				$this->roleModel->{$field} = $record;
-			});
-
-			$this->roleModel->save();
-
-			DB::commit();
-
-			return $this->roleModel;
-
-		}catch( \Exception $e){
-
-			DB::rollback();
-		}
-	}
+            return $this->profileModel;
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            DB::rollback();
+        }
+    }
 
 
-} // END class MakeProjectRepository 
+    /**
+     * Assign Profile To Project & Role
+     *
+     * @param  Collection $profileData Form Data
+     * @param  int        $profileID   Profile Id
+     * @return Joesama\Project\Database\Model\Organization\Profile
+     */
+    public function assignProfile(Collection $profileData, int $profileID)
+    {
+        DB::beginTransaction();
+
+        try {
+            $this->profileModel = $this->profileModel->find($profileID);
+
+            $this->profileModel->project()->attach($profileData->get('project_id'), ['role_id' => $profileData->get('role_id')]);
+            
+            DB::commit();
+
+            return $this->profileModel;
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            DB::rollback();
+        }
+    }
+
+    /**
+     * Reassign Profile To Project & Role
+     *
+     * @param  int        $profileID   Profile Id
+     * @param  int        $projectId   Project Id
+     * @return Joesama\Project\Database\Model\Organization\Profile
+     */
+    public function reassignProfile(int $profileID, int $projectId)
+    {
+        DB::beginTransaction();
+
+        try {
+            $this->profileModel = $this->profileModel->find($profileID);
+
+            $this->profileModel->project()->detach($projectId);
+            
+            DB::commit();
+
+            return $this->profileModel;
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            DB::rollback();
+        }
+    }
+
+    /**
+     * Create New Role
+     *
+     * @return Joesama\Project\Database\Model\Organization\ProfileRole
+     **/
+    public function initRole($roleData)
+    {
+        $inputData = collect($roleData)->intersectByKeys([
+            'role' => null,
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            $inputData->each(function ($record, $field) {
+                $this->roleModel->{$field} = $record;
+            });
+
+            $this->roleModel->save();
+
+            DB::commit();
+
+            return $this->roleModel;
+        } catch (\Exception $e) {
+            DB::rollback();
+        }
+    }
+
+    /**
+     * Reset profile user password
+     *
+     * @param  int    $profileID Profile id
+     * @return void
+     */
+    public function resetPassword(int $profileID)
+    {
+        $this->profileModel = $this->profileModel->with('user')->find($profileID);
+
+        $user = $this->profileModel->user;
+
+        $user->sendPasswordResetNotification($user->validate);
+    }
+} // END class MakeProjectRepository

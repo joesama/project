@@ -94,7 +94,6 @@ class MakeProjectRepository
             }
 
             if ($this->projectModel->active != 1) {
-
                 $inputData->each(function ($record, $field) {
                     if (!is_null($record)) {
                         if (in_array($field, ['start','end'])) :
@@ -129,7 +128,7 @@ class MakeProjectRepository
                 $this->projectModel->save();
 
                 // Create Physical & Financial Milestones
-                if ( $this->projectModel->physical->count() == 0 ) {
+                if ($this->projectModel->physical->count() == 0) {
                     $period = CarbonInterval::month()->toPeriod($this->projectModel->start, $this->projectModel->end);
 
                     foreach ($period as $key => $date) {
@@ -153,17 +152,17 @@ class MakeProjectRepository
                     }
                 }
 
-                $partner = collect($projectData->get('partner_id'))->mapWithKeys(function($map) {
+                $partner = collect($projectData->get('partner_id'))->mapWithKeys(function ($map) {
                     return [ $map =>  ['created_at' => Carbon::now(), 'updated_at' => Carbon::now()] ];
                 });
 
                 $this->projectModel->partner()->sync($partner);
 
-                collect($projectData->get('role_id'))->each(function($profile, $key) {
+                collect($projectData->get('role_id'))->each(function ($profile, $key) {
                     $attr = explode('_', $key);
                     
                     $this->projectModel->profile()->attach(
-                        (int)$profile, 
+                        (int)$profile,
                         [
                             'step_id' => (int)$attr[0],
                             'role_id' => (int)$attr[1],
@@ -173,8 +172,8 @@ class MakeProjectRepository
                     );
                 });
                 // Assign Role
-                $stepsAssign->each(function($step) {
-                	$this->projectModel->profile()->attach($step);
+                $stepsAssign->each(function ($step) {
+                    $this->projectModel->profile()->attach($step);
                 });
 
                 // Generate Approval Workflow
@@ -183,11 +182,9 @@ class MakeProjectRepository
 
                     $approval = new ProjectWorkflowRepository();
 
-                    $approval->registerProject($this->projectModel,$approvalFlow);
+                    $approval->registerProject($this->projectModel, $approvalFlow);
                 }
-            } 
-            else 
-            {
+            } else {
                 $requestedInfo = new ProjectInfo();
 
                 $inputData->each(function ($record, $field) use ($requestedInfo) {
@@ -220,9 +217,7 @@ class MakeProjectRepository
             DB::commit();
 
             return $this->projectModel;
-            
         } catch (Exception $e) {
-
             DB::rollback();
 
             throw new Exception($e->getMessage(), 1);
@@ -722,20 +717,19 @@ class MakeProjectRepository
 
                 $incident->report_by = data_get($inputData, 'report_by');
 
-                $incidentIds->each(function($value, $field) use($incident){
+                $incidentIds->each(function ($value, $field) use ($incident) {
                     $incident->{$field} = $value;
                 });
 
                 $incident->save();
             } else {
-
                 $newDetail = [
                     'incident'=> data_get($inputData, 'incident'),
                     'incident_date'=> Carbon::createFromFormat('d/m/Y', data_get($inputData, 'incident_date'))->toDateTimeString(),
                     'report_by'=> data_get($inputData, 'report_by')
                 ];
 
-                $newDetail = array_merge($newDetail,$incidentIds->toArray());
+                $newDetail = array_merge($newDetail, $incidentIds->toArray());
 
                 $incident = new Incident($newDetail);
 
@@ -746,7 +740,7 @@ class MakeProjectRepository
 
             $incidentRecord = $this->projectModel->incident;
 
-            $incidentUpdate = $incidentRecord->groupBy('incident_code')->flatMap(function($incident,$type){
+            $incidentUpdate = $incidentRecord->groupBy('incident_code')->flatMap(function ($incident, $type) {
                 return [ $type => $incident->sum('incident')];
             });
 

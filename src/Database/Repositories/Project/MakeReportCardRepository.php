@@ -85,8 +85,8 @@ class MakeReportCardRepository
 
             if (!is_null($report->nextby)) {
                 // $project->profile->groupBy('id')->each(function ($profile) use ($project, $report, $request) {
-                    $report->nextby->sendActionNotification($project, $report, $request->get('type'), 'warning');
-                // });
+                $report->nextby->sendActionNotification($project, $report, $request->get('type'), 'warning');
+            // });
             } else {
                 $report->creator->sendActionNotification($project, $report, $request->get('type'));
             }
@@ -162,8 +162,8 @@ class MakeReportCardRepository
 
             if (!is_null($report->nextby)) {
                 // $project->profile->groupBy('id')->each(function ($profile) use ($project, $report, $request) {
-                    $report->nextby->sendActionNotification($project, $report, $request->get('type'), 'warning');
-                // });
+                $report->nextby->sendActionNotification($project, $report, $request->get('type'), 'warning');
+            // });
             } else {
                 $report->creator->sendActionNotification($project, $report, $request->get('type'));
             }

@@ -91,5 +91,22 @@ class ProfileProcessor
 		);
 	}
 
+	/**
+	 * Reset password & redirect back
+	 * 
+	 * @param  int    $corporateId [description]
+	 * @param  int    $masterId    [description]
+	 * @return [type]              [description]
+	 */
+	public function password(Request $request, int $corporateId)
+	{
+		$this->makeorganization->resetPassword($request->segment(5));
+
+		return redirect_with_message(
+			handles(str_replace('api', 'corporate', str_replace('password', 'view', $request->path()))),
+			'power',
+            'success'
+		);
+	}
 
 } // END class MakeProjectProcessor 

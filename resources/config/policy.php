@@ -43,22 +43,26 @@ return [
 			'task' => [
 				'list' => ['corporateId','projectId?'],
 				'form' => ['corporateId','projectId?','dataId?'],
-				'view' => ['corporateId','projectId','dataId?']
+				'view' => ['corporateId','projectId','dataId?'],
+				'no_menu' => TRUE
 			],
             'plan' => [
 				'list' => ['corporateId','projectId?'],
 				'form' => ['corporateId','projectId?','dataId?'],
-				'view' => ['corporateId','projectId','dataId?']
+				'view' => ['corporateId','projectId','dataId?'],
+				'no_menu' => TRUE
 			],
 			'issue' => [
 				'list' => ['corporateId','projectId?'],
 				'form' => ['corporateId','projectId?','dataId?'],
-				'view' => ['corporateId','projectId','dataId?']
+				'view' => ['corporateId','projectId','dataId?'],
+				'no_menu' => TRUE
 			],
 			'risk' => [
 				'list' => ['corporateId','projectId?'],
 				'form' => ['corporateId','projectId?','dataId?'],
-				'view' => ['corporateId','projectId','dataId?']
+				'view' => ['corporateId','projectId','dataId?'],
+				'no_menu' => TRUE
 			],
 			'partner' => [
 				'list' => ['corporateId','projectId'],
@@ -132,15 +136,18 @@ return [
 				'redirect' => ['reportId'],
 				'list' => ['corporateId','projectId?'],
 				'form' => ['corporateId','projectId','reportId?'],
-				'view' => ['corporateId','projectId','reportId?']
+				'view' => ['corporateId','projectId','reportId?'],
+				'no_menu' => TRUE
 			],
 			'weekly' => [
 				'redirect' => ['reportId'],
 				'list' => ['corporateId','projectId?'],
 				'form' => ['corporateId','projectId','reportId?'],
-				'view' => ['corporateId','projectId','reportId?']
+				'view' => ['corporateId','projectId','reportId?'],
+				'no_menu' => TRUE
 			],
-			'icon' => 'psi-notepad icon-lg icon-fw'
+			'icon' => 'psi-notepad icon-lg icon-fw',
+			'no_menu' => TRUE
 		]
 	],
 	'api' => [
@@ -176,7 +183,8 @@ return [
 				'step' => ['corporateId','flowId']
 			],
 			'profile' => [
-				'reassign' => ['masterId','projectId']
+				'reassign' => ['masterId','projectId'],
+				'password' => ['corporateId','masterId'],
 			],
 			'partner' => [
 				'delete' => ['corporateId','projectId','partnerId']
