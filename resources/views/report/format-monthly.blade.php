@@ -1,54 +1,65 @@
-<div class="row bord-all">
-	<div class="col-md-2 col-xs-2 bord-rgt text-center ">
-		<img class="pad-no img-lg" src="{{ asset('packages/joesama/project/img/kub.png') }}">
-	</div>
-	<div class="col-md-10 col-xs-10 text-center text-bold text-3x text-dark pad-all"> 
-			{{ __('joesama/project::report.'.request()->segment(2).'.form') }}
-	</div>
+<div class="panel" >
+    <div class="panel-body">
+        <div class="col-md-4 text-center pull-right mar-btm"> 
+            <div class="row bord-all">
+                <div class="col-md-12 text-bold text-center" style="padding: 3px">
+                    {{ strtoupper( __('joesama/project::report.format.monthly') ) }}
+                    {{ strtoupper( '#'.$reportDue ) }}
+                </div>
+            </div>
+            <div class="row text-thin text-center">
+                <div class="col-md-4 text-bold bord-hor bord-btm"  style="padding: 3px">
+                    {{ $reportStart->format('j M Y') }}
+                </div>
+                <div class="col-md-4 bord-rgt bord-btm"  style="padding: 3px">
+                    {{ __('joesama/project::report.format.through') }}
+                </div>
+                <div class="col-md-4 text-bold bord-rgt bord-btm"  style="padding: 3px">
+                    {{ $reportEnd->format('j M Y') }}
+                </div>
+            </div>
+        </div>
+    	@includeIf('joesama/project::manager.project.part.projectInfo')
+    </div>
+	<div class="panel-footer text-right">
+  		@php
+  			$projectUrl = 'manager/project/view/'.$project->corporate_id.'/'.$project->id;
+  			$printUrl = 'report/monthly/form/'.$corporateId.'/'.$projectId.'/'.$reportId.'?print=true';
+  		@endphp
+        @if($printed)
+        <a class="btn btn-info" href="{{ handles($printUrl) }}">
+        	<i class="psi-printer icon-fw"></i>
+        	{{ __('joesama/project::report.print') }}
+        </a>
+        @endif
+        <a class="btn btn-dark" href="{{ handles($projectUrl) }}">
+        	<i class="psi-folder-with-document icon-fw"></i>
+        	{{ __('joesama/project::manager.project.view') }}
+        </a>
+    </div>
 </div>
-<div class="row bord-hor bord-btm text-dark" style="page-break-after: auto;">
-	<div class="col-md-2 col-xs-2 text-center text-bold bord-rgt pad-all">
-		{{ strtoupper( __('joesama/project::report.format.dept') ) }}
-	</div>
-	<div class="col-md-5 col-xs-5 text-center text-semibold bord-rgt pad-all"> 
-		{{ __('joesama/project::report.format.mo') }}
-	</div>
-	<div class="col-md-5 col-xs-5 text-center"> 
-		<div class="row bord-btm">
-			<div class="col-md-12  col-xs-12 text-bold text-center" style="padding: 3px">
-				{{ strtoupper( __('joesama/project::report.format.'.request()->segment(2)) ) }}
-				{{ '#'.strtoupper( $reportDue ) }}
-			</div>
-		</div>
-		<div class="row text-thin text-center">
-			<div class="col-md-4  col-xs-4  text-bold bord-rgt"  style="padding: 3px">
-				{{ $reportStart }}
-			</div>
-			<div class="col-md-4 col-xs-4 bord-rgt"  style="padding: 3px">
-				{{ __('joesama/project::report.format.through') }}
-			</div>
-			<div class="col-md-4 col-xs-4  text-bold"  style="padding: 3px">
-				{{ $reportEnd }}
-			</div>
-		</div>
-	</div>
-</div>
-<div class="row bord-hor bord-btm bg-primary" style="page-break-after: auto;">
-	<div class="col-md-2 col-xs-2 text-left text-bold bord-rgt pad-all">
-		{{ strtoupper( __('joesama/project::report.format.company') ) }}
-	</div>
-	<div class="col-md-10 col-xs-10 text-left text-bold pad-all">
-		{{ ucwords( data_get($project,'corporate.name') ) }}
-	</div>
-</div>
-<div class="row bord-hor bord-btm bg-primary" style="page-break-after: auto;">
-	<div class="col-md-2 col-xs-2 text-left text-bold bord-rgt pad-all">
-		{{ strtoupper( __('joesama/project::report.format.title') ) }}
-	</div>
-	<div class="col-md-10 col-xs-10 text-left text-bold pad-all">
-		{{ ucwords( data_get($project,'name') ) }}
-	</div>
-</div>
+
+@includeIf('joesama/project::manager.project.part.physical-curve')
+
+@includeIf('joesama/project::manager.project.part.financial-curve')
+
+@foreach($policies as $policyId => $policy)
+    @php
+        $currentView = 'joesama/project::manager.project.part.'.$policyId;
+
+        $view = 'joesama/project::manager.project.part.table';
+    @endphp
+
+    @includeFirst([$currentView,$view],[
+            'table' => ${$policyId.'Table'},
+            'title' => 'joesama/project::manager.'.$policyId.'.list',
+            'tableId' => $policyId
+        ])
+@endforeach
+
+@includeIf('joesama/project::manager.project.part.financial')
+
+@includeIf('joesama/project::manager.project.part.hse')
 
 @includeWhen(
     ($project->active && (data_get($workflow,'current.profile_assign.id') == $profile->id)),
@@ -62,6 +73,11 @@
     ($project->active && (data_get($workflow,'current.profile_assign.id') != $profile->id )),
     'joesama/project::manager.project.part.flowHistory', 
     [
-        'workflow' => $workflow
+        'workflow' => $workflow,
+        'input' => [
+        	'start' => $reportStart->format('Y-m-d'),
+        	'end' => $reportEnd->format('Y-m-d'),
+        	'cycle' => $reportDue
+        ]
     ]
 )

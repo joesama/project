@@ -1,5 +1,5 @@
 <?php
-namespace Joesama\Project\Http\Processors\Report; 
+namespace Joesama\Project\Http\Processors\Report;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -10,42 +10,43 @@ use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
 use Joesama\Project\Database\Repositories\Project\ReportCardInfoRepository;
 use Joesama\Project\Http\Processors\Manager\ListProcessor;
 use Joesama\Project\Http\Services\ProcessFlowManager;
+use Joesama\Project\Http\Traits\PrintingView;
 use Joesama\Project\Traits\HasAccessAs;
 use Joesama\Project\Traits\ProjectCalculator;
 
 /**
- * Client Record 
+ * Client Record
  *
  * @package default
- * @author 
+ * @author
  **/
-class MonthlyProcessor 
+class MonthlyProcessor
 {
-	use HasAccessAs, ProjectCalculator;
-	
-	private $project, $reportCard;
+    use HasAccessAs, ProjectCalculator, PrintingView;
+    
+    private $project, $reportCard;
 
-	public function __construct(
-		ProjectInfoRepository $projectInfo,
-		ReportCardInfoRepository $reportCardInfo
-	){
-		$this->projectInfo = $projectInfo;
-		$this->reportCard = $reportCardInfo;
-		$this->profile();
-	}
+    public function __construct(
+        ProjectInfoRepository $projectInfo,
+        ReportCardInfoRepository $reportCardInfo
+    ) {
+        $this->projectInfo = $projectInfo;
+        $this->reportCard = $reportCardInfo;
+        $this->profile();
+    }
 
 
-	/**
-	 * @param  Request $request
-	 * @param  int $corporateId
-	 * @return mixed
-	 */
-	public function list(Request $request, int $corporateId)
-	{
-		$table = app(ListProcessor::class)->monthlyReportHistory($request);
+    /**
+     * @param  Request $request
+     * @param  int $corporateId
+     * @return mixed
+     */
+    public function list(Request $request, int $corporateId)
+    {
+        $table = app(ListProcessor::class)->monthlyReportHistory($request);
 
-		return compact('table');
-	}
+        return compact('table');
+    }
 
     /**
      * Redirecting current report to exact uri
@@ -63,39 +64,39 @@ class MonthlyProcessor
         );
     }
 
-	/**
-	 * Weekly Report Form
-	 * 
-	 * @param  Request $request     
-	 * @param  int     $corporateId  Corporate Id
-	 * @param  int     $projectId    Project Id
-	 * @return array
-	 */
-	public function form(Request $request, int $corporateId, $projectId)
-	{
+    /**
+     * Weekly Report Form
+     *
+     * @param  Request $request
+     * @param  int     $corporateId  Corporate Id
+     * @param  int     $projectId    Project Id
+     * @return array
+     */
+    public function form(Request $request, int $corporateId, $projectId)
+    {
         $reportId = $request->segment(6);
 
         $isProjectManager = $this->isProjectManager();
 
-        if ($reportId !== NULL) {
+        if ($reportId !== null) {
             $report = $this->reportCard->getMonthlyReportInfo($reportId);
 
             $projectId = data_get($report, 'project_id');
 
             $project = data_get($report, 'project');
-        }else{
+        } else {
             $report = false;
 
-        	$project = $this->projectInfo->getProject($projectId,'month');
+            $project = $this->projectInfo->getProject($projectId, 'month');
         }
 
         $processFlow = new ProcessFlowManager($project->corporate_id);
 
-		$projectDate = Carbon::parse($project->start);
+        $projectDate = Carbon::parse($project->start);
 
-		$today = Carbon::now();
+        $today = Carbon::now();
 
-		$reportDue = $this->calculateMonth($today, $projectDate);
+        $reportDue = $this->calculateMonth($today, $projectDate);
 
         $startOfMonth = $today->startOfMonth();
 
@@ -109,91 +110,92 @@ class MonthlyProcessor
 
         $reportEnd = ($report) ? Carbon::parse($report->report_end) : $endOfMonth;
 
-		$workflow = $processFlow->getMonthlyFlow($project, $reportId);
+        $workflow = $processFlow->getMonthlyFlow($project, $reportId);
 
-		$financialRepo = app(FinancialRepository::class);
+        $financialRepo = app(FinancialRepository::class);
 
-		$listProcessor = app(ListProcessor::class);
+        $listProcessor = app(ListProcessor::class);
 
-		$paymentSchedule = $financialRepo->schedulePayment($project->id);
+        $paymentSchedule = $financialRepo->schedulePayment($project->id);
 
-		$projectSchedule = $this->reportCard->scheduleTask($project->id);
+        $projectSchedule = $this->reportCard->scheduleTask($project->id);
 
-		$projectStart = $reportStart->format('Y-m-d');
+        $projectStart = $reportStart->format('Y-m-d');
 
-		$projectEnd = $reportEnd->format('Y-m-d');
+        $projectEnd = $reportEnd->format('Y-m-d');
 
-		$hsecard = $this->projectInfo->hseScore($project);
+        $hsecard = $this->projectInfo->hseScore($project);
 
-		$vo = $financialRepo->financialMapping($project,'vo');
+        $vo = $financialRepo->financialMapping($project, 'vo');
 
-		$paymentTrans = collect([
-			'claimTo' => $financialRepo->financialMapping(
-				$project,
-				'claim',
-				true,
-				'claim_date',
-				'claim_amount'
-			),
-			'paymentFrom' => $financialRepo->financialMapping(
-				$project,
-				'payment',
-				true,
-				'payment_date',
-				'paid_amount'
-			),
-			'retentionTo' => $financialRepo->financialMapping($project, 'retention'),
-			'ladby' => $financialRepo->financialMapping($project, 'lad'),
-			'claimBy' => $financialRepo->financialMapping(
-				$project,
-				'claim',
-				false,
-				'claim_date',
-				'claim_amount'
-			),
-			'paymentTo' => $financialRepo->financialMapping(
-				$project,
-				'payment',
-				false,
-				'payment_date',
-				'paid_amount'
-			),
-			'retentionBy' => $financialRepo->financialMapping($project, 'retention', false),
-			'ladto' => $financialRepo->financialMapping($project, 'lad', false)
-		]);
+        $paymentTrans = collect([
+            'claimTo' => $financialRepo->financialMapping(
+                $project,
+                'claim',
+                true,
+                'claim_date',
+                'claim_amount'
+            ),
+            'paymentFrom' => $financialRepo->financialMapping(
+                $project,
+                'payment',
+                true,
+                'payment_date',
+                'paid_amount'
+            ),
+            'retentionTo' => $financialRepo->financialMapping($project, 'retention'),
+            'ladby' => $financialRepo->financialMapping($project, 'lad'),
+            'claimBy' => $financialRepo->financialMapping(
+                $project,
+                'claim',
+                false,
+                'claim_date',
+                'claim_amount'
+            ),
+            'paymentTo' => $financialRepo->financialMapping(
+                $project,
+                'payment',
+                false,
+                'payment_date',
+                'paid_amount'
+            ),
+            'retentionBy' => $financialRepo->financialMapping($project, 'retention', false),
+            'ladto' => $financialRepo->financialMapping($project, 'lad', false)
+        ]);
 
-		$taskTable = $listProcessor->task($request,$corporateId);
+        $taskTable = $listProcessor->task($request, $corporateId);
 
-		$issueTable = $listProcessor->issue($request,$corporateId);
+        $issueTable = $listProcessor->issue($request, $corporateId);
 
-		$riskTable = $listProcessor->risk($request,$corporateId);
+        $riskTable = $listProcessor->risk($request, $corporateId);
 
-		$policies = collect(config('joesama/project::policy.dashboard'));
+        $policies = collect(config('joesama/project::policy.dashboard'));
 
-		$balanceSheet = $financialRepo->balanceSheet($project);
+        $balanceSheet = $financialRepo->balanceSheet($project);
 
         $lastAction = collect(data_get($report, 'workflow'))
-        ->where('state', strtolower(data_get($workflow,'last.status')))
-        ->where('profile_id', strtolower(data_get($workflow,'last.profile_assign.id')));
+        ->where('state', strtolower(data_get($workflow, 'last.status')))
+        ->where('profile_id', strtolower(data_get($workflow, 'last.profile_assign.id')));
 
         $printed = $lastAction->count();
 
+        $params = compact('project', 'reportDue', 'reportStart', 'reportEnd', 'reportId', 'corporateId', 'projectId', 'workflow', 'paymentSchedule', 'projectSchedule', 'claim', 'payment', 'paid', 'vo', 'paymentTrans', 'taskTable', 'issueTable', 'riskTable', 'policies', 'hsecard', 'balanceSheet', 'printed');
+
         if ($request->get('print') == true) {
-            dd($request->get('print'));
+            $this->printReport('joesama/project::report.format-monthly', $params, 'Monthly');
         }
 
-		return compact('project','reportDue','reportStart','reportEnd','reportId','corporateId','projectId','workflow', 'paymentSchedule','projectSchedule', 'claim', 'payment', 'paid', 'vo', 'paymentTrans', 'taskTable', 'issueTable', 'riskTable', 'policies', 'hsecard', 'balanceSheet', 'printed');
-	}
+        return $params;
+    }
 
-	/**
-	 * @param  Request $request
-	 * @param  int $corporateId
-	 * @return mixed
-	 */
-	public function view(Request $request, int $corporateId)
-	{
+    /**
+     * @param  Request $request
+     * @param  int $corporateId
+     * @return mixed
+     */
+    public function view(Request $request, int $corporateId)
+    {
 
-		return [];
-	}
-
-} // END class ClientProcessor 
+        return [];
+    }
+} // END class ClientProcessor

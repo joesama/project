@@ -7,9 +7,9 @@ use Joesama\Project\Database\Repositories\Project\ProjectInfoRepository;
 use Joesama\Project\Database\Repositories\Project\ReportCardInfoRepository;
 use Joesama\Project\Http\Processors\Manager\ListProcessor;
 use Joesama\Project\Http\Services\ProcessFlowManager;
+use Joesama\Project\Http\Traits\PrintingView;
 use Joesama\Project\Traits\HasAccessAs;
 use Joesama\Project\Traits\ProjectCalculator;
-use Barryvdh\DomPDF\Facade as PDF;
 
 /**
  * Client Record
@@ -19,7 +19,7 @@ use Barryvdh\DomPDF\Facade as PDF;
  **/
 class WeeklyProcessor
 {
-    use HasAccessAs, ProjectCalculator;
+    use HasAccessAs, ProjectCalculator, PrintingView;
     
     private $reportCard;
 
@@ -73,16 +73,16 @@ class WeeklyProcessor
     {
         $reportId = $request->segment(6);
 
-        if ($reportId !== NULL) {
+        if ($reportId !== null) {
             $report = $this->reportCard->getWeeklyReportInfo($reportId);
 
             $projectId = data_get($report, 'project_id');
 
             $project = data_get($report, 'project');
-        }else{
+        } else {
             $report = false;
 
-        	$project = $this->projectInfo->getProject($projectId,'week');
+            $project = $this->projectInfo->getProject($projectId, 'week');
         }
 
         $processFlow = new ProcessFlowManager($project->corporate_id);
@@ -91,7 +91,7 @@ class WeeklyProcessor
 
         $today = Carbon::now();
 
-        $reportDue = $this->calculateWeek($today, $projectDate); 
+        $reportDue = $this->calculateWeek($today, $projectDate);
 
         $startOfWeek = $today->startOfWeek();
 
@@ -110,76 +110,17 @@ class WeeklyProcessor
         $reportInit = $projectDate->isLastWeek() || $projectDate->lessThan(Carbon::now()->isLastWeek()) ? 1 : 0;
 
         $lastAction = collect(data_get($report, 'workflow'))
-        ->where('state', strtolower(data_get($workflow,'last.status')))
-        ->where('profile_id', strtolower(data_get($workflow,'last.profile_assign.id')));
+        ->where('state', strtolower(data_get($workflow, 'last.status')))
+        ->where('profile_id', strtolower(data_get($workflow, 'last.profile_assign.id')));
 
         $printed = $lastAction->count();
 
         $params = compact('project', 'reportDue', 'reportStart', 'reportEnd', 'corporateId', 'projectId', 'workflow', 'printed', 'reportId');
 
         if ($request->get('print') == true) {
-            $this->printReport($params);
+            $this->printReport('joesama/project::report.format-weekly', $params, 'Weekly');
         }
 
         return $params;
-    }
-
-    /**
-     * @param  Request $request
-     * @param  int $corporateId
-     * @return mixed
-     */
-    public function printReport($params)
-    {
-        $html = '<!DOCTYPE html><html lang="en"><head>';
-        $html .= '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>';
-        $html .= '<link href="'. asset('packages/joesama/entree/css/bootstrap.min.css') .'" rel="stylesheet" media="all">';
-        $html .= '<link href="'. asset('packages/joesama/entree/css/font-awesome.min.css') .'" rel="stylesheet" media="all">';
-        $html .= '<link href="'. asset('packages/joesama/entree/css/nifty.min.css') .'" rel="stylesheet" media="all">';
-        $html .= '<link href="'. asset('packages/joesama/entree/premium/icon-sets/icons/line-icons/premium-line-icons.min.css') .'" rel="stylesheet" media="all">';
-        $html .= '<link href="'. asset('packages/joesama/entree/premium/icon-sets/icons/solid-icons/premium-solid-icons.min.css') .'" rel="stylesheet" media="all">';
-        $html .= '<link href="'. asset('packages/joesama/entree/plugins/ionicons/css/ionicons.min.css') .'" rel="stylesheet" media="all">';
-        $html .= '<link rel="stylesheet" href="'.public_path().'/packages/joesama/entree/css/nifty.css" media="all" />';
-        $html .= '</head><body>';
-        $html .= '<div class="row"><div class="col-lg-12 col-md-12  col-sm-12">';
-        // $html .= '<div class="row mb-3"><div class="col-md-12"><div class="panel"><div class="panel-body">';
-
-        $html .= view('joesama/project::report.format', $params);
-
-        // $html .= '</div></div></div></div>';
-        $html .= '</div></div>';
-        $html .= '</body></html>';
-
-        $storage = public_path('weekly');
-
-        if (!is_dir($storage)) :
-            mkdir($storage, 0777, true);
-        endif;
-
-        $fonts = storage_path('fonts');
-
-        if (!is_dir($fonts)) :
-            mkdir($fonts, 0777, true);
-        endif;
-
-        $reportName = '/weekly'.data_get($params, 'reportDue').'.pdf';
-        $pdfReport = $storage.$reportName;
-
-        PDF::setOptions(['isHtml5ParserEnabled' => true,'dpi' => 76,'enable_php' =>true]);
-
-        PDF::loadHTML($html)->setWarnings(false)->save($pdfReport);
-
-        if (file_exists($pdfReport)) {
-            header('Content-Description: File Transfer');
-            header('Content-Type: application/pdf');
-            header('Content-Disposition: attachment; filename="'.basename($pdfReport).'"');
-            header('Expires: 0');
-            header('Cache-Control: must-revalidate');
-            header('Pragma: public');
-            header('Content-Length: ' . filesize($pdfReport));
-            flush(); // Flush system output buffer
-            readfile($pdfReport);
-            exit;
-        }
     }
 } // END class ClientProcessor

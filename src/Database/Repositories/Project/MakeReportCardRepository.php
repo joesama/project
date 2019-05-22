@@ -54,6 +54,10 @@ class MakeReportCardRepository
 
             $report->workflow_id = (int)$request->get('status');
 
+            if ($report->month == 0) {
+                $report->month = (int)$request->get('cycle');
+            }
+
             $report->need_action = (int)$request->get('need_action');
 
             $report->need_step = (int)$request->get('need_step');
