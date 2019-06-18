@@ -17,7 +17,7 @@ return [
 		'module' => 'Administrasi',
 		'master' => 'Pengurusan Data',
 		'data' => 'Kategori Data',
-		'client' => 'Maklumat Klien'
+		'client' => 'Maklumat Klien',
 		'flow' => 'Pengurusan Process',
 	],
 	'dashboard' => [
